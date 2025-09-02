@@ -14,6 +14,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: ^2.4.7
   flutter_lints: ^5.0.0
   flutter_gen_runner: ^5.3.1
   flutter_gen: ^5.3.1
@@ -38,17 +39,23 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts in packages, see
-  # https://flutter.dev/to/font-from-package
+  fonts:
+    - family: Akkurat_Pro
+      fonts:
+        - asset: lib/assets/fonts/Akkurat_Pro/AkkBd_Pro_1.otf
+        - asset: lib/assets/fonts/Akkurat_Pro/AkkRg_Pro_1.otf
+    - family: GT_Pressura_Mono
+      fonts:
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-regular.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-regular-italic.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-light.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-light-italic.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-bold.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-bold-italic.ttf
+
+flutter_gen:
+  output: lib/core/gen/
+  fonts:
+    enabled: true
+    outputs:
+      class_name: FontFamilyToken
