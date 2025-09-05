@@ -3,9 +3,30 @@ import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
 import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
 import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
 
+/// {@template subscription_search_bar}
+/// A search bar widget for entering and filtering subscription queries.
+///
+/// This widget displays a styled [TextField] with a search icon and a customizable
+/// [onChanged] callback. It can be controlled externally via a [TextEditingController].
+///
+/// Example usage:
+/// ```dart
+/// SubscriptionSearchBar(
+///   controller: myController,
+///   onChanged: (value) {
+///     // Handle search input
+///   },
+/// )
+/// ```
+/// {@endtemplate}
 class SubscriptionSearchBar extends StatefulWidget {
+  /// Optional controller to manage the text being edited.
   final TextEditingController? controller;
+
+  /// Called when the text in the search bar changes.
   final ValueChanged<String>? onChanged;
+
+  /// {@macro subscription_search_bar}
   const SubscriptionSearchBar({super.key, this.controller, this.onChanged});
 
   @override

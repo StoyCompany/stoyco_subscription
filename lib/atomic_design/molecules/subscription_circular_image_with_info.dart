@@ -5,7 +5,32 @@ import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
 import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
 import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
 
+/// {@template subscription_circular_image_with_info}
+/// A widget that displays a circular image, a title, and a subscription action button.
+///
+/// This widget is typically used to represent a subscription item in a grid or list.
+/// It shows a circular image loaded from [imageUrl], the [title] below the image,
+/// and a button at the bottom. The button's text and background gradient change
+/// depending on the [subscribed] state:
+/// - If [subscribed] is `true`, the button displays "Ver suscripción" and a gray gradient.
+/// - If [subscribed] is `false` or `null`, the button displays "Suscribirme" and a blue gradient.
+///
+/// The [onTap] callback is triggered when the widget is tapped.
+///
+/// Example usage:
+/// ```dart
+/// SubscriptionCircularImageWithInfo(
+///   imageUrl: 'https://example.com/image.jpg',
+///   title: 'Artist Name',
+///   subscribed: true,
+///   onTap: () {
+///     // Handle tap
+///   },
+/// )
+/// ```
+/// {@endtemplate}
 class SubscriptionCircularImageWithInfo extends StatelessWidget {
+  /// {@macro subscription_circular_image_with_info}
   const SubscriptionCircularImageWithInfo({
     super.key,
     this.onTap,
@@ -15,10 +40,19 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
     this.margin,
   });
 
+  /// The title displayed below the image.
   final String title;
+
+  /// The URL of the image to display in the circular avatar.
   final String imageUrl;
+
+  /// Whether the user is subscribed. Affects the button's appearance and text.
   final bool? subscribed;
+
+  /// Called when the widget is tapped.
   final Function()? onTap;
+
+  /// Optional margin for the widget.
   final EdgeInsetsGeometry? margin;
 
   @override

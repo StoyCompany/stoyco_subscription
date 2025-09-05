@@ -7,9 +7,33 @@ import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
 import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/subscription_catalog_notifier.dart';
 
+/// {@template subscription_catalog}
+/// A catalog screen for displaying and searching subscriptions in a grid format.
+///
+/// This widget displays a customizable [AppBar], a search bar, a tab bar for filtering,
+/// and a grid of subscription items. When a subscription is tapped, the [onTapSubscription]
+/// callback is triggered with the selected subscription's id.
+///
+/// Example usage:
+/// ```dart
+/// SubscriptionCatalog(
+///   buildAppbar: AppBar(title: const Text('Subscriptions')),
+///   onTapSubscription: (id)
+///     print('Tapped subscription with id: $id');
+///   },
+/// )
+/// ```
+///
+/// {@endtemplate}
 class SubscriptionCatalog extends StatefulWidget {
+  /// The [AppBar] to display at the top of the screen.
   final PreferredSizeWidget buildAppbar;
+
+  /// Callback triggered when a subscription item is tapped.
+  /// Receives the [id] of the tapped subscription.
   final void Function(String id)? onTapSubscription;
+
+  /// {@macro subscription_catalog}
   const SubscriptionCatalog({
     super.key,
     required this.buildAppbar,
