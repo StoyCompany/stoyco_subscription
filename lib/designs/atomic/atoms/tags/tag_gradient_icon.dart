@@ -4,51 +4,36 @@ import 'package:gap/gap.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
-
-/// {@template tag_gradient_icon}
-/// TagGradientIcon
-///
-/// An atomic design widget that displays a tag with a gradient background, customizable icon, and text.
-///
-/// The gradient starts lighter on the left and becomes darker on the right, ideal for highlighting information or status.
-///
-/// Parameters:
-/// - [title]: Main text of the tag.
-/// - [titleStyle]: Text style (optional).
-/// - [icon]: Widget for the icon (optional, defaults to SVG star).
-/// - [width]: Tag width (optional, adapts to content if null).
-/// - [height]: Tag height (default 29).
-/// - [borderRadius]: Border radius (default 100).
-/// - [padding]: Inner padding (optional).
-/// - [margin]: Outer margin (optional).
-/// - [gradient]: Custom gradient (optional, defaults to dark gradient).
-///
-/// Example usage:
-/// ```dart
-/// TagGradientIcon(
-///   title: 'Premium',
-///   icon: SvgPicture.asset('assets/icons/crown.svg'),
-///   width: 140,
-///   height: 32,
-///   borderRadius: 80,
-/// )
-/// ```
-/// {@endtemplate}
 class TagGradientIcon extends StatelessWidget {
-  /// Crea un [TagGradientIcon].
+  /// {@template tag_gradient_icon}
+  /// TagGradientIcon
   ///
-  /// [title] es requerido. Los demás parámetros son opcionales y permiten personalizar el aspecto.
-  /// Creates a [TagGradientIcon].
+  /// An atomic design widget that displays a tag with a gradient background, customizable icon, and text.
   ///
-  /// [title] Main text of the tag.
-  /// [titleStyle] Text style (optional).
-  /// [icon] Widget for the icon (optional, defaults to SVG star).
-  /// [width] Tag width (optional, adapts to content if null).
-  /// [height] Tag height (default 29).
-  /// [borderRadius] Border radius (default 100).
-  /// [padding] Inner padding (optional).
-  /// [margin] Outer margin (optional).
-  /// [gradient] Custom gradient (optional, defaults to dark gradient).
+  /// The gradient starts lighter on the left and becomes darker on the right, ideal for highlighting information or status.
+  ///
+  /// Parameters:
+  /// - [title]: Main text of the tag.
+  /// - [titleStyle]: Text style (optional).
+  /// - [icon]: Widget for the icon (optional, defaults to SVG star).
+  /// - [width]: Tag width (optional, adapts to content if null).
+  /// - [height]: Tag height (default 29).
+  /// - [borderRadius]: Border radius (default 100).
+  /// - [padding]: Inner padding (optional).
+  /// - [margin]: Outer margin (optional).
+  /// - [gradient]: Custom gradient (optional, defaults to dark gradient).
+  ///
+  /// Example usage:
+  /// ```dart
+  /// TagGradientIcon(
+  ///   title: 'Premium',
+  ///   icon: SvgPicture.asset('assets/icons/crown.svg'),
+  ///   width: 140,
+  ///   height: 32,
+  ///   borderRadius: 80,
+  /// )
+  /// ```
+  /// {@endtemplate} 
   const TagGradientIcon({
     super.key,
     required this.title,
@@ -95,7 +80,7 @@ class TagGradientIcon extends StatelessWidget {
       width: width,
       height: StoycoScreenSize.height(context, height),
       padding: padding ?? StoycoScreenSize.fromLTRB( context, top: 5, right: 10, left: 10, bottom: 5),
-      margin: margin ?? StoycoScreenSize.fromLTRB( context, top: 8, right: 12),
+      margin: margin ?? StoycoScreenSize.fromLTRB( context, top: 16, right: 12),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           begin: Alignment.centerLeft,
