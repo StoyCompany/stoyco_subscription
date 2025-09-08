@@ -47,6 +47,14 @@ class $LibAssetsColorsGen {
 class $LibAssetsIconsGen {
   const $LibAssetsIconsGen();
 
+  /// File path: lib/assets/icons/arrow_right.svg
+  SvgGenImage get arrowRight =>
+      const SvgGenImage('lib/assets/icons/arrow_right.svg');
+
+  /// File path: lib/assets/icons/exclamacion.svg
+  SvgGenImage get exclamacion =>
+      const SvgGenImage('lib/assets/icons/exclamacion.svg');
+
   /// File path: lib/assets/icons/star.svg
   SvgGenImage get star => const SvgGenImage('lib/assets/icons/star.svg');
 
@@ -54,8 +62,18 @@ class $LibAssetsIconsGen {
   SvgGenImage get subscriptionIcon =>
       const SvgGenImage('lib/assets/icons/subscription_icon.svg');
 
+  /// File path: lib/assets/icons/tag_subscription.svg
+  SvgGenImage get tagSubscription =>
+      const SvgGenImage('lib/assets/icons/tag_subscription.svg');
+
   /// List of all assets
-  List<SvgGenImage> get values => [star, subscriptionIcon];
+  List<SvgGenImage> get values => [
+    arrowRight,
+    exclamacion,
+    star,
+    subscriptionIcon,
+    tagSubscription,
+  ];
 }
 
 class $LibAssetsMocksGen {

@@ -22,6 +22,7 @@ class SubscriptionPlan extends Equatable {
   /// [porcentageDiscount] - The discount percentage, if any.
   /// [messageDiscount] - The message to display for the discount.
   const SubscriptionPlan({
+    required this.id,
     required this.name,
     required this.imageUrl,
     required this.description,
@@ -38,6 +39,9 @@ class SubscriptionPlan extends Equatable {
   });
 
   factory SubscriptionPlan.fromJson(Map<String, dynamic> json) => _$SubscriptionPlanFromJson(json);
+
+  /// The unique identifier of the plan.
+  final String id;
 
   /// The name/title of the plan.
   final String name;
@@ -82,6 +86,7 @@ class SubscriptionPlan extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
+    id,
     name,
     imageUrl,
     description,

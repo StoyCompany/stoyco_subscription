@@ -8,6 +8,7 @@ part of 'subscription_plan.dart';
 
 SubscriptionPlan _$SubscriptionPlanFromJson(Map<String, dynamic> json) =>
     SubscriptionPlan(
+      id: json['id'] as String,
       name: json['name'] as String,
       imageUrl: json['imageUrl'] as String,
       description: json['description'] as String,
@@ -30,6 +31,7 @@ SubscriptionPlan _$SubscriptionPlanFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$SubscriptionPlanToJson(SubscriptionPlan instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'imageUrl': instance.imageUrl,
       'description': instance.description,

@@ -17,6 +17,24 @@ class StoycoColors {
   /// Color: #4639E7
   static const Color blue = Color(0xFF4639E7);
 
+  /// Color: #40000000
+  static const Color buttonBorderBlack25 = Color(0x40000000);
+
+  /// Color: #40FFFFFF
+  static const Color buttonBorderWhite25 = Color(0x40FFFFFF);
+
+  /// Color: #1A232336
+  static const Color buttonSecondaryBgEnd = Color(0x1A232336);
+
+  /// Color: #B2232336
+  static const Color buttonSecondaryBgStart = Color(0xB2232336);
+
+  /// Color: #802B3445
+  static const Color buttonShadowBlue50 = Color(0x802B3445);
+
+  /// Color: #10141C
+  static const Color buttonShadowDark = Color(0xFF10141C);
+
   /// Color: #80000000
   static const Color cardBackgroundBlack50 = Color(0x80000000);
 
@@ -64,6 +82,9 @@ class StoycoColors {
 
   /// Color: #D5D5E0
   static const Color iconDefault = Color(0xFFD5D5E0);
+
+  /// Color: #253341
+  static const Color menuItemBackground = Color(0xFF253341);
 
   /// Color: #0E1926
   static const Color midnightBlue = Color(0xFF0E1926);
