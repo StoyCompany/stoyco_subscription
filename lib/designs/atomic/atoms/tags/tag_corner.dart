@@ -48,7 +48,7 @@ class TagCorner extends StatelessWidget {
     this.color = const Color(0xFF4639E7),
     this.cutSize = 48,
     this.cornerRadius = 20,
-    this.borderWidth = 2,
+    this.borderWidth = 4,
     this.gradientColorsBorder,
     this.position = TagCornerPosition.topRight,
     this.shadows,
@@ -112,10 +112,10 @@ class TagCorner extends StatelessWidget {
           color: color,
           shadows: shadows ?? const <BoxShadow>[
             BoxShadow(
-              color: Color(0x8F4F1FE6),
-              offset: Offset.zero,
-              blurRadius: 46.67,
-              spreadRadius: 0,
+              color: Color.fromARGB(98, 77, 31, 230),
+              offset: Offset(-15, 10),
+              blurRadius: 50,
+              spreadRadius: 20,
             ),
           ],
           shape: PathBuilderBorder(
@@ -132,6 +132,7 @@ class TagCorner extends StatelessWidget {
             path: shapePath,
             borderWidth: borderWidth,
             gradientColors: gradientColorsBorder,
+            gradientEnd: Alignment.bottomRight,
           ),
           child: Center(
             child: Transform.rotate(
