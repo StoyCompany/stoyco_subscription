@@ -36,6 +36,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 ///     child: Text('NEW', style: TextStyle(color: Colors.white)),
 ///   ),
 ///   tagAlignment: Alignment.topRight,
+///   paddingContent: EdgeInsets.all(8),
 /// )
 /// ```
 /// {@endtemplate}
@@ -54,6 +55,7 @@ class CardImageDescriptionTag extends StatelessWidget {
   /// [description] - The main description widget below the image.
   /// [tag] - Optional floating widget (tag/badge) to overlay on the card.
   /// [tagAlignment] - Alignment for the floating tag. Defaults to [Alignment.topRight].
+  /// [paddingContent] - Padding for the content inside the card.
   const CardImageDescriptionTag({
     super.key,
     this.cardWidth,
@@ -68,6 +70,7 @@ class CardImageDescriptionTag extends StatelessWidget {
     required this.description,
     this.tagAlignment = Alignment.topRight,
     this.tag,
+    this.paddingContent,
   });
 
   /// The width of the card. If null, expands to parent constraints.
@@ -106,36 +109,43 @@ class CardImageDescriptionTag extends StatelessWidget {
   /// Alignment for the floating tag. Defaults to [Alignment.topRight].
   final Alignment tagAlignment;
 
+  /// Padding for the content inside the card.
+  final EdgeInsetsGeometry? paddingContent;
+
   @override
   Widget build(BuildContext context) {
     return CardWithShadow(
       width: cardWidth,
       height: cardHeight,
       borderRadius: StoycoScreenSize.radius(context, cardBorderRadius),
+      paddingChildren: EdgeInsets.zero,
       child: ClipRRect(
         child: Stack(
           children: <Widget>[
-            Column(
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: imageBorderRadius ?? BorderRadius.only(
-                    topLeft: Radius.circular(StoycoScreenSize.radius(context, 22)),
-                    topRight: Radius.circular(StoycoScreenSize.radius(context, 22)),
-                  ),
-                  child: SizedBox(
-                    height: imageHeight ?? StoycoScreenSize.height(context, 160),
-                    width: imageWidth ?? double.infinity,
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      placeholder: (BuildContext context, String url) => imagePlaceholder ?? const SkeletonCard(),
-                      errorWidget: (BuildContext context, String url, Object error) => imageErrorPlaceholder ?? const SkeletonCard(),
-                      fit: BoxFit.cover,
+            Padding(
+              padding: paddingContent ?? StoycoScreenSize.fromLTRB(context, left: 8, top: 8, right: 8, bottom: 32),
+              child: Column(
+                children: <Widget>[
+                  ClipRRect(
+                    borderRadius: imageBorderRadius ?? BorderRadius.only(
+                      topLeft: Radius.circular(StoycoScreenSize.radius(context, 22)),
+                      topRight: Radius.circular(StoycoScreenSize.radius(context, 22)),
+                    ),
+                    child: SizedBox(
+                      height: imageHeight ?? StoycoScreenSize.height(context, 160),
+                      width: imageWidth ?? double.infinity,
+                      child: CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        placeholder: (BuildContext context, String url) => imagePlaceholder ?? const SkeletonCard(),
+                        errorWidget: (BuildContext context, String url, Object error) => imageErrorPlaceholder ?? const SkeletonCard(),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Gap(StoycoScreenSize.height(context, 24)),
-                description,
-              ],
+                  Gap(StoycoScreenSize.height(context, 24)),
+                  description,
+                ],
+              ),
             ),
             if (tag != null)
               Align(
