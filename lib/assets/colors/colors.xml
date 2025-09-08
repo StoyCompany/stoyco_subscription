@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- SkeletonCard colors -->
+    <color name="skeleton_base">#0B122C</color>
+    <color name="skeleton_highlight">#142358</color>
+    <!-- Generic transparent color for design tokens -->
+    <color name="transparent">#00000000</color>
+    <color name="blue">#4639E7</color>
+    <color name="darkBlue">#1C197F</color>
+    <color name="deepCharcoal">#0F151A</color>
+    <color name="error">#D81736</color>
+    <color name="grayText">#D9D9D9</color>
+    <color name="hint">#92929D</color>
+    <color name="iconDefault">#D5D5E0</color>
+    <color name="midnightBlue">#0E1926</color>
+    <color name="navbarButtonColor">#4639E7</color>
+    <color name="principal">#2B71FF</color>
+    <color name="royalIndigo">#4236DD</color>
+    <color name="shadowColor">#494949</color>
+    <color name="softWhite">#F8F9FA</color>
+    <color name="text">#F2F2FA</color>
+    <color name="white">#FAFAFA</color>
+    <color name="white2">#FFFFFF</color>
+    <color name="shadowBlue">#4F1FE68F</color>
+    <!-- CardWithShadow colors -->
+    <color name="card_background_black_50">#80000000</color>
+    <color name="card_shadow_purple_40">#664D1FE6</color>
+    <color name="card_shadow_purple_19">#304D1FE6</color>
+    <color name="card_border_gradient_start">#FFFFFF</color>
+    <color name="card_border_gradient_mid">#4639E7</color>
+    <color name="card_border_gradient_end">#00000000</color>
+    <color name="card_border_gradient_white_05">#1AFFFFFF</color>
+    <color name="card_border_gradient_white_15">#26FFFFFF</color>
+    <color name="card_border_gradient_purple_57">#924539E7</color>
+    <color name="card_border_gradient_purple_72">#B74539E7</color>
+</resources>

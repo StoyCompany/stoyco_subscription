@@ -8,15 +8,18 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  cached_network_image: ^3.3.0
+  collection: ^1.19.1
+  country_flags: ^3.3.0
+  currency_picker: ^2.0.21
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
-  cached_network_image: ^3.3.0
-  flutter_widget_from_html: ^0.17.0
   flutter_svg: ^2.2.0
-  shimmer: ^3.0.0
+  flutter_widget_from_html: ^0.17.0
   gap: ^3.0.1
-  currency_picker: ^2.0.21
-  country_flags: ^3.3.0
+  json_annotation: ^4.9.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   build_runner: ^2.4.7
@@ -25,12 +28,14 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+  json_serializable: ^6.7.0
 
 flutter:
   assets:
     - lib/assets/colors/
     - lib/assets/icons/
     - lib/assets/images/
+    - lib/assets/mocks/
 
 flutter_gen:
   output: lib/designs/atomic/tokens/src/gen
