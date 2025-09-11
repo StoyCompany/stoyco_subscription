@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
-import 'package:stoyco_subscription/atomic_design/molecules/alert_indicator.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/alert/alert_indicator.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// A widget that displays a text with an optional alert indicator.
 ///
@@ -38,7 +38,7 @@ class TextWithAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Stack(
     alignment: Alignment.center,
-    children: [
+    children: <Widget>[
       Positioned(
         top: 6,
         child: ConstrainedBox(
@@ -59,7 +59,7 @@ class TextWithAlert extends StatelessWidget {
       if (showAlertIndicator)
         AnimatedBuilder(
           animation: animation,
-          builder: (context, child) => Positioned(
+          builder: (BuildContext context, Widget? child) => Positioned(
             top: 0,
             left: StoycoScreenSize.width(context, textWidth + 5),
             child: AlertIndicator(animation: animation),

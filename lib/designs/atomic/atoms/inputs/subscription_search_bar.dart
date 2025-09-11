@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
-import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
-import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template subscription_search_bar}
 /// A search bar widget for entering and filtering subscription queries.
@@ -20,14 +20,15 @@ import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
 /// ```
 /// {@endtemplate}
 class SubscriptionSearchBar extends StatefulWidget {
+
+  /// {@macro subscription_search_bar}
+  const SubscriptionSearchBar({super.key, this.controller, this.onChanged});
+  
   /// Optional controller to manage the text being edited.
   final TextEditingController? controller;
 
   /// Called when the text in the search bar changes.
   final ValueChanged<String>? onChanged;
-
-  /// {@macro subscription_search_bar}
-  const SubscriptionSearchBar({super.key, this.controller, this.onChanged});
 
   @override
   State<SubscriptionSearchBar> createState() => _SubscriptionSearchBarState();

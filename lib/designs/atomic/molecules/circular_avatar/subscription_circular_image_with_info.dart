@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
-import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
-import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template subscription_circular_image_with_info}
 /// A widget that displays a circular image, a title, and a subscription action button.
@@ -50,7 +50,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
   final bool? subscribed;
 
   /// Called when the widget is tapped.
-  final Function()? onTap;
+  final VoidCallback? onTap;
 
   /// Optional margin for the widget.
   final EdgeInsetsGeometry? margin;
@@ -62,13 +62,13 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Container(
             width: StoycoScreenSize.width(context, 148.15),
             height: StoycoScreenSize.height(context, 148.15),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
-              boxShadow: [
+              boxShadow: <BoxShadow>[
                 BoxShadow(
                   color: const Color(0xFF000000).withValues(alpha: 0.25),
                   blurRadius: 4,
@@ -108,9 +108,9 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(color: const Color(0xFF373680)),
               borderRadius: BorderRadius.circular(15.31),
-              gradient: subscribed == true
+              gradient: subscribed ?? false
                   ? const LinearGradient(
-                      colors: [
+                      colors: <Color>[
                         Color(0x232336B2),
                         Color(0x232336B2),
                         Color(0x2323361A),
@@ -119,13 +119,13 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                       end: Alignment.centerRight,
                     )
                   : const LinearGradient(
-                      colors: [Color(0xFF1C197F), Color(0xFF4639E7)],
+                      colors: <Color>[Color(0xFF1C197F), Color(0xFF4639E7)],
                       begin: Alignment.centerLeft,
                       end: Alignment.centerRight,
                     ),
             ),
             child: Text(
-              subscribed == true ? 'Ver suscripción' : 'Suscribirme',
+              subscribed ?? false ? 'Ver suscripción' : 'Suscribirme',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: StoycoScreenSize.fontSize(context, 15.31),

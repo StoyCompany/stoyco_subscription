@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
-import 'package:stoyco_subscription/atomic_design/molecules/text_with_alert.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/alert/text_with_alert.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 class SubscriptionStoycoTab extends StatefulWidget {
   const SubscriptionStoycoTab({

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:stoyco_subscription/atomic_design/molecules/stoyco_subscription_tab.dart';
-import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
-import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscription_tab.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 
 class StoycoTabBarV2 extends StatelessWidget {
   const StoycoTabBarV2({
@@ -38,11 +38,11 @@ class StoycoTabBarV2 extends StatelessWidget {
     }
 
     return Stack(
-      children: [
+      children: <Widget>[
         SizedBox(
           height: 56,
           child: TabBar(
-            padding: const EdgeInsets.all(0),
+            padding: EdgeInsets.zero,
             controller: tabController,
             tabs: tabsWithKeys,
             indicatorColor: Colors.transparent,
@@ -106,7 +106,7 @@ class _CustomPainter extends BoxPainter {
       topRight: const Radius.circular(5),
     );
 
-    final Shadow shadow = Shadow(color: StoycoColors.blue, blurRadius: 15.0);
+    const Shadow shadow = Shadow(color: StoycoColors.blue, blurRadius: 15.0);
 
     canvas.drawShadow(
       Path()..addRRect(rrect),

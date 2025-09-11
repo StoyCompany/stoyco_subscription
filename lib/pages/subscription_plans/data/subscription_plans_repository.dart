@@ -1,6 +1,5 @@
 
 import 'package:dio/dio.dart';
-import 'package:dio/src/response.dart';
 import 'package:either_dart/either.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/error.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';

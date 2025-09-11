@@ -49,4 +49,8 @@
     <!-- ButtonGradientText secondary border and background colors -->
     <color name="button_secondary_bg_start">#B2232336</color> <!-- rgba(35,35,54,0.7) -->
     <color name="button_secondary_bg_end">#1A232336</color> <!-- rgba(35,35,54,0.1) -->
+    <!-- Colores agregados desde colors.dart -->
+    <color name="navbarButtonColor">#4639E7</color>
+    <color name="midnightInk">#0F151A</color>
+    <color name="deepTeal">#253341</color>
 </resources>

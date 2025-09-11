@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// A widget that displays an alert indicator with animation.
 class AlertIndicator extends StatelessWidget {
@@ -20,7 +20,7 @@ class AlertIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xffED0095),
         borderRadius: BorderRadius.circular(100),
-        boxShadow: [
+        boxShadow: <BoxShadow>[
           BoxShadow(
             color: const Color(0xffED0095).withOpacity(0.25),
             offset: const Offset(0, 4),

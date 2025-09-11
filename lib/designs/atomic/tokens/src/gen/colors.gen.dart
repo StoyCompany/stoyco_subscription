@@ -71,6 +71,9 @@ class StoycoColors {
   /// Color: #0F151A
   static const Color deepCharcoal = Color(0xFF0F151A);
 
+  /// Color: #253341
+  static const Color deepTeal = Color(0xFF253341);
+
   /// Color: #D81736
   static const Color error = Color(0xFFD81736);
 
@@ -88,6 +91,12 @@ class StoycoColors {
 
   /// Color: #0E1926
   static const Color midnightBlue = Color(0xFF0E1926);
+
+  /// Color: #0F151A
+  static const Color midnightInk = Color(0xFF0F151A);
+
+  /// Color: #4639E7
+  static const Color navbarButtonColor = Color(0xFF4639E7);
 
   /// Color: #2B71FF
   static const Color principal = Color(0xFF2B71FF);
