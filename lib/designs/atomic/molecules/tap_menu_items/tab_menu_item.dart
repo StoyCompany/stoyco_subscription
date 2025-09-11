@@ -92,6 +92,7 @@ class _TabMenuItemState extends State<TabMenuItem> {
             Expanded(
               child: PageView(
                 controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (int index) {
                   setState(() {
                     selectedIndex = index;
