@@ -214,8 +214,8 @@ class ButtonGradientText extends StatelessWidget {
         shadows = boxShadow ?? const <BoxShadow>[
           BoxShadow(
             color: StoycoColors.shadowBlue,
-            offset: Offset(4.24, 4.24),
-            blurRadius: 59.36,
+            offset: Offset.zero,
+            blurRadius: 10,
             spreadRadius: 0,
           ),
         ];
