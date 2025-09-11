@@ -35,6 +35,7 @@ class HtmlDropdown extends StatefulWidget {
     required this.htmlContent,
     this.arrowIcon,
     this.contentPadding,
+    this.selectorPadding,
   });
   
   /// The HTML string to render when the dropdown is expanded.
@@ -52,6 +53,9 @@ class HtmlDropdown extends StatefulWidget {
   /// Optional custom padding for the dropdown content. Defaults to design token spacing.
   final EdgeInsetsGeometry? contentPadding;
 
+  ///
+  final EdgeInsetsGeometry? selectorPadding;
+
 
   @override
   State<HtmlDropdown> createState() => _HtmlDropdownState();
@@ -65,6 +69,7 @@ class _HtmlDropdownState extends State<HtmlDropdown> {
     return Column(
       children: <Widget>[
         ListTile(
+          contentPadding: widget.selectorPadding ?? StoycoScreenSize.fromLTRB(context, left: 40, right: 24),
           focusColor: StoycoColors.transparent,
           splashColor: StoycoColors.transparent,
           title: Text(
