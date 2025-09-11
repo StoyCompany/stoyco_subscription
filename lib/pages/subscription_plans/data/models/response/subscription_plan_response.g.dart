@@ -9,7 +9,8 @@ part of 'subscription_plan_response.dart';
 SubscriptionPlanResponse _$SubscriptionPlanResponseFromJson(
   Map<String, dynamic> json,
 ) => SubscriptionPlanResponse(
-  artistName: json['artistName'] as String,
+  partnerID: json['partnerID'] as String,
+  partnerName: json['partnerName'] as String,
   monthlyPlans: (json['monthlyPlans'] as List<dynamic>)
       .map((e) => SubscriptionPlan.fromJson(e as Map<String, dynamic>))
       .toList(),
@@ -21,7 +22,8 @@ SubscriptionPlanResponse _$SubscriptionPlanResponseFromJson(
 Map<String, dynamic> _$SubscriptionPlanResponseToJson(
   SubscriptionPlanResponse instance,
 ) => <String, dynamic>{
-  'artistName': instance.artistName,
+  'partnerID': instance.partnerID,
+  'partnerName': instance.partnerName,
   'monthlyPlans': instance.monthlyPlans,
   'annualPlans': instance.annualPlans,
 };

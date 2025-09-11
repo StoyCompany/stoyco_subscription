@@ -8,15 +8,24 @@ part 'subscription_plan_response.g.dart';
 @JsonSerializable()
 class SubscriptionPlanResponse extends Equatable {
   const SubscriptionPlanResponse({
-    required this.artistName,
+    required this.partnerID,
+    required this.partnerName,
     required this.monthlyPlans,
     required this.annualPlans,
   });
 
+  const SubscriptionPlanResponse.empty()
+      : partnerID = '',
+        partnerName = '',
+        monthlyPlans = const <SubscriptionPlan>[],
+        annualPlans = const <SubscriptionPlan>[];
+
   factory SubscriptionPlanResponse.fromJson(Map<String, dynamic> json) => _$SubscriptionPlanResponseFromJson(json);
 
   /// The name of the artist, athlete, or brand.
-  final String artistName;
+  final String partnerID;
+
+  final String partnerName;
 
   /// List of monthly subscription plans.
   final List<SubscriptionPlan> monthlyPlans;
@@ -26,5 +35,5 @@ class SubscriptionPlanResponse extends Equatable {
   Map<String, dynamic> toJson() => _$SubscriptionPlanResponseToJson(this);
 
   @override
-  List<Object?> get props => <Object?>[artistName, monthlyPlans, annualPlans];
+  List<Object?> get props => <Object?>[partnerID, partnerName, monthlyPlans, annualPlans];
 }

@@ -28,10 +28,13 @@ class SubscriptionPlan extends Equatable {
     required this.description,
     required this.price,
     required this.currencyCode,
+    required this.currencySymbol,
     required this.subscribed,
     this.isActive = false,
     this.subscribedAt,
     this.expiresAt,
+    this.trialStart,
+    this.trialEnd,
     this.recommended = false,
     this.priceDiscount = 0.0,
     this.porcentageDiscount = 0.0,
@@ -58,6 +61,9 @@ class SubscriptionPlan extends Equatable {
   /// The currency code or text (e.g., 'MXN').
   final String currencyCode;
 
+  /// The currency symbol (e.g., '$').
+  final String currencySymbol;
+
   /// Whether the user is currently subscribed to this plan.
   final bool subscribed;
 
@@ -69,6 +75,12 @@ class SubscriptionPlan extends Equatable {
 
   /// The date/time when the subscription expires.
   final DateTime? expiresAt;
+
+  /// The date/time when the trial starts.
+  final DateTime? trialStart;
+
+  /// The date/time when the trial ends.
+  final DateTime? trialEnd;
 
   /// Whether this plan is recommended.
   final bool recommended;

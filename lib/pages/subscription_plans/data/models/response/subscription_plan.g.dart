@@ -14,6 +14,7 @@ SubscriptionPlan _$SubscriptionPlanFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String,
       price: (json['price'] as num).toDouble(),
       currencyCode: json['currencyCode'] as String,
+      currencySymbol: json['currencySymbol'] as String,
       subscribed: json['subscribed'] as bool,
       isActive: json['isActive'] as bool? ?? false,
       subscribedAt: json['subscribedAt'] == null
@@ -22,6 +23,12 @@ SubscriptionPlan _$SubscriptionPlanFromJson(Map<String, dynamic> json) =>
       expiresAt: json['expiresAt'] == null
           ? null
           : DateTime.parse(json['expiresAt'] as String),
+      trialStart: json['trialStart'] == null
+          ? null
+          : DateTime.parse(json['trialStart'] as String),
+      trialEnd: json['trialEnd'] == null
+          ? null
+          : DateTime.parse(json['trialEnd'] as String),
       recommended: json['recommended'] as bool? ?? false,
       priceDiscount: (json['priceDiscount'] as num?)?.toDouble() ?? 0.0,
       porcentageDiscount:
@@ -37,10 +44,13 @@ Map<String, dynamic> _$SubscriptionPlanToJson(SubscriptionPlan instance) =>
       'description': instance.description,
       'price': instance.price,
       'currencyCode': instance.currencyCode,
+      'currencySymbol': instance.currencySymbol,
       'subscribed': instance.subscribed,
       'isActive': instance.isActive,
       'subscribedAt': instance.subscribedAt?.toIso8601String(),
       'expiresAt': instance.expiresAt?.toIso8601String(),
+      'trialStart': instance.trialStart?.toIso8601String(),
+      'trialEnd': instance.trialEnd?.toIso8601String(),
       'recommended': instance.recommended,
       'priceDiscount': instance.priceDiscount,
       'porcentageDiscount': instance.porcentageDiscount,
