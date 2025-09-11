@@ -9,27 +9,53 @@ import 'package:stoyco_subscription/designs/atomic/molecules/cards/card_image_de
 import 'package:stoyco_subscription/designs/atomic/molecules/dropdowns/html_dropdown.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/subscription_plans/models/subscription_plan.dart';
+import 'package:stoyco_subscription/designs/utils/formatter_dates.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/presentation/helpers/models/card_subscription_plan_params.dart';
 
 class CardSubscriptionPlan extends StatelessWidget {
+  /// Card widget for displaying a subscription plan with customizable styles and actions.
+  ///
+  /// This widget is part of the Stoyco atomic design system and is used to visually represent a subscription plan, including price, currency, and various design tokens.
+  ///
+  /// The widget supports custom styles and exposes callbacks for subscription actions.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// CardSubscriptionPlan(
+  ///   plan: myPlan,
+  ///   onTapRenewSubscription: (plan) => ...,
+  ///   onTapCancelSubscription: (plan) => ...,
+  ///   onTapFreeTrial: (plan) => ...,
+  ///   styleParams: SubscriptionPlanScreenStyleParams(
+  ///     titleFontSize: 28,
+  ///     ... other style overrides
+  ///   )
+  /// ```
+  ///
+  /// Parameters:
+  /// - [plan]: Subscription plan model.
+  /// - [onTapRenewSubscription]: Callback when renew subscription is tapped.
+  /// - [onTapCancelSubscription]: Callback when cancel subscription is tapped.
+  /// - [onTapFreeTrial]: Callback when free trial is tapped.
+  /// - [styleParams]: Style parameters for customizing appearance.
+  
   const CardSubscriptionPlan({
-    super.key, 
+    super.key,
     required this.plan,
-    this.titleFontSize = 28,
-    this.priceFontSize = 38,
-    this.currencyFontSize = 16,
-    this.onTapRenewSubscription,
-    this.onTapCancelSubscription,
-    this.onTapFreeTrial,
+    required this.onTapRenewSubscription,
+    required this.onTapCancelSubscription,
+    required this.onTapFreeTrial,
+    required this.styleParams,
   });
 
   final SubscriptionPlan plan;
-  final double titleFontSize;
-  final double priceFontSize;
-  final double currencyFontSize;
-  final void Function(SubscriptionPlan)? onTapRenewSubscription;
-  final void Function(SubscriptionPlan)? onTapCancelSubscription;
-  final void Function(SubscriptionPlan)? onTapFreeTrial;
+  final SubscriptionPlanScreenStyleParams styleParams;
+  final void Function(SubscriptionPlan) onTapRenewSubscription;
+  final void Function(SubscriptionPlan) onTapCancelSubscription;
+  final void Function(SubscriptionPlan) onTapFreeTrial;
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +63,37 @@ class CardSubscriptionPlan extends StatelessWidget {
       key: ValueKey<String>('cardImageDescriptionTag_${plan.id}'),
       imageUrl: plan.imageUrl,
       tag: plan.subscribed 
-        ? TagCorner(key: ValueKey<String>('tagCorner_${plan.id}'), title: 'Actual') 
+        ? TagCorner(
+            key: ValueKey<String>('tagCorner_${plan.id}'), 
+            title: 'Actual',
+            height: styleParams.tagCornerHeight,
+            width: styleParams.tagCornerWidth,
+            cutSize: styleParams.tagCornerCutSize,
+            gradientColorsBorder: styleParams.tagCornerGradientColorsBorder,
+            color: styleParams.tagCornerColor,
+            cornerRadius: styleParams.tagCornerRadius,
+            paddingText: styleParams.tagCornerPaddingText,
+            textStyle: styleParams.tagCornerTextStyle,
+          ) 
         : plan.recommended 
-          ? TagGradientIcon(key: ValueKey<String>('tagGradient_${plan.id}'), title: 'Recomendado') 
-            : null,
+          ? TagGradientIcon(
+              key: ValueKey<String>('tagGradient_${plan.id}'), 
+              title: 'Recomendado',
+              height: styleParams.tagGradientHeight,
+              width: styleParams.tagGradientWidth,
+              borderRadius: styleParams.tagGradientBorderRadius,
+              gradient: styleParams.tagGradientGradient,
+              margin: styleParams.tagGradientMargin,
+              padding: styleParams.tagGradientPadding,
+              titleStyle: styleParams.titleStyleTagGradient,
+            ) : null,
       description: Column(
         children: <Widget>[
           Text(
             plan.name,
-            style: TextStyle(
+            style: styleParams.planNameTextStyle ?? TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: StoycoScreenSize.fontSize(context, titleFontSize),
+              fontSize: StoycoScreenSize.fontSize(context, styleParams.titleFontSize),
               fontFamily: 'Montserrat',
               color: StoycoColors.softWhite,
             ),
@@ -58,9 +104,9 @@ class CardSubscriptionPlan extends StatelessWidget {
             children: <Widget>[
               Text(
                 '\$${plan.price.toStringAsFixed(0)}',
-                style: TextStyle(
+                style: styleParams.planPriceTextStyle ?? TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: StoycoScreenSize.fontSize(context, priceFontSize),
+                  fontSize: StoycoScreenSize.fontSize(context, styleParams.priceFontSize),
                   fontFamily: 'Montserrat',
                   color: StoycoColors.softWhite,
                 ),
@@ -68,11 +114,11 @@ class CardSubscriptionPlan extends StatelessWidget {
               Gap(StoycoScreenSize.width(context, 5)),
               Text(
                 plan.currencyCode,
-                style: TextStyle(
+                style: styleParams.planCurrencyTextStyle ?? TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: StoycoScreenSize.fontSize(
                     context,
-                    currencyFontSize,
+                    styleParams.currencyFontSize,
                   ),
                   fontFamily: 'Montserrat',
                   color: StoycoColors.iconDefault,
@@ -80,9 +126,11 @@ class CardSubscriptionPlan extends StatelessWidget {
               ),
               Gap(StoycoScreenSize.width(context, 1)),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0),
+                padding: StoycoScreenSize.fromLTRB(context, left: 8),
                 child: CurrencyFlag(
                   key: ValueKey<String>('currencyFlag_${plan.id}'),
+                  height: styleParams.currencyFlagHeight,
+                  width: styleParams.currencyFlagWidth,
                   currencyCode: plan.currencyCode,
                 ),
               ),
@@ -91,63 +139,86 @@ class CardSubscriptionPlan extends StatelessWidget {
           HtmlDropdown(
             key: ValueKey<String>('htmlDropdown_${plan.id}'),
             title: 'Beneficios',
+            contentPadding: styleParams.htmlDropdownContentPadding,
+            selectorPadding: styleParams.htmlDropdownSelectorPadding,
+            titleTextStyle: styleParams.htmlDropdownTitleTextStyle,
             htmlContent: plan.description,
           ),
           if (plan.subscribed) ...<Widget>[
-            Gap(StoycoScreenSize.height(context, 32)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SvgPicture.asset(
-                  'packages/stoyco_subscription/lib/assets/icons/exclamacion.svg',
-                ),
-                Gap(StoycoScreenSize.width(context, 8)),
-                Text(
-                  'Tu suscripción actual  vence ${plan.expiresAt}',
-                  style: TextStyle(
-                    fontSize: StoycoScreenSize.fontSize(context, 16),
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Montserrat',
-                    color: StoycoColors.softWhite,
+            Padding(
+              padding: styleParams.messageInformationPadding ?? StoycoScreenSize.fromLTRB(
+                context, 
+                right: 16, 
+                left: 16, 
+                top: 20,
+                bottom: 30,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SvgPicture.asset(
+                    'packages/stoyco_subscription/lib/assets/icons/exclamacion.svg',
+                    width: styleParams.exclamationIconWidth,
+                    height: styleParams.exclamationIconHeight,
                   ),
-                ),
-              ],
+                  Gap(StoycoScreenSize.width(context, 8)),
+                  Expanded(
+                    child: Text(
+                      'Tu suscripción actual vence el ${formatDateDMY(plan.expiresAt)}',
+                      style: styleParams.messageInformationTextStyle ?? TextStyle(
+                        fontSize: StoycoScreenSize.fontSize(context, 16),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Montserrat',
+                        color: StoycoColors.softWhite,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Gap(StoycoScreenSize.height(context, 32)),
             ButtonGradientText(
               type: ButtonGradientTextType.primary,
+              paddingButton: styleParams.onTapRenewSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
+                context, 
+                bottom: 16, 
+                right: 16, 
+                left: 16,
+              ),
               text: 'Renovar',
-              onPressed: () {
-                if (onTapRenewSubscription != null) {
-                  onTapRenewSubscription!(plan);
-                }
-              },
+              onPressed: () => onTapRenewSubscription(plan),
             ),
-            Gap(StoycoScreenSize.height(context, 16)),
             ButtonGradientText(
-              type: ButtonGradientTextType.primary,
+              type: ButtonGradientTextType.secondary,
+              paddingButton: styleParams.onTapCancelSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
+                context, 
+                bottom: 5, 
+                right: 16, 
+                left: 16,
+              ),
               text: 'Cancelar suscripción',
-              onPressed: () {
-                if (onTapCancelSubscription != null) {
-                  onTapCancelSubscription!(plan);
-                }
-              },
+              onPressed: () => onTapCancelSubscription(plan),
             )
           ] else ...<Widget>[
             ButtonGradientText(
               type: ButtonGradientTextType.primary,
+              paddingButton: styleParams.onTapFreeTrialPadding ?? StoycoScreenSize.fromLTRB(
+                context, 
+                top: 20, 
+                bottom: 16, 
+                right: 16, 
+                left: 16,
+              ),
               text: 'Probar gratis durante 1 mes',
-              onPressed: () {
-                if (onTapFreeTrial != null) {
-                  onTapFreeTrial!(plan);
-                }
-              },
+              onPressed: () => onTapFreeTrial(plan)
             ),
             Gap(StoycoScreenSize.height(context, 16)),
             Text(
               plan.messageDiscount,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: styleParams.planMessageDiscountTextStyle ?? TextStyle(
                 fontSize: StoycoScreenSize.fontSize(context, 14),
                 fontWeight: FontWeight.w400,
                 fontFamily: 'Montserrat',
