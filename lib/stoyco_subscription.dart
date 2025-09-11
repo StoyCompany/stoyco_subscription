@@ -1,5 +1,5 @@
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+library;
+
+export 'atomic_design/molecules/subscription_circular_image_with_info.dart';
+export 'atomic_design/atoms/subscription_search_bar.dart';
+export 'pages/subscription_catalog/subscription_catalog_screen.dart';

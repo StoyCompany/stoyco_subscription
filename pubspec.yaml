@@ -4,20 +4,21 @@ version: 0.0.1
 homepage: null
 
 environment:
-  sdk: ^3.9.0
+  sdk: ">=3.8.0"
   flutter: ">=1.17.0"
 
 dependencies:
-  cached_network_image: ^3.3.0
   collection: ^1.19.1
   country_flags: ^3.3.0
   currency_picker: ^2.0.21
   dio: ^5.5.0+1
   either_dart: ^1.0.0
   logger: ^2.2.0
-  equatable: ^2.0.5
   flutter:
     sdk: flutter
+  cached_network_image: ^3.3.0
+  google_fonts: ^6.3.1
+  equatable: ^2.0.5
   flutter_svg: ^2.2.0
   flutter_widget_from_html: ^0.17.0
   gap: ^3.0.1
@@ -26,13 +27,13 @@ dependencies:
   shimmer: ^3.0.0
 
 dev_dependencies:
-  build_runner: ^2.4.7
-  flutter_gen: ^5.3.1
-  flutter_gen_runner: ^5.3.1
-  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
-  json_serializable: ^6.7.0
+  build_runner: ^2.4.7
+  flutter_lints: ^5.0.0
+  flutter_gen_runner: ^5.3.1
+  flutter_gen: ^5.3.1
+  json_serializable: ^6.7.1
 
 flutter:
   assets:
@@ -40,9 +41,26 @@ flutter:
     - lib/assets/icons/
     - lib/assets/images/
     - lib/assets/mocks/
+  fonts:
+    - family: Akkurat_Pro
+      fonts:
+        - asset: lib/assets/fonts/Akkurat_Pro/AkkBd_Pro_1.otf
+        - asset: lib/assets/fonts/Akkurat_Pro/AkkRg_Pro_1.otf
+    - family: GT_Pressura_Mono
+      fonts:
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-regular.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-regular-italic.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-light.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-light-italic.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-bold.ttf
+        - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-bold-italic.ttf
 
 flutter_gen:
   output: lib/designs/atomic/tokens/src/gen
+  fonts:
+    enabled: true
+    outputs:
+      class_name: FontFamilyToken
   integrations:
     flutter_svg: true
   assets:
