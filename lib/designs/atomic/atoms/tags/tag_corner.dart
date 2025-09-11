@@ -45,13 +45,34 @@ class TagCorner extends StatelessWidget {
     this.paddingText,
     this.width = 100,
     this.height = 100,
-    this.color = const Color(0xFF4639E7),
+    this.color = StoycoColors.blue,
     this.cutSize = 48,
     this.cornerRadius = 20,
     this.borderWidth = 4,
-    this.gradientColorsBorder,
+    this.gradientColorsBorder = const <Color>[
+      StoycoColors.transparent,
+      StoycoColors.transparent,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite15,
+      StoycoColors.cardBorderGradientWhite15,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite15,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.transparent,
+      StoycoColors.transparent,
+    ],
     this.position = TagCornerPosition.topRight,
-    this.shadows,
+    this.shadows = const <BoxShadow>[
+      BoxShadow(
+        color: StoycoColors.shadowPurple98,
+        offset: Offset(-15, 10),
+        blurRadius: 50,
+        spreadRadius: 20,
+      ),
+    ],
   });
 
   /// Text to display inside the tag.
@@ -82,13 +103,13 @@ class TagCorner extends StatelessWidget {
   final double borderWidth;
 
   /// Colors for the gradient border.
-  final List<Color>? gradientColorsBorder;
+  final List<Color> gradientColorsBorder;
 
   /// Which corner to cut (default: topRight).
   final TagCornerPosition position;
 
   /// Optional list of shadows for the tag.
-  final List<BoxShadow>? shadows;
+  final List<BoxShadow> shadows;
 
   @override
   Widget build(BuildContext context) {
@@ -110,14 +131,7 @@ class TagCorner extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
           color: color,
-          shadows: shadows ?? const <BoxShadow>[
-            BoxShadow(
-              color: Color.fromARGB(98, 77, 31, 230),
-              offset: Offset(-15, 10),
-              blurRadius: 50,
-              spreadRadius: 20,
-            ),
-          ],
+          shadows: shadows,
           shape: PathBuilderBorder(
             pathBuilder: (Rect r, double _) {
               return roundPolygon(
@@ -143,14 +157,12 @@ class TagCorner extends StatelessWidget {
                   padding: paddingText ?? StoycoScreenSize.fromLTRB(context, top: 14),
                   child: Text(
                     title,
-                    style:
-                        textStyle ??
-                        TextStyle(
-                          color: StoycoColors.softWhite,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Montserrat',
-                          fontSize: StoycoScreenSize.fontSize(context, 14),
-                        ),
+                    style: textStyle ?? TextStyle(
+                      color: StoycoColors.softWhite,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
+                      fontSize: StoycoScreenSize.fontSize(context, 14),
+                    ),
                   ),
                 ),
               ),
