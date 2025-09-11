@@ -44,7 +44,18 @@ class TagGradientIcon extends StatelessWidget {
     this.borderRadius = 100,
     this.padding,
     this.margin,
-    this.gradient,
+    this.gradient = const LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      colors: <Color>[
+        StoycoColors.tagGradientWhite18,
+        StoycoColors.tagGradientGray25,
+        StoycoColors.tagGradientBlack45,
+        StoycoColors.tagGradientDark65,
+        StoycoColors.tagGradientBlack85,
+      ],
+      stops: <double>[0.0, 0.25, 0.5, 0.75, 1.0],
+    ),
   });
 
   /// Main text of the tag.
@@ -72,7 +83,7 @@ class TagGradientIcon extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
 
   /// Custom gradient (optional, defaults to dark gradient).
-  final Gradient? gradient;
+  final Gradient gradient;
 
   @override
   Widget build(BuildContext context) {
@@ -82,18 +93,7 @@ class TagGradientIcon extends StatelessWidget {
       padding: padding ?? StoycoScreenSize.fromLTRB( context, top: 5, right: 10, left: 10, bottom: 5),
       margin: margin ?? StoycoScreenSize.fromLTRB( context, top: 16, right: 12),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: <Color>[
-            Color.fromRGBO(255, 255, 255, 0.18),
-            Color.fromRGBO(80, 80, 80, 0.25),   
-            Color.fromRGBO(0, 0, 0, 0.45),      
-            Color.fromRGBO(20, 20, 20, 0.65),   
-            Color.fromRGBO(0, 0, 0, 0.85),      
-          ],
-          stops: <double>[0.0, 0.25, 0.5, 0.75, 1.0],
-        ),
+        gradient: gradient,
         borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, borderRadius)),
       ),
       child: Row(
