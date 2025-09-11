@@ -89,9 +89,6 @@ class StoycoColors {
   /// Color: #0E1926
   static const Color midnightBlue = Color(0xFF0E1926);
 
-  /// Color: #4639E7
-  static const Color navbarButtonColor = Color(0xFF4639E7);
-
   /// Color: #2B71FF
   static const Color principal = Color(0xFF2B71FF);
 
@@ -104,6 +101,9 @@ class StoycoColors {
   /// Color: #494949
   static const Color shadowColor = Color(0xFF494949);
 
+  /// Color: #624D1FE6
+  static const Color shadowPurple98 = Color(0x624D1FE6);
+
   /// Color: #0B122C
   static const Color skeletonBase = Color(0xFF0B122C);
 
@@ -112,6 +112,21 @@ class StoycoColors {
 
   /// Color: #F8F9FA
   static const Color softWhite = Color(0xFFF8F9FA);
+
+  /// Color: #73000000
+  static const Color tagGradientBlack45 = Color(0x73000000);
+
+  /// Color: #D9000000
+  static const Color tagGradientBlack85 = Color(0xD9000000);
+
+  /// Color: #A6141414
+  static const Color tagGradientDark65 = Color(0xA6141414);
+
+  /// Color: #40805050
+  static const Color tagGradientGray25 = Color(0x40805050);
+
+  /// Color: #2DFFFFFF
+  static const Color tagGradientWhite18 = Color(0x2DFFFFFF);
 
   /// Color: #F2F2FA
   static const Color text = Color(0xFFF2F2FA);
