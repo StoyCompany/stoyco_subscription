@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'subscription_plan_parent.dart';
+part of 'subscription_plan_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-SubscriptionPlanParent _$SubscriptionPlanParentFromJson(
+SubscriptionPlanResponse _$SubscriptionPlanResponseFromJson(
   Map<String, dynamic> json,
-) => SubscriptionPlanParent(
+) => SubscriptionPlanResponse(
   artistName: json['artistName'] as String,
   monthlyPlans: (json['monthlyPlans'] as List<dynamic>)
       .map((e) => SubscriptionPlan.fromJson(e as Map<String, dynamic>))
@@ -18,8 +18,8 @@ SubscriptionPlanParent _$SubscriptionPlanParentFromJson(
       .toList(),
 );
 
-Map<String, dynamic> _$SubscriptionPlanParentToJson(
-  SubscriptionPlanParent instance,
+Map<String, dynamic> _$SubscriptionPlanResponseToJson(
+  SubscriptionPlanResponse instance,
 ) => <String, dynamic>{
   'artistName': instance.artistName,
   'monthlyPlans': instance.monthlyPlans,
