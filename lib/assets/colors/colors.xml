@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Tag Gradient Colors -->
+    <color name="tag_gradient_white_18">#2DFFFFFF</color> <!-- rgba(255,255,255,0.18) -->
+    <color name="tag_gradient_gray_25">#40805050</color> <!-- rgba(80,80,80,0.25) -->
+    <color name="tag_gradient_black_45">#73000000</color> <!-- rgba(0,0,0,0.45) -->
+    <color name="tag_gradient_dark_65">#A6141414</color> <!-- rgba(20,20,20,0.65) -->
+    <color name="tag_gradient_black_85">#D9000000</color> <!-- rgba(0,0,0,0.85) -->
     <!-- SkeletonCard colors -->
     <color name="skeleton_base">#0B122C</color>
     <color name="skeleton_highlight">#142358</color>
@@ -13,7 +19,6 @@
     <color name="hint">#92929D</color>
     <color name="iconDefault">#D5D5E0</color>
     <color name="midnightBlue">#0E1926</color>
-    <color name="navbarButtonColor">#4639E7</color>
     <color name="principal">#2B71FF</color>
     <color name="royalIndigo">#4236DD</color>
     <color name="shadowColor">#494949</color>
@@ -23,6 +28,7 @@
     <color name="white2">#FFFFFF</color>
     <color name="shadowBlue">#4F1FE68F</color>
     <!-- CardWithShadow colors -->
+    <color name="shadow_purple_98">#624D1FE6</color>
     <color name="card_background_black_50">#80000000</color>
     <color name="card_shadow_purple_40">#664D1FE6</color>
     <color name="card_shadow_purple_19">#304D1FE6</color>

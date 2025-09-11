@@ -37,9 +37,23 @@ class GradientPathBorderPainter extends CustomPainter {
   const GradientPathBorderPainter({
     required this.path,
     required this.borderWidth,
-    this.gradientColors,
     this.gradientBegin = Alignment.topCenter,
     this.gradientEnd = Alignment.bottomCenter,
+    this.gradientColors = const <Color>[
+      StoycoColors.transparent,
+      StoycoColors.transparent,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite15,
+      StoycoColors.cardBorderGradientWhite15,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite15,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.cardBorderGradientWhite05,
+      StoycoColors.transparent,
+      StoycoColors.transparent,
+    ],
   });
 
   /// Path on which the border is drawn.
@@ -47,7 +61,7 @@ class GradientPathBorderPainter extends CustomPainter {
   /// Border width.
   final double borderWidth;
   /// Gradient colors.
-  final List<Color>? gradientColors;
+  final List<Color> gradientColors;
   /// Gradient start alignment.
   final Alignment gradientBegin;
   /// Gradient end alignment.
@@ -60,21 +74,7 @@ class GradientPathBorderPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: gradientBegin,
         end: gradientEnd,
-        colors: gradientColors ?? const <Color>[
-          StoycoColors.transparent,
-          StoycoColors.transparent,
-          StoycoColors.cardBorderGradientWhite05,
-          StoycoColors.cardBorderGradientWhite05,
-          StoycoColors.cardBorderGradientWhite15,
-          StoycoColors.cardBorderGradientWhite15,
-          StoycoColors.cardBorderGradientWhite05,
-          StoycoColors.cardBorderGradientWhite15,
-          StoycoColors.cardBorderGradientWhite05,
-          StoycoColors.cardBorderGradientWhite05,
-          StoycoColors.cardBorderGradientWhite05,
-          StoycoColors.transparent,
-          StoycoColors.transparent,
-        ],
+        colors: gradientColors,
       ).createShader(rect)
       ..style = PaintingStyle.stroke
       ..strokeWidth = borderWidth;
