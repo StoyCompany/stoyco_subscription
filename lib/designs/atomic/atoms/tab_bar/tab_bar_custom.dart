@@ -65,7 +65,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
     return Container(
       height: StoycoScreenSize.height(context, widget.height),
       width: StoycoScreenSize.width(context, widget.width),
-      padding: widget.padding ?? StoycoScreenSize.symmetric(context, horizontal: 8, vertical: 4),
+      padding: widget.padding ?? StoycoScreenSize.symmetric(context, horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: StoycoColors.menuItemBackground,
         borderRadius: BorderRadius.circular(106 - 1.06),
@@ -82,27 +82,27 @@ class _CustomTabBarState extends State<CustomTabBar> {
               return SizedBox(
                 width: StoycoScreenSize.width(context, widget.width - StoycoScreenSize.symmetric(context, horizontal: 8).horizontal) / 2,
                 child: isSelected 
-                ? ButtonGradientText(
-                  text: widget.tabs[index], 
-                  onPressed: () => changeTab(index),
-                  paddingContent: StoycoScreenSize.symmetric(context, vertical: 2),
-                  borderRadius: 106 - 1.06,
-                  type: ButtonGradientTextType.tertiary,
-                )
-                : ButtonGradientText(
-                  text: widget.tabs[index],
-                  textStyle: TextStyle(
-                    color: StoycoColors.iconDefault,
-                    fontSize: StoycoScreenSize.fontSize(context, 14),
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Montserrat',
-                  ),
-                  onPressed: () => changeTab(index),
-                  paddingContent: StoycoScreenSize.symmetric(context, vertical: 2),
-                  borderRadius: 106 - 1.06,
-                  type: ButtonGradientTextType.custom,
-                  backgroundColor: StoycoColors.transparent,
-                ),
+                  ? ButtonGradientText(
+                      text: widget.tabs[index], 
+                      onPressed: () => changeTab(index),
+                      paddingContent: StoycoScreenSize.symmetric(context, vertical: 2),
+                      borderRadius: 106 - 1.06,
+                      type: ButtonGradientTextType.tertiary,
+                    )
+                  : ButtonGradientText(
+                      text: widget.tabs[index],
+                      textStyle: TextStyle(
+                        color: StoycoColors.iconDefault,
+                        fontSize: StoycoScreenSize.fontSize(context, 14),
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Montserrat',
+                      ),
+                      onPressed: () => changeTab(index),
+                      paddingContent: StoycoScreenSize.symmetric(context, vertical: 2),
+                      borderRadius: 106 - 1.06,
+                      type: ButtonGradientTextType.custom,
+                      backgroundColor: StoycoColors.transparent,
+                    ),
               );
             },
           ),
