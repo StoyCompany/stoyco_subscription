@@ -50,16 +50,15 @@ class SkeletonCard extends StatelessWidget {
     margin: margin,
     child: ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.circular(StoycoScreenSize.radius(context, 25)),
-      child: Stack(
-        children: <Widget>[
-          Shimmer.fromColors(
-            baseColor: StoycoColors.skeletonBase,
-            highlightColor: StoycoColors.skeletonHighlight,
-            child: Container(
-              height: height,
-            ),
+      child: Shimmer.fromColors(
+        baseColor: StoycoColors.skeletonBase,
+        highlightColor: StoycoColors.skeletonHighlight,
+        child: Container(
+          height: height,
+          decoration: const BoxDecoration(
+            color: Colors.white,
           ),
-        ],
+        ),
       ),
     ),
   );
