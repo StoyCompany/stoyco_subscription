@@ -5,10 +5,6 @@ part 'subscription_catalog_item.g.dart';
 
 @JsonSerializable()
 class SubscriptionCatalogItem extends Equatable {
-  final String id;
-  final String imageUrl;
-  final String title;
-  final bool subscribed;
 
   const SubscriptionCatalogItem({
     required this.id,
@@ -17,11 +13,15 @@ class SubscriptionCatalogItem extends Equatable {
     required this.subscribed,
   });
 
-  factory SubscriptionCatalogItem.fromJson(Map<String, dynamic> json) =>
-      _$SubscriptionCatalogItemFromJson(json);
+  factory SubscriptionCatalogItem.fromJson(Map<String, dynamic> json) => _$SubscriptionCatalogItemFromJson(json);
+
+  final String id;
+  final String imageUrl;
+  final String title;
+  final bool subscribed;
 
   Map<String, dynamic> toJson() => _$SubscriptionCatalogItemToJson(this);
 
   @override
-  List<Object?> get props => [imageUrl, title, subscribed];
+  List<Object?> get props => <Object?>[imageUrl, title, subscribed];
 }
