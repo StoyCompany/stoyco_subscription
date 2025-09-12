@@ -1,4 +1,8 @@
-## 0.3.1
+## 0.4.0
+
+- Add catalog web screen and responsive design
+
+## 0.3.0
 
 - Add documentation to existing exports
 
