@@ -43,6 +43,24 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
       title: 'Feid',
       subscribed: false,
     ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?16',
+      title: 'Shakira',
+      subscribed: false,
+    ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?17',
+      title: 'J Balvin',
+      subscribed: false,
+    ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?18',
+      title: 'Ozuna',
+      subscribed: false,
+    ),
   ];
 
   final List<SubscriptionCatalogItem> sportSubscriptions = [
@@ -74,6 +92,24 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
       id: '681bb4ed712816d61286b1af',
       imageUrl: 'https://picsum.photos/200?10',
       title: 'Usain Bolt',
+      subscribed: false,
+    ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?19',
+      title: 'Michael Jordan',
+      subscribed: false,
+    ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?20',
+      title: 'Simone Biles',
+      subscribed: false,
+    ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?21',
+      title: 'Roger Federer',
       subscribed: false,
     ),
   ];
@@ -109,6 +145,24 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
       title: 'Coca-Cola',
       subscribed: false,
     ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?22',
+      title: 'Microsoft',
+      subscribed: false,
+    ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?23',
+      title: 'Google',
+      subscribed: false,
+    ),
+    SubscriptionCatalogItem(
+      id: '681bb4ed712816d61286b1af',
+      imageUrl: 'https://picsum.photos/200?24',
+      title: 'Amazon',
+      subscribed: false,
+    ),
   ];
 
   List<SubscriptionCatalogItem> subscriptions = [];
@@ -118,20 +172,12 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
   SubscriptionCatalogNotifier(TickerProvider vsync) {
     tabController = TabController(vsync: vsync, length: tabs.length);
     tabController.addListener(_onTabChanged);
-    scrollController.addListener(_onScroll);
     changeTab(0);
   }
 
   void _onTabChanged() {
     if (tabController.indexIsChanging || tabController.index != selectedIndex) {
       changeTab(tabController.index);
-    }
-  }
-
-  void _onScroll() {
-    if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent - 200) {
-      _loadMore();
     }
   }
 
@@ -171,36 +217,6 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
           )
           .toList();
     }
-  }
-
-  void _loadMore() {
-    List<SubscriptionCatalogItem> source;
-    switch (selectedIndex) {
-      case 0:
-        source = musicSubscriptions;
-        break;
-      case 1:
-        source = sportSubscriptions;
-        break;
-      case 2:
-        source = brandSubscriptions;
-        break;
-      default:
-        source = [];
-    }
-    final int start = subscriptions.length;
-    for (int i = 0; i < 5; i++) {
-      subscriptions.add(
-        SubscriptionCatalogItem(
-          id: '681bb4ed712816d61286b1af',
-          imageUrl: 'https://picsum.photos/200?${start + i + 1}',
-          title: '${source[start % source.length].title} ${start + i + 1}',
-          subscribed: false,
-        ),
-      );
-    }
-    applyFilter();
-    notifyListeners();
   }
 
   void goToDetail(SubscriptionCatalogItem item) {}

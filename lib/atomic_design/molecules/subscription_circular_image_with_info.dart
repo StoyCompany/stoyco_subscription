@@ -36,8 +36,11 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
     this.onTap,
     required this.imageUrl,
     required this.title,
+    this.titleFontSize,
     this.subscribed,
     this.margin,
+    this.imageWidth,
+    this.imageHeight,
   });
 
   /// The title displayed below the image.
@@ -49,6 +52,13 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
   /// Whether the user is subscribed. Affects the button's appearance and text.
   final bool? subscribed;
 
+  //Image width and height
+  final double? imageWidth;
+  final double? imageHeight;
+
+  /// Optional font size for the title text.
+  final double? titleFontSize;
+
   /// Called when the widget is tapped.
   final Function()? onTap;
 
@@ -56,87 +66,102 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-    child: GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: StoycoScreenSize.width(context, 148.15),
-            height: StoycoScreenSize.height(context, 148.15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF000000).withValues(alpha: 0.25),
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(999),
-              child: CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
-            ),
-          ),
-          SizedBox(height: StoycoScreenSize.height(context, 7.66)),
-          SizedBox(
-            child: Text(
-              maxLines: 1,
-              title,
-              textScaler: TextScaler.noScaling,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  color: StoycoColors.softWhite,
-                  fontSize: StoycoScreenSize.fontSize(context, 18.53),
-                  fontWeight: FontWeight.w400,
+  Widget build(BuildContext context) {
+    double dynamicImageSize;
+    if (StoycoScreenSize.isDesktopLarge(context)) {
+      dynamicImageSize = 180;
+    } else if (StoycoScreenSize.isDesktop(context)) {
+      dynamicImageSize = 154.8;
+    } else if (StoycoScreenSize.isTablet(context)) {
+      dynamicImageSize = 120;
+    } else {
+      dynamicImageSize = 100;
+    }
+
+    final double imageW = imageWidth ?? dynamicImageSize;
+    final double imageH = imageHeight ?? dynamicImageSize;
+
+    return SizedBox(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: StoycoScreenSize.width(context, imageW),
+              height: StoycoScreenSize.height(context, imageH),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(999),
+                child: CachedNetworkImage(
+                  imageUrl: imageUrl,
+                  fit: BoxFit.cover,
                 ),
               ),
-              overflow: TextOverflow.ellipsis,
             ),
-          ),
-          SizedBox(height: StoycoScreenSize.height(context, 7.66)),
-          Container(
-            padding: StoycoScreenSize.symmetric(
-              context,
-              horizontal: 22.97,
-              vertical: 3.83,
-            ),
-            height: StoycoScreenSize.height(context, 30.66),
-            decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xFF373680)),
-              borderRadius: BorderRadius.circular(15.31),
-              gradient: subscribed == true
-                  ? const LinearGradient(
-                      colors: [
-                        Color(0x232336B2),
-                        Color(0x232336B2),
-                        Color(0x2323361A),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    )
-                  : const LinearGradient(
-                      colors: [Color(0xFF1C197F), Color(0xFF4639E7)],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
+            SizedBox(height: StoycoScreenSize.height(context, 7.66)),
+            SizedBox(
+              child: Text(
+                maxLines: 1,
+                title,
+                textScaler: TextScaler.noScaling,
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    color: StoycoColors.softWhite,
+                    fontSize: StoycoScreenSize.fontSize(
+                      context,
+                      titleFontSize ?? 18.53,
                     ),
-            ),
-            child: Text(
-              subscribed == true ? 'Ver suscripción' : 'Suscribirme',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: StoycoScreenSize.fontSize(context, 15.31),
-                fontFamily: FontFamilyToken.akkuratPro,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-          ),
-        ],
+            SizedBox(height: StoycoScreenSize.height(context, 7.66)),
+            Container(
+              padding: StoycoScreenSize.symmetric(
+                context,
+                horizontal: 22.97,
+                vertical: 3.83,
+              ),
+              height: StoycoScreenSize.height(context, 30.66),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFF373680)),
+                borderRadius: BorderRadius.circular(15.31),
+                gradient: subscribed == true
+                    ? const LinearGradient(
+                        colors: [
+                          Color(0x232336B2),
+                          Color(0x232336B2),
+                          Color(0x2323361A),
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      )
+                    : const LinearGradient(
+                        colors: [Color(0xFF1C197F), Color(0xFF4639E7)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+              ),
+              child: Text(
+                subscribed == true ? 'Ver suscripción' : 'Suscribirme',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: StoycoScreenSize.fontSize(context, 16),
+                  fontFamily: FontFamilyToken.akkuratPro,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

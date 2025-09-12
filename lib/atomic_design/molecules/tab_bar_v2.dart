@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/atomic_design/molecules/stoyco_subscription_tab.dart';
 import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
 import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
 
 class StoycoTabBarV2 extends StatelessWidget {
   const StoycoTabBarV2({
@@ -42,15 +43,16 @@ class StoycoTabBarV2 extends StatelessWidget {
         SizedBox(
           height: 56,
           child: TabBar(
+            isScrollable: false,
             padding: const EdgeInsets.all(0),
             controller: tabController,
             tabs: tabsWithKeys,
             indicatorColor: Colors.transparent,
-            indicatorSize: TabBarIndicatorSize.label,
+            indicatorSize: TabBarIndicatorSize.tab,
             indicator: CustomTabIndicatorV2(controller: tabController),
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: StoycoScreenSize.fontSize(context, 16),
               fontFamily: FontFamilyToken.akkuratPro,
               fontWeight: FontWeight.w700,
               height: 1.50,
@@ -92,10 +94,9 @@ class _CustomPainter extends BoxPainter {
 
     final double tabWidth = configuration.size!.width;
 
-    final double horizontalStart = offset.dx + (tabWidth - 121.31) / 2;
     final Rect rect =
-        Offset(horizontalStart, configuration.size!.height - 12) &
-        const Size(121.31, 3.6);
+        Offset(offset.dx, configuration.size!.height - 12) &
+        Size(tabWidth, 3.6);
 
     final RRect rrect = RRect.fromLTRBAndCorners(
       rect.left,
@@ -104,15 +105,6 @@ class _CustomPainter extends BoxPainter {
       rect.bottom,
       topLeft: const Radius.circular(5),
       topRight: const Radius.circular(5),
-    );
-
-    final Shadow shadow = Shadow(color: StoycoColors.blue, blurRadius: 15.0);
-
-    canvas.drawShadow(
-      Path()..addRRect(rrect),
-      shadow.color,
-      shadow.blurRadius,
-      true,
     );
 
     canvas.drawRRect(rrect, paint);

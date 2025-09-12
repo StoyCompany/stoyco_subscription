@@ -49,7 +49,7 @@ class TextWithAlert extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: StoycoScreenSize.fontSize(context, 14),
+              fontSize: StoycoScreenSize.fontSize(context, 20, phone: 14),
               fontWeight: FontWeight.w700,
             ),
             overflow: TextOverflow.ellipsis,

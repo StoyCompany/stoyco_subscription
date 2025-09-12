@@ -34,4 +34,6 @@ class StoycoColors {
   static Color midnightInk = ColorUtils.fromHex('0F151A');
 
   static Color deepTeal = ColorUtils.fromHex('253341');
+
+  static Color snowWhite = ColorUtils.fromHex('F2F2FA');
 }
