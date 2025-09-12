@@ -66,6 +66,10 @@ class $LibAssetsIconsGen {
   SvgGenImage get tagSubscription =>
       const SvgGenImage('lib/assets/icons/tag_subscription.svg');
 
+  /// File path: lib/assets/icons/tag_subscription_slim.svg
+  SvgGenImage get tagSubscriptionSlim =>
+      const SvgGenImage('lib/assets/icons/tag_subscription_slim.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
     arrowRight,
@@ -73,6 +77,7 @@ class $LibAssetsIconsGen {
     star,
     subscriptionIcon,
     tagSubscription,
+    tagSubscriptionSlim,
   ];
 }
 
