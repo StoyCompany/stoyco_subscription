@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/buttons/button_gradient.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
@@ -160,12 +161,12 @@ class ButtonGradientText extends StatelessWidget {
             StoycoColors.blue,
           ],
         );
-        style = textStyle ?? TextStyle(
+        style = textStyle ?? GoogleFonts.montserrat( 
+          textStyle: TextStyle(
           color: StoycoColors.text,
           fontSize: StoycoScreenSize.fontSize(context, 16),
           fontWeight: FontWeight.w700,
-          fontFamily: 'Montserrat',
-        );
+        ));
       case ButtonGradientTextType.secondary:
 
         border = gradientBorder ?? GradientBoxBorder(
@@ -192,11 +193,12 @@ class ButtonGradientText extends StatelessWidget {
           stops: <double>[0.0, 0.0001, 1.0],
         );
 
-        style = textStyle ?? TextStyle(
-          color: StoycoColors.text,
-          fontSize: StoycoScreenSize.fontSize(context, 16),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+        style = textStyle ?? GoogleFonts.montserrat(
+          textStyle: TextStyle(
+            color: StoycoColors.text,
+            fontSize: StoycoScreenSize.fontSize(context, 16),
+            fontWeight: FontWeight.bold,
+          ),
         );
       case ButtonGradientTextType.tertiary:
         border = gradientBorder ?? GradientBoxBorder(
@@ -222,21 +224,23 @@ class ButtonGradientText extends StatelessWidget {
 
         backgroundC = backgroundColor ?? StoycoColors.text;
 
-        style = textStyle ?? TextStyle(
-          color: StoycoColors.deepCharcoal,
-          fontSize: StoycoScreenSize.fontSize(context, 14),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+        style = textStyle ?? GoogleFonts.montserrat(
+          textStyle: TextStyle(
+            color: StoycoColors.deepCharcoal,
+            fontSize: StoycoScreenSize.fontSize(context, 14),
+            fontWeight: FontWeight.bold,
+          ),
         );
       case ButtonGradientTextType.inactive:
         border = gradientBorder;
         shadows = boxShadow;
         backgroundC = backgroundColor ?? StoycoColors.hint;
-        style = textStyle ?? TextStyle(
-          color: StoycoColors.iconDefault,
-          fontSize: StoycoScreenSize.fontSize(context, 16),
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Montserrat',
+        style = textStyle ?? GoogleFonts.montserrat(
+          textStyle: TextStyle(
+            color: StoycoColors.iconDefault,
+            fontSize: StoycoScreenSize.fontSize(context, 16),
+            fontWeight: FontWeight.bold,
+          ),
         );
       case ButtonGradientTextType.custom:
         border = gradientBorder;
@@ -265,7 +269,7 @@ class ButtonGradientText extends StatelessWidget {
         child: textWidget ?? Text(
           text,
           textAlign: textAlign ?? TextAlign.center,
-          overflow: TextOverflow.ellipsis,
+          maxLines: null,
           softWrap: true,
           style: style,
         ),

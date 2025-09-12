@@ -91,17 +91,19 @@ class ButtonGradient extends StatelessWidget {
       onTap: onPressed,
       child: Padding(
         padding: padding ?? EdgeInsetsGeometry.zero,
-        child: Container(
-          width: width ?? double.infinity,
-          height: height,
-          decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
-            gradient: backgroundGradientColor,
-            boxShadow: boxShadow,
-            border: gradientBorder,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: height ?? 29),
+          child: Container(
+            width: width ?? double.infinity,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
+              gradient: backgroundGradientColor,
+              boxShadow: boxShadow,
+              border: gradientBorder,
+            ),
+            child: child,
           ),
-          child: Center(child: child),
         ),
       ),
     );
