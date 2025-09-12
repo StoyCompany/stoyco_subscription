@@ -17,14 +17,17 @@ class StoycoTabBarV2 extends StatelessWidget {
   final TabController tabController;
   final List<SubscriptionStoycoTab> tabs;
   final bool showAlertIndicator;
-  final Function(int)? getOnboardingKey;
+  final GlobalKey Function(int)? getOnboardingKey;
   final Color? dividerColor;
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey? onboardingKey = getOnboardingKey != null
-        ? getOnboardingKey!(2) as GlobalKey
-        : null;
+    final GlobalKey? onboardingKey;
+    if (getOnboardingKey != null) {
+      onboardingKey = getOnboardingKey!(2);
+    } else {
+      onboardingKey = null;
+    }
 
     final List<SubscriptionStoycoTab> tabsWithKeys =
         List<SubscriptionStoycoTab>.from(tabs);
