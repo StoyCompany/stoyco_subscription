@@ -29,6 +29,7 @@ class SubscriptionPlanScreenStyleParams {
     this.messageInformationTextStyle,
     // ----------- Action Button Paddings -----------
     this.onTapFreeTrialPadding,
+    this.onTapContinuePadding,
     this.onTapRenewSubscriptionPadding,
     this.onTapCancelSubscriptionPadding,
     // ----------- Discount Message Style -----------
@@ -128,6 +129,8 @@ class SubscriptionPlanScreenStyleParams {
   // ----------- Action Button Paddings -----------
   /// Free trial button padding.
   final EdgeInsets? onTapFreeTrialPadding;
+  /// Continue button padding.
+  final EdgeInsets? onTapContinuePadding;
   /// Renew subscription button padding.
   final EdgeInsets? onTapRenewSubscriptionPadding;
   /// Cancel subscription button padding.

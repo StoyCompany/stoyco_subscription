@@ -13,14 +13,17 @@ class SubscriptionPlan extends Equatable {
   /// [description] - The HTML description of the plan's benefits.
   /// [price] - The price of the plan.
   /// [currencyCode] - The currency code or text (e.g., 'MXN').
+  /// [currencySymbol] - The currency symbol (e.g., '$').
   /// [subscribed] - Whether the user is currently subscribed to this plan.
-  /// [isActive] - Whether the plan is currently active.
+  /// [subscribedIsActive] - Whether the plan is currently active.
   /// [subscribedAt] - The date/time when the user subscribed.
   /// [expiresAt] - The date/time when the subscription expires.
   /// [recommended] - Whether this plan is recommended.
   /// [priceDiscount] - The discounted price, if any.
   /// [porcentageDiscount] - The discount percentage, if any.
   /// [messageDiscount] - The message to display for the discount.
+  /// [messageSuscriptionStatus] - The message to display for the subscription status.
+  /// [messageTrial] - The message to display for the trial status.
   const SubscriptionPlan({
     required this.id,
     required this.name,
@@ -29,8 +32,9 @@ class SubscriptionPlan extends Equatable {
     required this.price,
     required this.currencyCode,
     required this.currencySymbol,
-    required this.subscribed,
-    this.isActive = false,
+    this.subscribed = false,
+    this.subscribedIsActive = false,
+    this.subscribedIsPendingActivation = false,
     this.subscribedAt,
     this.expiresAt,
     this.trialStart,
@@ -39,6 +43,8 @@ class SubscriptionPlan extends Equatable {
     this.priceDiscount = 0.0,
     this.porcentageDiscount = 0.0,
     this.messageDiscount = '',
+    this.messageSuscriptionStatus = '',
+    this.messageTrial = '',
   });
 
   factory SubscriptionPlan.fromJson(Map<String, dynamic> json) => _$SubscriptionPlanFromJson(json);
@@ -68,7 +74,10 @@ class SubscriptionPlan extends Equatable {
   final bool subscribed;
 
   /// Whether the plan is currently active.
-  final bool isActive;
+  final bool subscribedIsActive;
+
+  /// Whether the subscription is pending activation.
+  final bool subscribedIsPendingActivation;
 
   /// The date/time when the user subscribed.
   final DateTime? subscribedAt;
@@ -94,6 +103,12 @@ class SubscriptionPlan extends Equatable {
   /// The message to display for the discount.
   final String messageDiscount;
 
+  /// The message to display for the subscription status.
+  final String messageSuscriptionStatus;
+
+  /// The message to display for the trial status.
+  final String messageTrial;
+
   Map<String, dynamic> toJson() => _$SubscriptionPlanToJson(this);
 
   @override
@@ -105,12 +120,15 @@ class SubscriptionPlan extends Equatable {
     price,
     currencyCode,
     subscribed,
-    isActive,
+    subscribedIsActive,
     subscribedAt,
     expiresAt,
     recommended,
     priceDiscount,
     porcentageDiscount,
     messageDiscount,
+    messageSuscriptionStatus,
+    messageTrial,
+    currencySymbol,
   ];
 }
