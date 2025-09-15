@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/atomic_design/atoms/subscription_search_bar.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
-import 'package:stoyco_subscription/atomic_design/molecules/subscription_circular_image_with_info.dart';
-import 'package:stoyco_subscription/atomic_design/molecules/tab_bar_v2.dart';
-import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
-import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/inputs/subscription_search_bar.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/tab_bar/tab_bar_v2.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/circular_avatar/subscription_circular_image_with_info.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/subscription_catalog_notifier.dart';
 
 /// {@template subscription_catalog}
@@ -26,12 +27,6 @@ import 'package:stoyco_subscription/pages/subscription_catalog/subscription_cata
 ///
 /// {@endtemplate}
 class SubscriptionCatalog extends StatefulWidget {
-  /// The [AppBar] to display at the top of the screen.
-  final PreferredSizeWidget buildAppbar;
-
-  /// Callback triggered when a subscription item is tapped.
-  /// Receives the [id] of the tapped subscription.
-  final void Function(String id)? onTapSubscription;
 
   /// {@macro subscription_catalog}
   const SubscriptionCatalog({
@@ -39,6 +34,12 @@ class SubscriptionCatalog extends StatefulWidget {
     required this.buildAppbar,
     this.onTapSubscription,
   });
+  /// The [AppBar] to display at the top of the screen.
+  final PreferredSizeWidget buildAppbar;
+
+  /// Callback triggered when a subscription item is tapped.
+  /// Receives the [id] of the tapped subscription.
+  final void Function(String id)? onTapSubscription;
 
   @override
   State<SubscriptionCatalog> createState() => _SubscriptionCatalogState();
@@ -71,14 +72,14 @@ class _SubscriptionCatalogState extends State<SubscriptionCatalog>
 
   @override
   Widget build(BuildContext context) {
-    final controller = notifier;
+    final SubscriptionCatalogNotifier controller = notifier;
     return Scaffold(
       backgroundColor: StoycoColors.midnightInk,
       appBar: widget.buildAppbar,
       body: SafeArea(
         child: CustomScrollView(
           controller: controller.scrollController,
-          slivers: [
+          slivers: <Widget>[
             SliverAppBar(
               expandedHeight: StoycoScreenSize.height(context, 58),
               automaticallyImplyLeading: false,
@@ -110,7 +111,7 @@ class _SubscriptionCatalogState extends State<SubscriptionCatalog>
                 background: Padding(
                   padding: StoycoScreenSize.symmetric(context, horizontal: 24),
                   child: Column(
-                    children: [
+                    children: <Widget>[
                       SubscriptionSearchBar(
                         onChanged: controller.onSearchChanged,
                       ),
@@ -136,8 +137,8 @@ class _SubscriptionCatalogState extends State<SubscriptionCatalog>
                   crossAxisSpacing: 16,
                   childAspectRatio: 0.7,
                 ),
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final item = controller.filteredSubscriptions[index];
+                delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+                  final SubscriptionCatalogItem item = controller.filteredSubscriptions[index];
                   return SubscriptionCircularImageWithInfo(
                     imageUrl: item.imageUrl,
                     title: item.title,

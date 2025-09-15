@@ -1,0 +1,103 @@
+{
+    "artistName": "Peso Pluma",
+    "monthlyPlans": [
+        {
+            "id": "monthly_1",
+            "name": "Plan Mensual",
+            "imageUrl": "https://www.montrealhispano.com/wp-content/uploads/2023/06/peso-pluma-montreal-poster.jpg",
+            "description": "<p>📜 <strong>&iexcl;Tu pase directo al mundo exclusivo que siempre so&ntilde;aste!</strong></p><p>Convi&eacute;rtete en protagonista y disfruta de:</p><p>💥 <strong>Acceso completo a contenido exclusivo:</strong></p><p>Todo lo que amas, sin l&iacute;mites.</p><p><span style=\"font-size: 26px;\">💸&nbsp;</span><strong><span style=\"font-size: 26px;\">Descuentos en merchandising y eventos:</span></strong></p><p><span style='font-family: \"Times New Roman\", Times, serif;'> </span><span style=\"font-family: Impact, Charcoal, sans-serif;\">Vive m&aacute;s, gastando menos.</span></p><p>🏅 <strong>Recompensas y badges:</strong></p><p><span style=\"font-family: Symbol; background-color: rgb(247, 218, 100);\">Demuestra tu nivel y gana por participar.</span></p><p>🎟️ <strong>Acceso prioritario a boletos:</strong></p><p>S&eacute; el primero en estar donde todo sucede.</p><p>🌐 <strong>Eventos virtuales exclusivos:</strong></p><p>Momentos &uacute;nicos, solo para ti.</p>",
+            "price": 199,
+            "currencyCode": "MXN",
+            "subscribed": true,
+            "isActive": true,
+            "subscribedAt": "2025-09-01T12:00:00Z",
+            "expiresAt": "2025-10-01T12:00:00Z",
+            "recommended": false,
+            "priceDiscount": 20.0,
+            "porcentageDiscount": 10.0,
+            "messageDiscount": "Gratis durante 1 mes. Luego, 199 MXN al mes. 20% de descuento por pago anual."
+        },
+        {
+            "id": "monthly_2",
+            "name": "Plan Mensual Plus",
+            "imageUrl": "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+            "description": "<p>📜 <strong>&iexcl;Tu pase directo al mundo exclusivo que siempre so&ntilde;aste!</strong></p><p>Convi&eacute;rtete en protagonista y disfruta de:</p><p>💥 <strong>Acceso completo a contenido exclusivo:</strong></p><p>Todo lo que amas, sin l&iacute;mites.</p><p><span style=\"font-size: 26px;\">💸&nbsp;</span><strong><span style=\"font-size: 26px;\">Descuentos en merchandising y eventos:</span></strong></p><p><span style='font-family: \"Times New Roman\", Times, serif;'> </span><span style=\"font-family: Impact, Charcoal, sans-serif;\">Vive m&aacute;s, gastando menos.</span></p><p>🏅 <strong>Recompensas y badges:</strong></p><p><span style=\"font-family: Symbol; background-color: rgb(247, 218, 100);\">Demuestra tu nivel y gana por participar.</span></p><p>🎟️ <strong>Acceso prioritario a boletos:</strong></p><p>S&eacute; el primero en estar donde todo sucede.</p><p>🌐 <strong>Eventos virtuales exclusivos:</strong></p><p>Momentos &uacute;nicos, solo para ti.</p>",
+            "price": 299,
+            "currencyCode": "MXN",
+            "subscribed": false,
+            "isActive": false,
+            "subscribedAt": null,
+            "expiresAt": null,
+            "recommended": false,
+            "priceDiscount": 0.0,
+            "porcentageDiscount": 0.0,
+            "messageDiscount": "Gratis durante 1 mes. Luego, 299 MXN al mes. 0% de descuento por pago anual."
+        },
+        {
+            "id": "monthly_3",
+            "name": "Plan Mensual Premium",
+            "imageUrl": "https://images.unsplash.com/photo-1519125323398-675f0ddb6308",
+            "description": "<p>📜 <strong>&iexcl;Tu pase directo al mundo exclusivo que siempre so&ntilde;aste!</strong></p><p>Convi&eacute;rtete en protagonista y disfruta de:</p><p>💥 <strong>Acceso completo a contenido exclusivo:</strong></p><p>Todo lo que amas, sin l&iacute;mites.</p><p><span style=\"font-size: 26px;\">💸&nbsp;</span><strong><span style=\"font-size: 26px;\">Descuentos en merchandising y eventos:</span></strong></p><p><span style='font-family: \"Times New Roman\", Times, serif;'> </span><span style=\"font-family: Impact, Charcoal, sans-serif;\">Vive m&aacute;s, gastando menos.</span></p><p>🏅 <strong>Recompensas y badges:</strong></p><p><span style=\"font-family: Symbol; background-color: rgb(247, 218, 100);\">Demuestra tu nivel y gana por participar.</span></p><p>🎟️ <strong>Acceso prioritario a boletos:</strong></p><p>S&eacute; el primero en estar donde todo sucede.</p><p>🌐 <strong>Eventos virtuales exclusivos:</strong></p><p>Momentos &uacute;nicos, solo para ti.</p>",
+            "price": 399,
+            "currencyCode": "MXN",
+            "subscribed": false,
+            "isActive": false,
+            "subscribedAt": null,
+            "expiresAt": null,
+            "recommended": true,
+            "priceDiscount": 50.0,
+            "porcentageDiscount": 12.5,
+            "messageDiscount": "12.5% de descuento en Premium"
+        }
+    ],
+    "annualPlans": [
+        {
+            "id": "annual_1",
+            "name": "Plan Anual",
+            "imageUrl": "https://www.montrealhispano.com/wp-content/uploads/2023/06/peso-pluma-montreal-poster.jpg",
+            "description": "<p>📜 <strong>&iexcl;Tu pase directo al mundo exclusivo que siempre so&ntilde;aste!</strong></p><p>Convi&eacute;rtete en protagonista y disfruta de:</p><p>💥 <strong>Acceso completo a contenido exclusivo:</strong></p><p>Todo lo que amas, sin l&iacute;mites.</p><p><span style=\"font-size: 26px;\">💸&nbsp;</span><strong><span style=\"font-size: 26px;\">Descuentos en merchandising y eventos:</span></strong></p><p><span style='font-family: \"Times New Roman\", Times, serif;'> </span><span style=\"font-family: Impact, Charcoal, sans-serif;\">Vive m&aacute;s, gastando menos.</span></p><p>🏅 <strong>Recompensas y badges:</strong></p><p><span style=\"font-family: Symbol; background-color: rgb(247, 218, 100);\">Demuestra tu nivel y gana por participar.</span></p><p>🎟️ <strong>Acceso prioritario a boletos:</strong></p><p>S&eacute; el primero en estar donde todo sucede.</p><p>🌐 <strong>Eventos virtuales exclusivos:</strong></p><p>Momentos &uacute;nicos, solo para ti.</p>",
+            "price": 1999,
+            "currencyCode": "MXN",
+            "subscribed": false,
+            "isActive": true,
+            "subscribedAt": null,
+            "expiresAt": null,
+            "recommended": true,
+            "priceDiscount": 200.0,
+            "porcentageDiscount": 10.0,
+            "messageDiscount": "10% de descuento anual"
+        },
+        {
+            "id": "annual_2",
+            "name": "Plan Anual Plus",
+            "imageUrl": "https://images.unsplash.com/photo-1465101046530-73398c7f28ca",
+            "description": "<p>Incluye acceso VIP anual y contenido extra.</p>",
+            "price": 2999,
+            "currencyCode": "MXN",
+            "subscribed": false,
+            "isActive": false,
+            "subscribedAt": null,
+            "expiresAt": null,
+            "recommended": false,
+            "priceDiscount": 300.0,
+            "porcentageDiscount": 10.0,
+            "messageDiscount": "10% de descuento en Plus Anual"
+        },
+        {
+            "id": "annual_3",
+            "name": "Plan Anual Premium",
+            "imageUrl": "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+            "description": "<p>Todo lo anterior más acceso a eventos exclusivos anuales.</p>",
+            "price": 3999,
+            "currencyCode": "MXN",
+            "subscribed": false,
+            "isActive": false,
+            "subscribedAt": null,
+            "expiresAt": null,
+            "recommended": false,
+            "priceDiscount": 500.0,
+            "porcentageDiscount": 12.5,
+            "messageDiscount": "12.5% de descuento en Premium Anual"
+        }
+    ]
+}
