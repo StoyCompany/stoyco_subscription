@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-
-<<<<<<< HEAD:lib/atomic_design/molecules/tab_bar_v2.dart
-import 'package:stoyco_subscription/atomic_design/molecules/stoyco_subscription_tab.dart';
-import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
-import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
-=======
 import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscription_tab.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
->>>>>>> e22c7a53cfa028149799be3a1471f11550b9860c:lib/designs/atomic/atoms/tab_bar/tab_bar_v2.dart
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 class StoycoTabBarV2 extends StatelessWidget {
   const StoycoTabBarV2({
@@ -52,12 +45,8 @@ class StoycoTabBarV2 extends StatelessWidget {
         SizedBox(
           height: 56,
           child: TabBar(
-<<<<<<< HEAD:lib/atomic_design/molecules/tab_bar_v2.dart
             isScrollable: false,
             padding: const EdgeInsets.all(0),
-=======
-            padding: EdgeInsets.zero,
->>>>>>> e22c7a53cfa028149799be3a1471f11550b9860c:lib/designs/atomic/atoms/tab_bar/tab_bar_v2.dart
             controller: tabController,
             tabs: tabsWithKeys,
             indicatorColor: Colors.transparent,
@@ -120,18 +109,6 @@ class _CustomPainter extends BoxPainter {
       topRight: const Radius.circular(5),
     );
 
-<<<<<<< HEAD:lib/atomic_design/molecules/tab_bar_v2.dart
-=======
-    const Shadow shadow = Shadow(color: StoycoColors.blue, blurRadius: 15.0);
-
-    canvas.drawShadow(
-      Path()..addRRect(rrect),
-      shadow.color,
-      shadow.blurRadius,
-      true,
-    );
-
->>>>>>> e22c7a53cfa028149799be3a1471f11550b9860c:lib/designs/atomic/atoms/tab_bar/tab_bar_v2.dart
     canvas.drawRRect(rrect, paint);
   }
 }

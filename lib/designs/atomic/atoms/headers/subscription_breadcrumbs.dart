@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
-import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
-import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template breadcrumbs}
 /// A reusable breadcrumbs widget for navigation hierarchy.
@@ -19,12 +19,6 @@ import 'package:stoyco_subscription/core/gen/fonts.gen.dart';
 /// ```
 /// {@endtemplate}
 class Breadcrumbs extends StatelessWidget {
-  /// The list of breadcrumb items.
-  final List<BreadcrumbItem> items;
-
-  /// The separator widget between items (default: Text('/')).
-  final Widget Function(BuildContext context) separator;
-
   /// {@macro breadcrumbs}
   Breadcrumbs({
     super.key,
@@ -33,7 +27,7 @@ class Breadcrumbs extends StatelessWidget {
   }) : separator =
            separator ??
            ((BuildContext context) => Row(
-             children: [
+             children: <Widget>[
                SizedBox(width: StoycoScreenSize.width(context, 12)),
                Text(
                  '/',
@@ -48,23 +42,29 @@ class Breadcrumbs extends StatelessWidget {
              ],
            ));
 
+  /// The list of breadcrumb items.
+  final List<BreadcrumbItem> items;
+
+  /// The separator widget between items (default: Text('/')).
+  final Widget Function(BuildContext context) separator;
+
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
-        for (int i = 0; i < items.length; i++) ...[
+      children: <Widget>[
+        for (int i = 0; i < items.length; i++) ...<Widget>[
           GestureDetector(
             onTap: items[i].onTap,
             child: Text(
               items[i].label,
               style: i == 0
-                  ? TextStyle(
+                  ? const TextStyle(
                       color: StoycoColors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
                       fontFamily: FontFamilyToken.akkuratPro,
                     )
-                  : TextStyle(
+                  : const TextStyle(
                       color: StoycoColors.white,
                       fontWeight: FontWeight.w400,
                       fontFamily: FontFamilyToken.akkuratPro,
@@ -80,11 +80,11 @@ class Breadcrumbs extends StatelessWidget {
 
 /// Model for a breadcrumb item.
 class BreadcrumbItem {
+  BreadcrumbItem({required this.label, this.onTap});
+
   /// The label to display.
   final String label;
 
   /// The callback when this breadcrumb is tapped (null for the last/current item).
   final VoidCallback? onTap;
-
-  BreadcrumbItem({required this.label, this.onTap});
 }

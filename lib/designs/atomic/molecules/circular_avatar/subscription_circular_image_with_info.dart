@@ -66,7 +66,6 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
 
   @override
-<<<<<<< HEAD:lib/atomic_design/molecules/subscription_circular_image_with_info.dart
   Widget build(BuildContext context) {
     double dynamicImageSize;
     if (StoycoScreenSize.isDesktopLarge(context)) {
@@ -88,7 +87,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Container(
               width: StoycoScreenSize.width(context, imageW),
               height: StoycoScreenSize.height(context, imageH),
@@ -100,48 +99,9 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: imageUrl,
                   fit: BoxFit.cover,
-=======
-  Widget build(BuildContext context) => SizedBox(
-    child: GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: StoycoScreenSize.width(context, 148.15),
-            height: StoycoScreenSize.height(context, 148.15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: const Color(0xFF000000).withValues(alpha: 0.25),
-                  blurRadius: 4,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(999),
-              child: CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
-            ),
-          ),
-          SizedBox(height: StoycoScreenSize.height(context, 7.66)),
-          SizedBox(
-            child: Text(
-              maxLines: 1,
-              title,
-              textScaler: TextScaler.noScaling,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  color: StoycoColors.softWhite,
-                  fontSize: StoycoScreenSize.fontSize(context, 18.53),
-                  fontWeight: FontWeight.w400,
->>>>>>> e22c7a53cfa028149799be3a1471f11550b9860c:lib/designs/atomic/molecules/circular_avatar/subscription_circular_image_with_info.dart
                 ),
               ),
             ),
-<<<<<<< HEAD:lib/atomic_design/molecules/subscription_circular_image_with_info.dart
             SizedBox(height: StoycoScreenSize.height(context, 7.66)),
             SizedBox(
               child: Text(
@@ -159,60 +119,22 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                   ),
                 ),
                 overflow: TextOverflow.ellipsis,
-=======
-          ),
-          SizedBox(height: StoycoScreenSize.height(context, 7.66)),
-          Container(
-            padding: StoycoScreenSize.symmetric(
-              context,
-              horizontal: 22.97,
-              vertical: 3.83,
-            ),
-            height: StoycoScreenSize.height(context, 30.66),
-            decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xFF373680)),
-              borderRadius: BorderRadius.circular(15.31),
-              gradient: subscribed ?? false
-                  ? const LinearGradient(
-                      colors: <Color>[
-                        Color(0x232336B2),
-                        Color(0x232336B2),
-                        Color(0x2323361A),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    )
-                  : const LinearGradient(
-                      colors: <Color>[Color(0xFF1C197F), Color(0xFF4639E7)],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-            ),
-            child: Text(
-              subscribed ?? false ? 'Ver suscripción' : 'Suscribirme',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: StoycoScreenSize.fontSize(context, 15.31),
-                fontFamily: FontFamilyToken.akkuratPro,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
->>>>>>> e22c7a53cfa028149799be3a1471f11550b9860c:lib/designs/atomic/molecules/circular_avatar/subscription_circular_image_with_info.dart
               ),
             ),
             SizedBox(height: StoycoScreenSize.height(context, 7.66)),
             Container(
               padding: StoycoScreenSize.symmetric(
                 context,
-                horizontal: 22.97,
-                vertical: 3.83,
+                horizontal: 16,
+                vertical: 3,
               ),
               height: StoycoScreenSize.height(context, 30.66),
               decoration: BoxDecoration(
                 border: Border.all(color: const Color(0xFF373680)),
                 borderRadius: BorderRadius.circular(15.31),
-                gradient: subscribed == true
+                gradient: subscribed ?? false
                     ? const LinearGradient(
-                        colors: [
+                        colors: <Color>[
                           Color(0x232336B2),
                           Color(0x232336B2),
                           Color(0x2323361A),
@@ -221,16 +143,16 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                         end: Alignment.centerRight,
                       )
                     : const LinearGradient(
-                        colors: [Color(0xFF1C197F), Color(0xFF4639E7)],
+                        colors: <Color>[Color(0xFF1C197F), Color(0xFF4639E7)],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                       ),
               ),
               child: Text(
-                subscribed == true ? 'Ver suscripción' : 'Suscribirme',
+                subscribed ?? false ? 'Ver suscripción' : 'Suscribirme',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: StoycoScreenSize.fontSize(context, 16),
+                  fontSize: StoycoScreenSize.fontSize(context, 15.31),
                   fontFamily: FontFamilyToken.akkuratPro,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,

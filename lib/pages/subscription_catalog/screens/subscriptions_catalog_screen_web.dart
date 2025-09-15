@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/atomic_design/atoms/headers/subscription_breadcrumbs.dart';
-import 'package:stoyco_subscription/atomic_design/atoms/subscription_search_bar.dart';
-import 'package:stoyco_subscription/atomic_design/design/screen_size.dart';
-import 'package:stoyco_subscription/atomic_design/molecules/subscription_circular_image_with_info.dart';
-import 'package:stoyco_subscription/atomic_design/molecules/tab_bar_v2.dart';
-import 'package:stoyco_subscription/atomic_design/tokens/colors.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/headers/subscription_breadcrumbs.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/inputs/subscription_search_bar.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/tab_bar/tab_bar_v2.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/circular_avatar/subscription_circular_image_with_info.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/notifier/subscription_catalog_notifier.dart';
 
 class SubscriptionsCatalogScreenWeb extends StatefulWidget {
@@ -59,14 +60,14 @@ class _SubscriptionsCatalogScreenWebState
           bottom: 32,
         ),
         child: Column(
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Container(
                   margin: StoycoScreenSize.fromLTRB(context, left: 7),
                   child: Breadcrumbs(
-                    items: [
+                    items: <BreadcrumbItem>[
                       BreadcrumbItem(label: 'Suscripción', onTap: () {}),
                       BreadcrumbItem(label: 'Categorías'),
                     ],
@@ -76,7 +77,7 @@ class _SubscriptionsCatalogScreenWebState
             ),
             SizedBox(height: StoycoScreenSize.height(context, 32)),
             Row(
-              children: [
+              children: <Widget>[
                 Expanded(
                   child: StoycoTabBarV2(
                     tabController: notifier.tabController,
@@ -95,7 +96,7 @@ class _SubscriptionsCatalogScreenWebState
             SizedBox(height: StoycoScreenSize.height(context, 32)),
             Expanded(
               child: LayoutBuilder(
-                builder: (context, constraints) {
+                builder: (BuildContext context, BoxConstraints constraints) {
                   final double minCardWidth = StoycoScreenSize.width(
                     context,
                     148.1,
@@ -106,8 +107,9 @@ class _SubscriptionsCatalogScreenWebState
                       ((maxWidth + spacing) / (minCardWidth + spacing)).floor();
                   crossAxisCount = crossAxisCount.clamp(1, 6);
 
-                  double totalSpacing = (crossAxisCount - 1) * spacing;
-                  double cardWidth = (maxWidth - totalSpacing) / crossAxisCount;
+                  final double totalSpacing = (crossAxisCount - 1) * spacing;
+                  final double cardWidth =
+                      (maxWidth - totalSpacing) / crossAxisCount;
                   if (cardWidth < minCardWidth && crossAxisCount > 1) {
                     crossAxisCount -= 1;
                   }
@@ -123,8 +125,9 @@ class _SubscriptionsCatalogScreenWebState
                           cardWidth / StoycoScreenSize.height(context, 260),
                     ),
                     itemCount: notifier.filteredSubscriptions.length,
-                    itemBuilder: (context, index) {
-                      final item = notifier.filteredSubscriptions[index];
+                    itemBuilder: (BuildContext context, int index) {
+                      final SubscriptionCatalogItem item =
+                          notifier.filteredSubscriptions[index];
                       return SubscriptionCircularImageWithInfo(
                         imageUrl: item.imageUrl,
                         title: item.title,
