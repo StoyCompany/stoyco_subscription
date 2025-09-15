@@ -1,20 +1,30 @@
 name: stoyco_subscription
 description: "A new Flutter package project."
-version: 0.4.0
-homepage:
+version: 0.0.1
+homepage: null
 
 environment:
   sdk: ">=3.8.0"
   flutter: ">=1.17.0"
 
 dependencies:
+  collection: ^1.19.1
+  country_flags: ^3.3.0
+  currency_picker: ^2.0.21
+  dio: ^5.5.0+1
+  either_dart: ^1.0.0
+  logger: ^2.2.0
   flutter:
     sdk: flutter
   cached_network_image: ^3.3.0
   google_fonts: ^6.3.1
   equatable: ^2.0.5
-  json_annotation: ^4.8.1
-  flutter_svg: ^2.0.10
+  flutter_svg: ^2.2.0
+  flutter_widget_from_html: ^0.17.0
+  gap: ^3.0.1
+  gradient_borders: ^1.0.1
+  json_annotation: ^4.9.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -25,27 +35,12 @@ dev_dependencies:
   flutter_gen: ^5.3.1
   json_serializable: ^6.7.1
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter packages.
 flutter:
-  # To add assets to your package, add an assets section, like this:
   assets:
-    - lib/assets/icons/subscription_icon.svg
-    - lib/assets/icons/subscription_icon_web.svg
-  #
-  # For details regarding assets in packages, see
-  # https://flutter.dev/to/asset-from-package
-  #
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
-
-  # To add custom fonts to your package, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
+    - lib/assets/colors/
+    - lib/assets/icons/
+    - lib/assets/images/
+    - lib/assets/mocks/
   fonts:
     - family: Akkurat_Pro
       fonts:
@@ -61,8 +56,20 @@ flutter:
         - asset: lib/assets/fonts/GT_Pressura_Mono/gt-pressura-mono-bold-italic.ttf
 
 flutter_gen:
-  output: lib/core/gen/
+  output: lib/designs/atomic/tokens/src/gen
   fonts:
     enabled: true
     outputs:
       class_name: FontFamilyToken
+  integrations:
+    flutter_svg: true
+  assets:
+    enabled: true
+    outputs:
+      class_name: StoycoAssets
+  colors:
+    enabled: true
+    outputs:
+      class_name: StoycoColors
+    inputs:
+      - lib/assets/colors/colors.xml

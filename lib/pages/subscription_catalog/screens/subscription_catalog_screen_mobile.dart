@@ -27,14 +27,14 @@ import 'package:stoyco_subscription/pages/subscription_catalog/notifier/subscrip
 ///
 /// {@endtemplate}
 class SubscriptionsCatalogScreenMobile extends StatefulWidget {
+  /// {@macro subscription_catalog}
+  const SubscriptionsCatalogScreenMobile({super.key, this.onTapSubscription});
+
   /// The [AppBar] to display at the top of the screen.
 
   /// Callback triggered when a subscription item is tapped.
   /// Receives the [id] of the tapped subscription.
   final void Function(String id)? onTapSubscription;
-
-  /// {@macro subscription_catalog}
-  const SubscriptionsCatalogScreenMobile({super.key, this.onTapSubscription});
 
   @override
   State<SubscriptionsCatalogScreenMobile> createState() =>
@@ -69,13 +69,13 @@ class _SubscriptionsCatalogScreenMobileState
 
   @override
   Widget build(BuildContext context) {
-    final controller = notifier;
+    final SubscriptionCatalogNotifier controller = notifier;
     return Scaffold(
       backgroundColor: StoycoColors.deepCharcoal,
       body: SafeArea(
         child: CustomScrollView(
           controller: controller.scrollController,
-          slivers: [
+          slivers: <Widget>[
             SliverAppBar(
               backgroundColor: StoycoColors.deepCharcoal,
               surfaceTintColor: StoycoColors.deepCharcoal,
@@ -105,7 +105,7 @@ class _SubscriptionsCatalogScreenMobileState
               expandedHeight: StoycoScreenSize.height(context, 60),
               automaticallyImplyLeading: false,
               flexibleSpace: FlexibleSpaceBar(
-                background: Container(
+                background: ColoredBox(
                   color: StoycoColors.deepCharcoal,
                   child: Padding(
                     padding: StoycoScreenSize.symmetric(
@@ -137,7 +137,7 @@ class _SubscriptionsCatalogScreenMobileState
               pinned: true,
               automaticallyImplyLeading: false,
               flexibleSpace: FlexibleSpaceBar(
-                background: Container(
+                background: ColoredBox(
                   color: StoycoColors.deepCharcoal,
                   child: Padding(
                     padding: StoycoScreenSize.symmetric(
@@ -145,7 +145,7 @@ class _SubscriptionsCatalogScreenMobileState
                       horizontal: 24,
                     ),
                     child: Column(
-                      children: [
+                      children: <Widget>[
                         SubscriptionSearchBar(
                           onChanged: controller.onSearchChanged,
                         ),
@@ -172,8 +172,12 @@ class _SubscriptionsCatalogScreenMobileState
                   crossAxisSpacing: 16,
                   childAspectRatio: 0.7,
                 ),
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  final item = controller.filteredSubscriptions[index];
+                delegate: SliverChildBuilderDelegate((
+                  BuildContext context,
+                  int index,
+                ) {
+                  final SubscriptionCatalogItem item =
+                      controller.filteredSubscriptions[index];
                   return SubscriptionCircularImageWithInfo(
                     imageUrl: item.imageUrl,
                     title: item.title,
