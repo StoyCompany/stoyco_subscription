@@ -149,8 +149,8 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                       final double cardWidth = (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
                       return Wrap(
                         key: const ValueKey<String>('monthly_plans_wrap'),
-                        spacing: 10,
-                        runSpacing: 10,
+                        spacing: StoycoScreenSize.width(context, 8),
+                        runSpacing: StoycoScreenSize.height(context, 8),
                         alignment: WrapAlignment.center,
                         children: List<Widget>.generate(3, (int index) {
                           return SizedBox(
@@ -193,8 +193,8 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                             final List<SubscriptionPlan> plans = widget.subscriptionPlanResponse.monthlyPlans;
                             return Wrap(
                               key: const ValueKey<String>('monthly_plans_wrap'),
-                              spacing: 10,
-                              runSpacing: 10,
+                              spacing: StoycoScreenSize.width(context, 8),
+                              runSpacing: StoycoScreenSize.height(context, 8),
                               alignment: WrapAlignment.center,
                               children: plans.map((SubscriptionPlan plan) {
                                 return SizedBox(
@@ -222,8 +222,8 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                           final List<SubscriptionPlan> plans = widget.subscriptionPlanResponse.annualPlans;
                           return Wrap(
                             key: const ValueKey<String>('annual_plans_wrap'),
-                            spacing: 10,
-                            runSpacing: 10,
+                            spacing: StoycoScreenSize.width(context, 8),
+                            runSpacing: StoycoScreenSize.height(context, 8),
                             alignment: WrapAlignment.center,
                             children: plans.map((SubscriptionPlan plan) {
                               return SizedBox(
