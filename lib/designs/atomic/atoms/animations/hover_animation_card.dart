@@ -18,21 +18,6 @@ class HoverAnimationCard extends StatefulWidget {
 /// )
 /// ```
 ///
-/// Native Flutter alternative (for comparison):
-/// ```dart
-/// MouseRegion(
-///   onEnter: (_) => setState(() => isHovered = true),
-///   onExit: (_) => setState(() => isHovered = false),
-///   child: AnimatedContainer(
-///     duration: Duration(milliseconds: 120),
-///     transform: isHovered
-///         ? Matrix4.translationValues(0, -18, 0)
-///         : Matrix4.identity(),
-///     child: ...,
-///   ),
-/// )
-/// ```
-///
 /// This component is designed for web/desktop platforms and will not trigger hover on mobile devices.
 
   /// Creates a [HoverAnimationCard] for atomic design systems.
