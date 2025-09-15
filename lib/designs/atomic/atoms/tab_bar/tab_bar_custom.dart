@@ -65,7 +65,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
   Widget build(BuildContext context) {
     return Container(
       height: StoycoScreenSize.height(context, widget.height),
-      width: StoycoScreenSize.width(context, widget.width),
+      width: StoycoScreenSize.width(context, widget.tabs.length > 1 ? widget.width : widget.width / 1.95),
       padding: widget.padding ?? StoycoScreenSize.symmetric(context, horizontal: 4),
       decoration: BoxDecoration(
         color: StoycoColors.menuItemBackground,
