@@ -32,6 +32,7 @@ class SubscriptionPlanResponse extends Equatable {
 
   /// List of annual subscription plans.
   final List<SubscriptionPlan> annualPlans;
+  
   Map<String, dynamic> toJson() => _$SubscriptionPlanResponseToJson(this);
 
   @override

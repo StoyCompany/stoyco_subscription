@@ -167,7 +167,13 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                   )
                 )
               : TabMenuItem(
-                  tabs: const <String>['Mensual', 'Anual'],
+                  tabs: widget.subscriptionPlanResponse.monthlyPlans.isNotEmpty && widget.subscriptionPlanResponse.annualPlans.isNotEmpty 
+                    ? const <String>['Mensual', 'Anual']
+                    : widget.subscriptionPlanResponse.monthlyPlans.isNotEmpty 
+                      ? const <String>['Mensual'] 
+                      : widget.subscriptionPlanResponse.annualPlans.isNotEmpty 
+                        ? const <String>['Anual'] 
+                        : const <String>['Mensual', 'Anual'],
                   textDescription: StoycoScreenSize.isPhone(context) ? 'Elige el plan que mejor se adapte a ti.' : null,
                   isLoading: widget.isLoading,
                   textDescriptionStyle: widget.styleParams.textDescriptionStyle,
@@ -178,34 +184,36 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                   },
                   initialNavIndex: isMonthly ? 0 : 1,
                   children: <Widget>[
-                    SingleChildScrollView(
-                      child: LayoutBuilder(
-                        builder: (BuildContext context, BoxConstraints constraints) {
-                          final double totalSpacing = (widget.crossAxisCount - 1) * 10;
-                          final double cardWidth = (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
-                          final List<SubscriptionPlan> plans = widget.subscriptionPlanResponse.monthlyPlans;
-                          return Wrap(
-                            key: const ValueKey<String>('monthly_plans_wrap'),
-                            spacing: 10,
-                            runSpacing: 10,
-                            alignment: WrapAlignment.center,
-                            children: plans.map((SubscriptionPlan plan) {
-                              return SizedBox(
-                                width: cardWidth,
-                                child: CardSubscriptionPlan(
-                                  key: ValueKey<String>(plan.id),
-                                  plan: plan,
-                                  onTapCancelSubscription: widget.onTapCancelSubscription,
-                                  onTapNewSubscription: widget.onTapNewSubscription,
-                                  onTapRenewSubscription: widget.onTapRenewSubscription,
-                                  styleParams: widget.styleParams,
-                                ),
-                              );
-                            }).toList(),
-                          );
-                        },
-                      )
-                    ),
+                    if (widget.subscriptionPlanResponse.monthlyPlans.isNotEmpty)
+                      SingleChildScrollView(
+                        child: LayoutBuilder(
+                          builder: (BuildContext context, BoxConstraints constraints) {
+                            final double totalSpacing = (widget.crossAxisCount - 1) * 10;
+                            final double cardWidth = (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
+                            final List<SubscriptionPlan> plans = widget.subscriptionPlanResponse.monthlyPlans;
+                            return Wrap(
+                              key: const ValueKey<String>('monthly_plans_wrap'),
+                              spacing: 10,
+                              runSpacing: 10,
+                              alignment: WrapAlignment.center,
+                              children: plans.map((SubscriptionPlan plan) {
+                                return SizedBox(
+                                  width: cardWidth,
+                                  child: CardSubscriptionPlan(
+                                    key: ValueKey<String>(plan.id),
+                                    plan: plan,
+                                    onTapCancelSubscription: widget.onTapCancelSubscription,
+                                    onTapNewSubscription: widget.onTapNewSubscription,
+                                    onTapRenewSubscription: widget.onTapRenewSubscription,
+                                    styleParams: widget.styleParams,
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                          },
+                        )
+                      ),
+                    if (widget.subscriptionPlanResponse.annualPlans.isNotEmpty)
                     SingleChildScrollView(
                       child: LayoutBuilder(
                         builder: (BuildContext context, BoxConstraints constraints) {
