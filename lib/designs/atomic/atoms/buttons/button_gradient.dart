@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_borders/gradient_borders.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template button_gradient}
 /// Native Flutter button with gradient borders, part of the atomic design system.
@@ -92,7 +93,7 @@ class ButtonGradient extends StatelessWidget {
       child: Padding(
         padding: padding ?? EdgeInsetsGeometry.zero,
         child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: height ?? 29),
+          constraints: BoxConstraints(minHeight: height ?? StoycoScreenSize.height(context, 29)),
           child: Container(
             width: width ?? double.infinity,
             decoration: BoxDecoration(
