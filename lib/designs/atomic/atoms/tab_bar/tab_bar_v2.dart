@@ -43,10 +43,10 @@ class StoycoTabBarV2 extends StatelessWidget {
     return Stack(
       children: <Widget>[
         SizedBox(
-          height: 56,
+          height: StoycoScreenSize.height(context, 56),
           child: TabBar(
             isScrollable: false,
-            padding: const EdgeInsets.all(0),
+            padding: EdgeInsets.zero,
             controller: tabController,
             tabs: tabsWithKeys,
             indicatorColor: Colors.transparent,
@@ -57,7 +57,7 @@ class StoycoTabBarV2 extends StatelessWidget {
               fontSize: StoycoScreenSize.fontSize(context, 16),
               fontFamily: FontFamilyToken.akkuratPro,
               fontWeight: FontWeight.w700,
-              height: 1.50,
+              height: StoycoScreenSize.height(context, 1.50),
             ),
             unselectedLabelColor: StoycoColors.hint,
             overlayColor: WidgetStateProperty.all(Colors.transparent),
