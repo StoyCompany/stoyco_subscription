@@ -1,11 +1,25 @@
 # Changelog
 
+## [Unreleased]
+
+## 0.5.0
+
+## Features
+
+- Added stoyco catalog responsive design
+- Added stoyco web view
+- Added onTapSubscribe button callback
+
+## Fixes
+
+- Adjust screen sizes, paddings and text sizes for catalog related widgets
 
 ## [Unreleased]
 
 ## 0.4.0
 
 ### Features
+
 - Added `SubscriptionPlansList` widget for displaying subscription plans with customizable styles and actions.
 - Enhanced subscription plan model and UI with new currency handling and button styles.
 - Implemented custom error handling classes and logging utilities for improved error management.
@@ -26,6 +40,7 @@
 - Added mock data and models for monthly and annual subscription plans.
 
 ### Improvements
+
 - Enhanced layout and visual consistency for buttons, cards, and tags.
 - Improved padding, shadow, and border properties across multiple components.
 - Updated color definitions and removed deprecated widgets.
@@ -34,6 +49,7 @@
 - Updated pubspec.yaml to clean up dependencies and asset paths.
 
 ### Fixes
+
 - Fixed callback names for subscription actions in `SubscriptionPlansList`.
 - Adjusted content padding in `HtmlDropdown` for better responsiveness.
 - Updated onboarding key retrieval logic in `StoycoTabBarV2` for better clarity.
@@ -44,11 +60,13 @@
 - Removed deprecated linter rule `use_setters_to_change_properties` from analysis options.
 
 ### Refactoring
+
 - Refactored color and font utilities; removed unused files and implemented new alert components.
 - Updated documentation and improved parameter descriptions in `TagGradientIcon`.
 - Removed unused atomic design widgets and related files.
 
 ### Other
+
 - Merged changes from `main` branch.
 - Updated SDK requirements.
 - Added documentation to existing exports.
