@@ -88,6 +88,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Column(
+          spacing: StoycoScreenSize.height(context, 7.66),
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -105,7 +106,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: StoycoScreenSize.height(context, 7.66)),
+
             SizedBox(
               child: Text(
                 maxLines: 1,
@@ -124,7 +125,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            SizedBox(height: StoycoScreenSize.height(context, 7.66)),
+
             InkWell(
               onTap: onTapSubscribe,
               child: Container(

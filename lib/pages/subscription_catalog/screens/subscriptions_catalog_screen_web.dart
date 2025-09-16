@@ -81,6 +81,7 @@ class _SubscriptionsCatalogScreenWebState
           bottom: 32,
         ),
         child: Column(
+          spacing: StoycoScreenSize.height(context, 32),
           children: <Widget>[
             // Breadcrumb navigation
             Row(
@@ -97,9 +98,10 @@ class _SubscriptionsCatalogScreenWebState
                 ),
               ],
             ),
-            SizedBox(height: StoycoScreenSize.height(context, 32)),
+
             // Tab bar and search bar
             Row(
+              spacing: StoycoScreenSize.width(context, 96),
               children: <Widget>[
                 Expanded(
                   child: StoycoTabBarV2(
@@ -107,7 +109,7 @@ class _SubscriptionsCatalogScreenWebState
                     tabs: notifier.tabs,
                   ),
                 ),
-                SizedBox(width: StoycoScreenSize.width(context, 96)),
+
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 327),
                   child: SubscriptionSearchBar(
@@ -116,7 +118,7 @@ class _SubscriptionsCatalogScreenWebState
                 ),
               ],
             ),
-            SizedBox(height: StoycoScreenSize.height(context, 32)),
+
             // Responsive grid of subscription items
             Expanded(
               child: LayoutBuilder(

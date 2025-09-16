@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscription_tab.dart';
-import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item.dart'; // Importa el modelo
+import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item.dart';
 
 class SubscriptionCatalogNotifier extends ChangeNotifier {
   SubscriptionCatalogNotifier(TickerProvider vsync) {
@@ -218,6 +218,4 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
           .toList();
     }
   }
-
-  void goToDetail(SubscriptionCatalogItem item) {}
 }
