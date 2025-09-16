@@ -8,18 +8,39 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/notifier/subscription_catalog_notifier.dart';
 
+/// {@template subscriptions_catalog_screen_web}
+/// Displays the subscription catalog for web and large screens.
+///
+/// This widget shows a responsive grid of subscription items, a tab bar for filtering,
+/// a search bar, and breadcrumbs for navigation context. It adapts the grid layout
+/// based on the available width.
+///
+/// Optionally, you can provide callbacks for when a subscription or the subscribe button is tapped.
+/// {@endtemplate}
 class SubscriptionsCatalogScreenWeb extends StatefulWidget {
-  const SubscriptionsCatalogScreenWeb({this.onTapSubscription, super.key});
+  /// {@macro subscriptions_catalog_screen_web}
+  const SubscriptionsCatalogScreenWeb({
+    this.onTapSubscription,
+    this.onTapSubscribe,
+    super.key,
+  });
 
   /// Callback triggered when a subscription item is tapped.
   /// Receives the [id] of the tapped subscription.
   final void Function(String id)? onTapSubscription;
+
+  /// Callback triggered when the subscribe button is tapped.
+  /// Receives the [id] of the subscription.
+  final void Function(String id)? onTapSubscribe;
 
   @override
   State<SubscriptionsCatalogScreenWeb> createState() =>
       _SubscriptionsCatalogScreenWebState();
 }
 
+/// State for [SubscriptionsCatalogScreenWeb].
+///
+/// Handles the notifier, tab controller, and grid layout logic.
 class _SubscriptionsCatalogScreenWebState
     extends State<SubscriptionsCatalogScreenWeb>
     with SingleTickerProviderStateMixin {
@@ -61,6 +82,7 @@ class _SubscriptionsCatalogScreenWebState
         ),
         child: Column(
           children: <Widget>[
+            // Breadcrumb navigation
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -76,6 +98,7 @@ class _SubscriptionsCatalogScreenWebState
               ],
             ),
             SizedBox(height: StoycoScreenSize.height(context, 32)),
+            // Tab bar and search bar
             Row(
               children: <Widget>[
                 Expanded(
@@ -94,6 +117,7 @@ class _SubscriptionsCatalogScreenWebState
               ],
             ),
             SizedBox(height: StoycoScreenSize.height(context, 32)),
+            // Responsive grid of subscription items
             Expanded(
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
@@ -133,6 +157,8 @@ class _SubscriptionsCatalogScreenWebState
                         title: item.title,
                         subscribed: item.subscribed,
                         onTap: () => onTapSubscription?.call(item.id),
+                        onTapSubscribe: () =>
+                            widget.onTapSubscribe?.call(item.id),
                         titleFontSize: 19.36,
                       );
                     },

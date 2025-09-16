@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## 0.5.0
+
+## Features
+
+- Added stoyco catalog responsive design
+- Added stoyco web view
+- Added onTapSubscribe button callback
+
+## Fixes
+
+- Adjust screen sizes, paddings and text sizes for catalog related widgets
+
+## [Unreleased]
+
 ## 0.4.0
 
 ### Features

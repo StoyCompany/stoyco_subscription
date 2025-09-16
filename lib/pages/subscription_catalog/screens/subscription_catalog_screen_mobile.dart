@@ -7,42 +7,53 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item.dart';
-
 import 'package:stoyco_subscription/pages/subscription_catalog/notifier/subscription_catalog_notifier.dart';
 
-/// {@template subscription_catalog}
-/// A catalog screen for displaying and searching subscriptions in a grid format.
+/// {@template subscription_catalog_screen_mobile}
+/// Displays the subscription catalog for mobile devices.
 ///
-/// This widget displays a customizable [AppBar], a search bar, a tab bar for filtering,
-/// and a grid of subscription items. When a subscription is tapped, the [onTapSubscription]
-/// callback is triggered with the selected subscription's id.
+/// This widget presents a scrollable catalog of subscriptions in a grid format,
+/// including a customizable [AppBar], a search bar, a tab bar for filtering,
+/// and a grid of subscription items. The layout is optimized for mobile screens.
+///
+/// Optionally, you can provide callbacks for when a subscription or the subscribe button is tapped.
 ///
 /// Example usage:
 /// ```dart
-/// SubscriptionCatalog(
-///   buildAppbar: AppBar(title: const Text('Subscriptions')),
-///   onTapSubscription: (id)
+/// SubscriptionsCatalogScreenMobile(
+///   onTapSubscription: (id) {
 ///     print('Tapped subscription with id: $id');
+///   },
+///   onTapSubscribe: (id) {
+///     print('Tapped subscribe for id: $id');
 ///   },
 /// )
 /// ```
-///
 /// {@endtemplate}
 class SubscriptionsCatalogScreenMobile extends StatefulWidget {
-  /// {@macro subscription_catalog}
-  const SubscriptionsCatalogScreenMobile({super.key, this.onTapSubscription});
-
-  /// The [AppBar] to display at the top of the screen.
+  /// {@macro subscription_catalog_screen_mobile}
+  const SubscriptionsCatalogScreenMobile({
+    super.key,
+    this.onTapSubscription,
+    this.onTapSubscribe,
+  });
 
   /// Callback triggered when a subscription item is tapped.
   /// Receives the [id] of the tapped subscription.
   final void Function(String id)? onTapSubscription;
+
+  /// Callback triggered when subscribe button is tapped.
+  /// Receives the [id] of the subscription.
+  final void Function(String id)? onTapSubscribe;
 
   @override
   State<SubscriptionsCatalogScreenMobile> createState() =>
       _SubscriptionsCatalogScreenMobileState();
 }
 
+/// State for [SubscriptionsCatalogScreenMobile].
+///
+/// Handles the notifier, tab controller, and grid layout logic.
 class _SubscriptionsCatalogScreenMobileState
     extends State<SubscriptionsCatalogScreenMobile>
     with SingleTickerProviderStateMixin {
@@ -78,6 +89,7 @@ class _SubscriptionsCatalogScreenMobileState
         child: CustomScrollView(
           controller: controller.scrollController,
           slivers: <Widget>[
+            // AppBar
             SliverAppBar(
               backgroundColor: StoycoColors.deepCharcoal,
               surfaceTintColor: StoycoColors.deepCharcoal,
@@ -98,6 +110,7 @@ class _SubscriptionsCatalogScreenMobileState
             SliverToBoxAdapter(
               child: SizedBox(height: StoycoScreenSize.height(context, 16)),
             ),
+            // Subtitle
             SliverAppBar(
               backgroundColor: StoycoColors.deepCharcoal,
               surfaceTintColor: StoycoColors.deepCharcoal,
@@ -132,6 +145,7 @@ class _SubscriptionsCatalogScreenMobileState
             SliverToBoxAdapter(
               child: SizedBox(height: StoycoScreenSize.height(context, 16)),
             ),
+            // Search bar and tab bar
             SliverAppBar(
               backgroundColor: StoycoColors.deepCharcoal,
               expandedHeight: StoycoScreenSize.height(context, 124),
@@ -165,6 +179,7 @@ class _SubscriptionsCatalogScreenMobileState
             SliverToBoxAdapter(
               child: SizedBox(height: StoycoScreenSize.height(context, 16)),
             ),
+            // Grid of subscription items
             SliverPadding(
               padding: StoycoScreenSize.symmetric(context, horizontal: 24),
               sliver: SliverGrid(
@@ -185,6 +200,7 @@ class _SubscriptionsCatalogScreenMobileState
                     title: item.title,
                     subscribed: item.subscribed,
                     onTap: () => onTapSubscription?.call(item.id),
+                    onTapSubscribe: () => widget.onTapSubscribe?.call(item.id),
                   );
                 }, childCount: controller.filteredSubscriptions.length),
               ),
