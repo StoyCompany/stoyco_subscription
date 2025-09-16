@@ -161,11 +161,12 @@ class _SubscriptionsCatalogScreenMobileState
                       horizontal: 24,
                     ),
                     child: Column(
+                      spacing: StoycoScreenSize.height(context, 16),
                       children: <Widget>[
                         SubscriptionSearchBar(
                           onChanged: controller.onSearchChanged,
                         ),
-                        SizedBox(height: StoycoScreenSize.height(context, 16)),
+
                         StoycoTabBarV2(
                           tabController: controller.tabController,
                           tabs: controller.tabs,
