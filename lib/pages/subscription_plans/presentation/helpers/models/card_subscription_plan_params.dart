@@ -62,7 +62,7 @@ class SubscriptionPlanScreenStyleParams {
     this.tagGradientWidth,
     this.tagGradientMargin,
     this.tagGradientPadding,
-    this.titleStyleTagGradient,
+    this.tagGradientTitleStyle,
     this.tagGradientBorderRadius = 100,
     this.tagGradientGradient = const LinearGradient(
       begin: Alignment.centerLeft,
@@ -172,7 +172,7 @@ class SubscriptionPlanScreenStyleParams {
   /// Tag gradient.
   final Gradient tagGradientGradient;
   /// Tag gradient title text style.
-  final TextStyle? titleStyleTagGradient;
+  final TextStyle? tagGradientTitleStyle;
 
   // ----------- Plan Text Styles -----------
   /// Plan currency text style.
