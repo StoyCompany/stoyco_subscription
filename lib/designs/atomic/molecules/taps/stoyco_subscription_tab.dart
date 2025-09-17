@@ -43,7 +43,7 @@ class SubscriptionStoycoTabState extends State<SubscriptionStoycoTab>
 
   @override
   Widget build(BuildContext context) => SizedBox(
-    height: StoycoScreenSize.height(context, 26),
+    height: StoycoScreenSize.height(context, 56, phone: 26),
     child: LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         final double textWidth = _calculateTextWidth(

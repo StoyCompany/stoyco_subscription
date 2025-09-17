@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscription_tab.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 class StoycoTabBarV2 extends StatelessWidget {
   const StoycoTabBarV2({
@@ -43,20 +43,21 @@ class StoycoTabBarV2 extends StatelessWidget {
     return Stack(
       children: <Widget>[
         SizedBox(
-          height: 56,
+          height: StoycoScreenSize.height(context, 56),
           child: TabBar(
+            isScrollable: false,
             padding: EdgeInsets.zero,
             controller: tabController,
             tabs: tabsWithKeys,
             indicatorColor: Colors.transparent,
-            indicatorSize: TabBarIndicatorSize.label,
+            indicatorSize: TabBarIndicatorSize.tab,
             indicator: CustomTabIndicatorV2(controller: tabController),
-            labelStyle: const TextStyle(
+            labelStyle: TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: StoycoScreenSize.fontSize(context, 16),
               fontFamily: FontFamilyToken.akkuratPro,
               fontWeight: FontWeight.w700,
-              height: 1.50,
+              height: StoycoScreenSize.height(context, 1.50),
             ),
             unselectedLabelColor: StoycoColors.hint,
             overlayColor: WidgetStateProperty.all(Colors.transparent),
@@ -95,10 +96,9 @@ class _CustomPainter extends BoxPainter {
 
     final double tabWidth = configuration.size!.width;
 
-    final double horizontalStart = offset.dx + (tabWidth - 121.31) / 2;
     final Rect rect =
-        Offset(horizontalStart, configuration.size!.height - 12) &
-        const Size(121.31, 3.6);
+        Offset(offset.dx, configuration.size!.height - 12) &
+        Size(tabWidth, 3.6);
 
     final RRect rrect = RRect.fromLTRBAndCorners(
       rect.left,
@@ -107,15 +107,6 @@ class _CustomPainter extends BoxPainter {
       rect.bottom,
       topLeft: const Radius.circular(5),
       topRight: const Radius.circular(5),
-    );
-
-    const Shadow shadow = Shadow(color: StoycoColors.blue, blurRadius: 15.0);
-
-    canvas.drawShadow(
-      Path()..addRRect(rrect),
-      shadow.color,
-      shadow.blurRadius,
-      true,
     );
 
     canvas.drawRRect(rrect, paint);
