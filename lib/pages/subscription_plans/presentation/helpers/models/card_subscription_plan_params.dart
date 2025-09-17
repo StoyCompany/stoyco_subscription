@@ -13,8 +13,8 @@ class SubscriptionPlanScreenStyleParams {
     this.tagSubscriptionHeight,
     // ----------- Plan Font Sizes -----------
     this.currencyFontSize = 14,
-    this.priceFontSize = 24,
-    this.titleFontSize = 16,
+    this.priceFontSize = 40,
+    this.titleFontSize = 28,
     // ----------- Currency Flag -----------
     this.currencyFlagHeight = 16,
     this.currencyFlagWidth = 24,
