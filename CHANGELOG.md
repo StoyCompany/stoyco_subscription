@@ -9,6 +9,7 @@
 - Added stoyco catalog responsive design
 - Added stoyco web view
 - Added onTapSubscribe button callback
+- Added get subscription plan service
 
 ## Fixes
 
