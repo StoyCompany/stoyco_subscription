@@ -70,9 +70,13 @@ class _HtmlDropdownState extends State<HtmlDropdown> {
       children: <Widget>[
         ListTile(
           contentPadding: widget.selectorPadding ?? 
-              (StoycoScreenSize.isPhone(context) 
-                  ? StoycoScreenSize.fromLTRB(context, left: 40, right: 24) 
-                  : StoycoScreenSize.fromLTRB(context, left: 24, right: 24)),
+            StoycoScreenSize.fromLTRB(
+              context, 
+              left: 24, 
+              right: 24,
+              leftPhone: 40,
+              rightPhone: 24,
+            ),
           focusColor: StoycoColors.transparent,
           splashColor: StoycoColors.transparent,
           title: Text(

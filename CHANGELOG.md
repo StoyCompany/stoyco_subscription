@@ -1,6 +1,18 @@
 # Changelog
 
+
 ## [Unreleased]
+
+## 0.5.1
+
+### Features
+- Enhanced subscription plans display with availability checks and improved messaging.
+- Adjusted padding and font size for ButtonGradientText based on device type.
+
+### Fixes
+- Renamed `titleStyleTagGradient` to `tagGradientTitleStyle` for consistency.
+- Corrected property name for tag gradient title style in `CardSubscriptionPlan`.
+- Removed redundant token verification in `getSubscriptionPlansByPartnerAndUser` method.
 
 ## 0.5.0
 
