@@ -1,15 +1,25 @@
 # Changelog
 
+## [Unreleased]
+
+## 0.5.2
+
+### Features
+
+- Add receiving of auth token for subscription_catalog_service init
+- Update service, repository and datasource accordingly, to receive auth token.
 
 ## [Unreleased]
 
 ## 0.5.1
 
 ### Features
+
 - Enhanced subscription plans display with availability checks and improved messaging.
 - Adjusted padding and font size for ButtonGradientText based on device type.
 
 ### Fixes
+
 - Renamed `titleStyleTagGradient` to `tagGradientTitleStyle` for consistency.
 - Corrected property name for tag gradient title style in `CardSubscriptionPlan`.
 - Removed redundant token verification in `getSubscriptionPlansByPartnerAndUser` method.

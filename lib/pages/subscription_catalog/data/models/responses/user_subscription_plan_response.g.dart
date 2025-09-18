@@ -31,6 +31,7 @@ Map<String, dynamic> _$UserSubscriptionPlanResponseToJson(
 UserSubscriptionPlan _$UserSubscriptionPlanFromJson(
   Map<String, dynamic> json,
 ) => UserSubscriptionPlan(
+  planId: json['planId'] as String,
   planName: json['planName'] as String,
   planImageUrl: json['planImageUrl'] as String,
   partnerName: json['partnerName'] as String,
@@ -41,12 +42,13 @@ UserSubscriptionPlan _$UserSubscriptionPlanFromJson(
     json['subscriptionStartDate'] as String,
   ),
   subscriptionEndDate: DateTime.parse(json['subscriptionEndDate'] as String),
-  isActive: json['isActive'] as bool,
+  hasActivePlan: json['hasActivePlan'] as bool,
 );
 
 Map<String, dynamic> _$UserSubscriptionPlanToJson(
   UserSubscriptionPlan instance,
 ) => <String, dynamic>{
+  'planId': instance.planId,
   'planName': instance.planName,
   'planImageUrl': instance.planImageUrl,
   'partnerName': instance.partnerName,
@@ -55,5 +57,5 @@ Map<String, dynamic> _$UserSubscriptionPlanToJson(
   'price': instance.price,
   'subscriptionStartDate': instance.subscriptionStartDate.toIso8601String(),
   'subscriptionEndDate': instance.subscriptionEndDate.toIso8601String(),
-  'isActive': instance.isActive,
+  'hasActivePlan': instance.hasActivePlan,
 };

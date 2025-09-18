@@ -16,6 +16,17 @@ class SubscriptionCatalogRepository {
   /// The data source used to fetch subscription catalog data.
   final SubscriptionCatalogDataSource _dataSource;
 
+  String userToken = '';
+
+  /// Updates the authentication token used for data requests.
+  ///
+  /// This method allows the repository to update the token in the data source
+  /// when it changes, ensuring that all requests use the latest token.
+  void updateToken(String token) {
+    userToken = token;
+    _dataSource.updateToken(token);
+  }
+
   /// Fetches the subscription plans for a specific user.
   ///
   /// Takes a [GetUserSubscriptionPlansRequest] containing the user ID.

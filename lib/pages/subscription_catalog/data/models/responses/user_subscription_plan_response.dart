@@ -62,6 +62,7 @@ class UserSubscriptionPlanResponse extends Equatable {
 class UserSubscriptionPlan extends Equatable {
   /// {@macro user_subscription_plan}
   const UserSubscriptionPlan({
+    required this.planId,
     required this.planName,
     required this.planImageUrl,
     required this.partnerName,
@@ -70,12 +71,15 @@ class UserSubscriptionPlan extends Equatable {
     required this.price,
     required this.subscriptionStartDate,
     required this.subscriptionEndDate,
-    required this.isActive,
+    required this.hasActivePlan,
   });
 
   /// Creates a [UserSubscriptionPlan] from a JSON map.
   factory UserSubscriptionPlan.fromJson(Map<String, dynamic> json) =>
       _$UserSubscriptionPlanFromJson(json);
+
+  /// Unique identifier of the subscription plan.
+  final String planId;
 
   /// Name of the subscription plan.
   final String planName;
@@ -101,14 +105,15 @@ class UserSubscriptionPlan extends Equatable {
   /// End date of the subscription.
   final DateTime subscriptionEndDate;
 
-  /// Indicates if the subscription is currently active.
-  final bool isActive;
+  /// Indicates if the user currently has an active plan.
+  final bool hasActivePlan;
 
   /// Converts this object to a JSON map.
   Map<String, dynamic> toJson() => _$UserSubscriptionPlanToJson(this);
 
   @override
   List<Object?> get props => <Object?>[
+    planId,
     planName,
     planImageUrl,
     partnerName,
@@ -117,6 +122,6 @@ class UserSubscriptionPlan extends Equatable {
     price,
     subscriptionStartDate,
     subscriptionEndDate,
-    isActive,
+    hasActivePlan,
   ];
 }

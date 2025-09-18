@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/requests/get_user_subscription_plans_request.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_data_source.dart';
@@ -12,41 +14,102 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure
 /// Service class for managing subscription catalog operations.
 ///
 /// This singleton service provides methods to fetch user subscription plans
-/// by interacting with the repository and data source layers.
+/// by interacting with the repository and data source layers. It manages
+/// the user authentication token, environment configuration, and supports
+/// automatic token refresh using a provided callback function.
+///
+/// Usage example:
+/// ```dart
+/// final service = SubscriptionCatalogService(
+///   environment: StoycoEnvironment.production,
+///   userToken: 'your_token',
+///   functionToUpdateToken: () => getNewToken(),
+/// );
+///
+/// final result = await service.getUserSubscriptionPlans(
+///   GetUserSubscriptionPlansRequest(userId: 'user_id'),
+/// );
+/// ```
 /// {@endtemplate}
 class SubscriptionCatalogService {
+  /// Factory for singleton initialization with custom environment, token and token update function.
+  factory SubscriptionCatalogService({
+    StoycoEnvironment environment = StoycoEnvironment.development,
+    String userToken = '',
+    Future<String?>? Function()? functionToUpdateToken,
+  }) {
+    instance = SubscriptionCatalogService._(
+      environment: environment,
+      userToken: userToken,
+      functionToUpdateToken: functionToUpdateToken,
+    );
+    return instance;
+  }
+
   /// Private constructor for singleton pattern.
-  SubscriptionCatalogService._({this.userToken = ''}) {
-    _dataSource = SubscriptionCatalogDataSource();
+  SubscriptionCatalogService._({
+    this.environment = StoycoEnvironment.development,
+    this.userToken = '',
+    this.functionToUpdateToken,
+  }) {
+    _dataSource = SubscriptionCatalogDataSource(environment: environment);
     _repository = SubscriptionCatalogRepository(_dataSource);
+    _repository.updateToken(userToken);
     _dataSource.updateToken(userToken);
   }
 
-  /// The singleton instance of [SubscriptionCatalogService].
+  /// Singleton instance of [SubscriptionCatalogService].
   static SubscriptionCatalogService instance = SubscriptionCatalogService._();
-
-  /// Internal data source for subscription catalog operations.
-  late final SubscriptionCatalogDataSource _dataSource;
-
-  /// Internal repository for subscription catalog operations.
-  late final SubscriptionCatalogRepository _repository;
 
   /// The user's authentication token.
   String userToken;
 
-  /// Updates the user token and propagates it to the data source.
+  /// The current environment (development, production, etc.).
+  StoycoEnvironment environment;
+
+  /// Optional function to update the user token if it becomes invalid.
+  Future<String?>? Function()? functionToUpdateToken;
+
+  late final SubscriptionCatalogDataSource _dataSource;
+  late final SubscriptionCatalogRepository _repository;
+
+  /// Updates the user token and propagates it to the repository and data source.
   void updateToken(String token) {
     userToken = token;
+    _repository.updateToken(token);
     _dataSource.updateToken(token);
+  }
+
+  /// Sets the function to update the user token.
+  void setFunctionToUpdateToken(Future<String?>? Function()? function) {
+    functionToUpdateToken = function;
+  }
+
+  /// Verifies the user token and updates it if necessary using [functionToUpdateToken].
+  ///
+  /// Throws an [Exception] if the token cannot be updated.
+  Future<void> verifyToken() async {
+    if (userToken.isEmpty) {
+      if (functionToUpdateToken == null) {
+        throw Exception('functionToUpdateToken is not set');
+      }
+      final String? newToken = await functionToUpdateToken!();
+      if (newToken != null && newToken.isNotEmpty) {
+        updateToken(newToken);
+      } else {
+        throw Exception('Failed to update token');
+      }
+    }
   }
 
   /// Fetches the subscription plans for a specific user.
   ///
   /// Takes a [GetUserSubscriptionPlansRequest] containing the user ID.
-  /// Returns [Either] with [UserSubscriptionPlanResponse] on success or [Failure] on error.
+  /// Returns an [Either] with [UserSubscriptionPlanResponse] on success or [Failure] on error.
   Future<Either<Failure, UserSubscriptionPlanResponse>>
   getUserSubscriptionPlans(GetUserSubscriptionPlansRequest request) async {
     try {
+      await verifyToken();
       final UserSubscriptionPlanResponse response = await _repository
           .getUserSubscriptionPlans(request);
       return Right<Failure, UserSubscriptionPlanResponse>(response);
