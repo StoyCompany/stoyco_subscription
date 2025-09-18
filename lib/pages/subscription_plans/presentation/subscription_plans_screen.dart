@@ -171,7 +171,12 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                               child: SkeletonCard(
                                 height: cardWidth,
                                 width: cardWidth,
-                                margin: StoycoScreenSize.symmetric(context, horizontal: StoycoScreenSize.isPhone(context) ? 40 : 16, vertical: 12),
+                                margin: StoycoScreenSize.symmetric(
+                                  context, 
+                                  horizontal: 16, 
+                                  horizontalPhone: 40,
+                                  vertical: 12,
+                                ),
                               ),
                             );
                           }),
