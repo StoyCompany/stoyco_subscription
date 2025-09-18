@@ -89,7 +89,7 @@ class CardSubscriptionPlan extends StatelessWidget {
                 gradient: styleParams.tagGradientGradient,
                 margin: styleParams.tagGradientMargin,
                 padding: styleParams.tagGradientPadding,
-                titleStyle: styleParams.titleStyleTagGradient,
+                titleStyle: styleParams.tagGradientTitleStyle,
               ) : null,
         description: Column(
           children: <Widget>[

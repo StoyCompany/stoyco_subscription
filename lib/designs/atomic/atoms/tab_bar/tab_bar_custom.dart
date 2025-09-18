@@ -86,21 +86,44 @@ class _CustomTabBarState extends State<CustomTabBar> {
                   ? ButtonGradientText(
                       text: widget.tabs[index], 
                       onPressed: () => changeTab(index),
-                      paddingContent: StoycoScreenSize.symmetric(context, vertical: 6),
+                      paddingContent: StoycoScreenSize.symmetric(
+                        context, 
+                        verticalPhone: 6,
+                        vertical: 2,
+                      ),
                       borderRadius: StoycoScreenSize.radius(context, 105),
                       type: ButtonGradientTextType.tertiary,
+                      textStyle: GoogleFonts.montserrat(
+                        textStyle: TextStyle(
+                          color: StoycoColors.deepCharcoal,
+                          fontSize: StoycoScreenSize.fontSize(
+                            context, 
+                            18,
+                            phone: 14,
+                          ),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     )
                   : ButtonGradientText(
                       text: widget.tabs[index],
                       textStyle: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           color: StoycoColors.iconDefault,
-                          fontSize: StoycoScreenSize.fontSize(context, 14),
+                          fontSize: StoycoScreenSize.fontSize(
+                            context, 
+                            18,
+                            phone: 14,
+                          ),
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       onPressed: () => changeTab(index),
-                      paddingContent: StoycoScreenSize.symmetric(context, vertical: 6),
+                      paddingContent: StoycoScreenSize.symmetric(
+                          context, 
+                          vertical: 2,
+                          verticalPhone: 6,
+                        ),
                       borderRadius: StoycoScreenSize.radius(context, 105),
                       type: ButtonGradientTextType.custom,
                       backgroundColor: StoycoColors.transparent,

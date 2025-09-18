@@ -125,7 +125,6 @@ class SubscriptionPlansService {
   /// Returns [Either] with [SubscriptionPlanResponse] on success or [Failure] on error.
   Future<Either<Failure, SubscriptionPlanResponse>> getSubscriptionPlansByPartnerAndUser(GetSubscriptionPlansRequest request) async {
     try {
-      await verifyToken();
       return await _subscriptionPlansRepository.getSubscriptionPlans(request);
     } catch (e) {
       return Left<Failure, SubscriptionPlanResponse>(ExceptionFailure.decode(Exception('Error getting subscription plans by user: $e')));

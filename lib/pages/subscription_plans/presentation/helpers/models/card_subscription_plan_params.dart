@@ -13,8 +13,8 @@ class SubscriptionPlanScreenStyleParams {
     this.tagSubscriptionHeight,
     // ----------- Plan Font Sizes -----------
     this.currencyFontSize = 14,
-    this.priceFontSize = 24,
-    this.titleFontSize = 16,
+    this.priceFontSize = 40,
+    this.titleFontSize = 28,
     // ----------- Currency Flag -----------
     this.currencyFlagHeight = 16,
     this.currencyFlagWidth = 24,
@@ -62,7 +62,7 @@ class SubscriptionPlanScreenStyleParams {
     this.tagGradientWidth,
     this.tagGradientMargin,
     this.tagGradientPadding,
-    this.titleStyleTagGradient,
+    this.tagGradientTitleStyle,
     this.tagGradientBorderRadius = 100,
     this.tagGradientGradient = const LinearGradient(
       begin: Alignment.centerLeft,
@@ -172,7 +172,7 @@ class SubscriptionPlanScreenStyleParams {
   /// Tag gradient.
   final Gradient tagGradientGradient;
   /// Tag gradient title text style.
-  final TextStyle? titleStyleTagGradient;
+  final TextStyle? tagGradientTitleStyle;
 
   // ----------- Plan Text Styles -----------
   /// Plan currency text style.
