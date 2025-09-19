@@ -62,6 +62,10 @@ class $LibAssetsIconsGen {
   SvgGenImage get subscriptionIcon =>
       const SvgGenImage('lib/assets/icons/subscription_icon.svg');
 
+  /// File path: lib/assets/icons/subscription_icon_web.svg
+  SvgGenImage get subscriptionIconWeb =>
+      const SvgGenImage('lib/assets/icons/subscription_icon_web.svg');
+
   /// File path: lib/assets/icons/tag_subscription.svg
   SvgGenImage get tagSubscription =>
       const SvgGenImage('lib/assets/icons/tag_subscription.svg');
@@ -76,6 +80,7 @@ class $LibAssetsIconsGen {
     exclamacion,
     star,
     subscriptionIcon,
+    subscriptionIconWeb,
     tagSubscription,
     tagSubscriptionSlim,
   ];
