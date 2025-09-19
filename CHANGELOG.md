@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 0.5.3
+
+### Features
+
+- Added default package 'stoyco_subscription' name in assets.gen for assets tokens
+
+## [Unreleased]
+
 ## 0.5.2
 
 ### Features
