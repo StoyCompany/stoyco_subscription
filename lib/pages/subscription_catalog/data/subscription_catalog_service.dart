@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/requests/get_user_subscription_plans_request.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/get_subscription_catalog_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_data_source.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_repository.dart';
@@ -123,6 +124,28 @@ class SubscriptionCatalogService {
       );
     } on Exception catch (error) {
       return Left<Failure, UserSubscriptionPlanResponse>(
+        ExceptionFailure.decode(error),
+      );
+    }
+  }
+
+  Future<Either<Failure, GetSubscriptionCatalogResponse>>
+  getSubscriptionCatalog({String? userId}) async {
+    try {
+      await verifyToken();
+      final GetSubscriptionCatalogResponse response = await _repository
+          .getSubscriptionCatalog(userId: userId);
+      return Right<Failure, GetSubscriptionCatalogResponse>(response);
+    } on DioException catch (error) {
+      return Left<Failure, GetSubscriptionCatalogResponse>(
+        DioFailure.decode(error),
+      );
+    } on Error catch (error) {
+      return Left<Failure, GetSubscriptionCatalogResponse>(
+        ErrorFailure.decode(error),
+      );
+    } on Exception catch (error) {
+      return Left<Failure, GetSubscriptionCatalogResponse>(
         ExceptionFailure.decode(error),
       );
     }

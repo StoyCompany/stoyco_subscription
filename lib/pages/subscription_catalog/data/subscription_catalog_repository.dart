@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/requests/get_user_subscription_plans_request.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/get_subscription_catalog_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_data_source.dart';
 
@@ -37,5 +38,13 @@ class SubscriptionCatalogRepository {
     final Response<Map<String, dynamic>> response = await _dataSource
         .getUserSubscriptionPlans(request);
     return UserSubscriptionPlanResponse.fromJson(response.data!);
+  }
+
+  Future<GetSubscriptionCatalogResponse> getSubscriptionCatalog({
+    String? userId,
+  }) async {
+    final Response<Map<String, dynamic>> response = await _dataSource
+        .getSubscriptionCatalog(userId: userId);
+    return GetSubscriptionCatalogResponse.fromJson(response.data!);
   }
 }

@@ -42,4 +42,19 @@ class SubscriptionCatalogDataSource {
         '${environment.baseUrl()}subscriptions/plans/user/${request.userId}';
     return _dio.get(url, options: Options(headers: _getHeaders()));
   }
+
+  Future<Response<Map<String, dynamic>>> getSubscriptionCatalog({
+    String? userId,
+  }) async {
+    final String url = '${environment.baseUrl()}subscriptions/catalog';
+    final Map<String, dynamic> queryParams = <String, dynamic>{};
+    if (userId != null && userId.isNotEmpty) {
+      queryParams['userId'] = userId;
+    }
+    return _dio.get(
+      url,
+      queryParameters: queryParams.isNotEmpty ? queryParams : null,
+      options: Options(headers: _getHeaders()),
+    );
+  }
 }
