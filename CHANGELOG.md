@@ -7,6 +7,7 @@
 ### Features
 
 - Added default package 'stoyco_subscription' name in assets.gen for assets tokens
+- replace SvgPicture.asset with generated asset references in multiple components
 
 ## [Unreleased]
 

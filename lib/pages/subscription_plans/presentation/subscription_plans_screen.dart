@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/tap_menu_items/tab_menu_item.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/cards/card_subcription_plan.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan.dart';
@@ -101,8 +101,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             if (StoycoScreenSize.isPhone(context)) ...<Widget>[
-              SvgPicture.asset(
-                'packages/stoyco_subscription/lib/assets/icons/tag_subscription.svg',
+              StoycoAssets.lib.assets.icons.tagSubscription.svg(
                 width: widget.styleParams.tagSubscriptionWidth,
                 height: widget.styleParams.tagSubscriptionHeight,
               ),
@@ -122,10 +121,9 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
               ),
               Gap(StoycoScreenSize.height(context, 16)),
             ] else ...<Widget>[
-              SvgPicture.asset(
-                'packages/stoyco_subscription/lib/assets/icons/tag_subscription_slim.svg',
-                  width: widget.styleParams.tagSubscriptionWidth,
-                  height: widget.styleParams.tagSubscriptionHeight,
+              StoycoAssets.lib.assets.icons.tagSubscriptionSlim.svg(
+                width: widget.styleParams.tagSubscriptionWidth,
+                height: widget.styleParams.tagSubscriptionHeight,
               ),
               Gap(StoycoScreenSize.height(context, 12)),
               Text(
