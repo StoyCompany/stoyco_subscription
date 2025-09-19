@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/animations/hover_animation_card.dart';
@@ -9,6 +8,7 @@ import 'package:stoyco_subscription/designs/atomic/atoms/tags/tag_gradient_icon.
 import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/card_image_description_tag.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/dropdowns/html_dropdown.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/designs/utils/formatter_currency.dart';
@@ -165,8 +165,7 @@ class CardSubscriptionPlan extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SvgPicture.asset(
-                      'packages/stoyco_subscription/lib/assets/icons/exclamacion.svg',
+                    StoycoAssets.lib.assets.icons.exclamacion.svg(
                       width: styleParams.exclamationIconWidth,
                       height: styleParams.exclamationIconHeight,
                     ),

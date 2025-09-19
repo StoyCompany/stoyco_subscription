@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
@@ -91,9 +91,7 @@ class _HtmlDropdownState extends State<HtmlDropdown> {
           trailing: AnimatedRotation(
             turns: expanded ? 0.25 : 0,
             duration: const Duration(milliseconds: 200),
-            child: widget.arrowIcon ?? SvgPicture.asset(
-              'packages/stoyco_subscription/lib/assets/icons/arrow_right.svg',
-            ),
+            child: widget.arrowIcon ?? StoycoAssets.lib.assets.icons.arrowRight.svg(),
           ),
           onTap: () => setState(() => expanded = !expanded),
         ),

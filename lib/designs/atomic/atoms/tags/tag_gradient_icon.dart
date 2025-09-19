@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
@@ -103,9 +103,7 @@ class TagGradientIcon extends StatelessWidget {
           if (icon != null) ...<Widget>[
             icon!,
           ] else ...<Widget>[
-            SvgPicture.asset(
-              'packages/stoyco_subscription/lib/assets/icons/star.svg',
-            ),
+            StoycoAssets.lib.assets.icons.star.svg(),
           ],
           Gap(StoycoScreenSize.width(context, 7)),
           Text(
