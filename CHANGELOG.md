@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 0.5.3
+
+### Fixes
+
+- replace SvgPicture.asset with generated asset references in multiple components
+
+## [Unreleased]
+
 ## 0.5.2
 
 ### Features
