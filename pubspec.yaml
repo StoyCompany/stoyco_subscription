@@ -39,7 +39,6 @@ flutter:
   assets:
     - lib/assets/colors/
     - lib/assets/icons/
-    - lib/assets/images/
     - lib/assets/mocks/
   fonts:
     - family: Akkurat_Pro
