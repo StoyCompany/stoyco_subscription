@@ -122,6 +122,9 @@ class StoycoColors {
   /// Color: #F8F9FA
   static const Color softWhite = Color(0xFFF8F9FA);
 
+  /// Color: #DEE4ED
+  static const Color tagBackground = Color(0xFFDEE4ED);
+
   /// Color: #73000000
   static const Color tagGradientBlack45 = Color(0x73000000);
 
