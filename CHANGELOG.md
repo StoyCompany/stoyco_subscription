@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 0.5.4
+
+### Features
+
+- Search icon refactor
+
+## [Unreleased]
+
 ## 0.5.3
 
 ### Features

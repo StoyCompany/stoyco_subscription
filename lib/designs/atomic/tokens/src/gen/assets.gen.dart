@@ -55,6 +55,10 @@ class $LibAssetsIconsGen {
   SvgGenImage get exclamacion =>
       const SvgGenImage('lib/assets/icons/exclamacion.svg');
 
+  /// File path: lib/assets/icons/search_navbar.svg
+  SvgGenImage get searchNavbar =>
+      const SvgGenImage('lib/assets/icons/search_navbar.svg');
+
   /// File path: lib/assets/icons/star.svg
   SvgGenImage get star => const SvgGenImage('lib/assets/icons/star.svg');
 
@@ -78,6 +82,7 @@ class $LibAssetsIconsGen {
   List<SvgGenImage> get values => [
     arrowRight,
     exclamacion,
+    searchNavbar,
     star,
     subscriptionIcon,
     subscriptionIconWeb,
@@ -119,7 +124,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String? package = 'stoyco_subscription',
+    String? package,
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,

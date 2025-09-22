@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -20,10 +21,9 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 /// ```
 /// {@endtemplate}
 class SubscriptionSearchBar extends StatefulWidget {
-
   /// {@macro subscription_search_bar}
   const SubscriptionSearchBar({super.key, this.controller, this.onChanged});
-  
+
   /// Optional controller to manage the text being edited.
   final TextEditingController? controller;
 
@@ -63,10 +63,19 @@ class _SubscriptionSearchBarState extends State<SubscriptionSearchBar> {
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide.none,
           ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: StoycoColors.white,
-            size: StoycoScreenSize.fontSize(context, 16),
+          prefixIcon: Padding(
+            padding: EdgeInsets.only(left: 16, right: 8),
+            child: StoycoAssets.lib.assets.icons.searchNavbar.svg(
+              package: 'stoyco_subscription',
+              width: StoycoScreenSize.width(context, 16),
+              height: StoycoScreenSize.height(context, 16),
+            ),
+          ),
+          prefixIconConstraints: BoxConstraints(
+            minWidth: StoycoScreenSize.width(context, 42),
+            minHeight: StoycoScreenSize.height(context, 42),
+            maxWidth: StoycoScreenSize.width(context, 42),
+            maxHeight: StoycoScreenSize.height(context, 42),
           ),
           contentPadding: StoycoScreenSize.symmetric(
             context,
