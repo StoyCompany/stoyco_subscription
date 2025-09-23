@@ -66,7 +66,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
     return Container(
       height: StoycoScreenSize.height(context, widget.height),
       width: StoycoScreenSize.width(context, widget.tabs.length > 1 ? widget.width : widget.width / 1.95),
-      padding: widget.padding ?? StoycoScreenSize.symmetric(context, horizontal: 4),
+      padding: widget.padding ?? StoycoScreenSize.symmetric(context, horizontal: 6, horizontalPhone: 4),
       decoration: BoxDecoration(
         color: StoycoColors.menuItemBackground,
         borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, 105)),
@@ -81,7 +81,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
             (int index) {
               final bool isSelected = selectedIndex == index;
               return SizedBox(
-                width: StoycoScreenSize.width(context, widget.width - StoycoScreenSize.symmetric(context, horizontal: 4).horizontal) / 2,
+                width: StoycoScreenSize.width(context, widget.width - StoycoScreenSize.symmetric(context, horizontal: 6, horizontalPhone: 4).horizontal) / 2,
                 child: isSelected 
                   ? ButtonGradientText(
                       text: widget.tabs[index], 
