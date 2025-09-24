@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/cards/card_with_shadow.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template card_image_description_tag}
@@ -134,12 +135,16 @@ class CardImageDescriptionTag extends StatelessWidget {
                     child: SizedBox(
                       height: imageHeight ?? StoycoScreenSize.height(context, 160),
                       width: imageWidth ?? double.infinity,
-                      child: CachedNetworkImage(
-                        imageUrl: imageUrl,
-                        placeholder: (BuildContext context, String url) => imagePlaceholder ?? const SkeletonCard(),
-                        errorWidget: (BuildContext context, String url, Object error) => imageErrorPlaceholder ?? const SkeletonCard(),
-                        fit: BoxFit.cover,
-                      ),
+                      child:  CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            placeholder: (BuildContext context, String url) => imagePlaceholder ?? const SkeletonCard(),
+                            errorWidget: (BuildContext context, String url, Object error) => imageErrorPlaceholder ?? Container(
+                              alignment: Alignment.center,
+                              color: StoycoColors.deepTeal,
+                              child: const Icon(Icons.error),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                     ),
                   ),
                   Gap(StoycoScreenSize.height(context, 24)),

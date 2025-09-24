@@ -66,7 +66,7 @@ class CardSubscriptionPlan extends StatelessWidget {
       child: CardImageDescriptionTag(
         key: ValueKey<String>('cardImageDescriptionTag_${plan.id}'),
         imageUrl: plan.imageUrl,
-        tag: plan.subscribed 
+        tag: plan.subscribed && plan.subscribedIsActive
           ? TagCorner(
               key: ValueKey<String>('tagCorner_${plan.id}'), 
               title: 'Actual',

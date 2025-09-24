@@ -64,7 +64,7 @@ class _SubscriptionSearchBarState extends State<SubscriptionSearchBar> {
             borderSide: BorderSide.none,
           ),
           prefixIcon: Padding(
-            padding: EdgeInsets.only(left: 16, right: 8),
+            padding: const EdgeInsets.only(left: 16, right: 8),
             child: StoycoAssets.lib.assets.icons.searchNavbar.svg(
               package: 'stoyco_subscription',
               width: StoycoScreenSize.width(context, 16),
