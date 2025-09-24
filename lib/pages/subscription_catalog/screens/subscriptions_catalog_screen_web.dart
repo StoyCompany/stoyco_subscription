@@ -158,9 +158,9 @@ class _SubscriptionsCatalogScreenWebState
                         imageUrl: item.imageUrl,
                         title: item.title,
                         subscribed: item.subscribed,
-                        onTap: () => onTapSubscription?.call(item.id),
+                        onTap: () => onTapSubscription?.call(item.partnerId),
                         onTapSubscribe: () =>
-                            widget.onTapSubscribe?.call(item.id),
+                            widget.onTapSubscribe?.call(item.partnerId),
                         titleFontSize: 19.36,
                       );
                     },
