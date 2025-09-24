@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## 0.6.0
+
+### Features
+
+- Add page and pageSize to getSubscriptionCatalogService
+- Implement subscription catalog service in catalog screen to fetch real data
+
+## [Unreleased]
+
 ## 0.5.4
 
 ### Features

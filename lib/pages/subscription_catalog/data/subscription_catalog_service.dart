@@ -129,12 +129,20 @@ class SubscriptionCatalogService {
     }
   }
 
+  /// Fetches the subscription catalog from the API, optionally filtered by [userId]
+  /// and paginated using [page] and [pageSize].
+  ///
+  /// Returns an [Either] with [GetSubscriptionCatalogResponse] on success or [Failure] on error.
   Future<Either<Failure, GetSubscriptionCatalogResponse>>
-  getSubscriptionCatalog({String? userId}) async {
+  getSubscriptionCatalog({String? userId, int? page, int? pageSize}) async {
     try {
       await verifyToken();
       final GetSubscriptionCatalogResponse response = await _repository
-          .getSubscriptionCatalog(userId: userId);
+          .getSubscriptionCatalog(
+            userId: userId,
+            page: page,
+            pageSize: pageSize,
+          );
       return Right<Failure, GetSubscriptionCatalogResponse>(response);
     } on DioException catch (error) {
       return Left<Failure, GetSubscriptionCatalogResponse>(

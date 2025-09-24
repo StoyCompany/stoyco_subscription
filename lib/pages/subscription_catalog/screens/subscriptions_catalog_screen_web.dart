@@ -5,7 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/atoms/tab_bar/tab_bar_v2.dart
 import 'package:stoyco_subscription/designs/atomic/molecules/circular_avatar/subscription_circular_image_with_info.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item_map.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/notifier/subscription_catalog_notifier.dart';
 
 /// {@template subscriptions_catalog_screen_web}
@@ -152,15 +152,15 @@ class _SubscriptionsCatalogScreenWebState
                     ),
                     itemCount: notifier.filteredSubscriptions.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final SubscriptionCatalogItem item =
+                      final SubscriptionCatalogItemMap item =
                           notifier.filteredSubscriptions[index];
                       return SubscriptionCircularImageWithInfo(
                         imageUrl: item.imageUrl,
                         title: item.title,
                         subscribed: item.subscribed,
-                        onTap: () => onTapSubscription?.call(item.id),
+                        onTap: () => onTapSubscription?.call(item.partnerId),
                         onTapSubscribe: () =>
-                            widget.onTapSubscribe?.call(item.id),
+                            widget.onTapSubscribe?.call(item.partnerId),
                         titleFontSize: 19.36,
                       );
                     },

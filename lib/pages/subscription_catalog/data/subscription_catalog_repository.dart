@@ -28,10 +28,10 @@ class SubscriptionCatalogRepository {
     _dataSource.updateToken(token);
   }
 
-  /// Fetches the subscription plans for a specific user.
+  /// Fetches the subscription catalog from the API, optionally filtered by [userId]
+  /// and paginated using [page] and [pageSize].
   ///
-  /// Takes a [GetUserSubscriptionPlansRequest] containing the user ID.
-  /// Returns a [UserSubscriptionPlanResponse] with the list of plans and response metadata.
+  /// Returns a [GetSubscriptionCatalogResponse] with the catalog data and pagination info.
   Future<UserSubscriptionPlanResponse> getUserSubscriptionPlans(
     GetUserSubscriptionPlansRequest request,
   ) async {
@@ -42,9 +42,11 @@ class SubscriptionCatalogRepository {
 
   Future<GetSubscriptionCatalogResponse> getSubscriptionCatalog({
     String? userId,
+    int? page,
+    int? pageSize,
   }) async {
     final Response<Map<String, dynamic>> response = await _dataSource
-        .getSubscriptionCatalog(userId: userId);
+        .getSubscriptionCatalog(userId: userId, page: page, pageSize: pageSize);
     return GetSubscriptionCatalogResponse.fromJson(response.data!);
   }
 }
