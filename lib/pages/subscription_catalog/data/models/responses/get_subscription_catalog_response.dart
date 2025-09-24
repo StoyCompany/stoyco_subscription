@@ -92,8 +92,10 @@ class Pagination extends Equatable {
 class SubscriptionCatalogItem extends Equatable {
   const SubscriptionCatalogItem({
     required this.subscriptionId,
+    required this.partnerId,
     required this.partnerName,
     required this.partnerImageUrl,
+    required this.profile,
     required this.isSubscribed,
   });
 
@@ -101,8 +103,10 @@ class SubscriptionCatalogItem extends Equatable {
       _$SubscriptionCatalogItemFromJson(json);
 
   final String subscriptionId;
+  final String partnerId;
   final String partnerName;
   final String partnerImageUrl;
+  final String profile;
   final bool isSubscribed;
 
   Map<String, dynamic> toJson() => _$SubscriptionCatalogItemToJson(this);
@@ -110,8 +114,10 @@ class SubscriptionCatalogItem extends Equatable {
   @override
   List<Object?> get props => <Object?>[
     subscriptionId,
+    partnerId,
     partnerName,
     partnerImageUrl,
+    profile,
     isSubscribed,
   ];
 }

@@ -43,7 +43,7 @@ class StoycoTabBarV2 extends StatelessWidget {
     return Stack(
       children: <Widget>[
         SizedBox(
-          height: StoycoScreenSize.height(context, 56),
+          height: StoycoScreenSize.height(context, 52),
           child: TabBar(
             isScrollable: false,
             padding: EdgeInsets.zero,

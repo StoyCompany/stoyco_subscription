@@ -45,11 +45,19 @@ class SubscriptionCatalogDataSource {
 
   Future<Response<Map<String, dynamic>>> getSubscriptionCatalog({
     String? userId,
+    int? page,
+    int? pageSize,
   }) async {
     final String url = '${environment.baseUrl()}subscriptions/catalog';
     final Map<String, dynamic> queryParams = <String, dynamic>{};
     if (userId != null && userId.isNotEmpty) {
       queryParams['userId'] = userId;
+    }
+    if (page != null) {
+      queryParams['page'] = page;
+    }
+    if (pageSize != null) {
+      queryParams['pageSize'] = pageSize;
     }
     return _dio.get(
       url,
