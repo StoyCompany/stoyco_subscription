@@ -7,7 +7,7 @@ import 'package:stoyco_subscription/pages/subscription_catalog/models/subscripti
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 
 class SubscriptionCatalogNotifier extends ChangeNotifier {
-  SubscriptionCatalogNotifier(TickerProvider vsync) {
+  SubscriptionCatalogNotifier(TickerProvider vsync, {this.userId}) {
     tabController = TabController(vsync: vsync, length: tabs.length);
     tabController.addListener(_onTabChanged);
     _fetchCatalog();
@@ -22,6 +22,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     const SubscriptionStoycoTab(title: 'Brands'),
   ];
   final ScrollController scrollController = ScrollController();
+  final String? userId;
 
   List<SubscriptionCatalogItemMap> musicSubscriptions =
       <SubscriptionCatalogItemMap>[];
@@ -162,6 +163,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     isLoadingMore = false;
     final Either<Failure, GetSubscriptionCatalogResponse> result =
         await SubscriptionCatalogService.instance.getSubscriptionCatalog(
+          userId: userId,
           page: currentPage,
           pageSize: pageSize,
         );

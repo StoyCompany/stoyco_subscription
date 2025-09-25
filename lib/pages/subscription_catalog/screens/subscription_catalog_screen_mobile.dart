@@ -36,6 +36,7 @@ class SubscriptionsCatalogScreenMobile extends StatefulWidget {
     super.key,
     this.onTapSubscription,
     this.onTapSubscribe,
+    this.userId,
   });
 
   /// Callback triggered when a subscription item is tapped.
@@ -45,6 +46,8 @@ class SubscriptionsCatalogScreenMobile extends StatefulWidget {
   /// Callback triggered when subscribe button is tapped.
   /// Receives the [id] of the subscription.
   final void Function(String id)? onTapSubscribe;
+
+  final String? userId;
 
   @override
   State<SubscriptionsCatalogScreenMobile> createState() =>
@@ -64,7 +67,7 @@ class _SubscriptionsCatalogScreenMobileState
   void initState() {
     super.initState();
     onTapSubscription = widget.onTapSubscription;
-    notifier = SubscriptionCatalogNotifier(this);
+    notifier = SubscriptionCatalogNotifier(this, userId: widget.userId);
     notifier.addListener(_onNotifierChanged);
   }
 
