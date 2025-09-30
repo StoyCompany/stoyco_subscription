@@ -15,6 +15,7 @@ SubscriptionCatalogItemMap _$SubscriptionCatalogItemMapFromJson(
   subscribed: json['subscribed'] as bool,
   partnerId: json['partnerId'] as String,
   profile: json['profile'] as String,
+  hasSubscription: json['hasSubscription'] as bool,
 );
 
 Map<String, dynamic> _$SubscriptionCatalogItemMapToJson(
@@ -26,4 +27,5 @@ Map<String, dynamic> _$SubscriptionCatalogItemMapToJson(
   'subscribed': instance.subscribed,
   'partnerId': instance.partnerId,
   'profile': instance.profile,
+  'hasSubscription': instance.hasSubscription,
 };

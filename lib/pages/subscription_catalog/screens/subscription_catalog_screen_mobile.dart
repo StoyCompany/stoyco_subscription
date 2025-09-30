@@ -203,6 +203,7 @@ class _SubscriptionsCatalogScreenMobileState
                     imageUrl: item.imageUrl,
                     title: item.title,
                     subscribed: item.subscribed,
+                    hasSubscription: item.hasSubscription,
                     onTap: () => onTapSubscription?.call(item.partnerId),
                     onTapSubscribe: () =>
                         widget.onTapSubscribe?.call(item.partnerId),

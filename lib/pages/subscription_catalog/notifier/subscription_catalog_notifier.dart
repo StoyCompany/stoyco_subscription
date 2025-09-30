@@ -125,6 +125,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
                 subscribed: item.isSubscribed,
                 partnerId: item.partnerId,
                 profile: item.profile,
+                hasSubscription: item.hasSubscription,
               ),
             )
             .toList();
@@ -172,6 +173,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         print('Error al obtener catálogo: $failure');
       },
       (GetSubscriptionCatalogResponse response) {
+        print('Fetch catalog: $response');
         final List<SubscriptionCatalogItemMap> allItems = response.data
             .map(
               (SubscriptionCatalogItem item) => SubscriptionCatalogItemMap(
@@ -181,6 +183,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
                 subscribed: item.isSubscribed,
                 partnerId: item.partnerId,
                 profile: item.profile,
+                hasSubscription: item.hasSubscription,
               ),
             )
             .toList();
@@ -188,42 +191,22 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         musicSubscriptions = allItems
             .where(
               (SubscriptionCatalogItemMap item) =>
-                  response.data
-                      .firstWhere(
-                        (SubscriptionCatalogItem e) =>
-                            e.subscriptionId == item.id,
-                      )
-                      .profile
-                      .toLowerCase() ==
-                  'music',
+                  item.profile.toLowerCase() == 'music',
             )
             .toList();
 
         sportSubscriptions = allItems
             .where(
               (SubscriptionCatalogItemMap item) =>
-                  response.data
-                      .firstWhere(
-                        (SubscriptionCatalogItem e) =>
-                            e.subscriptionId == item.id,
-                      )
-                      .profile
-                      .toLowerCase() ==
-                  'sport',
+                  item.profile.toLowerCase() == 'sport',
             )
             .toList();
 
         brandSubscriptions = allItems
             .where(
               (SubscriptionCatalogItemMap item) =>
-                  response.data
-                      .firstWhere(
-                        (SubscriptionCatalogItem e) =>
-                            e.subscriptionId == item.id,
-                      )
-                      .profile
-                      .toLowerCase() ==
-                  'brands',
+                  item.profile.toLowerCase() == 'brand' ||
+                  item.profile.toLowerCase() == 'brands',
             )
             .toList();
 
