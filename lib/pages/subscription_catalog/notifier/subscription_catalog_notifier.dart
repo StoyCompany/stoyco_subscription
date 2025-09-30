@@ -173,7 +173,6 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         print('Error al obtener catálogo: $failure');
       },
       (GetSubscriptionCatalogResponse response) {
-        print('Fetch catalog: $response');
         final List<SubscriptionCatalogItemMap> allItems = response.data
             .map(
               (SubscriptionCatalogItem item) => SubscriptionCatalogItemMap(
