@@ -124,7 +124,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String? package,
+    String? package = 'stoyco_subscription',
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,
