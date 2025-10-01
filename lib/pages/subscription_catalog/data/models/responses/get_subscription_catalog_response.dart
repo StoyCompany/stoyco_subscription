@@ -96,6 +96,7 @@ class SubscriptionCatalogItem extends Equatable {
     required this.partnerName,
     required this.partnerImageUrl,
     required this.profile,
+    required this.hasSubscription,
     required this.isSubscribed,
   });
 
@@ -107,6 +108,7 @@ class SubscriptionCatalogItem extends Equatable {
   final String partnerName;
   final String partnerImageUrl;
   final String profile;
+  final bool hasSubscription;
   final bool isSubscribed;
 
   Map<String, dynamic> toJson() => _$SubscriptionCatalogItemToJson(this);
@@ -118,6 +120,7 @@ class SubscriptionCatalogItem extends Equatable {
     partnerName,
     partnerImageUrl,
     profile,
+    hasSubscription,
     isSubscribed,
   ];
 }

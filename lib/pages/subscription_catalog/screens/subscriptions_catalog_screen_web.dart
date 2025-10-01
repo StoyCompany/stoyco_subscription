@@ -22,6 +22,7 @@ class SubscriptionsCatalogScreenWeb extends StatefulWidget {
   const SubscriptionsCatalogScreenWeb({
     this.onTapSubscription,
     this.onTapSubscribe,
+    this.userId,
     super.key,
   });
 
@@ -32,6 +33,8 @@ class SubscriptionsCatalogScreenWeb extends StatefulWidget {
   /// Callback triggered when the subscribe button is tapped.
   /// Receives the [id] of the subscription.
   final void Function(String id)? onTapSubscribe;
+
+  final String? userId;
 
   @override
   State<SubscriptionsCatalogScreenWeb> createState() =>
@@ -52,7 +55,7 @@ class _SubscriptionsCatalogScreenWebState
     super.initState();
 
     onTapSubscription = widget.onTapSubscription;
-    notifier = SubscriptionCatalogNotifier(this);
+    notifier = SubscriptionCatalogNotifier(this, userId: widget.userId);
     notifier.addListener(_onNotifierChanged);
   }
 
@@ -158,6 +161,7 @@ class _SubscriptionsCatalogScreenWebState
                         imageUrl: item.imageUrl,
                         title: item.title,
                         subscribed: item.subscribed,
+                        hasSubscription: item.hasSubscription,
                         onTap: () => onTapSubscription?.call(item.partnerId),
                         onTapSubscribe: () =>
                             widget.onTapSubscribe?.call(item.partnerId),

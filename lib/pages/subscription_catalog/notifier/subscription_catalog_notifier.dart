@@ -7,7 +7,7 @@ import 'package:stoyco_subscription/pages/subscription_catalog/models/subscripti
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 
 class SubscriptionCatalogNotifier extends ChangeNotifier {
-  SubscriptionCatalogNotifier(TickerProvider vsync) {
+  SubscriptionCatalogNotifier(TickerProvider vsync, {this.userId}) {
     tabController = TabController(vsync: vsync, length: tabs.length);
     tabController.addListener(_onTabChanged);
     _fetchCatalog();
@@ -22,6 +22,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     const SubscriptionStoycoTab(title: 'Brands'),
   ];
   final ScrollController scrollController = ScrollController();
+  final String? userId;
 
   List<SubscriptionCatalogItemMap> musicSubscriptions =
       <SubscriptionCatalogItemMap>[];
@@ -124,6 +125,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
                 subscribed: item.isSubscribed,
                 partnerId: item.partnerId,
                 profile: item.profile,
+                hasSubscription: item.hasSubscription,
               ),
             )
             .toList();
@@ -162,6 +164,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     isLoadingMore = false;
     final Either<Failure, GetSubscriptionCatalogResponse> result =
         await SubscriptionCatalogService.instance.getSubscriptionCatalog(
+          userId: userId,
           page: currentPage,
           pageSize: pageSize,
         );
@@ -179,6 +182,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
                 subscribed: item.isSubscribed,
                 partnerId: item.partnerId,
                 profile: item.profile,
+                hasSubscription: item.hasSubscription,
               ),
             )
             .toList();
@@ -186,42 +190,22 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         musicSubscriptions = allItems
             .where(
               (SubscriptionCatalogItemMap item) =>
-                  response.data
-                      .firstWhere(
-                        (SubscriptionCatalogItem e) =>
-                            e.subscriptionId == item.id,
-                      )
-                      .profile
-                      .toLowerCase() ==
-                  'music',
+                  item.profile.toLowerCase() == 'music',
             )
             .toList();
 
         sportSubscriptions = allItems
             .where(
               (SubscriptionCatalogItemMap item) =>
-                  response.data
-                      .firstWhere(
-                        (SubscriptionCatalogItem e) =>
-                            e.subscriptionId == item.id,
-                      )
-                      .profile
-                      .toLowerCase() ==
-                  'sport',
+                  item.profile.toLowerCase() == 'sport',
             )
             .toList();
 
         brandSubscriptions = allItems
             .where(
               (SubscriptionCatalogItemMap item) =>
-                  response.data
-                      .firstWhere(
-                        (SubscriptionCatalogItem e) =>
-                            e.subscriptionId == item.id,
-                      )
-                      .profile
-                      .toLowerCase() ==
-                  'brands',
+                  item.profile.toLowerCase() == 'brand' ||
+                  item.profile.toLowerCase() == 'brands',
             )
             .toList();
 

@@ -57,6 +57,7 @@ SubscriptionCatalogItem _$SubscriptionCatalogItemFromJson(
   partnerName: json['partnerName'] as String,
   partnerImageUrl: json['partnerImageUrl'] as String,
   profile: json['profile'] as String,
+  hasSubscription: json['hasSubscription'] as bool,
   isSubscribed: json['isSubscribed'] as bool,
 );
 
@@ -68,5 +69,6 @@ Map<String, dynamic> _$SubscriptionCatalogItemToJson(
   'partnerName': instance.partnerName,
   'partnerImageUrl': instance.partnerImageUrl,
   'profile': instance.profile,
+  'hasSubscription': instance.hasSubscription,
   'isSubscribed': instance.isSubscribed,
 };

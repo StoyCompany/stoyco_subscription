@@ -42,6 +42,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
     this.imageWidth,
     this.imageHeight,
     this.onTapSubscribe,
+    this.hasSubscription,
   });
 
   /// The title displayed below the image.
@@ -52,6 +53,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
 
   /// Whether the user is subscribed. Affects the button's appearance and text.
   final bool? subscribed;
+  final bool? hasSubscription;
 
   //Image width and height
   final double? imageWidth;
@@ -126,46 +128,51 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
               ),
             ),
 
-            InkWell(
-              onTap: onTapSubscribe,
-              child: Container(
-                padding: StoycoScreenSize.symmetric(
-                  context,
-                  horizontal: 16,
-                  vertical: 3,
-                ),
-                height: StoycoScreenSize.height(context, 30.66),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFF373680)),
-                  borderRadius: BorderRadius.circular(15.31),
-                  gradient: subscribed ?? false
-                      ? const LinearGradient(
-                          colors: <Color>[
-                            Color(0x232336B2),
-                            Color(0x232336B2),
-                            Color(0x2323361A),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        )
-                      : const LinearGradient(
-                          colors: <Color>[Color(0xFF1C197F), Color(0xFF4639E7)],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                ),
-                child: Text(
-                  subscribed ?? false ? 'Ver suscripción' : 'Suscribirme',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: StoycoScreenSize.fontSize(context, 15.31),
-                    fontFamily: FontFamilyToken.akkuratPro,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+            // Botón solo si hasSubscription es false o null
+            if (hasSubscription ?? false)
+              InkWell(
+                onTap: onTapSubscribe,
+                child: Container(
+                  padding: StoycoScreenSize.symmetric(
+                    context,
+                    horizontal: 16,
+                    vertical: 3,
+                  ),
+                  height: StoycoScreenSize.height(context, 30.66),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFF373680)),
+                    borderRadius: BorderRadius.circular(15.31),
+                    gradient: subscribed ?? false
+                        ? const LinearGradient(
+                            colors: <Color>[
+                              Color(0x232336B2),
+                              Color(0x232336B2),
+                              Color(0x2323361A),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          )
+                        : const LinearGradient(
+                            colors: <Color>[
+                              Color(0xFF1C197F),
+                              Color(0xFF4639E7),
+                            ],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                  ),
+                  child: Text(
+                    subscribed ?? false ? 'Ver suscripción' : 'Suscribirme',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: StoycoScreenSize.fontSize(context, 15.31),
+                      fontFamily: FontFamilyToken.akkuratPro,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),

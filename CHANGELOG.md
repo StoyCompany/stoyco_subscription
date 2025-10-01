@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## 0.6.1
+
+### Features
+
+- Add hasSubscription param and hide Subscribe button depending on it
+
+## [Unreleased]
+
 ## 0.6.0
 
 ### Features

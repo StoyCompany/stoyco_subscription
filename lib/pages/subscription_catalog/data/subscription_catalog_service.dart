@@ -136,7 +136,6 @@ class SubscriptionCatalogService {
   Future<Either<Failure, GetSubscriptionCatalogResponse>>
   getSubscriptionCatalog({String? userId, int? page, int? pageSize}) async {
     try {
-      await verifyToken();
       final GetSubscriptionCatalogResponse response = await _repository
           .getSubscriptionCatalog(
             userId: userId,
