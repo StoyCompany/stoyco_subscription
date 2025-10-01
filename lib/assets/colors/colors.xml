@@ -53,4 +53,6 @@
     <color name="navbarButtonColor">#4639E7</color>
     <color name="midnightInk">#0F151A</color>
     <color name="deepTeal">#253341</color>
+    
+    <color name="lightGray">#DEE4ED</color>
 </resources>

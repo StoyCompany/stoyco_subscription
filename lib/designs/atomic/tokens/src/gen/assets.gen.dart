@@ -70,6 +70,9 @@ class $LibAssetsIconsGen {
   SvgGenImage get subscriptionIconWeb =>
       const SvgGenImage('lib/assets/icons/subscription_icon_web.svg');
 
+  /// File path: lib/assets/icons/tag_lock.svg
+  SvgGenImage get tagLock => const SvgGenImage('lib/assets/icons/tag_lock.svg');
+
   /// File path: lib/assets/icons/tag_subscription.svg
   SvgGenImage get tagSubscription =>
       const SvgGenImage('lib/assets/icons/tag_subscription.svg');
@@ -86,6 +89,7 @@ class $LibAssetsIconsGen {
     star,
     subscriptionIcon,
     subscriptionIconWeb,
+    tagLock,
     tagSubscription,
     tagSubscriptionSlim,
   ];
@@ -124,7 +128,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String? package = 'stoyco_subscription',
+    String? package,
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,

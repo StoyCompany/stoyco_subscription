@@ -86,6 +86,9 @@ class StoycoColors {
   /// Color: #D5D5E0
   static const Color iconDefault = Color(0xFFD5D5E0);
 
+  /// Color: #DEE4ED
+  static const Color lightGray = Color(0xFFDEE4ED);
+
   /// Color: #253341
   static const Color menuItemBackground = Color(0xFF253341);
 
