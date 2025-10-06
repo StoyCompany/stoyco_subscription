@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## 0.7.0
+
+### Features
+
+- Added PartnerProfile service, datasource and repository
+- Added response models for getLowestPricePlanByPartner and getLastUserPlanByPartner services.
+- Added PartnerProfileSubscriptionBtn component
+- Added CulturalAssetSlider and CulturalAssetCard components
+
+## [Unreleased]
+
 ## 0.6.1
 
 ### Features

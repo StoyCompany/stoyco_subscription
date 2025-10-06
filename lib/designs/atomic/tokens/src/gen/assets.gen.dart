@@ -47,9 +47,17 @@ class $LibAssetsColorsGen {
 class $LibAssetsIconsGen {
   const $LibAssetsIconsGen();
 
+  /// File path: lib/assets/icons/alert_icon.svg
+  SvgGenImage get alertIcon =>
+      const SvgGenImage('lib/assets/icons/alert_icon.svg');
+
   /// File path: lib/assets/icons/arrow_right.svg
   SvgGenImage get arrowRight =>
       const SvgGenImage('lib/assets/icons/arrow_right.svg');
+
+  /// File path: lib/assets/icons/double_right_arrow.svg
+  SvgGenImage get doubleRightArrow =>
+      const SvgGenImage('lib/assets/icons/double_right_arrow.svg');
 
   /// File path: lib/assets/icons/exclamacion.svg
   SvgGenImage get exclamacion =>
@@ -61,6 +69,10 @@ class $LibAssetsIconsGen {
 
   /// File path: lib/assets/icons/star.svg
   SvgGenImage get star => const SvgGenImage('lib/assets/icons/star.svg');
+
+  /// File path: lib/assets/icons/subsciption_button_icon.svg
+  SvgGenImage get subsciptionButtonIcon =>
+      const SvgGenImage('lib/assets/icons/subsciption_button_icon.svg');
 
   /// File path: lib/assets/icons/subscription_icon.svg
   SvgGenImage get subscriptionIcon =>
@@ -80,10 +92,13 @@ class $LibAssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+    alertIcon,
     arrowRight,
+    doubleRightArrow,
     exclamacion,
     searchNavbar,
     star,
+    subsciptionButtonIcon,
     subscriptionIcon,
     subscriptionIconWeb,
     tagSubscription,
