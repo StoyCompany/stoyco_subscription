@@ -55,6 +55,10 @@ class $LibAssetsIconsGen {
   SvgGenImage get arrowRight =>
       const SvgGenImage('lib/assets/icons/arrow_right.svg');
 
+  /// File path: lib/assets/icons/cultural_asset_coin.svg
+  SvgGenImage get culturalAssetCoin =>
+      const SvgGenImage('lib/assets/icons/cultural_asset_coin.svg');
+
   /// File path: lib/assets/icons/double_right_arrow.svg
   SvgGenImage get doubleRightArrow =>
       const SvgGenImage('lib/assets/icons/double_right_arrow.svg');
@@ -94,6 +98,7 @@ class $LibAssetsIconsGen {
   List<SvgGenImage> get values => [
     alertIcon,
     arrowRight,
+    culturalAssetCoin,
     doubleRightArrow,
     exclamacion,
     searchNavbar,

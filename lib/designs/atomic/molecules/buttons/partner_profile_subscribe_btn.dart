@@ -70,9 +70,9 @@ class PartnerProfileSubscribeBtn extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   (hasActivePlan ?? false)
-                      ? StoycoAssets.lib.assets.icons.subsciptionButtonIcon
-                            .svg()
-                      : StoycoAssets.lib.assets.icons.alertIcon.svg(),
+                      ? StoycoAssets.lib.assets.icons.alertIcon.svg()
+                      : StoycoAssets.lib.assets.icons.subsciptionButtonIcon
+                            .svg(),
                   SizedBox(width: StoycoScreenSize.width(context, 10)),
                   (hasActivePlan ?? false)
                       ? Text(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/cultural_asset_card_model.dart';
@@ -117,6 +118,7 @@ class CulturalAssetCard extends StatelessWidget {
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
                                 'Comprar',
@@ -125,26 +127,47 @@ class CulturalAssetCard extends StatelessWidget {
                                     context,
                                     12,
                                   ),
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w400,
                                   color: Colors.white,
                                 ),
                                 maxLines: 1,
                                 textAlign: TextAlign.start,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              Text(
-                                culturalAssetCard.price.toString(),
-                                style: TextStyle(
-                                  fontSize: StoycoScreenSize.fontSize(
-                                    context,
-                                    10,
+                              Row(
+                                spacing: StoycoScreenSize.width(context, 4),
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  StoycoAssets
+                                      .lib
+                                      .assets
+                                      .icons
+                                      .culturalAssetCoin
+                                      .svg(
+                                        width: StoycoScreenSize.width(
+                                          context,
+                                          15,
+                                        ),
+                                        height: StoycoScreenSize.height(
+                                          context,
+                                          15,
+                                        ),
+                                      ),
+                                  Text(
+                                    culturalAssetCard.price.toString(),
+                                    style: TextStyle(
+                                      fontSize: StoycoScreenSize.fontSize(
+                                        context,
+                                        12,
+                                      ),
+                                      fontWeight: FontWeight.w400,
+                                      color: StoycoColors.text,
+                                    ),
+                                    maxLines: 1,
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF92929D),
-                                ),
-                                maxLines: 1,
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.ellipsis,
+                                ],
                               ),
                             ],
                           ),
