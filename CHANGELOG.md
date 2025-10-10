@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## 0.8.0
+
+### Features
+
+- Added payment summary mobile screen design
+- Added payment summary card
+- Added payment summary info list
+- Added payment method buttons
+
+## [Unreleased]
+
 ## 0.7.0
 
 ### Features

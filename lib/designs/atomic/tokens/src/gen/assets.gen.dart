@@ -51,9 +51,17 @@ class $LibAssetsIconsGen {
   SvgGenImage get alertIcon =>
       const SvgGenImage('lib/assets/icons/alert_icon.svg');
 
+  /// File path: lib/assets/icons/apple_logo.svg
+  SvgGenImage get appleLogo =>
+      const SvgGenImage('lib/assets/icons/apple_logo.svg');
+
   /// File path: lib/assets/icons/arrow_right.svg
   SvgGenImage get arrowRight =>
       const SvgGenImage('lib/assets/icons/arrow_right.svg');
+
+  /// File path: lib/assets/icons/bell_icon.svg
+  SvgGenImage get bellIcon =>
+      const SvgGenImage('lib/assets/icons/bell_icon.svg');
 
   /// File path: lib/assets/icons/cultural_asset_coin.svg
   SvgGenImage get culturalAssetCoin =>
@@ -66,6 +74,14 @@ class $LibAssetsIconsGen {
   /// File path: lib/assets/icons/exclamacion.svg
   SvgGenImage get exclamacion =>
       const SvgGenImage('lib/assets/icons/exclamacion.svg');
+
+  /// File path: lib/assets/icons/left_arrow.svg
+  SvgGenImage get leftArrow =>
+      const SvgGenImage('lib/assets/icons/left_arrow.svg');
+
+  /// File path: lib/assets/icons/plus_icon.svg
+  SvgGenImage get plusIcon =>
+      const SvgGenImage('lib/assets/icons/plus_icon.svg');
 
   /// File path: lib/assets/icons/search_navbar.svg
   SvgGenImage get searchNavbar =>
@@ -97,10 +113,14 @@ class $LibAssetsIconsGen {
   /// List of all assets
   List<SvgGenImage> get values => [
     alertIcon,
+    appleLogo,
     arrowRight,
+    bellIcon,
     culturalAssetCoin,
     doubleRightArrow,
     exclamacion,
+    leftArrow,
+    plusIcon,
     searchNavbar,
     star,
     subsciptionButtonIcon,
