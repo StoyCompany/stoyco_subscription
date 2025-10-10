@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:glassmorphism/glassmorphism.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_card_type.dart';
 
 class PaymentMethodSelectButton extends StatefulWidget {
@@ -30,8 +31,8 @@ class PaymentItemCardState extends State<PaymentMethodSelectButton> {
   Widget build(BuildContext context) {
     final String cardNumber = '•••• •••• •••• ${widget.lastDigits}';
     final String svgSelectedCard = widget.isSelected
-        ? 'lib/assets/icons/radio_buttons/Radiobuttons_selected.svg'
-        : 'lib/assets/icons/radio_buttons/Radiobuttons_no_selected.svg';
+        ? StoycoAssets.lib.assets.icons.radiobuttonsSelected.path
+        : StoycoAssets.lib.assets.icons.radiobuttonsNoSelected.path;
 
     return GestureDetector(
       onTap: () => widget.onTap(),

@@ -32,7 +32,9 @@ class PartnerProfileSubscribeBtn extends StatelessWidget {
         child: SkeletonCard(
           width: double.infinity,
           height: StoycoScreenSize.height(context, 70),
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(
+            StoycoScreenSize.radius(context, 24),
+          ),
         ),
       );
     }
@@ -54,7 +56,7 @@ class PartnerProfileSubscribeBtn extends StatelessWidget {
         onPressed: () => onTap?.call(),
         backgroundColor: StoycoColors.backgroundGrey,
         height: StoycoScreenSize.height(context, 70),
-        borderRadius: 24,
+        borderRadius: StoycoScreenSize.radius(context, 24),
         child: Padding(
           padding: StoycoScreenSize.symmetric(
             context,

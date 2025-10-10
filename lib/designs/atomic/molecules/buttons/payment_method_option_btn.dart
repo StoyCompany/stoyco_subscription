@@ -19,7 +19,7 @@ class PaymentMethodOptionBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ButtonGradient(
-      borderRadius: 16,
+      borderRadius: StoycoScreenSize.radius(context, 16),
       backgroundColor: StoycoColors.backgroundGrey,
       onPressed: onTap,
       child: Padding(

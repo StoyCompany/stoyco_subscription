@@ -47,6 +47,14 @@ class $LibAssetsColorsGen {
 class $LibAssetsIconsGen {
   const $LibAssetsIconsGen();
 
+  /// File path: lib/assets/icons/Radiobuttons_no_selected.svg
+  SvgGenImage get radiobuttonsNoSelected =>
+      const SvgGenImage('lib/assets/icons/Radiobuttons_no_selected.svg');
+
+  /// File path: lib/assets/icons/Radiobuttons_selected.svg
+  SvgGenImage get radiobuttonsSelected =>
+      const SvgGenImage('lib/assets/icons/Radiobuttons_selected.svg');
+
   /// File path: lib/assets/icons/alert_icon.svg
   SvgGenImage get alertIcon =>
       const SvgGenImage('lib/assets/icons/alert_icon.svg');
@@ -112,6 +120,8 @@ class $LibAssetsIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+    radiobuttonsNoSelected,
+    radiobuttonsSelected,
     alertIcon,
     appleLogo,
     arrowRight,
