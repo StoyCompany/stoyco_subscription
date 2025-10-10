@@ -7,12 +7,44 @@ import 'package:stoyco_subscription/designs/atomic/organisms/sections/select_pay
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summary_notifier.dart';
 
-class PaymentSummaryMobileScreen extends StatelessWidget {
-  const PaymentSummaryMobileScreen({super.key});
+class PaymentSummaryMobileScreen extends StatefulWidget {
+  const PaymentSummaryMobileScreen({super.key, this.subscriptionId});
+
+  final String? subscriptionId;
+
+  @override
+  State<PaymentSummaryMobileScreen> createState() =>
+      _PaymentSummaryMobileScreenState();
+}
+
+class _PaymentSummaryMobileScreenState
+    extends State<PaymentSummaryMobileScreen> {
+  late PaymentSummaryNotifier notifier;
+
+  @override
+  void initState() {
+    super.initState();
+    notifier = PaymentSummaryNotifier(subscriptionId: widget.subscriptionId);
+    notifier.addListener(_onNotifierChanged);
+  }
+
+  @override
+  void dispose() {
+    notifier.removeListener(_onNotifierChanged);
+    notifier.dispose();
+    super.dispose();
+  }
+
+  void _onNotifierChanged() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = notifier.isLoading;
+
     return Container(
       height: MediaQuery.of(context).size.height,
       color: StoycoColors.deepCharcoal,
@@ -47,44 +79,60 @@ class PaymentSummaryMobileScreen extends StatelessWidget {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: SizedBox(
-          height: StoycoScreenSize.height(context, 56),
-          child: ButtonGradient(
-            backgroundGradientColor: const LinearGradient(
-              colors: <Color>[StoycoColors.darkBlue, StoycoColors.blue],
-            ),
-            borderRadius: 16,
-            width: StoycoScreenSize.width(context, 330),
-            child: Center(
-              child: Text(
-                r'Total a pagar $9.99',
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: StoycoScreenSize.fontSize(context, 16),
+        floatingActionButton: isLoading
+            ? null
+            : SizedBox(
+                height: StoycoScreenSize.height(context, 56),
+                child: ButtonGradient(
+                  backgroundGradientColor: const LinearGradient(
+                    colors: <Color>[StoycoColors.darkBlue, StoycoColors.blue],
+                  ),
+                  borderRadius: 16,
+                  width: StoycoScreenSize.width(context, 330),
+                  child: Center(
+                    child: Text(
+                      'Total a pagar ${notifier.paymentSummaryInfo?.currencyCode ?? 'MXN'} ${notifier.paymentSummaryInfo?.currencySymbol ?? r'$'}${notifier.paymentSummaryInfo?.totalPrice ?? ''}',
+                      style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: StoycoScreenSize.fontSize(context, 16),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ),
-        body: Padding(
-          padding: StoycoScreenSize.symmetric(context, horizontal: 23),
-          child: Column(
-            spacing: StoycoScreenSize.height(context, 24),
-            children: <Widget>[
-              SizedBox(height: StoycoScreenSize.height(context, 59)),
-              const SubscriptionPaymentPreviewCard(),
-              const PaymentInformationSection(
-                items: [
-                  {'key': 'Plan', 'value': r'MX $600'},
-                  {'key': 'IVA', 'value': r'MX $10'},
-                ],
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              )
+            : Padding(
+                padding: StoycoScreenSize.symmetric(context, horizontal: 23),
+                child: Column(
+                  spacing: StoycoScreenSize.height(context, 24),
+                  children: <Widget>[
+                    SizedBox(height: StoycoScreenSize.height(context, 59)),
+                    SubscriptionPaymentPreviewCard(
+                      paymentSummaryInfo: notifier.paymentSummaryInfo,
+                    ),
+                    PaymentInformationSection(
+                      items: <Map<String, String>>[
+                        <String, String>{
+                          'key': 'Plan',
+                          'value':
+                              '${notifier.paymentSummaryInfo?.currencyCode ?? 'MXN'} ${notifier.paymentSummaryInfo?.currencySymbol ?? r'$'}${notifier.paymentSummaryInfo?.planPrice ?? 0}',
+                        },
+                        <String, String>{
+                          'key': 'IVA',
+                          'value':
+                              '${notifier.paymentSummaryInfo?.currencyCode ?? 'MXN'} ${notifier.paymentSummaryInfo?.currencySymbol ?? r'$'}${notifier.paymentSummaryInfo?.iva ?? ''}',
+                        },
+                      ],
+                    ),
+                    const SelectPaymentMethodSection(),
+                  ],
+                ),
               ),
-              const SelectPaymentMethodSection(),
-            ],
-          ),
-        ),
       ),
     );
   }

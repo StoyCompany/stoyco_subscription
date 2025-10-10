@@ -4,9 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/flags/currency_flag.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
 
 class SubscriptionPaymentPreviewCard extends StatelessWidget {
-  const SubscriptionPaymentPreviewCard({super.key});
+  const SubscriptionPaymentPreviewCard({super.key, this.paymentSummaryInfo});
+
+  final PaymentSummaryInfoModel? paymentSummaryInfo;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -25,7 +28,7 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
     ),
     child: GlassmorphicContainer(
       width: double.infinity,
-      height: StoycoScreenSize.height(context, 140),
+      height: StoycoScreenSize.height(context, 160),
       blur: 8,
       border: 2,
       borderGradient: const LinearGradient(
@@ -52,7 +55,7 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
           spacing: StoycoScreenSize.height(context, 4),
           children: [
             Text(
-              'Suscripción Plus',
+              paymentSummaryInfo?.planName ?? 'Plan Premium',
               style: GoogleFonts.montserrat(
                 textStyle: TextStyle(
                   color: StoycoColors.softWhite,
@@ -63,9 +66,9 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
             ),
             Row(
               spacing: StoycoScreenSize.width(context, 8),
-              children: [
+              children: <Widget>[
                 Text(
-                  r'$153',
+                  '${paymentSummaryInfo?.currencySymbol ?? r'$'}${paymentSummaryInfo?.totalPrice}',
                   style: GoogleFonts.montserrat(
                     textStyle: TextStyle(
                       color: StoycoColors.softWhite,
@@ -76,9 +79,9 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                 ),
                 Row(
                   spacing: StoycoScreenSize.width(context, 4),
-                  children: [
+                  children: <Widget>[
                     Text(
-                      'MXN',
+                      '${paymentSummaryInfo?.currencyCode}',
                       style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           color: StoycoColors.iconDefault,
@@ -90,24 +93,26 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                     CurrencyFlag(
                       height: StoycoScreenSize.height(context, 16),
                       width: StoycoScreenSize.width(context, 24),
-                      currencyCode: 'MXN',
+                      currencyCode: paymentSummaryInfo?.currencyCode ?? 'MXN',
                     ),
                   ],
                 ),
               ],
             ),
             Text(
-              '¡Gratis durante 1 mes!',
+              paymentSummaryInfo?.shortDescription ?? '',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  color: StoycoColors.softWhite,
-                  fontWeight: FontWeight.w700,
-                  fontSize: StoycoScreenSize.fontSize(context, 16),
-                ),
+              textStyle: TextStyle(
+                color: StoycoColors.softWhite,
+                fontWeight: FontWeight.w700,
+                fontSize: StoycoScreenSize.fontSize(context, 16),
+              ),
               ),
             ),
             Text(
-              r'A partir del 25 oct 2024: 153 MXN/mes.',
+              'A partir del ${paymentSummaryInfo?.startDate ?? '25 oct 2025'}: ${paymentSummaryInfo?.totalPrice} ${paymentSummaryInfo?.currencySymbol ?? ''}/mes.',
               style: GoogleFonts.montserrat(
                 textStyle: TextStyle(
                   color: StoycoColors.softWhite,

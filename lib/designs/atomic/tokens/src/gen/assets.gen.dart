@@ -134,12 +134,19 @@ class $LibAssetsIconsGen {
 class $LibAssetsMocksGen {
   const $LibAssetsMocksGen();
 
+  /// File path: lib/assets/mocks/payment_summary_info_response.json
+  String get paymentSummaryInfoResponse =>
+      'lib/assets/mocks/payment_summary_info_response.json';
+
   /// File path: lib/assets/mocks/subscription_plan_by_user.json
   String get subscriptionPlanByUser =>
       'lib/assets/mocks/subscription_plan_by_user.json';
 
   /// List of all assets
-  List<String> get values => [subscriptionPlanByUser];
+  List<String> get values => [
+    paymentSummaryInfoResponse,
+    subscriptionPlanByUser,
+  ];
 }
 
 class StoycoAssets {
