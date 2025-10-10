@@ -14,6 +14,9 @@ import 'package:flutter/material.dart';
 class StoycoColors {
   StoycoColors._();
 
+  /// Color: #FF202532
+  static const Color backgroundGrey = Color(0xFF202532);
+
   /// Color: #4639E7
   static const Color blue = Color(0xFF4639E7);
 

@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+## 0.8.0
+
+### Features
+
+- Added payment summary mobile screen design
+- Added payment summary card
+- Added payment summary info list
+- Added payment method buttons
+
+## [Unreleased]
+
+## 0.7.0
+
+### Features
+
+- Added PartnerProfile service, datasource and repository
+- Added response models for getLowestPricePlanByPartner and getLastUserPlanByPartner services.
+- Added PartnerProfileSubscriptionBtn component
+- Added CulturalAssetSlider and CulturalAssetCard components
+
+## [Unreleased]
+
 ## 0.6.1
 
 ### Features

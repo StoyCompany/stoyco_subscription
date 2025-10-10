@@ -1,0 +1,10 @@
+{
+    "planName": "Plan Premium",
+    "totalPrice": 610.0,
+    "shortDescription": "Acceso ilimitado a contenido premium por un año.",
+    "startDate": "2025-10-10",
+    "planPrice": 600.0,
+    "iva": 10.0,
+    "currencySymbol": "$",
+    "currencyCode": "MXN"
+}
