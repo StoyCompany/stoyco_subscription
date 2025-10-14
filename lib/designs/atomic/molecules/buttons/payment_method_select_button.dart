@@ -11,14 +11,17 @@ import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_ca
 /// This widget shows the card type icon, masked card number, and a radio button indicating selection.
 /// Users can tap to select the card or swipe left to reveal a delete action. The delete button can also be tapped directly.
 ///
+/// You must provide exactly one of [svgIconPath] or [imageIconPath] to specify the card icon type.
+/// An [assert] ensures that only one of these parameters is non-null at construction time.
+///
 /// Example usage:
 /// ```dart
 /// PaymentMethodSelectButton(
 ///   lastDigits: '1234',
-///   cardType: PaymentCardType.visa,
 ///   isSelected: true,
 ///   onTap: () { /* select card */ },
 ///   onDelete: () { /* delete card */ },
+///   svgIconPath: 'assets/icons/visa.svg', // or imageIconPath: 'assets/icons/visa.png'
 /// )
 /// ```
 /// {@endtemplate}
@@ -26,24 +29,27 @@ class PaymentMethodSelectButton extends StatefulWidget {
   /// Creates a [PaymentMethodSelectButton].
   ///
   /// [lastDigits] is the last four digits of the card number.
-  /// [cardType] is the type of the payment card.
   /// [isSelected] indicates if this card is currently selected.
   /// [onTap] is called when the card is tapped.
   /// [onDelete] is called when the card is deleted (swiped or delete button tapped).
+  ///
+  /// You must provide exactly one of [svgIconPath] or [imageIconPath].
+  /// The constructor uses an [assert] to enforce this rule.
   const PaymentMethodSelectButton({
     required this.lastDigits,
-    required this.cardType,
     required this.isSelected,
     required this.onTap,
     required this.onDelete,
+    this.svgIconPath,
+    this.imageIconPath,
     super.key,
-  });
+  }) : assert(
+         (svgIconPath != null) ^ (imageIconPath != null),
+         'You must provide exactly one: svgIconPath or imageIconPath',
+       );
 
   /// The last four digits of the card number.
   final String lastDigits;
-
-  /// The type of the payment card.
-  final PaymentCardType cardType;
 
   /// Whether this card is currently selected.
   final bool isSelected;
@@ -53,6 +59,16 @@ class PaymentMethodSelectButton extends StatefulWidget {
 
   /// Callback when the card is deleted.
   final Function onDelete;
+
+  /// Path to the SVG icon representing the card type.
+  ///
+  /// You must provide exactly one of [svgIconPath] or [imageIconPath].
+  final String? svgIconPath;
+
+  /// Path to the image icon (e.g., PNG, JPG) representing the card type.
+  ///
+  /// You must provide exactly one of [svgIconPath] or [imageIconPath].
+  final String? imageIconPath;
 
   @override
   PaymentItemCardState createState() => PaymentItemCardState();
@@ -148,28 +164,24 @@ class PaymentItemCardState extends State<PaymentMethodSelectButton> {
                     Container(
                       margin: StoycoScreenSize.fromLTRB(context, left: 24),
                       child: Center(
-                        child: () {
-                          if (widget.cardType.icon.contains('.svg')) {
-                            return SvgPicture.asset(widget.cardType.icon);
-                          } else {
-                            return Image.asset(widget.cardType.icon, width: 45);
-                          }
-                        }(),
+                        child: widget.svgIconPath != null
+                            ? SvgPicture.asset(widget.svgIconPath!)
+                            : Image.asset(widget.imageIconPath!, width: 45),
                       ),
                     ),
                     Center(
                       child: Text(
                         cardNumber,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: StoycoScreenSize.fontSize(context, 16),
                           fontWeight: FontWeight.w500,
                           decoration: TextDecoration.none,
                         ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.only(right: 24),
+                      padding: StoycoScreenSize.fromLTRB(context, right: 24),
                       child: Center(child: SvgPicture.asset(svgSelectedCard)),
                     ),
                   ],
@@ -178,7 +190,7 @@ class PaymentItemCardState extends State<PaymentMethodSelectButton> {
             ),
             // Delete Button
             Positioned(
-              top: 8.5,
+              top: StoycoScreenSize.height(context, 8.5),
               right: 0,
               child: GestureDetector(
                 onTap: () => widget.onDelete(),
@@ -186,8 +198,8 @@ class PaymentItemCardState extends State<PaymentMethodSelectButton> {
                   valueListenable: isDraggingLeft,
                   builder: (context, dragging, child) {
                     return AnimatedContainer(
-                      width: dragging ? 56 : 0,
-                      height: 56,
+                      width: dragging ? StoycoScreenSize.width(context, 56) : 0,
+                      height: StoycoScreenSize.height(context, 56),
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeInOut,
                       alignment: Alignment.center,

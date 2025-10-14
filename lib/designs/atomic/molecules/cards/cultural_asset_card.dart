@@ -27,12 +27,12 @@ class CulturalAssetCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: const Color(0xFF222b3d),
-                    width: 2.5,
+                    width: StoycoScreenSize.width(context, 2.5),
                   ),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Colors.white.withOpacity(0.1),
-                      blurRadius: 35,
+                      blurRadius: StoycoScreenSize.radius(context, 35),
                     ),
                   ],
                 ),
@@ -44,12 +44,16 @@ class CulturalAssetCard extends StatelessWidget {
                     Padding(
                       padding: StoycoScreenSize.all(context, 3),
                       child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(13),
-                          topRight: Radius.circular(13),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(
+                            StoycoScreenSize.radius(context, 13),
+                          ),
+                          topRight: Radius.circular(
+                            StoycoScreenSize.radius(context, 13),
+                          ),
                         ),
                         child: CachedNetworkImage(
-                          height: constraints.maxHeight * 0.66 - 3,
+                          height: constraints.maxHeight * 0.65,
                           width: double.infinity,
                           fit: BoxFit.cover,
                           imageUrl: culturalAssetCard.image,
@@ -92,9 +96,13 @@ class CulturalAssetCard extends StatelessWidget {
                       ),
                     ),
                     ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(
+                          StoycoScreenSize.radius(context, 16),
+                        ),
+                        bottomRight: Radius.circular(
+                          StoycoScreenSize.radius(context, 16),
+                        ),
                       ),
                       child: Container(
                         decoration: BoxDecoration(
@@ -110,11 +118,10 @@ class CulturalAssetCard extends StatelessWidget {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 10,
-                            right: 10,
-                            bottom: 5,
-                            top: 5,
+                          padding: StoycoScreenSize.symmetric(
+                            context,
+                            horizontal: 10,
+                            vertical: 5,
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

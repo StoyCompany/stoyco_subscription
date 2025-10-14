@@ -14,7 +14,7 @@ class PartnerProfileService {
   factory PartnerProfileService({
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
-    Future<String?>? Function()? functionToUpdateToken,
+    Future<String?> Function()? functionToUpdateToken,
   }) {
     instance = PartnerProfileService._(
       environment: environment,
@@ -30,6 +30,7 @@ class PartnerProfileService {
     this.functionToUpdateToken,
   }) {
     _dataSource = PartnerProfileDataSource(environment: environment);
+    _dataSource.setRefreshTokenCallback(functionToUpdateToken);
     _repository = PartnerProfileRepository(_dataSource, userToken);
     _repository.updateToken(userToken);
     _dataSource.updateToken(userToken);
@@ -41,7 +42,7 @@ class PartnerProfileService {
 
   StoycoEnvironment environment;
 
-  Future<String?>? Function()? functionToUpdateToken;
+   Future<String?> Function()? functionToUpdateToken;
 
   late final PartnerProfileDataSource _dataSource;
   late final PartnerProfileRepository _repository;
@@ -52,7 +53,7 @@ class PartnerProfileService {
     _dataSource.updateToken(token);
   }
 
-  void setFunctionToUpdateToken(Future<String?>? Function()? function) {
+  void setFunctionToUpdateToken(Future<String?> Function()? function) {
     functionToUpdateToken = function;
   }
 

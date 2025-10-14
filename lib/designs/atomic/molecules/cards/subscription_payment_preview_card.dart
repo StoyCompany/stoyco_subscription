@@ -13,7 +13,6 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    // box-shadow: 5px 5px 30px 0px #00000040;
     decoration: const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(24)),
       boxShadow: <BoxShadow>[
@@ -37,7 +36,7 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
         colors: <Color>[Color(0x00FFFFFF), Color(0xFF4639E7)],
         stops: <double>[0, 1],
       ),
-      borderRadius: 24,
+      borderRadius: StoycoScreenSize.radius(context, 24),
       linearGradient: const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,

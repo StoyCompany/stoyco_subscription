@@ -2,24 +2,116 @@ import 'package:dio/dio.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/lowest_price_plan_response_model.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/subscription_is_active_response.dart';
+import 'dart:async';
 
+/// {@template partner_profile_data_source}
+/// Data source for partner profile-related network operations.
+///
+/// This class manages API requests related to partner profiles, including
+/// fetching the lowest price plan and checking if a user's subscription is active.
+/// It uses Dio for HTTP requests and supports automatic token refresh via an
+/// authentication interceptor. When a request fails with a 401 or 403 status code,
+/// the interceptor attempts to refresh the token and retries the request once.
+///
+/// Example usage:
+/// ```dart
+/// final dataSource = PartnerProfileDataSource(
+///   environment: StoycoEnvironment.production,
+/// );
+/// dataSource.setRefreshTokenCallback(() async => await refreshToken());
+/// dataSource.updateToken('user-access-token');
+/// final plan = await dataSource.getLowestPricePlanByPartner('partnerId');
+/// ```
+/// {@endtemplate}
 class PartnerProfileDataSource {
-  PartnerProfileDataSource({required this.environment});
+  /// Creates a [PartnerProfileDataSource] with the given [environment] and optional [dio] client.
+  ///
+  /// Installs an interceptor that automatically refreshes the token and retries
+  /// the request if a 401/403 response is received.
+  PartnerProfileDataSource({required this.environment, Dio? dio})
+    : _dio = dio ?? Dio() {
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onError: (DioException e, ErrorInterceptorHandler handler) async {
+          final requestOptions = e.requestOptions;
 
-  final StoycoEnvironment environment;
+          // If unauthorized and not already retried, attempt to refresh token and retry once.
+          if ((e.response?.statusCode == 401 || e.response?.statusCode == 403) &&
+              _refreshToken != null &&
+              requestOptions.extra['retried'] != true) {
+            try {
+              // Synchronize token refresh so only one refresh occurs at a time.
+              _refreshingTokenFuture ??= _refreshToken!();
+              final String? newToken = await _refreshingTokenFuture;
+              _refreshingTokenFuture = null;
 
-  final Dio _dio = Dio();
+              if (newToken != null && newToken.isNotEmpty) {
+                _userToken = newToken;
+                _dio.options.headers['Authorization'] = 'Bearer $newToken';
 
-  String _userToken = '';
+                // Mark the request as retried to avoid infinite loops.
+                requestOptions.headers['Authorization'] = 'Bearer $newToken';
+                requestOptions.extra['retried'] = true;
 
-  void updateToken(String token) {
-    _userToken = token;
+                try {
+                  final response = await _dio.fetch(requestOptions);
+                  return handler.resolve(response);
+                } catch (err) {
+                  return handler.reject(err as DioException);
+                }
+              } else {
+                // If refresh fails, clear the token and forward the error.
+                _userToken = '';
+                _dio.options.headers.remove('Authorization');
+                return handler.next(e);
+              }
+            } catch (err) {
+              _refreshingTokenFuture = null;
+              _userToken = '';
+              _dio.options.headers.remove('Authorization');
+              return handler.next(e);
+            }
+          }
+          return handler.next(e);
+        },
+      ),
+    );
   }
 
+  /// The environment configuration for API endpoints.
+  final StoycoEnvironment environment;
+
+  /// Dio HTTP client used for network requests.
+  final Dio _dio;
+
+  /// The current user access token.
+  String _userToken = '';
+
+  /// Callback to refresh the access token.
+  Future<String?> Function()? _refreshToken;
+
+  /// Future used to synchronize token refresh operations.
+  Future<String?>? _refreshingTokenFuture;
+
+  /// Updates the stored user token and sets the Authorization header.
+  void updateToken(String token) {
+    _userToken = token;
+    _dio.options.headers['Authorization'] = 'Bearer $token';
+  }
+
+  /// Sets the callback function used to refresh the token when unauthorized.
+  void setRefreshTokenCallback(Future<String?> Function()? callback) {
+    _refreshToken = callback;
+  }
+
+  /// Returns the current headers for authenticated requests.
   Map<String, String> _getHeaders() => <String, String>{
     'Authorization': 'Bearer $_userToken',
   };
 
+  /// Fetches the lowest price subscription plan for the given [partnerId].
+  ///
+  /// Throws a [DioException] if the request fails.
   Future<LowestPricePlanResponseModel> getLowestPricePlanByPartner(
     String partnerId,
   ) async {
@@ -32,6 +124,9 @@ class PartnerProfileDataSource {
     return LowestPricePlanResponseModel.fromJson(response.data!);
   }
 
+  /// Fetches the last active user subscription for the given [partnerId].
+  ///
+  /// Throws a [DioException] if the request fails.
   Future<SubscriptionIsActiveResponse> getLastUserPlanByPartner(
     String partnerId,
   ) async {

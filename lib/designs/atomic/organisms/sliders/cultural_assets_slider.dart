@@ -53,7 +53,7 @@ class CulturalAssetsSlider extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) => SkeletonCard(
                 width: StoycoScreenSize.width(context, 156),
                 height: StoycoScreenSize.height(context, 226),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, 20)),
               ),
             ),
           ),
@@ -94,7 +94,7 @@ class CulturalAssetsSlider extends StatelessWidget {
             shrinkWrap: true,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(width: 20),
+                SizedBox(width: StoycoScreenSize.width(context, 20)),
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: culturalAssets.length,
