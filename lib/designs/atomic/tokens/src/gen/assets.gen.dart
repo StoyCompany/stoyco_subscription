@@ -55,9 +55,17 @@ class $LibAssetsIconsGen {
   SvgGenImage get radiobuttonsSelected =>
       const SvgGenImage('lib/assets/icons/Radiobuttons_selected.svg');
 
+  /// File path: lib/assets/icons/Visa_white.svg
+  SvgGenImage get visaWhite =>
+      const SvgGenImage('lib/assets/icons/Visa_white.svg');
+
   /// File path: lib/assets/icons/alert_icon.svg
   SvgGenImage get alertIcon =>
       const SvgGenImage('lib/assets/icons/alert_icon.svg');
+
+  /// File path: lib/assets/icons/american-express.png
+  AssetGenImage get americanExpress =>
+      const AssetGenImage('lib/assets/icons/american-express.png');
 
   /// File path: lib/assets/icons/apple_logo.svg
   SvgGenImage get appleLogo =>
@@ -75,6 +83,14 @@ class $LibAssetsIconsGen {
   SvgGenImage get culturalAssetCoin =>
       const SvgGenImage('lib/assets/icons/cultural_asset_coin.svg');
 
+  /// File path: lib/assets/icons/diners-club.png
+  AssetGenImage get dinersClub =>
+      const AssetGenImage('lib/assets/icons/diners-club.png');
+
+  /// File path: lib/assets/icons/discover.png
+  AssetGenImage get discover =>
+      const AssetGenImage('lib/assets/icons/discover.png');
+
   /// File path: lib/assets/icons/double_right_arrow.svg
   SvgGenImage get doubleRightArrow =>
       const SvgGenImage('lib/assets/icons/double_right_arrow.svg');
@@ -83,9 +99,16 @@ class $LibAssetsIconsGen {
   SvgGenImage get exclamacion =>
       const SvgGenImage('lib/assets/icons/exclamacion.svg');
 
+  /// File path: lib/assets/icons/jcb.png
+  AssetGenImage get jcb => const AssetGenImage('lib/assets/icons/jcb.png');
+
   /// File path: lib/assets/icons/left_arrow.svg
   SvgGenImage get leftArrow =>
       const SvgGenImage('lib/assets/icons/left_arrow.svg');
+
+  /// File path: lib/assets/icons/mastercard.png
+  AssetGenImage get mastercard =>
+      const AssetGenImage('lib/assets/icons/mastercard.png');
 
   /// File path: lib/assets/icons/plus_icon.svg
   SvgGenImage get plusIcon =>
@@ -119,17 +142,23 @@ class $LibAssetsIconsGen {
       const SvgGenImage('lib/assets/icons/tag_subscription_slim.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
+  List<dynamic> get values => [
     radiobuttonsNoSelected,
     radiobuttonsSelected,
+    visaWhite,
     alertIcon,
+    americanExpress,
     appleLogo,
     arrowRight,
     bellIcon,
     culturalAssetCoin,
+    dinersClub,
+    discover,
     doubleRightArrow,
     exclamacion,
+    jcb,
     leftArrow,
+    mastercard,
     plusIcon,
     searchNavbar,
     star,
@@ -163,6 +192,94 @@ class StoycoAssets {
   const StoycoAssets._();
 
   static const $LibGen lib = $LibGen();
+}
+
+class AssetGenImage {
+  const AssetGenImage(
+    this._assetName, {
+    this.size,
+    this.flavors = const {},
+    this.animation,
+  });
+
+  final String _assetName;
+
+  final Size? size;
+  final Set<String> flavors;
+  final AssetGenImageAnimation? animation;
+
+  Image image({
+    Key? key,
+    AssetBundle? bundle,
+    ImageFrameBuilder? frameBuilder,
+    ImageErrorWidgetBuilder? errorBuilder,
+    String? semanticLabel,
+    bool excludeFromSemantics = false,
+    double? scale,
+    double? width,
+    double? height,
+    Color? color,
+    Animation<double>? opacity,
+    BlendMode? colorBlendMode,
+    BoxFit? fit,
+    AlignmentGeometry alignment = Alignment.center,
+    ImageRepeat repeat = ImageRepeat.noRepeat,
+    Rect? centerSlice,
+    bool matchTextDirection = false,
+    bool gaplessPlayback = true,
+    bool isAntiAlias = false,
+    String? package,
+    FilterQuality filterQuality = FilterQuality.medium,
+    int? cacheWidth,
+    int? cacheHeight,
+  }) {
+    return Image.asset(
+      _assetName,
+      key: key,
+      bundle: bundle,
+      frameBuilder: frameBuilder,
+      errorBuilder: errorBuilder,
+      semanticLabel: semanticLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      scale: scale,
+      width: width,
+      height: height,
+      color: color,
+      opacity: opacity,
+      colorBlendMode: colorBlendMode,
+      fit: fit,
+      alignment: alignment,
+      repeat: repeat,
+      centerSlice: centerSlice,
+      matchTextDirection: matchTextDirection,
+      gaplessPlayback: gaplessPlayback,
+      isAntiAlias: isAntiAlias,
+      package: package,
+      filterQuality: filterQuality,
+      cacheWidth: cacheWidth,
+      cacheHeight: cacheHeight,
+    );
+  }
+
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
+}
+
+class AssetGenImageAnimation {
+  const AssetGenImageAnimation({
+    required this.isAnimation,
+    required this.duration,
+    required this.frames,
+  });
+
+  final bool isAnimation;
+  final Duration duration;
+  final int frames;
 }
 
 class SvgGenImage {

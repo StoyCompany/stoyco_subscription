@@ -7,6 +7,7 @@ import 'package:stoyco_subscription/designs/atomic/organisms/sections/select_pay
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
 import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summary_notifier.dart';
 
 class PaymentSummaryMobileScreen extends StatefulWidget {
@@ -41,9 +42,36 @@ class _PaymentSummaryMobileScreenState
     setState(() {});
   }
 
+  String getTotalToPayText() {
+    final PaymentSummaryInfoModel? info = notifier.paymentSummaryInfo;
+    final String code = info?.currencyCode ?? 'MXN';
+    final String symbol = info?.currencySymbol ?? r'$';
+    final String total = info?.totalPrice.toStringAsFixed(2) ?? '';
+    return 'Total a pagar $code $symbol$total';
+  }
+
+  List<Map<String, String>> getPaymentInfoItems() {
+    final PaymentSummaryInfoModel? info = notifier.paymentSummaryInfo;
+    final String code = info?.currencyCode ?? 'MXN';
+    final String symbol = info?.currencySymbol ?? r'$';
+    return <Map<String, String>>
+    [
+      <String, String>
+      
+      {
+        'key': 'Plan',
+        'value': '$code $symbol${info?.planPrice.toStringAsFixed(2) ?? '0.00'}',
+      },
+      <String, String>{
+        'key': 'IVA',
+        'value': '$code $symbol${info?.iva.toStringAsFixed(2) ?? ''}',
+      },
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isLoading = notifier.isLoading;
+    final bool isLoading = notifier.isLoading;
 
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -91,7 +119,7 @@ class _PaymentSummaryMobileScreenState
                   width: StoycoScreenSize.width(context, 330),
                   child: Center(
                     child: Text(
-                      'Total a pagar ${notifier.paymentSummaryInfo?.currencyCode ?? 'MXN'} ${notifier.paymentSummaryInfo?.currencySymbol ?? r'$'}${notifier.paymentSummaryInfo?.totalPrice ?? ''}',
+                      getTotalToPayText(),
                       style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.w700,
@@ -116,18 +144,7 @@ class _PaymentSummaryMobileScreenState
                       paymentSummaryInfo: notifier.paymentSummaryInfo,
                     ),
                     PaymentInformationSection(
-                      items: <Map<String, String>>[
-                        <String, String>{
-                          'key': 'Plan',
-                          'value':
-                              '${notifier.paymentSummaryInfo?.currencyCode ?? 'MXN'} ${notifier.paymentSummaryInfo?.currencySymbol ?? r'$'}${notifier.paymentSummaryInfo?.planPrice ?? 0}',
-                        },
-                        <String, String>{
-                          'key': 'IVA',
-                          'value':
-                              '${notifier.paymentSummaryInfo?.currencyCode ?? 'MXN'} ${notifier.paymentSummaryInfo?.currencySymbol ?? r'$'}${notifier.paymentSummaryInfo?.iva ?? ''}',
-                        },
-                      ],
+                      items: getPaymentInfoItems(),
                     ),
                     const SelectPaymentMethodSection(),
                   ],

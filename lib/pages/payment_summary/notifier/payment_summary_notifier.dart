@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
 
 class PaymentSummaryNotifier extends ChangeNotifier {

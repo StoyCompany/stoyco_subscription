@@ -35,14 +35,14 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: <Color>[Color(0x00FFFFFF), Color(0xFF4639E7)],
-        stops: [0, 1],
+        stops: <double>[0, 1],
       ),
       borderRadius: 24,
       linearGradient: const LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: <Color>[Color(0xFF202532), Color(0xFF202532)],
-        stops: [0, 1],
+        stops: <double>[0, 1],
       ),
       child: Container(
         padding: StoycoScreenSize.symmetric(
@@ -53,7 +53,8 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: StoycoScreenSize.height(context, 4),
-          children: [
+          children: <Widget>
+          [
             Text(
               paymentSummaryInfo?.planName ?? 'Plan Premium',
               style: GoogleFonts.montserrat(

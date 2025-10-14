@@ -9,9 +9,7 @@ class PaymentSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (StoycoScreenSize.isDesktop(context) ||
-        StoycoScreenSize.isDesktopLarge(context) ||
-        StoycoScreenSize.isTablet(context)) {
+    if (!StoycoScreenSize.isPhone(context)) {
       return const Center(child: Text('En Desarrollo'));
     } else {
       return PaymentSummaryMobileScreen(subscriptionId: subscriptionId);
