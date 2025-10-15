@@ -79,7 +79,7 @@ class _PaymentSummaryMobileScreenState
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {Navigator.of(context).pop();},
             icon: StoycoAssets.lib.assets.icons.leftArrow.svg(
               height: StoycoScreenSize.height(context, 24),
               width: StoycoScreenSize.width(context, 24),

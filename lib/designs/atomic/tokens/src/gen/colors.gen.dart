@@ -14,6 +14,9 @@ import 'package:flutter/material.dart';
 class StoycoColors {
   StoycoColors._();
 
+  /// Color: #DBF1BC
+  static const Color activeChip = Color(0xFFDBF1BC);
+
   /// Color: #FF202532
   static const Color backgroundGrey = Color(0xFF202532);
 
@@ -88,6 +91,9 @@ class StoycoColors {
 
   /// Color: #D5D5E0
   static const Color iconDefault = Color(0xFFD5D5E0);
+
+  /// Color: #FFBDCB
+  static const Color inactiveChip = Color(0xFFFFBDCB);
 
   /// Color: #253341
   static const Color menuItemBackground = Color(0xFF253341);
