@@ -5,14 +5,36 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/cultural_asset_card_model.dart';
 
+/// {@template cultural_assets_slider}
+/// A horizontal slider widget that displays a list of cultural asset cards.
+///
+/// Shows a section title and a horizontally scrollable list of [CulturalAssetCard] widgets.
+/// While loading, displays a row of skeleton cards as placeholders.
+/// If the [culturalAssets] list is empty and not loading, nothing is shown.
+///
+/// Example usage:
+/// ```dart
+/// CulturalAssetsSlider(
+///   culturalAssets: myAssetsList,
+///   isLoading: false,
+/// )
+/// ```
+/// {@endtemplate}
 class CulturalAssetsSlider extends StatelessWidget {
+  /// Creates a [CulturalAssetsSlider].
+  ///
+  /// [culturalAssets] is the list of assets to display.
+  /// [isLoading] determines whether to show skeleton loaders instead of real content.
   const CulturalAssetsSlider({
     super.key,
     required this.culturalAssets,
     this.isLoading = false,
   });
 
+  /// The list of cultural asset models to display in the slider.
   final List<CulturalAssetCardModel> culturalAssets;
+
+  /// Whether the slider is in a loading state and should show skeleton cards.
   final bool isLoading;
 
   @override

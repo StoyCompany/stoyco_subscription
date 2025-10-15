@@ -6,7 +6,27 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
+/// {@template partner_profile_subscribe_btn}
+/// A button widget for subscribing to a partner's plan or viewing the active subscription.
+///
+/// Displays a gradient button with dynamic content:
+/// - If [isLoading] is true, shows a skeleton loader.
+/// - If the user has an active plan ([hasActivePlan]), shows an alert icon and "View my subscription".
+/// - Otherwise, shows the lowest subscription price and a call to action to subscribe.
+///
+/// The button is disabled if required subscription data is missing.
+/// {@endtemplate}
 class PartnerProfileSubscribeBtn extends StatelessWidget {
+  /// Creates a [PartnerProfileSubscribeBtn].
+  ///
+  /// [lowestSubscriptionValue], [lowestSubscriptionCurrency], and [lowestSubscriptionCurrencySymbol]
+  /// are used to display the minimum subscription price.
+  ///
+  /// [hasActivePlan] determines if the button shows "View my subscription" or the subscribe CTA.
+  ///
+  /// [onTap] is called when the button is pressed.
+  ///
+  /// [isLoading] shows a skeleton loader instead of the button when true.
   const PartnerProfileSubscribeBtn({
     super.key,
     this.lowestSubscriptionValue,
@@ -17,11 +37,22 @@ class PartnerProfileSubscribeBtn extends StatelessWidget {
     this.isLoading = false,
   });
 
+  /// The lowest subscription value to display.
   final double? lowestSubscriptionValue;
+
+  /// The currency code for the lowest subscription value.
   final String? lowestSubscriptionCurrency;
+
+  /// The currency symbol for the lowest subscription value.
   final String? lowestSubscriptionCurrencySymbol;
+
+  /// Whether the user currently has an active subscription plan.
   final bool? hasActivePlan;
+
+  /// Whether the button is in a loading state.
   final bool isLoading;
+
+  /// Callback when the button is pressed.
   final VoidCallback? onTap;
 
   @override

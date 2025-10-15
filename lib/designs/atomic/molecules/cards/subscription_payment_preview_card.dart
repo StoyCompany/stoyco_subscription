@@ -6,9 +6,37 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
 
+/// {@template subscription_payment_preview_card}
+/// A card widget that displays a preview of the user's subscription payment details.
+///
+/// This widget shows the plan name, total price, currency, a short description,
+/// and the start date of the subscription. It uses a glassmorphic effect for the background
+/// and includes a currency flag icon for visual context.
+///
+/// If [paymentSummaryInfo] is null, default values are shown for each field.
+///
+/// Example usage:
+/// ```dart
+/// SubscriptionPaymentPreviewCard(
+///   paymentSummaryInfo: PaymentSummaryInfoModel(
+///     planName: 'Premium Plan',
+///     totalPrice: 199,
+///     currencySymbol: '\$',
+///     currencyCode: 'MXN',
+///     shortDescription: 'Access to all premium features.',
+///     startDate: '25 Oct 2025',
+///   ),
+/// )
+/// ```
+/// {@endtemplate}
 class SubscriptionPaymentPreviewCard extends StatelessWidget {
+  /// Creates a [SubscriptionPaymentPreviewCard].
+  ///
+  /// [paymentSummaryInfo] provides the data to display in the card.
+  /// If null, default values are used.
   const SubscriptionPaymentPreviewCard({super.key, this.paymentSummaryInfo});
 
+  /// The model containing the payment summary information to display.
   final PaymentSummaryInfoModel? paymentSummaryInfo;
 
   @override

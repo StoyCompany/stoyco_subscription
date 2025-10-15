@@ -5,8 +5,35 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/cultural_asset_card_model.dart';
 
+/// {@template cultural_asset_card}
+/// A card widget that displays information about a cultural asset.
+///
+/// Shows the asset image, title, and price in a styled card.
+/// Tapping the card is intended to navigate to the asset's detail page (TODO).
+///
+/// The card includes:
+/// - A network image with loading and error states.
+/// - The asset's title centered below the image.
+/// - A footer with a "Comprar" label and the asset's price with a coin icon.
+///
+/// Example usage:
+/// ```dart
+/// CulturalAssetCard(
+///   culturalAssetCard: CulturalAssetCardModel(
+///     image: 'https://example.com/image.jpg',
+///     title: 'Art Piece',
+///     price: 100,
+///   ),
+/// )
+/// ```
+/// {@endtemplate}
 class CulturalAssetCard extends StatelessWidget {
+  /// Creates a [CulturalAssetCard].
+  ///
+  /// [culturalAssetCard] provides the data to display in the card.
   const CulturalAssetCard({super.key, required this.culturalAssetCard});
+
+  /// The model containing the asset's image, title, and price.
   final CulturalAssetCardModel culturalAssetCard;
 
   @override

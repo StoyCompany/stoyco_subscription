@@ -10,7 +10,26 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/error.d
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 
+/// {@template partner_profile_service}
+/// Service class for managing partner profile-related operations.
+///
+/// This service handles authentication token management, token refresh logic,
+/// and provides methods to fetch partner subscription data. It coordinates
+/// between the data source and repository layers, ensuring that API requests
+/// are authenticated and that tokens are refreshed as needed.
+///
+/// Example usage:
+/// ```dart
+/// await injectPartnerProfileService();
+/// final result = await PartnerProfileService.instance.getLowestPricePlanByPartner('partnerId');
+/// ```
+/// {@endtemplate}
 class PartnerProfileService {
+  /// Factory constructor for [PartnerProfileService].
+  ///
+  /// [environment] specifies the API environment.
+  /// [userToken] is the initial authentication token.
+  /// [functionToUpdateToken] is a callback to refresh the token when needed.
   factory PartnerProfileService({
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
@@ -24,6 +43,7 @@ class PartnerProfileService {
     return instance;
   }
 
+  /// Internal constructor for [PartnerProfileService].
   PartnerProfileService._({
     this.environment = StoycoEnvironment.development,
     this.userToken = '',
@@ -36,27 +56,41 @@ class PartnerProfileService {
     _dataSource.updateToken(userToken);
   }
 
+  /// Singleton instance of the service.
   static PartnerProfileService instance = PartnerProfileService._();
 
+  /// The current user authentication token.
   String userToken;
 
+  /// The environment configuration for API endpoints.
   StoycoEnvironment environment;
 
-   Future<String?> Function()? functionToUpdateToken;
+  /// Callback function to refresh the authentication token.
+  Future<String?> Function()? functionToUpdateToken;
 
+  /// The data source for partner profile operations.
   late final PartnerProfileDataSource _dataSource;
+
+  /// The repository for partner profile operations.
   late final PartnerProfileRepository _repository;
 
+  /// Updates the stored token and propagates it to the repository and data source.
   void updateToken(String token) {
     userToken = token;
     _repository.updateToken(token);
     _dataSource.updateToken(token);
   }
 
+  /// Sets the function used to update the token when missing.
   void setFunctionToUpdateToken(Future<String?> Function()? function) {
     functionToUpdateToken = function;
   }
 
+  /// Ensures a valid token is available.
+  ///
+  /// If the token is empty, attempts to refresh it using [functionToUpdateToken].
+  /// Throws [FunctionToUpdateTokenNotSetException] if the refresh function is not set,
+  /// or [EmptyUserTokenException] if the token cannot be refreshed.
   Future<void> verifyToken() async {
     if (userToken.isEmpty) {
       if (functionToUpdateToken == null) {
@@ -73,6 +107,10 @@ class PartnerProfileService {
     }
   }
 
+  /// Fetches the lowest price subscription plan for the given [partnerId].
+  ///
+  /// Returns an [Either] with [LowestPricePlanResponseModel] on success,
+  /// or a [Failure] on error.
   Future<Either<Failure, LowestPricePlanResponseModel>>
   getLowestPricePlanByPartner(String partnerId) async {
     try {
@@ -94,6 +132,11 @@ class PartnerProfileService {
     }
   }
 
+  /// Fetches the last active user subscription for the given [partnerId].
+  ///
+  /// Ensures a valid token before making the request.
+  /// Returns an [Either] with [SubscriptionIsActiveResponse] on success,
+  /// or a [Failure] on error.
   Future<Either<Failure, SubscriptionIsActiveResponse>>
   getLastUserPlanByPartner(String partnerId) async {
     try {
