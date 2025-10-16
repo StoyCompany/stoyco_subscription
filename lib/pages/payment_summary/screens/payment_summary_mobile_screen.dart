@@ -1,0 +1,156 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/buttons/button_gradient.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/cards/subscription_payment_preview_card.dart';
+import 'package:stoyco_subscription/designs/atomic/organisms/sections/payment_information_section.dart';
+import 'package:stoyco_subscription/designs/atomic/organisms/sections/select_payment_method_section.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
+import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summary_notifier.dart';
+
+class PaymentSummaryMobileScreen extends StatefulWidget {
+  const PaymentSummaryMobileScreen({super.key, this.subscriptionId});
+
+  final String? subscriptionId;
+
+  @override
+  State<PaymentSummaryMobileScreen> createState() =>
+      _PaymentSummaryMobileScreenState();
+}
+
+class _PaymentSummaryMobileScreenState
+    extends State<PaymentSummaryMobileScreen> {
+  late PaymentSummaryNotifier notifier;
+
+  @override
+  void initState() {
+    super.initState();
+    notifier = PaymentSummaryNotifier(subscriptionId: widget.subscriptionId);
+    notifier.addListener(_onNotifierChanged);
+  }
+
+  @override
+  void dispose() {
+    notifier.removeListener(_onNotifierChanged);
+    notifier.dispose();
+    super.dispose();
+  }
+
+  void _onNotifierChanged() {
+    setState(() {});
+  }
+
+  String getTotalToPayText() {
+    final PaymentSummaryInfoModel? info = notifier.paymentSummaryInfo;
+    final String code = info?.currencyCode ?? 'MXN';
+    final String symbol = info?.currencySymbol ?? r'$';
+    final String total = info?.totalPrice.toStringAsFixed(2) ?? '';
+    return 'Total a pagar $code $symbol$total';
+  }
+
+  List<Map<String, String>> getPaymentInfoItems() {
+    final PaymentSummaryInfoModel? info = notifier.paymentSummaryInfo;
+    final String code = info?.currencyCode ?? 'MXN';
+    final String symbol = info?.currencySymbol ?? r'$';
+    return <Map<String, String>>
+    [
+      <String, String>
+      
+      {
+        'key': 'Plan',
+        'value': '$code $symbol${info?.planPrice.toStringAsFixed(2) ?? '0.00'}',
+      },
+      <String, String>{
+        'key': 'IVA',
+        'value': '$code $symbol${info?.iva.toStringAsFixed(2) ?? ''}',
+      },
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isLoading = notifier.isLoading;
+
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      color: StoycoColors.deepCharcoal,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {Navigator.of(context).pop();},
+            icon: StoycoAssets.lib.assets.icons.leftArrow.svg(
+              height: StoycoScreenSize.height(context, 24),
+              width: StoycoScreenSize.width(context, 24),
+            ),
+          ),
+          title: Center(
+            child: Text(
+              'Resumen de compra',
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: StoycoScreenSize.fontSize(context, 16),
+                ),
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {},
+              icon: StoycoAssets.lib.assets.icons.bellIcon.svg(
+                height: StoycoScreenSize.height(context, 24),
+                width: StoycoScreenSize.width(context, 24),
+              ),
+            ),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: isLoading
+            ? null
+            : SizedBox(
+                height: StoycoScreenSize.height(context, 56),
+                child: ButtonGradient(
+                  backgroundGradientColor: const LinearGradient(
+                    colors: <Color>[StoycoColors.darkBlue, StoycoColors.blue],
+                  ),
+                  borderRadius: 16,
+                  width: StoycoScreenSize.width(context, 330),
+                  child: Center(
+                    child: Text(
+                      getTotalToPayText(),
+                      style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: StoycoScreenSize.fontSize(context, 16),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              )
+            : Padding(
+                padding: StoycoScreenSize.symmetric(context, horizontal: 23),
+                child: Column(
+                  spacing: StoycoScreenSize.height(context, 24),
+                  children: <Widget>[
+                    SizedBox(height: StoycoScreenSize.height(context, 59)),
+                    SubscriptionPaymentPreviewCard(
+                      paymentSummaryInfo: notifier.paymentSummaryInfo,
+                    ),
+                    PaymentInformationSection(
+                      items: getPaymentInfoItems(),
+                    ),
+                    const SelectPaymentMethodSection(),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+}

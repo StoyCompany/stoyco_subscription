@@ -27,6 +27,7 @@
     <color name="white">#FAFAFA</color>
     <color name="white2">#FFFFFF</color>
     <color name="shadowBlue">#4F1FE68F</color>
+    <color name="backgroundGrey">#FF202532</color>
     <!-- CardWithShadow colors -->
     <color name="shadow_purple_98">#624D1FE6</color>
     <color name="card_background_black_50">#80000000</color>
@@ -39,8 +40,10 @@
     <color name="card_border_gradient_white_15">#26FFFFFF</color>
     <color name="card_border_gradient_purple_57">#924539E7</color>
     <color name="card_border_gradient_purple_72">#B74539E7</color>
-
+    <!-- Background colors -->
     <color name="menu_item_background">#253341</color>
+    <color name="active-chip">#DBF1BC</color>
+    <color name="inactive-chip">#FFBDCB</color>
     <!-- ButtonGradientText primary border and shadow colors -->
     <color name="button_border_white_25">#40FFFFFF</color> <!-- rgba(255,255,255,0.25) -->
     <color name="button_border_black_25">#40000000</color> <!-- rgba(0,0,0,0.25) -->

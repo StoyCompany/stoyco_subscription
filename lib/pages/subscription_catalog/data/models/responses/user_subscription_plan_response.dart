@@ -8,6 +8,12 @@ part 'user_subscription_plan_response.g.dart';
 ///
 /// Contains metadata about the request (error, messages, count)
 /// and a list of [UserSubscriptionPlan] objects.
+///
+/// Example usage:
+/// ```dart
+/// final response = UserSubscriptionPlanResponse.fromJson(jsonMap);
+/// print(response.data.first.planName);
+/// ```
 /// {@endtemplate}
 @JsonSerializable()
 class UserSubscriptionPlanResponse extends Equatable {
@@ -44,12 +50,12 @@ class UserSubscriptionPlanResponse extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-    error,
-    messageError,
-    tecMessageError,
-    count,
-    data,
-  ];
+        error,
+        messageError,
+        tecMessageError,
+        count,
+        data,
+      ];
 }
 
 /// {@template user_subscription_plan}
@@ -57,6 +63,12 @@ class UserSubscriptionPlanResponse extends Equatable {
 ///
 /// Contains details about the plan, partner, recurrence, price,
 /// subscription dates, and status.
+///
+/// Example usage:
+/// ```dart
+/// final plan = UserSubscriptionPlan.fromJson(jsonMap);
+/// print(plan.planName);
+/// ```
 /// {@endtemplate}
 @JsonSerializable()
 class UserSubscriptionPlan extends Equatable {
@@ -65,10 +77,14 @@ class UserSubscriptionPlan extends Equatable {
     required this.planId,
     required this.planName,
     required this.planImageUrl,
-    required this.partnerName,
     required this.partnerProfile,
+    required this.partnerName,
+    required this.partnerId,
     required this.recurrenceType,
     required this.price,
+    required this.currencyCode,
+    required this.currencySymbol,
+    required this.subscribedIsActive,
     required this.subscriptionStartDate,
     required this.subscriptionEndDate,
     required this.hasActivePlan,
@@ -78,34 +94,46 @@ class UserSubscriptionPlan extends Equatable {
   factory UserSubscriptionPlan.fromJson(Map<String, dynamic> json) =>
       _$UserSubscriptionPlanFromJson(json);
 
-  /// Unique identifier of the subscription plan.
+  /// The unique identifier of the plan.
   final String planId;
 
-  /// Name of the subscription plan.
+  /// The name of the subscription plan.
   final String planName;
 
-  /// URL of the plan's image.
+  /// The URL of the plan's image.
   final String planImageUrl;
 
-  /// Name of the partner offering the plan.
-  final String partnerName;
-
-  /// Profile or category of the partner.
+  /// The profile type of the partner (e.g., "Music", "Video").
   final String partnerProfile;
 
-  /// Recurrence type of the plan (e.g., Monthly, Annual).
+  /// The name of the partner.
+  final String partnerName;
+
+  /// The unique identifier of the partner.
+  final String partnerId;
+
+  /// The recurrence type of the subscription (e.g., "Monthly", "Yearly").
   final String recurrenceType;
 
-  /// Price of the subscription plan.
-  final double price;
+  /// The price of the subscription plan.
+  final num price;
 
-  /// Start date of the subscription.
-  final DateTime subscriptionStartDate;
+  /// The currency code (e.g., "MXN").
+  final String currencyCode;
 
-  /// End date of the subscription.
-  final DateTime subscriptionEndDate;
+  /// The currency symbol (e.g., "$").
+  final String currencySymbol;
 
-  /// Indicates if the user currently has an active plan.
+  /// Whether the subscription is currently active.
+  final bool subscribedIsActive;
+
+  /// The start date of the subscription (ISO 8601 string).
+  final String subscriptionStartDate;
+
+  /// The end date of the subscription (ISO 8601 string).
+  final String subscriptionEndDate;
+
+  /// Whether the user has an active plan.
   final bool hasActivePlan;
 
   /// Converts this object to a JSON map.
@@ -113,15 +141,19 @@ class UserSubscriptionPlan extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-    planId,
-    planName,
-    planImageUrl,
-    partnerName,
-    partnerProfile,
-    recurrenceType,
-    price,
-    subscriptionStartDate,
-    subscriptionEndDate,
-    hasActivePlan,
-  ];
+        planId,
+        planName,
+        planImageUrl,
+        partnerProfile,
+        partnerName,
+        partnerId,
+        recurrenceType,
+        price,
+        currencyCode,
+        currencySymbol,
+        subscribedIsActive,
+        subscriptionStartDate,
+        subscriptionEndDate,
+        hasActivePlan,
+      ];
 }

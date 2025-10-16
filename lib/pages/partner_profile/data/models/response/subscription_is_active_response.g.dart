@@ -1,36 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_subscription_plan_response.dart';
+part of 'subscription_is_active_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-UserSubscriptionPlanResponse _$UserSubscriptionPlanResponseFromJson(
+SubscriptionIsActiveResponse _$SubscriptionIsActiveResponseFromJson(
   Map<String, dynamic> json,
-) => UserSubscriptionPlanResponse(
-  error: (json['error'] as num).toInt(),
-  messageError: json['messageError'] as String,
-  tecMessageError: json['tecMessageError'] as String,
-  count: (json['count'] as num).toInt(),
-  data: (json['data'] as List<dynamic>)
-      .map((e) => UserSubscriptionPlan.fromJson(e as Map<String, dynamic>))
-      .toList(),
-);
-
-Map<String, dynamic> _$UserSubscriptionPlanResponseToJson(
-  UserSubscriptionPlanResponse instance,
-) => <String, dynamic>{
-  'error': instance.error,
-  'messageError': instance.messageError,
-  'tecMessageError': instance.tecMessageError,
-  'count': instance.count,
-  'data': instance.data,
-};
-
-UserSubscriptionPlan _$UserSubscriptionPlanFromJson(
-  Map<String, dynamic> json,
-) => UserSubscriptionPlan(
+) => SubscriptionIsActiveResponse(
   planId: json['planId'] as String,
   planName: json['planName'] as String,
   planImageUrl: json['planImageUrl'] as String,
@@ -47,8 +25,8 @@ UserSubscriptionPlan _$UserSubscriptionPlanFromJson(
   hasActivePlan: json['hasActivePlan'] as bool,
 );
 
-Map<String, dynamic> _$UserSubscriptionPlanToJson(
-  UserSubscriptionPlan instance,
+Map<String, dynamic> _$SubscriptionIsActiveResponseToJson(
+  SubscriptionIsActiveResponse instance,
 ) => <String, dynamic>{
   'planId': instance.planId,
   'planName': instance.planName,
