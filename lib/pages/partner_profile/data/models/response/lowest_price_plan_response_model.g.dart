@@ -9,12 +9,12 @@ part of 'lowest_price_plan_response_model.dart';
 LowestPricePlanResponseModel _$LowestPricePlanResponseModelFromJson(
   Map<String, dynamic> json,
 ) => LowestPricePlanResponseModel(
-  id: json['id'] as String,
-  partnerId: json['partnerId'] as String,
-  name: json['name'] as String,
-  amount: (json['amount'] as num).toDouble(),
-  currencyCode: json['currencyCode'] as String,
-  currencySymbol: json['currencySymbol'] as String,
+  id: json['id'] as String?,
+  partnerId: json['partnerId'] as String?,
+  name: json['name'] as String?,
+  amount: (json['amount'] as num?)?.toDouble(),
+  currencyCode: json['currencyCode'] as String?,
+  currencySymbol: json['currencySymbol'] as String?,
 );
 
 Map<String, dynamic> _$LowestPricePlanResponseModelToJson(

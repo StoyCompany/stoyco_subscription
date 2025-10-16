@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## 0.9.0
+
+### Features
+
+- Added subscription history screen design
+- Added subscription history integration
+
+
+## [Unreleased]
+
 ## 0.8.0
 
 ### Features

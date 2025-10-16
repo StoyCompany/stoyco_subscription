@@ -6,22 +6,22 @@ part 'lowest_price_plan_response_model.g.dart';
 @JsonSerializable()
 class LowestPricePlanResponseModel extends Equatable {
   const LowestPricePlanResponseModel({
-    required this.id,
-    required this.partnerId,
-    required this.name,
-    required this.amount,
-    required this.currencyCode,
-    required this.currencySymbol,
+     this.id,
+     this.partnerId,
+     this.name,
+     this.amount,
+     this.currencyCode,
+     this.currencySymbol,
   });
 
   factory LowestPricePlanResponseModel.fromJson(Map<String, dynamic> json) =>
       _$LowestPricePlanResponseModelFromJson(json);
-  final String id;
-  final String partnerId;
-  final String name;
-  final double amount;
-  final String currencyCode;
-  final String currencySymbol;
+  final String? id;
+  final String? partnerId;
+  final String? name;
+  final double? amount;
+  final String? currencyCode;
+  final String? currencySymbol;
 
   Map<String, dynamic> toJson() => _$LowestPricePlanResponseModelToJson(this);
 
