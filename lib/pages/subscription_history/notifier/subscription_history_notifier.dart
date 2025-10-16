@@ -1,28 +1,33 @@
+import 'package:either_dart/src/either.dart';
 import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscription_tab.dart';
-import 'package:stoyco_subscription/pages/subscription_history/data/models/subscription_history_response.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/models/requests/get_user_subscription_plans_request.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 
 /// A [ChangeNotifier] that manages the state for the subscription history view.
 ///
-/// Handles loading and exposing a list of [SubscriptionHistoryItem]s, tab selection,
+/// Handles loading and exposing a list of [UserSubscriptionPlan]s, tab selection,
 /// and notifies listeners when the data or selected tab changes.
 ///
 /// Tabs include "Todos", "Activo", and "Inactivo" to filter the subscription list.
 ///
 /// Example usage:
 /// ```dart
-/// final notifier = SubscriptionHistoryNotifier(vsync);
+/// final notifier = SubscriptionHistoryNotifier(vsync, userId: 'user123');
 /// notifier.addListener(() {
 ///   // React to updates
 /// });
 /// ```
 ///
-/// Call [getSubscriptionHistory] to load the subscription history data.
+/// Call [getSubscriptionHistory] to load the subscription history data from the service.
 class SubscriptionHistoryNotifier extends ChangeNotifier {
   /// Creates a [SubscriptionHistoryNotifier] and initializes the tab controller and data.
   ///
   /// [vsync] is required for the [TabController].
-  SubscriptionHistoryNotifier(TickerProvider vsync) {
+  /// [userId] is the identifier for the user whose subscriptions will be loaded.
+  SubscriptionHistoryNotifier(TickerProvider vsync, {required this.userId}) {
     tabController = TabController(vsync: vsync, length: tabs.length);
     tabController.addListener(_onTabChanged);
 
@@ -31,8 +36,17 @@ class SubscriptionHistoryNotifier extends ChangeNotifier {
     changeTab(0);
   }
 
+  /// The user ID for which to load the subscription history.
+  final String userId;
+
   /// The list of all subscription history items.
-  List<SubscriptionHistoryItem> allSubscriptions = <SubscriptionHistoryItem>[];
+  List<UserSubscriptionPlan> allSubscriptions = <UserSubscriptionPlan>[];
+
+  /// The list of active subscription history items.
+  List<UserSubscriptionPlan> activeSubscriptions = <UserSubscriptionPlan>[];
+
+  /// The list of inactive subscription history items.
+  List<UserSubscriptionPlan> inactiveSubscriptions = <UserSubscriptionPlan>[];
 
   /// The tab controller for switching between tabs.
   late TabController tabController;
@@ -57,50 +71,51 @@ class SubscriptionHistoryNotifier extends ChangeNotifier {
   /// Changes the selected tab and notifies listeners.
   void changeTab(int index) {
     selectedIndex = index;
-    // You can add logic here to filter the list based on the selected tab.
     notifyListeners();
   }
 
-  /// Loads the subscription history data and notifies listeners.
+  /// Loads the subscription history data from the service and notifies listeners.
   ///
-  /// This example uses mock data for demonstration purposes.
+  /// Populates [allSubscriptions], [activeSubscriptions], and [inactiveSubscriptions]
+  /// based on the [subscribedIsActive] field of each [UserSubscriptionPlan].
   Future<void> getSubscriptionHistory() async {
-    allSubscriptions = <SubscriptionHistoryItem>[
-      const SubscriptionHistoryItem(
-        planId: '68daa80886a91f7c4f0f6d70',
-        planName: 'Plan Básico',
-        planImageUrl:
-            'https://previews.123rf.com/images/chr1/chr11201/chr1120100048/12193904-orange-county-ca-usa-july-2010-mexican-dancers-performing-in-traditional-latin-american.jpg',
-        partnerProfile: 'Music',
-        partnerName: 'SUPIČIĆ',
-        partnerId: '683775acadde9e7b1d59dacb',
-        recurrenceType: 'Monthly',
-        price: 80,
-        currencyCode: 'MXN',
-        currencySymbol: r'$',
-        subscribedIsActive: true,
-        subscriptionStartDate: '2025-09-23T10:00:00Z',
-        subscriptionEndDate: '2025-10-30T10:00:00Z',
-        hasActivePlan: true,
-      ),
-      const SubscriptionHistoryItem(
-        planId: '68daa80886a91f7c4f0f6d71',
-        planName: 'Plan Premium',
-        planImageUrl:
-            'https://previews.123rf.com/images/chr1/chr11201/chr1120100048/12193904-orange-county-ca-usa-july-2010-mexican-dancers-performing-in-traditional-latin-american.jpg',
-        partnerProfile: 'Video',
-        partnerName: 'VIDEONOW',
-        partnerId: '683775acadde9e7b1d59dacd',
-        recurrenceType: 'Yearly',
-        price: 1200,
-        currencyCode: 'MXN',
-        currencySymbol: r'$',
-        subscribedIsActive: false,
-        subscriptionStartDate: '2024-01-01T10:00:00Z',
-        subscriptionEndDate: '2025-01-01T10:00:00Z',
-        hasActivePlan: false,
-      ),
-    ];
+    final Either<Failure, UserSubscriptionPlanResponse> result =
+        await SubscriptionCatalogService.instance.getUserSubscriptionPlans(
+          GetUserSubscriptionPlansRequest(userId: userId),
+        );
+    result.fold(
+      (Failure failure) {
+        // Handle the error according to your logic
+        allSubscriptions = <UserSubscriptionPlan>[];
+        activeSubscriptions = <UserSubscriptionPlan>[];
+        inactiveSubscriptions = <UserSubscriptionPlan>[];
+      },
+      (UserSubscriptionPlanResponse response) {
+        allSubscriptions = response.data;
+        activeSubscriptions = allSubscriptions
+            .where((UserSubscriptionPlan e) => e.subscribedIsActive)
+            .toList();
+        inactiveSubscriptions = allSubscriptions
+            .where((UserSubscriptionPlan e) => !e.subscribedIsActive)
+            .toList();
+      },
+    );
     notifyListeners();
+  }
+
+  /// Returns the list to display according to the selected tab.
+  ///
+  /// - Tab 0 ("Todos"): returns [allSubscriptions]
+  /// - Tab 1 ("Activo"): returns [activeSubscriptions]
+  /// - Tab 2 ("Inactivo"): returns [inactiveSubscriptions]
+  List<UserSubscriptionPlan> get subscriptionsToShow {
+    switch (selectedIndex) {
+      case 1:
+        return activeSubscriptions;
+      case 2:
+        return inactiveSubscriptions;
+      default:
+        return allSubscriptions;
+    }
   }
 }

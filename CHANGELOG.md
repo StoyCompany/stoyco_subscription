@@ -7,6 +7,7 @@
 ### Features
 
 - Added subscription history screen design
+- Added subscription history integration
 
 
 ## [Unreleased]

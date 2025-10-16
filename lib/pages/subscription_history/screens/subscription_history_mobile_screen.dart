@@ -20,7 +20,9 @@ import 'package:stoyco_subscription/pages/subscription_history/notifier/subscrip
 /// {@endtemplate}
 class SubscriptionHistoryMobileScreen extends StatefulWidget {
   /// Creates a [SubscriptionHistoryMobileScreen].
-  const SubscriptionHistoryMobileScreen({super.key});
+  const SubscriptionHistoryMobileScreen({super.key, this.userId});
+
+  final String? userId;
 
   @override
   State<SubscriptionHistoryMobileScreen> createState() =>
@@ -36,7 +38,7 @@ class _SubscriptionHistoryMobileScreenState
   @override
   void initState() {
     super.initState();
-    notifier = SubscriptionHistoryNotifier(this);
+    notifier = SubscriptionHistoryNotifier(this, userId: widget.userId ?? '');
     notifier.addListener(_onNotifierChanged);
   }
 
@@ -83,13 +85,14 @@ class _SubscriptionHistoryMobileScreenState
               SizedBox(height: StoycoScreenSize.height(context, 16)),
               Expanded(
                 child: ListView.separated(
-                  itemCount: notifier.allSubscriptions.length,
+                  itemCount: notifier.subscriptionsToShow.length,
                   itemBuilder: (BuildContext context, int index) => Container(
                     margin: EdgeInsets.only(
                       bottom: StoycoScreenSize.height(context, 12),
                     ),
                     child: SubscriptionHistoryCard(
-                      subscriptionHistoryItem: notifier.allSubscriptions[index],
+                      subscriptionHistoryItem:
+                          notifier.subscriptionsToShow[index],
                     ),
                   ),
                   separatorBuilder: (BuildContext context, int index) {

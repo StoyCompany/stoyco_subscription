@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/subscription_history/data/models/subscription_history_response.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
 
 /// {@template subscription_history_card}
 /// A card widget that displays information about a user's subscription history item.
@@ -30,7 +30,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
   });
 
   /// The model containing the subscription history item data.
-  final SubscriptionHistoryItem subscriptionHistoryItem;
+  final UserSubscriptionPlan subscriptionHistoryItem;
 
   /// Formats a date string (ISO 8601) to 'dd MMM yyyy', e.g., '25 oct 2024'.
   String _formatDate(String dateStr) {
@@ -105,7 +105,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               spacing: StoycoScreenSize.width(context, 25),
               children: <Widget>[
                 ConstrainedBox(
@@ -160,13 +160,11 @@ class SubscriptionHistoryCard extends StatelessWidget {
                           textStyle: TextStyle(
                             color: StoycoColors.deepCharcoal,
                             fontWeight: FontWeight.w400,
-                            fontSize: StoycoScreenSize.fontSize(
-                              context,
-                              12,
-                            ),
+                            fontSize: StoycoScreenSize.fontSize(context, 12),
                           ),
                         ),
-                        backgroundColor: subscriptionHistoryItem.subscribedIsActive
+                        backgroundColor:
+                            subscriptionHistoryItem.subscribedIsActive
                             ? StoycoColors.activeChip
                             : StoycoColors.inactiveChip,
                         padding: StoycoScreenSize.symmetric(
