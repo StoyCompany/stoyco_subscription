@@ -5,6 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart';
 
 /// {@template subscription_history_card}
 /// A card widget that displays information about a user's subscription history item.
@@ -32,27 +33,36 @@ class SubscriptionHistoryCard extends StatelessWidget {
   /// The model containing the subscription history item data.
   final UserSubscriptionPlan subscriptionHistoryItem;
 
-  /// Formats a date string (ISO 8601) to 'dd MMM yyyy', e.g., '25 oct 2024'.
+  static const List<String> _months = <String>[
+    'ene', 'feb', 'mar', 'abr', 'may', 'jun',
+    'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+  ];
+
+  /// Formats a date string to 'dd MMM yyyy' using Spanish month abbreviations.
+  ///
+  /// If the input [dateStr] is a valid ISO 8601 date (e.g., "2025-10-14T18:30:00Z"),
+  /// it will be parsed and formatted as '14 oct 2025'.
+  ///
+  /// If the input cannot be parsed, the original string is returned and an error is logged
+  /// using [StoyCoLogger].
+  ///
+  /// This method uses a static constant list of Spanish month abbreviations to avoid
+  /// recreating the list on each call.
+  ///
+  /// Example:
+  /// ```dart
+  /// final formatted = _formatDate("2025-10-14T18:30:00Z"); // "14 oct 2025"
+  /// ```
   String _formatDate(String dateStr) {
-    try {
-      final DateTime date = DateTime.parse(dateStr);
-      const List<String> months = [
-        'ene',
-        'feb',
-        'mar',
-        'abr',
-        'may',
-        'jun',
-        'jul',
-        'ago',
-        'sep',
-        'oct',
-        'nov',
-        'dic',
-      ];
-      final String month = months[date.month - 1];
+    final DateTime? date = DateTime.tryParse(dateStr);
+    if (date != null) {
+      final String month = _months[date.month - 1];
       return '${date.day.toString().padLeft(2, '0')} $month ${date.year}';
-    } catch (_) {
+    } else {
+      StoyCoLogger.error(
+        "Date couldn't be parsed: $dateStr",
+        stackTrace: StackTrace.current,
+      );
       return dateStr;
     }
   }

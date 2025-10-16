@@ -53,9 +53,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
       ),
-      actions: [
+      actions: <Widget>[
         if (suffixIcon != null)
-          IconButton(onPressed: onSuffixPressed, icon: suffixIcon!),
+          IconButton(onPressed: onSuffixPressed, icon: suffixIcon!)
+        else
+          SizedBox(
+            width: StoycoScreenSize.width(context, 24),
+            height: StoycoScreenSize.height(context, 24),
+          ),
       ],
       automaticallyImplyLeading: false,
     );

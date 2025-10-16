@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/tab_bar/tab_bar_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/appbars/custom_subscription_appbar.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/subscription_history_card.dart';
@@ -68,21 +69,16 @@ class _SubscriptionHistoryMobileScreenState
             Navigator.of(context).pop();
           },
           title: 'Historial de Suscripciones',
-          suffixIcon: StoycoAssets.lib.assets.icons.bellIcon.svg(
-            height: StoycoScreenSize.height(context, 24),
-            width: StoycoScreenSize.width(context, 24),
-          ),
-          onSuffixPressed: () {},
         ),
         body: Padding(
           padding: StoycoScreenSize.symmetric(context, horizontal: 24),
           child: Column(
+            spacing: StoycoScreenSize.height(context, 16),
             children: <Widget>[
               StoycoTabBarV2(
                 tabController: notifier.tabController,
                 tabs: notifier.tabs,
               ),
-              SizedBox(height: StoycoScreenSize.height(context, 16)),
               Expanded(
                 child: ListView.separated(
                   itemCount: notifier.subscriptionsToShow.length,
@@ -96,9 +92,7 @@ class _SubscriptionHistoryMobileScreenState
                     ),
                   ),
                   separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: StoycoScreenSize.height(context, 24),
-                    );
+                    return Gap(StoycoScreenSize.height(context, 24));
                   },
                 ),
               ),
