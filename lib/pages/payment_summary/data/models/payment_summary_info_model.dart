@@ -3,9 +3,26 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'payment_summary_info_model.g.dart';
 
-
+/// {@template payment_summary_info_model}
+/// A data model representing payment summary information for the Book Stack Atomic Design System.
 ///
-/// Example usage:
+/// ### Overview
+/// Encapsulates all relevant details for a payment summary, including plan name, pricing, taxes, currency, and a short description. Useful for displaying payment breakdowns in UI components.
+/// 
+/// ### Parameters
+/// - `planName`: The name of the subscription plan.
+/// - `totalPrice`: The total price to be paid (including taxes).
+/// - `shortDescription`: A short description of the plan or payment.
+/// - `startDate`: The start date of the subscription.
+/// - `planPrice`: The base price of the plan (before taxes).
+/// - `iva`: The tax (IVA) amount included in the total price.
+/// - `currencySymbol`: The currency symbol (e.g., '$').
+/// - `currencyCode`: The currency code (e.g., 'MXN').
+///
+/// ### Returns
+/// Provides a serializable model for payment summary information, supporting JSON serialization and value equality.
+///
+/// ### Example
 /// ```dart
 /// final info = PaymentSummaryInfoModel(
 ///   planName: 'Premium Plan',
@@ -19,8 +36,11 @@ part 'payment_summary_info_model.g.dart';
 /// );
 /// ```
 /// {@endtemplate}
+/// 
 @JsonSerializable()
+/// {@macro payment_summary_info_model}
 class PaymentSummaryInfoModel extends Equatable {
+
   /// The name of the subscription plan.
   final String planName;
 
@@ -45,7 +65,7 @@ class PaymentSummaryInfoModel extends Equatable {
   /// The currency code (e.g., 'MXN').
   final String currencyCode;
 
-  /// Creates a [PaymentSummaryInfoModel].
+  /// Creates a [PaymentSummaryInfoModel] with all required payment summary fields.
   const PaymentSummaryInfoModel({
     required this.planName,
     required this.totalPrice,
