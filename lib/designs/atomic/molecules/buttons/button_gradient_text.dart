@@ -7,17 +7,39 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 enum ButtonGradientTextType { primary, secondary, tertiary, inactive, custom }
 
-class ButtonGradientText extends StatelessWidget {
-/// Atomic Design System: Gradient Text Button
+/// {@template button_gradient_text}
+/// A [ButtonGradientText] molecule for the Book Stack Atomic Design System.
+/// Renders a customizable button with gradient borders, backgrounds, and multiple style variants.
 ///
-/// This widget is part of an atomic design system for Flutter, providing a highly customizable button with gradient borders and backgrounds.
+/// ### Atomic Level
+/// **Molecule** – Composed of atoms (gradient, text, shadow) for button interactions.
 ///
-/// - Follows atomic design principles for scalability and maintainability.
-/// - All documentation is provided inside the class for global visibility, as recommended by Flutter standards.
-/// - Supports multiple button types via the [ButtonGradientTextType] enum: primary, secondary, tertiary, inactive, custom.
-/// - Uses design tokens for colors and gradients, ensuring consistency across the app.
+/// ### Parameters
+/// - `textWidget`: The widget to display as button content. If provided, overrides [text].
+/// - `text`: The label displayed inside the button.
+/// - `type`: The button style variant, defined by [ButtonGradientTextType].
+/// - `width`: The width of the button.
+/// - `height`: The height of the button.
+/// - `onPressed`: Callback executed when the button is tapped.
+/// - `paddingButton`: Internal padding for the button.
+/// - `paddingContent`: Internal padding for the button content.
+/// - `textAlign`: Alignment for the button text.
+/// - `textStyle`: Custom text style for the label.
+/// - `borderWidth`: Width of the button border.
+/// - `borderRadius`: Border radius for rounded corners.
+/// - `boxShadow`: List of shadows applied to the button.
+/// - `gradientBorder`: Custom gradient border for the button.
+/// - `backgroundGradientColor`: Custom gradient for the background.
+/// - `backgroundColor`: Solid background color (used if no gradient).
+/// - `hoverColor`: Hover color for interactive states.
+/// - `splashColor`: Splash color for interactive states.
+/// - `focusColor`: Focus color for interactive states.
+/// - `highlightColor`: Highlight color for interactive states.
 ///
-/// Example usage:
+/// ### Returns
+/// Renders a button with gradient border, background, and styled text, supporting multiple variants for atomic design systems.
+///
+/// ### Example
 /// ```dart
 /// ButtonGradientText(
 ///   text: 'Subscribe',
@@ -25,12 +47,9 @@ class ButtonGradientText extends StatelessWidget {
 ///   onPressed: () {},
 /// )
 /// ```
-///
-/// [ButtonGradientTextType.primary]: Main action button with gradient border, background, and shadow.
-/// [ButtonGradientTextType.secondary]: Secondary action button with radial gradient background and gradient border.
-/// [ButtonGradientTextType.tertiary]: Tertiary button with solid background and no shadow.
-/// [ButtonGradientTextType.inactive]: Disabled/inactive button style.
-/// [ButtonGradientTextType.custom]: Fully custom style via parameters.
+/// {@endtemplate}
+class ButtonGradientText extends StatelessWidget {
+  /// {@macro button_gradient_text}
   const ButtonGradientText({
     super.key,
     this.textWidget,

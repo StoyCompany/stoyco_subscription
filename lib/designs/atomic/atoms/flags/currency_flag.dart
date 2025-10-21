@@ -3,20 +3,23 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
-class CurrencyFlag extends StatelessWidget {
   /// {@template currency_flag}
-  /// CurrencyFlag
+  /// A [CurrencyFlag] atom for the Book Stack Atomic Design System.
+  /// Displays the flag of a currency as an emoji or image, using country and currency metadata.
   ///
-  /// An atomic design widget that displays the flag of a currency as an emoji or image.
+  /// ### Atomic Level
+  /// **Atom** – Smallest UI unit.
   ///
-  /// This widget uses the following libraries to fetch and render currency flag information:
-  /// - [country_flags](https://pub.dev/packages/country_flags): For rendering country flags based on currency code.
-  /// - [currency_picker](https://pub.dev/packages/currency_picker): For currency metadata and emoji conversion.
-  /// - [flutter/material.dart]: For core Flutter UI components.
+  /// ### Parameters
+  /// - `currencyCode`: The currency code (e.g., 'USD', 'EUR') for which to display the flag.
+  /// - `width`: The width of the flag image or emoji. Defaults to 24.
+  /// - `height`: The height of the flag image or emoji. Defaults to 16.
+  /// - `borderRadius`: The border radius for the flag image. Defaults to 1.
   ///
-  /// It supports design tokens for sizing and border radius, ensuring consistency in atomic design systems.
+  /// ### Returns
+  /// Renders a flag widget for the given currency code, using an image, emoji, or country flag, with design token sizing and border radius.
   ///
-  /// Example usage:
+  /// ### Example
   /// ```dart
   /// CurrencyFlag(
   ///   currencyCode: 'USD',
@@ -26,6 +29,8 @@ class CurrencyFlag extends StatelessWidget {
   /// )
   /// ```
   /// {@endtemplate}
+class CurrencyFlag extends StatelessWidget {
+  /// {@macro currency_flag}
   const CurrencyFlag({
     super.key,
     required this.currencyCode,

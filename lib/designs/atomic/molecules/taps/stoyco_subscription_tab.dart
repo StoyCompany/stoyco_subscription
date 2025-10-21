@@ -2,14 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/alert/text_with_alert.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
+/// {@template subscription_stoyco_tab}
+/// A [SubscriptionStoycoTab] molecule for the Book Stack Atomic Design System.
+/// Renders a tab with animated alert indicator and styled text, suitable for tab navigation.
+///
+/// ### Atomic Level
+/// **Molecule** – Composed of atoms (text, alert indicator, animation) for tab navigation.
+///
+/// ### Parameters
+/// - `title`: The tab label text to display.
+/// - `showAlertIndicator`: If true, displays an animated alert indicator on the tab. Defaults to false.
+///
+/// ### Returns
+/// Renders a tab widget with animated alert indicator and styled text, suitable for atomic design systems.
+///
+/// ### Example
+/// ```dart
+/// SubscriptionStoycoTab(
+///   title: 'Active',
+///   showAlertIndicator: true,
+/// )
+/// ```
+/// {@endtemplate}
 class SubscriptionStoycoTab extends StatefulWidget {
+  /// {@macro subscription_stoyco_tab}
   const SubscriptionStoycoTab({
     super.key,
     required this.title,
     this.showAlertIndicator = false,
   });
 
+  /// The tab label text to display.
   final String title;
+
+  /// If true, displays an animated alert indicator on the tab. Defaults to false.
   final bool showAlertIndicator;
 
   @override

@@ -2,36 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 
 
+/// {@template gradient_border_painter}
+/// A [GradientBorderPainter] atom for the Book Stack Atomic Design System.
+/// Paints a rounded rectangle border with a customizable vertical gradient, suitable for cards and containers.
+///
+/// ### Atomic Level
+/// **Atom** – Smallest UI unit.
+///
+/// ### Parameters
+/// - `borderRadius`: The border radius for the border. Controls the roundness of the corners.
+/// - `borderWidth`: The width of the border stroke.
+/// - `gradientColors`: The list of colors used for the border gradient. If null, uses the default design token gradient.
+///
+/// ### Returns
+/// Renders a gradient border around a rounded rectangle using [CustomPainter].
+///
+/// ### Example
+/// ```dart
+/// CustomPaint(
+///   painter: GradientBorderPainter(
+///     borderRadius: 16,
+///     borderWidth: 2,
+///   ),
+///   child: Container(width: 100, height: 50),
+/// )
+/// ```
+/// {@endtemplate}
 class GradientBorderPainter extends CustomPainter {
-  /// {@template gradient_border_painter}
-  /// GradientBorderPainter
-  ///
-  /// An atomic design custom painter that draws a gradient border around a widget.
-  ///
-  /// This painter is intended for use in atomic design systems, providing a reusable visual effect for card borders and other UI atoms.
-  ///
-  /// It supports design tokens for border radius, width, and gradient colors, ensuring consistency and maintainability across your design system.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// CustomPaint(
-  ///   painter: GradientBorderPainter(
-  ///     borderRadius: 24,
-  ///     borderWidth: 2,
-  ///     gradientColors: [
-  ///       StoycoColors.cardBorderGradientEnd,
-  ///       StoycoColors.cardBorderGradientWhite05,
-  ///       StoycoColors.cardBorderGradientWhite15,
-  ///       StoycoColors.cardBorderGradientPurple57,
-  ///       StoycoColors.cardBorderGradientPurple72,
-  ///       StoycoColors.cardBorderGradientMid,
-  ///     ],
-  ///   ),
-  ///   child: ...,
-  /// )
-  /// ```
-  /// {@endtemplate}
 
+  /// {@macro gradient_border_painter}
   GradientBorderPainter({
     required this.borderRadius,
     required this.borderWidth,

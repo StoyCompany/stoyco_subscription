@@ -1,33 +1,34 @@
 
 import 'package:flutter/widgets.dart';
 
-class HoverAnimationCard extends StatefulWidget {
-/// Atomic Design System: Hover Animation Card
+/// {@template hover_animation_card}
+/// A hover-animated [HoverAnimationCard] atom for the Book Stack Atomic Design System.
+/// Animates its child widget with a translation effect when hovered, providing interactive feedback for desktop and web platforms.
 ///
-/// This widget is part of an atomic design system for Flutter, providing a reusable hover animation effect for cards and containers.
+/// ### Atomic Level
+/// **Atom** – Smallest UI unit.
 ///
-/// - Follows atomic design principles for scalability and maintainability.
-/// - All documentation is provided inside the class for global visibility, as recommended by Flutter standards.
-/// - Animates its child upwards when hovered (web/desktop only), using a fast and smooth transform.
-/// - Can be used to wrap any card or container to provide a native-like hover effect.
+/// ### Parameters
+/// - `child`: The widget to animate on hover.
+/// - `duration`: Animation duration for the hover effect. Defaults to 120 milliseconds.
+/// - `curve`: Animation curve for the hover effect. Defaults to [Curves.easeInOut].
+/// - `transformHoverX`: X offset for the hover transform. Defaults to 0.
+/// - `transformHoverY`: Y offset for the hover transform. Defaults to -10.
+/// - `transformHoverZ`: Z offset for the hover transform. Defaults to 0.
 ///
-/// Example usage:
+/// ### Returns
+/// Renders an [AnimatedContainer] that animates its position when hovered, wrapping the provided child widget.
+///
+/// ### Example
 /// ```dart
 /// HoverAnimationCard(
-///   child: CardImageDescriptionTag(...),
+///   child: Text('Hover me!'),
 /// )
 /// ```
-///
-/// This component is designed for web/desktop platforms and will not trigger hover on mobile devices.
+/// {@endtemplate}
+class HoverAnimationCard extends StatefulWidget {
 
-  /// Creates a [HoverAnimationCard] for atomic design systems.
-  ///
-  /// [child]: The widget to animate on hover.
-  /// [duration]: Animation duration (default: 120ms).
-  /// [curve]: Animation curve (default: easeInOut).
-  /// [transformHoverX]: X offset for hover (default: 0).
-  /// [transformHoverY]: Y offset for hover (default: -10).
-  /// [transformHoverZ]: Z offset for hover (default: 0).
+  /// {@macro hover_animation_card}
   const HoverAnimationCard({
     super.key,
     required this.child,
@@ -40,15 +41,20 @@ class HoverAnimationCard extends StatefulWidget {
 
   /// The widget to animate on hover.
   final Widget child;
-  /// Animation duration for the hover effect.
+
+  /// Animation duration for the hover effect. Defaults to 120 milliseconds.
   final Duration duration;
-  /// Animation curve for the hover effect.
+
+  /// Animation curve for the hover effect. Defaults to [Curves.easeInOut].
   final Curve curve;
-  /// X offset for the hover transform.
+
+  /// X offset for the hover transform. Defaults to 0.
   final double transformHoverX;
-  /// Y offset for the hover transform.
+
+  /// Y offset for the hover transform. Defaults to -10.
   final double transformHoverY;
-  /// Z offset for the hover transform.
+
+  /// Z offset for the hover transform. Defaults to 0.
   final double transformHoverZ;
 
   @override
