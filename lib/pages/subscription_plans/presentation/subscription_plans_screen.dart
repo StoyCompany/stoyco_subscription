@@ -11,37 +11,40 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/models/respons
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/presentation/helpers/models/card_subscription_plan_params.dart';
 
+/// {@template subscription_plans_list}
+/// A [SubscriptionPlansList] page (template with logic) for the Book Stack Atomic Design System.
+///
+/// ### Overview
+/// Displays a responsive list of subscription plans, including monthly and annual options, with loading skeletons, tab navigation, and customizable style parameters. Integrates callbacks for subscription actions and adapts layout for phone and desktop.
+///
+/// ### Atomic Level
+/// **Page** – High-level layout structure with business logic, composed of templates, organisms, molecules, and atoms for subscription plan selection flows.
+///
+/// ### Parameters
+/// - `subscriptionPlanResponse`: Response containing lists of subscription plans.
+/// - `isLoading`: Whether the screen is in a loading state. Defaults to false.
+/// - `crossAxisCount`: Number of columns in the grid. Defaults to 1.
+/// - `onTapCancelSubscription`: Callback when cancel subscription is tapped.
+/// - `onTapNewSubscription`: Callback when free trial is tapped.
+/// - `onTapRenewSubscription`: Callback when renew subscription is tapped.
+/// - `styleParams`: Optional style parameters for customizing the appearance and design tokens.
+/// - `key`: Optional widget key.
+///
+/// ### Returns
+/// Renders a responsive subscription plans page with tab navigation, loading skeletons, and plan cards, suitable for atomic design systems.
+///
+/// ### Example
+/// ```dart
+/// SubscriptionPlansList(
+///   subscriptionPlanResponse: myPlans,
+///   onTapCancelSubscription: (plan) {},
+///   onTapNewSubscription: (plan) {},
+///   onTapRenewSubscription: (plan) {},
+/// )
+/// ```
+/// {@endtemplate}
 class SubscriptionPlansList extends StatefulWidget {
-    /// Displays a list of subscription plans for a given partner and user.
-    ///
-    /// This widget is part of the Stoyco atomic design system and provides a customizable UI for displaying monthly and annual subscription plans.
-    ///
-    /// The widget supports custom styles via [styleParams], and exposes callbacks for subscription actions.
-    ///
-    /// Example usage:
-    /// ```dart
-    /// SubscriptionPlansList(
-    ///   idPartner: 'partnerId',
-    ///   idUser: 'userId',
-    ///   crossAxisCount: 2,
-    ///   onTapCancelSubscription: (plan) => ...,
-    ///   onTapFreeTrial: (plan) => ...,
-    ///   onTapRenewSubscription: (plan) => ...,
-    ///   styleParams: SubscriptionPlanScreenStyleParams(
-    ///     titleStyle: TextStyle(...),
-    ///       ...other style overrides
-    ///   ),
-    /// )
-    /// ```
-    ///
-    /// Parameters:
-    /// - [idPartner]: Partner/artist identifier.
-    /// - [idUser]: User identifier.
-    /// - [crossAxisCount]: Number of columns in the grid (default: 1).
-    /// - [onTapCancelSubscription]: Callback when cancel subscription is tapped.
-    /// - [onTapNewSubscription]: Callback when free trial is tapped.
-    /// - [onTapRenewSubscription]: Callback when renew subscription is tapped.
-    /// - [styleParams]: Optional style parameters for customizing appearance.
+    /// {@macro subscription_plans_list}
     const SubscriptionPlansList({
       super.key,
       required this.subscriptionPlanResponse,
@@ -56,9 +59,10 @@ class SubscriptionPlansList extends StatefulWidget {
   /// Response containing lists of subscription plans.
   final SubscriptionPlanResponse subscriptionPlanResponse;
 
+  /// Whether the screen is in a loading state. Defaults to false.
   final bool isLoading;
 
-  /// Number of columns in the grid.
+  /// Number of columns in the grid. Defaults to 1.
   final int crossAxisCount;
 
   /// Callback when cancel subscription is tapped.
@@ -104,6 +108,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
               StoycoAssets.lib.assets.icons.tagSubscription.svg(
                 width: widget.styleParams.tagSubscriptionWidth,
                 height: widget.styleParams.tagSubscriptionHeight,
+                package: 'stoyco_subscription',
               ),
               Gap(StoycoScreenSize.height(context, 16)),
               Text(
@@ -124,6 +129,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
               StoycoAssets.lib.assets.icons.tagSubscriptionSlim.svg(
                 width: widget.styleParams.tagSubscriptionWidth,
                 height: widget.styleParams.tagSubscriptionHeight,
+                package: 'stoyco_subscription',
               ),
               Gap(StoycoScreenSize.height(context, 12)),
               Text(
