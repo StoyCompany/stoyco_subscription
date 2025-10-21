@@ -118,7 +118,7 @@ class ProductsSlider<T> extends StatelessWidget {
             shrinkWrap: true,
             padding: StoycoScreenSize.symmetric(context, horizontal: 20),
             separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(width: StoycoScreenSize.width(context, 20),);
+              return Gap(StoycoScreenSize.width(context, 20));
             },
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
