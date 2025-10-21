@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:glassmorphism/glassmorphism.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/cultural_asset_card_model.dart';
+import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
 
 /// {@template cultural_asset_card}
 /// A card widget that displays information about a cultural asset.
@@ -31,17 +34,25 @@ class CulturalAssetCard extends StatelessWidget {
   /// Creates a [CulturalAssetCard].
   ///
   /// [culturalAssetCard] provides the data to display in the card.
-  const CulturalAssetCard({super.key, required this.culturalAssetCard});
+  const CulturalAssetCard({
+    super.key,
+    required this.culturalAssetCard,
+    this.onTap,
+  });
 
   /// The model containing the asset's image, title, and price.
-  final CulturalAssetCardModel culturalAssetCard;
+  final CulturalAssetItemModel culturalAssetCard;
+
+  final void Function(CulturalAssetItemModel)? onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, 20)),
       onTap: () {
-        //Todo: Navigate to cultural asset detail
+        if (onTap != null) {
+          onTap!(culturalAssetCard);
+        }
       },
       child: SizedBox(
         width: StoycoScreenSize.width(context, 156),
@@ -83,7 +94,7 @@ class CulturalAssetCard extends StatelessWidget {
                           height: constraints.maxHeight * 0.65,
                           width: double.infinity,
                           fit: BoxFit.cover,
-                          imageUrl: culturalAssetCard.image,
+                          imageUrl: culturalAssetCard.imageUri,
                           placeholder: (BuildContext context, String url) =>
                               const DecoratedBox(
                                 decoration: BoxDecoration(
@@ -110,14 +121,14 @@ class CulturalAssetCard extends StatelessWidget {
                       padding: StoycoScreenSize.all(context, 3),
                       child: Center(
                         child: Text(
-                          culturalAssetCard.title,
+                          culturalAssetCard.name,
                           style: TextStyle(
                             fontSize: StoycoScreenSize.fontSize(context, 14),
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                           textAlign: TextAlign.center,
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -133,11 +144,16 @@ class CulturalAssetCard extends StatelessWidget {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF191F27),
-                          border: Border.all(
-                            width: 1,
-                            style: BorderStyle.solid,
-                            color: StoycoColors.white,
+                          color: const Color(0xFFFFFFFF).withOpacity(0.07),
+                          border: GradientBoxBorder(
+                            gradient: LinearGradient(
+                              colors: <Color>[
+                                const Color(0xFFFFFFFF).withOpacity(1.0),
+                                const Color(0xFFFFFFFF).withOpacity(0.1),
+                                const Color(0xFFFFFFFF).withOpacity(0.7),
+                              ],
+                              stops: const <double>[0.3, 0.93, 1],
+                            ),
                           ),
                           borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(16),
@@ -188,7 +204,7 @@ class CulturalAssetCard extends StatelessWidget {
                                         ),
                                       ),
                                   Text(
-                                    culturalAssetCard.price.toString(),
+                                    culturalAssetCard.minted.toString(),
                                     style: TextStyle(
                                       fontSize: StoycoScreenSize.fontSize(
                                         context,

@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
-import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
-import 'package:stoyco_subscription/pages/partner_profile/data/models/response/lowest_price_plan_response_model.dart';
-import 'package:stoyco_subscription/pages/partner_profile/data/models/response/subscription_is_active_response.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
 
 /// {@template partner_profile_data_source}
 /// Data source for partner profile-related network operations.
@@ -25,12 +23,12 @@ import 'package:stoyco_subscription/pages/partner_profile/data/models/response/s
 /// final plan = await dataSource.getLowestPricePlanByPartner('partnerId');
 /// ```
 /// {@endtemplate}
-class PartnerProfileDataSource {
+class PaymentSummaryDataSource {
   /// Creates a [PartnerProfileDataSource] with the given [environment] and optional [dio] client.
   ///
   /// Installs an interceptor that automatically refreshes the token and retries
   /// the request if a 401/403 response is received.
-  PartnerProfileDataSource({required this.environment, Dio? dio})
+  PaymentSummaryDataSource({required this.environment, Dio? dio})
     : _dio = dio ?? Dio() {
     _dio.interceptors.add(
       InterceptorsWrapper(
@@ -99,64 +97,30 @@ class PartnerProfileDataSource {
   /// Updates the stored user token and sets the Authorization header.
   void updateToken(String token) {
     _userToken = token;
+    _dio.options.headers['Authorization'] = 'Bearer $token';
+  }
+
+  /// Sets the callback function used to refresh the token when unauthorized.
+  void setRefreshTokenCallback(Future<String?> Function()? callback) {
+    _refreshToken = callback;
   }
 
   /// Returns the current headers for authenticated requests.
-  Map<String, String> _getHeaders() {
-    if (_userToken.isNotEmpty) {
-      return <String, String>{'Authorization': 'Bearer $_userToken'};
-    }
-    return <String, String>{};
-  }
+  Map<String, String> _getHeaders() => <String, String>{
+    'Authorization': 'Bearer $_userToken',
+  };
 
-  /// Fetches the lowest price subscription plan for the given [partnerId].
-  ///
-  /// Throws a [DioException] if the request fails.
-  Future<LowestPricePlanResponseModel> getLowestPricePlanByPartner(
-    String partnerId,
-  ) async {
+  Future<PaymentSummaryInfoResponse> getPaymentSummaryByPlan({
+    required String planId,
+    required String recurrenceType,
+  }) async {
     final String url =
-        '${environment.baseUrl()}subscriptions/lowestPricePlan/partner/$partnerId';
-    final headers = <String, String>{};
-    if (_userToken.isNotEmpty) {
-      headers['Authorization'] = 'Bearer $_userToken';
-    }
+        '${environment.baseUrl()}subscriptions/plan/$planId/summary';
     final Response<Map<String, dynamic>> response = await _dio.get(
       url,
-      options: Options(headers: headers),
+      queryParameters: <String, dynamic>{'recurrenceType': recurrenceType},
+      options: Options(headers: _getHeaders()),
     );
-    return LowestPricePlanResponseModel.fromJson(response.data!);
-  }
-
-  /// Fetches the last active user subscription for the given [partnerId].
-  ///
-  /// Throws a [DioException] if the request fails.
-  Future<SubscriptionIsActiveResponse> getLastUserPlanByPartner(
-    String partnerId,
-  ) async {
-    final String url =
-        '${environment.baseUrl()}subscriptions/plan-last-user/partner/$partnerId';
-    final headers = <String, String>{};
-    if (_userToken.isNotEmpty) {
-      headers['Authorization'] = 'Bearer $_userToken';
-    }
-    final Response<Map<String, dynamic>> response = await _dio.get(
-      url,
-      options: Options(headers: headers),
-    );
-    return SubscriptionIsActiveResponse.fromJson(response.data!);
-  }
-
-  Future<GetCulturalAssetsResponse> getCulturalAssetsByCommunityOwner(
-    String partnerId,
-  ) async {
-    final String url =
-        '${environment.baseUrl()}cultural-assets/community-owner/$partnerId';
-    final headers = _getHeaders();
-    final Response<Map<String, dynamic>> response = await _dio.get(
-      url,
-      options: Options(headers: headers),
-    );
-    return GetCulturalAssetsResponse.fromJson(response.data!);
+    return PaymentSummaryInfoResponse.fromJson(response.data!);
   }
 }

@@ -3,7 +3,7 @@ import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/cultural_asset_card.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/partner_profile/data/models/cultural_asset_card_model.dart';
+import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
 
 /// {@template cultural_assets_slider}
 /// A horizontal slider widget that displays a list of cultural asset cards.
@@ -29,13 +29,16 @@ class CulturalAssetsSlider extends StatelessWidget {
     super.key,
     required this.culturalAssets,
     this.isLoading = false,
+    this.onTap,
   });
 
   /// The list of cultural asset models to display in the slider.
-  final List<CulturalAssetCardModel> culturalAssets;
+  final List<CulturalAssetItemModel> culturalAssets;
 
   /// Whether the slider is in a loading state and should show skeleton cards.
   final bool isLoading;
+
+  final void Function(CulturalAssetItemModel)? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +78,9 @@ class CulturalAssetsSlider extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) => SkeletonCard(
                 width: StoycoScreenSize.width(context, 156),
                 height: StoycoScreenSize.height(context, 226),
-                borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, 20)),
+                borderRadius: BorderRadius.circular(
+                  StoycoScreenSize.radius(context, 20),
+                ),
               ),
             ),
           ),
@@ -120,8 +125,10 @@ class CulturalAssetsSlider extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: culturalAssets.length,
-            itemBuilder: (BuildContext context, int index) =>
-                CulturalAssetCard(culturalAssetCard: culturalAssets[index]),
+            itemBuilder: (BuildContext context, int index) => CulturalAssetCard(
+              culturalAssetCard: culturalAssets[index],
+              onTap: onTap,
+            ),
           ),
         ),
       ],

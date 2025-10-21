@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/inputs/subscription_search_bar.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/tab_bar/tab_bar_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/circular_avatar/subscription_circular_image_with_info.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -97,7 +98,16 @@ class _SubscriptionsCatalogScreenMobileState
               backgroundColor: StoycoColors.deepCharcoal,
               surfaceTintColor: StoycoColors.deepCharcoal,
               expandedHeight: StoycoScreenSize.height(context, 24),
-              automaticallyImplyLeading: true,
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: StoycoAssets.lib.assets.icons.leftArrow.svg(
+                  height: StoycoScreenSize.height(context, 24),
+                  width: StoycoScreenSize.width(context, 24),
+                ),
+              ),
               elevation: 0,
               centerTitle: true,
               title: Text(

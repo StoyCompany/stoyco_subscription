@@ -7,13 +7,18 @@ import 'package:stoyco_subscription/designs/atomic/organisms/sections/select_pay
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
 import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summary_notifier.dart';
 
 class PaymentSummaryMobileScreen extends StatefulWidget {
-  const PaymentSummaryMobileScreen({super.key, this.subscriptionId});
+  const PaymentSummaryMobileScreen({
+    super.key,
+    this.planId,
+    this.recurrenceType,
+  });
 
-  final String? subscriptionId;
+  final String? planId;
+  final String? recurrenceType;
 
   @override
   State<PaymentSummaryMobileScreen> createState() =>
@@ -27,7 +32,10 @@ class _PaymentSummaryMobileScreenState
   @override
   void initState() {
     super.initState();
-    notifier = PaymentSummaryNotifier(subscriptionId: widget.subscriptionId);
+    notifier = PaymentSummaryNotifier(
+      planId: widget.planId,
+      recurrenceType: widget.recurrenceType,
+    );
     notifier.addListener(_onNotifierChanged);
   }
 
@@ -42,29 +50,20 @@ class _PaymentSummaryMobileScreenState
     setState(() {});
   }
 
-  String getTotalToPayText() {
-    final PaymentSummaryInfoModel? info = notifier.paymentSummaryInfo;
-    final String code = info?.currencyCode ?? 'MXN';
-    final String symbol = info?.currencySymbol ?? r'$';
-    final String total = info?.totalPrice.toStringAsFixed(2) ?? '';
-    return 'Total a pagar $code $symbol$total';
-  }
-
   List<Map<String, String>> getPaymentInfoItems() {
-    final PaymentSummaryInfoModel? info = notifier.paymentSummaryInfo;
-    final String code = info?.currencyCode ?? 'MXN';
-    final String symbol = info?.currencySymbol ?? r'$';
-    return <Map<String, String>>
-    [
-      <String, String>
-      
-      {
+    final PaymentSummaryInfoResponse? info = notifier.paymentSummaryInfo;
+    final String code = info?.breakdown.currencyCode ?? 'MXN';
+    final String symbol = info?.breakdown.currencySymbol ?? r'$';
+    return <Map<String, String>>[
+      <String, String>{
         'key': 'Plan',
-        'value': '$code $symbol${info?.planPrice.toStringAsFixed(2) ?? '0.00'}',
+        'value':
+            '$code $symbol${info?.breakdown.planAmount.toStringAsFixed(2) ?? '0.00'}',
       },
       <String, String>{
         'key': 'IVA',
-        'value': '$code $symbol${info?.iva.toStringAsFixed(2) ?? ''}',
+        'value':
+            '$code $symbol${info?.breakdown.ivaAmount.toStringAsFixed(2) ?? ''}',
       },
     ];
   }
@@ -79,7 +78,9 @@ class _PaymentSummaryMobileScreenState
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () {Navigator.of(context).pop();},
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
             icon: StoycoAssets.lib.assets.icons.leftArrow.svg(
               height: StoycoScreenSize.height(context, 24),
               width: StoycoScreenSize.width(context, 24),
@@ -119,7 +120,8 @@ class _PaymentSummaryMobileScreenState
                   width: StoycoScreenSize.width(context, 330),
                   child: Center(
                     child: Text(
-                      getTotalToPayText(),
+                      notifier.paymentSummaryInfo?.formattedTotal ??
+                          r'Total a pagar $0.00 MXN',
                       style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.w700,
@@ -143,9 +145,7 @@ class _PaymentSummaryMobileScreenState
                     SubscriptionPaymentPreviewCard(
                       paymentSummaryInfo: notifier.paymentSummaryInfo,
                     ),
-                    PaymentInformationSection(
-                      items: getPaymentInfoItems(),
-                    ),
+                    PaymentInformationSection(items: getPaymentInfoItems()),
                     const SelectPaymentMethodSection(),
                   ],
                 ),

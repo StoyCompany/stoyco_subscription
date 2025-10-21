@@ -38,7 +38,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
   String searchText = '';
 
   int currentPage = 1;
-  final int pageSize = 20;
+  final int pageSize = 50;
   bool isLoadingMore = false;
   bool hasNextPage = true;
 
@@ -162,56 +162,64 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     currentPage = 1;
     hasNextPage = true;
     isLoadingMore = false;
-    final Either<Failure, GetSubscriptionCatalogResponse> result =
-        await SubscriptionCatalogService.instance.getSubscriptionCatalog(
-          userId: userId,
-          page: currentPage,
-          pageSize: pageSize,
-        );
-    result.fold(
-      (Failure failure) {
-        print('Error al obtener catálogo: $failure');
-      },
-      (GetSubscriptionCatalogResponse response) {
-        final List<SubscriptionCatalogItemMap> allItems = response.data
-            .map(
-              (SubscriptionCatalogItem item) => SubscriptionCatalogItemMap(
-                id: item.subscriptionId,
-                imageUrl: item.partnerImageUrl,
-                title: item.partnerName,
-                subscribed: item.isSubscribed,
-                partnerId: item.partnerId,
-                profile: item.profile,
-                hasSubscription: item.hasSubscription,
-              ),
-            )
-            .toList();
+    musicSubscriptions.clear();
+    sportSubscriptions.clear();
+    brandSubscriptions.clear();
 
-        musicSubscriptions = allItems
-            .where(
+    while (hasNextPage) {
+      final Either<Failure, GetSubscriptionCatalogResponse> result =
+          await SubscriptionCatalogService.instance.getSubscriptionCatalog(
+        userId: userId,
+        page: currentPage,
+        pageSize: pageSize,
+      );
+      result.fold(
+        (Failure failure) {
+          print('Error al obtener catálogo: $failure');
+          hasNextPage = false; // Detén la paginación si hay error
+        },
+        (GetSubscriptionCatalogResponse response) {
+          final List<SubscriptionCatalogItemMap> allItems = response.data
+              .map(
+                (SubscriptionCatalogItem item) => SubscriptionCatalogItemMap(
+                  id: item.subscriptionId,
+                  imageUrl: item.partnerImageUrl,
+                  title: item.partnerName,
+                  subscribed: item.isSubscribed,
+                  partnerId: item.partnerId,
+                  profile: item.profile,
+                  hasSubscription: item.hasSubscription,
+                ),
+              )
+              .toList();
+
+          musicSubscriptions.addAll(
+            allItems.where(
               (SubscriptionCatalogItemMap item) =>
                   item.profile.toLowerCase() == 'music',
-            )
-            .toList();
-
-        sportSubscriptions = allItems
-            .where(
+            ),
+          );
+          sportSubscriptions.addAll(
+            allItems.where(
               (SubscriptionCatalogItemMap item) =>
                   item.profile.toLowerCase() == 'sport',
-            )
-            .toList();
-
-        brandSubscriptions = allItems
-            .where(
+            ),
+          );
+          brandSubscriptions.addAll(
+            allItems.where(
               (SubscriptionCatalogItemMap item) =>
                   item.profile.toLowerCase() == 'brand' ||
                   item.profile.toLowerCase() == 'brands',
-            )
-            .toList();
+            ),
+          );
 
-        changeTab(selectedIndex);
-        notifyListeners();
-      },
-    );
+          hasNextPage = response.pagination.hasNextPage;
+          currentPage++;
+        },
+      );
+    }
+
+    changeTab(selectedIndex);
+    notifyListeners();
   }
 }
