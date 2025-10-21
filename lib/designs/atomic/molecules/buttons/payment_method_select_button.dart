@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_card_type.dart';
 
 /// {@template payment_method_select_button}
 /// A widget that displays a selectable payment method card with swipe-to-delete functionality.
@@ -22,6 +21,37 @@ import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_ca
 ///   onTap: () { /* select card */ },
 ///   onDelete: () { /* delete card */ },
 ///   svgIconPath: 'assets/icons/visa.svg', // or imageIconPath: 'assets/icons/visa.png'
+/// )
+/// ```
+/// {@endtemplate}
+/// {@template payment_method_select_button}
+/// A [PaymentMethodSelectButton] molecule for the Stoyco Subscription Atomic Design System.
+///
+/// ### Overview
+/// Displays a selectable payment method card with swipe-to-delete functionality. Shows a card icon, masked card number, and a radio button for selection. Users can tap to select or swipe left to reveal a delete action.
+///
+/// ### Atomic Level
+/// **Molecule** – Composed of atoms (icon, card, radio button).
+///
+/// ### Parameters
+/// - `lastDigits`: The last four digits of the card number.
+/// - `isSelected`: Whether this card is currently selected.
+/// - `onTap`: Callback when the card is tapped.
+/// - `onDelete`: Callback when the card is deleted (swiped or delete button tapped).
+/// - `svgIconPath`: Path to the SVG icon representing the card type. Provide exactly one of [svgIconPath] or [imageIconPath].
+/// - `imageIconPath`: Path to the image icon (e.g., PNG, JPG) representing the card type. Provide exactly one of [svgIconPath] or [imageIconPath].
+///
+/// ### Returns
+/// A widget that renders a payment method card with selection and delete actions, suitable for payment flows.
+///
+/// ### Example
+/// ```dart
+/// PaymentMethodSelectButton(
+///   lastDigits: '1234',
+///   isSelected: true,
+///   onTap: () {},
+///   onDelete: () {},
+///   svgIconPath: 'assets/icons/visa.svg',
 /// )
 /// ```
 /// {@endtemplate}
@@ -44,9 +74,9 @@ class PaymentMethodSelectButton extends StatefulWidget {
     this.imageIconPath,
     super.key,
   }) : assert(
-         (svgIconPath != null) ^ (imageIconPath != null),
-         'You must provide exactly one: svgIconPath or imageIconPath',
-       );
+    (svgIconPath != null) ^ (imageIconPath != null),
+    'You must provide exactly one: svgIconPath or imageIconPath',
+  );
 
   /// The last four digits of the card number.
   final String lastDigits;
@@ -55,19 +85,15 @@ class PaymentMethodSelectButton extends StatefulWidget {
   final bool isSelected;
 
   /// Callback when the card is tapped.
-  final Function onTap;
+  final VoidCallback onTap;
 
-  /// Callback when the card is deleted.
-  final Function onDelete;
+  /// Callback when the card is deleted (swiped or delete button tapped).
+  final VoidCallback onDelete;
 
-  /// Path to the SVG icon representing the card type.
-  ///
-  /// You must provide exactly one of [svgIconPath] or [imageIconPath].
+  /// Path to the SVG icon representing the card type. Provide exactly one of [svgIconPath] or [imageIconPath].
   final String? svgIconPath;
 
-  /// Path to the image icon (e.g., PNG, JPG) representing the card type.
-  ///
-  /// You must provide exactly one of [svgIconPath] or [imageIconPath].
+  /// Path to the image icon (e.g., PNG, JPG) representing the card type. Provide exactly one of [svgIconPath] or [imageIconPath].
   final String? imageIconPath;
 
   @override
@@ -103,7 +129,7 @@ class PaymentItemCardState extends State<PaymentMethodSelectButton> {
       ),
       onDismissed: (_) => widget.onDelete(),
       child: GestureDetector(
-        onTap: () => widget.onTap(),
+        onTap: widget.onTap,
         onHorizontalDragEnd: (DragEndDetails details) {
           if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
             isDraggingLeft.value = true;
@@ -196,7 +222,7 @@ class PaymentItemCardState extends State<PaymentMethodSelectButton> {
                 onTap: () => widget.onDelete(),
                 child: ValueListenableBuilder<bool>(
                   valueListenable: isDraggingLeft,
-                  builder: (context, dragging, child) {
+                  builder: (BuildContext context, bool dragging, Widget? child) {
                     return AnimatedContainer(
                       width: dragging ? StoycoScreenSize.width(context, 56) : 0,
                       height: StoycoScreenSize.height(context, 56),

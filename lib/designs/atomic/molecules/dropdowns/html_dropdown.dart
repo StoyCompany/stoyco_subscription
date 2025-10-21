@@ -4,17 +4,25 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dar
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
-class HtmlDropdown extends StatefulWidget {
   /// {@template html_dropdown}
-  /// HtmlDropdown
+  /// A [HtmlDropdown] molecule for the Stoyco Subscription Atomic Design System.
+  /// Displays a dropdown with a title and renders HTML content when expanded, combining atoms for advanced UI.
   ///
-  /// An atomic design molecule widget that displays a dropdown with a title and renders HTML content when expanded.
+  /// ### Atomic Level
+  /// **Molecule** – Composed of atoms (text, icon, padding) for dropdown and HTML rendering.
   ///
-  /// This widget is designed for use in atomic design systems, serving as a "molecule" that combines basic atoms (text, icon, padding) with advanced HTML rendering.
+  /// ### Parameters
+  /// - `title`: The title displayed in the dropdown header.
+  /// - `titleTextStyle`: Optional custom text style for the dropdown title. Defaults to a standard text style.
+  /// - `htmlContent`: The HTML string to render when the dropdown is expanded.
+  /// - `arrowIcon`: Optional custom icon for the dropdown arrow. Defaults to [Icons.chevron_right].
+  /// - `contentPadding`: Optional custom padding for the dropdown content. Defaults to design token spacing.
+  /// - `selectorPadding`: Optional custom padding for the dropdown selector.
   ///
-  /// It supports design tokens for colors, spacing, and font styles, ensuring consistency and maintainability across your design system.
+  /// ### Returns
+  /// Renders a dropdown with a title and HTML content, suitable for atomic design systems.
   ///
-  /// Example usage:
+  /// ### Example
   /// ```dart
   /// HtmlDropdown(
   ///   title: 'Details',
@@ -28,6 +36,8 @@ class HtmlDropdown extends StatefulWidget {
   /// )
   /// ```
   /// {@endtemplate}
+class HtmlDropdown extends StatefulWidget {
+  /// {@macro html_dropdown}
   const HtmlDropdown({
     super.key,
     required this.title,
@@ -91,7 +101,9 @@ class _HtmlDropdownState extends State<HtmlDropdown> {
           trailing: AnimatedRotation(
             turns: expanded ? 0.25 : 0,
             duration: const Duration(milliseconds: 200),
-            child: widget.arrowIcon ?? StoycoAssets.lib.assets.icons.arrowRight.svg(),
+            child: widget.arrowIcon ?? StoycoAssets.lib.assets.icons.arrowRight.svg(
+              package: 'stoyco_subscription',
+            ),
           ),
           onTap: () => setState(() => expanded = !expanded),
         ),

@@ -3,25 +3,47 @@ import 'package:gradient_borders/gradient_borders.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
+
 /// {@template button_gradient}
-/// Native Flutter button with gradient borders, part of the atomic design system.
-/// Highly customizable, with sensible defaults matching design tokens.
+/// A [ButtonGradient] atom for the Stoyco Subscription Atomic Design System.
+/// Renders a customizable button with gradient borders, background, and interactive states for modern UI experiences.
 ///
-/// Default styles:
-/// - Border: 1.06px solid gradient (vertical, darkBlue to blue)
-/// - Box shadow: 4.24px 4.24px 59.36px 0px shadowBlue
-/// - Background color: text
+/// ### Atomic Level
+/// **Atom** – Smallest UI unit.
 ///
-/// Example usage:
+/// ### Parameters
+/// - `child`: Button content widget.
+/// - `onPressed`: Callback when the button is pressed.
+/// - `width`: Width of the button.
+/// - `height`: Height of the button.
+/// - `backgroundColor`: Background color.
+/// - `hoverColor`: Color when hovered.
+/// - `splashColor`: Splash color on tap.
+/// - `focusColor`: Color when focused.
+/// - `highlightColor`: Color when highlighted.
+/// - `backgroundGradientColor`: Gradient for the background.
+/// - `gradientBorder`: Gradient for the border.
+/// - `borderRadius`: Border radius for rounded corners.
+/// - `boxShadow`: Box shadow(s) for elevation.
+/// - `padding`: Padding inside the button.
+///
+/// ### Returns
+/// Renders an [InkWell] button with gradient border, background, and interactive effects, wrapping the provided child widget.
+///
+/// ### Example
 /// ```dart
 /// ButtonGradient(
+///   child: Text('Subscribe'),
 ///   onPressed: () {},
-///   child: Text('Button'),
+///   backgroundColor: Colors.white,
+///   gradientBorder: GradientBoxBorder(
+///     gradient: LinearGradient(colors: [Colors.purple, Colors.blue]),
+///   ),
 /// )
 /// ```
 /// {@endtemplate}
 class ButtonGradient extends StatelessWidget {
-  /// Creates a button with gradient borders and custom styles.
+  /// {@macro button_gradient}
   const ButtonGradient({
     super.key,
     required this.child,
@@ -43,7 +65,7 @@ class ButtonGradient extends StatelessWidget {
   /// Callback when the button is pressed.
   final VoidCallback? onPressed;
 
-  /// Button content.
+  /// Button content widget.
   final Widget child;
 
   /// Width of the button.
@@ -55,16 +77,16 @@ class ButtonGradient extends StatelessWidget {
   /// Background color.
   final Color? backgroundColor;
 
-  /// Hover color.
+  /// Color when hovered.
   final Color? hoverColor;
 
-  /// Splash color.
+  /// Splash color on tap.
   final Color? splashColor;
 
-  /// Focus color.
+  /// Color when focused.
   final Color? focusColor;
 
-  /// Highlight color.
+  /// Color when highlighted.
   final Color? highlightColor;
 
   /// Gradient for the background.
@@ -73,10 +95,10 @@ class ButtonGradient extends StatelessWidget {
   /// Gradient for the border.
   final GradientBoxBorder? gradientBorder;
 
-  /// Border radius.
+  /// Border radius for rounded corners.
   final double? borderRadius;
 
-  /// Box shadow(s).
+  /// Box shadow(s) for elevation.
   final List<BoxShadow>? boxShadow;
 
   /// Padding inside the button.

@@ -79,6 +79,10 @@ class $LibAssetsIconsGen {
   SvgGenImage get bellIcon =>
       const SvgGenImage('lib/assets/icons/bell_icon.svg');
 
+  /// File path: lib/assets/icons/calendarIco.svg
+  SvgGenImage get calendarIco =>
+      const SvgGenImage('lib/assets/icons/calendarIco.svg');
+
   /// File path: lib/assets/icons/cultural_asset_coin.svg
   SvgGenImage get culturalAssetCoin =>
       const SvgGenImage('lib/assets/icons/cultural_asset_coin.svg');
@@ -133,6 +137,9 @@ class $LibAssetsIconsGen {
   SvgGenImage get subscriptionIconWeb =>
       const SvgGenImage('lib/assets/icons/subscription_icon_web.svg');
 
+  /// File path: lib/assets/icons/tag_lock.svg
+  SvgGenImage get tagLock => const SvgGenImage('lib/assets/icons/tag_lock.svg');
+
   /// File path: lib/assets/icons/tag_subscription.svg
   SvgGenImage get tagSubscription =>
       const SvgGenImage('lib/assets/icons/tag_subscription.svg');
@@ -151,6 +158,7 @@ class $LibAssetsIconsGen {
     appleLogo,
     arrowRight,
     bellIcon,
+    calendarIco,
     culturalAssetCoin,
     dinersClub,
     discover,
@@ -165,6 +173,7 @@ class $LibAssetsIconsGen {
     subsciptionButtonIcon,
     subscriptionIcon,
     subscriptionIconWeb,
+    tagLock,
     tagSubscription,
     tagSubscriptionSlim,
   ];
@@ -298,7 +307,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String? package = 'stoyco_subscription',
+    String? package,
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,

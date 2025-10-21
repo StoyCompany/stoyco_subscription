@@ -4,6 +4,33 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
+/// {@template stoyco_tab_bar_v2}
+/// A [StoycoTabBarV2] molecule for the Stoyco Subscription Atomic Design System.
+/// Renders a styled tab bar with custom indicator, onboarding key support, and alert indicators for tab navigation.
+///
+/// ### Atomic Level
+/// **Molecule** – Composed of multiple atoms (tabs, indicator) for navigation.
+///
+/// ### Parameters
+/// - `tabController`: The [TabController] managing tab selection and animation.
+/// - `tabs`: List of [SubscriptionStoycoTab] widgets to display as tabs.
+/// - `showAlertIndicator`: If true, displays an alert indicator on tabs.
+/// - `getOnboardingKey`: Optional callback to provide a [GlobalKey] for onboarding.
+/// - `dividerColor`: Color of the divider below the tab bar. Defaults to transparent.
+///
+/// ### Returns
+/// Renders a custom tab bar with styled indicator, onboarding key, and alert support.
+///
+/// ### Example
+/// ```dart
+/// StoycoTabBarV2(
+///   tabController: controller,
+///   tabs: [SubscriptionStoycoTab(title: 'Tab 1'), SubscriptionStoycoTab(title: 'Tab 2')],
+///   initialNavIndex: 0,
+///   showAlertIndicator: true,
+/// )
+/// ```
+/// {@endtemplate}
 class StoycoTabBarV2 extends StatelessWidget {
   const StoycoTabBarV2({
     super.key,
@@ -14,10 +41,19 @@ class StoycoTabBarV2 extends StatelessWidget {
     this.dividerColor,
   });
 
+  /// The [TabController] managing tab selection and animation.
   final TabController tabController;
+
+  /// List of [SubscriptionStoycoTab] widgets to display as tabs.
   final List<SubscriptionStoycoTab> tabs;
+
+  /// If true, displays an alert indicator on tabs.
   final bool showAlertIndicator;
+
+  /// Optional callback to provide a [GlobalKey] for onboarding.
   final GlobalKey Function(int)? getOnboardingKey;
+
+  /// Color of the divider below the tab bar. Defaults to transparent.
   final Color? dividerColor;
 
   @override

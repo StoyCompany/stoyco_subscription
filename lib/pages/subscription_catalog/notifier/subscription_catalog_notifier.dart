@@ -5,6 +5,7 @@ import 'package:stoyco_subscription/pages/subscription_catalog/data/models/respo
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_service.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item_map.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart';
 
 class SubscriptionCatalogNotifier extends ChangeNotifier {
   SubscriptionCatalogNotifier(TickerProvider vsync, {this.userId}) {
@@ -113,7 +114,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         );
     result.fold(
       (Failure failure) {
-        print('Error al obtener catálogo: $failure');
+        StoyCoLogger.error('Error al obtener catálogo: $failure');
       },
       (GetSubscriptionCatalogResponse response) {
         final List<SubscriptionCatalogItemMap> newItems = response.data
@@ -170,7 +171,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         );
     result.fold(
       (Failure failure) {
-        print('Error al obtener catálogo: $failure');
+        StoyCoLogger.error('Error al obtener catálogo: $failure');
       },
       (GetSubscriptionCatalogResponse response) {
         final List<SubscriptionCatalogItemMap> allItems = response.data

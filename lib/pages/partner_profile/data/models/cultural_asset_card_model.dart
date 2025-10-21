@@ -10,7 +10,8 @@ class CulturalAssetCardModel extends Equatable {
     required this.title,
     required this.price,
     required this.subscribersOnly,
-  });
+    bool? hasAccess,
+  }) : hasAccess = hasAccess ?? !subscribersOnly;
 
   factory CulturalAssetCardModel.fromJson(Map<String, dynamic> json) =>
       _$CulturalAssetCardModelFromJson(json);
@@ -18,9 +19,10 @@ class CulturalAssetCardModel extends Equatable {
   final String title;
   final num price;
   final bool subscribersOnly;
+  final bool hasAccess;
 
   Map<String, dynamic> toJson() => _$CulturalAssetCardModelToJson(this);
 
   @override
-  List<Object?> get props => <Object?>[image, title, price, subscribersOnly];
+  List<Object?> get props => <Object?>[image, title, price, hasAccess, subscribersOnly];
 }

@@ -13,6 +13,7 @@ CulturalAssetCardModel _$CulturalAssetCardModelFromJson(
   title: json['title'] as String,
   price: json['price'] as num,
   subscribersOnly: json['subscribersOnly'] as bool,
+  hasAccess: json['hasAccess'] as bool?,
 );
 
 Map<String, dynamic> _$CulturalAssetCardModelToJson(
@@ -22,4 +23,5 @@ Map<String, dynamic> _$CulturalAssetCardModelToJson(
   'title': instance.title,
   'price': instance.price,
   'subscribersOnly': instance.subscribersOnly,
+  'hasAccess': instance.hasAccess,
 };

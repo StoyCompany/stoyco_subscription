@@ -2,6 +2,44 @@
 
 ## [Unreleased]
 
+## 1.0.0 - 2025-10-21
+
+### Added
+
+- ProductsSlider and ProductsSliderStyle components for customizable product card displays.
+- EventsSlider and EventsSliderStyle components for event card displays with customizable styles.
+- LockedBlur widget for exclusive content overlays with customizable blur effects.
+- TagLocked widget for exclusive content overlays.
+- ImageNetworkBlur widget with customizable blur effect and overlay.
+- New colors and icons for dark mode support.
+
+### Changed / Enhanced
+
+- PaymentSummaryInfoModel: Added JSON serialization and improved builder signature for PaymentItemCardState.
+- CulturalAssetCardModel: Added hasAccess field and updated JSON serialization.
+- CardSubscriptionPlan: Enhanced documentation with detailed parameters and example usage.
+- CulturalAssetCard: Improved access handling and UI elements.
+- CardImageDescriptionTag: Enhanced documentation and added image URL visibility.
+- PaymentMethodSelectButton: Enhanced documentation and improved callback types.
+- PartnerProfileSubscribeBtn: Improved subscription handling.
+- CulturalAssetsSlider: Improved loading state handling and documentation.
+- SubscriptionPlansList: Enhanced documentation and updated import statements for tab_bar_v2.
+- Atomic design components: Enhanced documentation and structure for better maintainability.
+
+### Fixed
+
+- Replaced print statements with logger in SubscriptionCatalogNotifier.
+- Corrected import path in SubscriptionHistoryNotifier.
+
+### Removed
+
+- Deprecated tab bar and card components.
+
+### Chore
+
+- Updated version number to 1.0.0 in pubspec.yaml.
+- update README.md with version badge, enhance features section, and improve asset usage examples
+
 ## 0.9.0
 
 ### Features

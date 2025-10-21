@@ -10,9 +10,34 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
 import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summary_notifier.dart';
 
+/// {@template payment_summary_mobile_screen}
+/// A [PaymentSummaryMobileScreen] page (template with logic) for the Stoyco Subscription Atomic Design System.
+///
+/// ### Overview
+/// Displays a mobile-friendly payment summary page, including plan details, payment breakdown, selectable payment methods, and a total-to-pay action button. Integrates with a notifier for state management and loading states. Serves as a high-level template with business logic, composing multiple organisms, molecules, and atoms.
+///
+/// ### Atomic Level
+/// **Page** – High-level layout structure with business logic, composed of templates, organisms, molecules, and atoms for payment summary and checkout flows.
+///
+/// ### Parameters
+/// - `subscriptionId`: The optional subscription ID to load payment summary data for.
+/// - `key`: Optional widget key.
+///
+/// ### Returns
+/// Renders a scaffolded mobile payment summary page with app bar, loading indicator, payment details, and action button.
+///
+/// ### Example
+/// ```dart
+/// const PaymentSummaryMobileScreen(
+///   subscriptionId: 'sub_123',
+/// )
+/// ```
+/// {@endtemplate}
 class PaymentSummaryMobileScreen extends StatefulWidget {
+  /// {@macro payment_summary_mobile_screen}
   const PaymentSummaryMobileScreen({super.key, this.subscriptionId});
 
+  /// The optional subscription ID to load payment summary data for.
   final String? subscriptionId;
 
   @override
@@ -21,7 +46,7 @@ class PaymentSummaryMobileScreen extends StatefulWidget {
 }
 
 class _PaymentSummaryMobileScreenState
-    extends State<PaymentSummaryMobileScreen> {
+  extends State<PaymentSummaryMobileScreen> {
   late PaymentSummaryNotifier notifier;
 
   @override
@@ -83,6 +108,7 @@ class _PaymentSummaryMobileScreenState
             icon: StoycoAssets.lib.assets.icons.leftArrow.svg(
               height: StoycoScreenSize.height(context, 24),
               width: StoycoScreenSize.width(context, 24),
+              package: 'stoyco_subscription',
             ),
           ),
           title: Center(
@@ -102,6 +128,7 @@ class _PaymentSummaryMobileScreenState
               icon: StoycoAssets.lib.assets.icons.bellIcon.svg(
                 height: StoycoScreenSize.height(context, 24),
                 width: StoycoScreenSize.width(context, 24),
+                package: 'stoyco_subscription',
               ),
             ),
           ],

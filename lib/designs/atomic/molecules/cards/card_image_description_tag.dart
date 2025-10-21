@@ -7,15 +7,31 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template card_image_description_tag}
-/// CardImageDescriptionTag
+/// A [CardImageDescriptionTag] molecule for the Stoyco Subscription Atomic Design System.
+/// Displays a card with an image, description, and an optional floating tag widget for highlighting content.
 ///
-/// An atomic design widget that displays a card with an image, description, and an optional floating tag widget.
+/// ### Atomic Level
+/// **Molecule** – Composed of atoms (card, image, tag) for content presentation.
 ///
-/// This widget is designed for use in atomic design systems, serving as a foundational "molecule" for building more complex UI organisms.
+/// ### Parameters
+/// - `cardWidth`: The width of the card. If null, expands to parent constraints.
+/// - `cardHeight`: The height of the card. If null, expands to parent constraints.
+/// - `cardBorderRadius`: The border radius of the card. Defaults to 24.
+/// - `imageUrl`: The main image URL for the card.
+/// - `imageHeight`: The height of the image. Defaults to 160.
+/// - `imageWidth`: The width of the image. Defaults to full width.
+/// - `imageBorderRadius`: The border radius for the image. Defaults to top corners rounded.
+/// - `imagePlaceholder`: Widget to show while the image is loading. Defaults to [SkeletonCard].
+/// - `imageErrorPlaceholder`: Widget to show if the image fails to load. Defaults to [SkeletonCard].
+/// - `description`: The main description widget below the image.
+/// - `tag`: Optional floating widget (tag/badge) to overlay on the card.
+/// - `tagAlignment`: Alignment for the floating tag. Defaults to [Alignment.topRight].
+/// - `paddingContent`: Padding for the content inside the card.
 ///
-/// It supports design tokens for sizing, border radius, and overlays, ensuring consistency and maintainability across your design system.
+/// ### Returns
+/// Renders a card with image, description, and optional tag overlay, suitable for atomic design systems.
 ///
-/// Example usage:
+/// ### Example
 /// ```dart
 /// CardImageDescriptionTag(
 ///   cardWidth: 320,
@@ -127,24 +143,27 @@ class CardImageDescriptionTag extends StatelessWidget {
               padding: paddingContent ?? StoycoScreenSize.fromLTRB(context, left: 8, top: 8, right: 8, bottom: 32),
               child: Column(
                 children: <Widget>[
-                  ClipRRect(
-                    borderRadius: imageBorderRadius ?? BorderRadius.only(
-                      topLeft: Radius.circular(StoycoScreenSize.radius(context, 22)),
-                      topRight: Radius.circular(StoycoScreenSize.radius(context, 22)),
-                    ),
-                    child: SizedBox(
-                      height: imageHeight ?? StoycoScreenSize.height(context, 160),
-                      width: imageWidth ?? double.infinity,
-                      child:  CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            placeholder: (BuildContext context, String url) => imagePlaceholder ?? const SkeletonCard(),
-                            errorWidget: (BuildContext context, String url, Object error) => imageErrorPlaceholder ?? Container(
-                              alignment: Alignment.center,
-                              color: StoycoColors.deepTeal,
-                              child: const Icon(Icons.error),
+                  Visibility(
+                    visible: imageUrl.isNotEmpty,
+                    child: ClipRRect(
+                      borderRadius: imageBorderRadius ?? BorderRadius.only(
+                        topLeft: Radius.circular(StoycoScreenSize.radius(context, 22)),
+                        topRight: Radius.circular(StoycoScreenSize.radius(context, 22)),
+                      ),
+                      child: SizedBox(
+                        height: imageHeight ?? StoycoScreenSize.height(context, 160),
+                        width: imageWidth ?? double.infinity,
+                        child:  CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              placeholder: (BuildContext context, String url) => imagePlaceholder ?? const SkeletonCard(),
+                              errorWidget: (BuildContext context, String url, Object error) => imageErrorPlaceholder ?? Container(
+                                alignment: Alignment.center,
+                                color: StoycoColors.deepTeal,
+                                child: const Icon(Icons.error),
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
-                          ),
+                      ),
                     ),
                   ),
                   Gap(StoycoScreenSize.height(context, 24)),

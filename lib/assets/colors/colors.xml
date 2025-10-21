@@ -38,6 +38,8 @@
     <color name="card_border_gradient_end">#00000000</color>
     <color name="card_border_gradient_white_05">#1AFFFFFF</color>
     <color name="card_border_gradient_white_15">#26FFFFFF</color>
+    <color name="card_dark_background">#12191F</color>
+    <color name="card_border_dark">#161F27</color>
     <color name="card_border_gradient_purple_57">#924539E7</color>
     <color name="card_border_gradient_purple_72">#B74539E7</color>
     <!-- Background colors -->
@@ -56,4 +58,6 @@
     <color name="navbarButtonColor">#4639E7</color>
     <color name="midnightInk">#0F151A</color>
     <color name="deepTeal">#253341</color>
+    
+    <color name="lightGray">#DEE4ED</color>
 </resources>

@@ -6,9 +6,34 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_method_model.dart';
 
+/// {@template select_payment_method_section}
+/// A [SelectPaymentMethodSection] organism for the Stoyco Subscription Atomic Design System.
+///
+/// ### Overview
+/// Displays a section for selecting a payment method, including a list of available payment methods and options to add a new card or use Apple Pay. Designed for use in payment or checkout flows.
+///
+/// ### Atomic Level
+/// **Organism** – Composed of molecules and atoms (buttons, lists, icons) for payment method selection.
+///
+/// ### Parameters
+/// - `paymentMethodList`: The list of available payment methods to display (optional).
+/// - `key`: Optional widget key.
+///
+/// ### Returns
+/// Renders a column with a title, selectable payment method list, and action buttons for adding new payment methods or using Apple Pay.
+///
+/// ### Example
+/// ```dart
+/// SelectPaymentMethodSection(
+///   paymentMethodList: myPaymentMethods,
+/// )
+/// ```
+/// {@endtemplate}
 class SelectPaymentMethodSection extends StatelessWidget {
+  /// {@macro select_payment_method_section}
   const SelectPaymentMethodSection({super.key, this.paymentMethodList});
 
+  /// The list of available payment methods to display (optional).
   final List<PaymentMethodModel>? paymentMethodList;
 
   @override
@@ -16,7 +41,7 @@ class SelectPaymentMethodSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: StoycoScreenSize.height(context, 16),
-      children: [
+      children: <Widget>[
         Text(
           'Selecciona método de pago',
           style: GoogleFonts.montserrat(
@@ -33,6 +58,7 @@ class SelectPaymentMethodSection extends StatelessWidget {
             : ListView.builder(
                 itemCount: paymentMethodList?.length ?? 0,
                 itemBuilder: (BuildContext context, int index) {
+                  return null;
                   //Todo: add selectable payment method button
                 },
               ),
@@ -45,6 +71,7 @@ class SelectPaymentMethodSection extends StatelessWidget {
           icon: StoycoAssets.lib.assets.icons.plusIcon.svg(
             width: StoycoScreenSize.width(context, 24),
             height: StoycoScreenSize.height(context, 24),
+            package: 'stoyco_subscription',
           ),
           text: 'Agregar nueva tarjeta',
         ),
@@ -55,6 +82,7 @@ class SelectPaymentMethodSection extends StatelessWidget {
           icon: StoycoAssets.lib.assets.icons.appleLogo.svg(
             width: StoycoScreenSize.width(context, 24),
             height: StoycoScreenSize.height(context, 24),
+            package: 'stoyco_subscription',
           ),
           text: 'Apple Pay',
         ),

@@ -15,33 +15,41 @@ import 'package:stoyco_subscription/designs/utils/formatter_currency.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/presentation/helpers/models/card_subscription_plan_params.dart';
 
+
+/// {@template card_subscription_plan}
+/// A highly customizable subscription plan card organism for the Stoyco Subscription Atomic Design System.
+///
+/// ### Overview
+/// Displays detailed information about a subscription plan, including name, price, currency, benefits, and status. Provides actions for renewing, canceling, or subscribing to a plan, with visual cues for active and recommended plans.
+///
+/// ### Atomic Level
+/// **Organism** – Complex UI component composed of atoms and molecules.
+///
+/// ### Parameters
+/// - `plan`: The subscription plan model to display.
+/// - `styleParams`: Style parameters for customizing the appearance of the card.
+/// - `onTapRenewSubscription`: Callback when the renew subscription action is tapped.
+/// - `onTapCancelSubscription`: Callback when the cancel subscription action is tapped.
+/// - `onTapNewSubscription`: Callback when the new subscription or free trial action is tapped.
+/// - `key`: Optional widget key.
+///
+/// ### Returns
+/// Renders a visually rich card with plan details, status tags, benefit dropdown, and action buttons, adapting its layout and content based on the plan's state.
+///
+/// ### Example
+/// ```dart
+/// CardSubscriptionPlan(
+///   plan: myPlan,
+///   styleParams: myStyleParams,
+///   onTapRenewSubscription: (plan) => print('Renew: \\${plan.name}'),
+///   onTapCancelSubscription: (plan) => print('Cancel: \\${plan.name}'),
+///   onTapNewSubscription: (plan) => print('Subscribe: \\${plan.name}'),
+/// )
+/// ```
+/// {@endtemplate}
 class CardSubscriptionPlan extends StatelessWidget {
-  /// Card widget for displaying a subscription plan with customizable styles and actions.
-  ///
-  /// This widget is part of the Stoyco atomic design system and is used to visually represent a subscription plan, including price, currency, and various design tokens.
-  ///
-  /// The widget supports custom styles and exposes callbacks for subscription actions.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// CardSubscriptionPlan(
-  ///   plan: myPlan,
-  ///   onTapRenewSubscription: (plan) => ...,
-  ///   onTapCancelSubscription: (plan) => ...,
-  ///   onTapFreeTrial: (plan) => ...,
-  ///   styleParams: SubscriptionPlanScreenStyleParams(
-  ///     titleFontSize: 28,
-  ///     ... other style overrides
-  ///   )
-  /// ```
-  ///
-  /// Parameters:
-  /// - [plan]: Subscription plan model.
-  /// - [onTapRenewSubscription]: Callback when renew subscription is tapped.
-  /// - [onTapCancelSubscription]: Callback when cancel subscription is tapped.
-  /// - [onTapNewSubscription]: Callback when free trial is tapped.
-  /// - [styleParams]: Style parameters for customizing appearance.
-  
+
+  /// {@macro card_subscription_plan}
   const CardSubscriptionPlan({
     super.key,
     required this.plan,
@@ -51,10 +59,24 @@ class CardSubscriptionPlan extends StatelessWidget {
     required this.styleParams,
   });
 
+
+  /// The subscription plan model to display.
   final SubscriptionPlan plan;
+
+
+  /// Style parameters for customizing the appearance of the card.
   final SubscriptionPlanScreenStyleParams styleParams;
+
+
+  /// Callback when the renew subscription action is tapped.
   final void Function(SubscriptionPlan) onTapRenewSubscription;
+
+
+  /// Callback when the cancel subscription action is tapped.
   final void Function(SubscriptionPlan) onTapCancelSubscription;
+
+
+  /// Callback when the new subscription or free trial action is tapped.
   final void Function(SubscriptionPlan) onTapNewSubscription;
 
   
@@ -168,6 +190,7 @@ class CardSubscriptionPlan extends StatelessWidget {
                     StoycoAssets.lib.assets.icons.exclamacion.svg(
                       width: styleParams.exclamationIconWidth,
                       height: styleParams.exclamationIconHeight,
+                      package: 'stoyco_subscription',
                     ),
                     Gap(StoycoScreenSize.width(context, 8)),
                     Expanded(
