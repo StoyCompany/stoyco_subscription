@@ -79,6 +79,10 @@ class $LibAssetsIconsGen {
   SvgGenImage get bellIcon =>
       const SvgGenImage('lib/assets/icons/bell_icon.svg');
 
+  /// File path: lib/assets/icons/calendarIco.svg
+  SvgGenImage get calendarIco =>
+      const SvgGenImage('lib/assets/icons/calendarIco.svg');
+
   /// File path: lib/assets/icons/cultural_asset_coin.svg
   SvgGenImage get culturalAssetCoin =>
       const SvgGenImage('lib/assets/icons/cultural_asset_coin.svg');
@@ -154,6 +158,7 @@ class $LibAssetsIconsGen {
     appleLogo,
     arrowRight,
     bellIcon,
+    calendarIco,
     culturalAssetCoin,
     dinersClub,
     discover,
