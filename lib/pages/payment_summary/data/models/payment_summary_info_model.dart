@@ -41,6 +41,22 @@ part 'payment_summary_info_model.g.dart';
 /// {@macro payment_summary_info_model}
 class PaymentSummaryInfoModel extends Equatable {
 
+  /// Creates a [PaymentSummaryInfoModel] with all required payment summary fields.
+  const PaymentSummaryInfoModel({
+    required this.planName,
+    required this.totalPrice,
+    required this.shortDescription,
+    required this.startDate,
+    required this.planPrice,
+    required this.iva,
+    required this.currencySymbol,
+    required this.currencyCode,
+  });
+
+  /// Creates a [PaymentSummaryInfoModel] from a JSON map.
+  factory PaymentSummaryInfoModel.fromJson(Map<String, dynamic> json) =>
+      _$PaymentSummaryInfoModelFromJson(json);
+
   /// The name of the subscription plan.
   final String planName;
 
@@ -65,34 +81,18 @@ class PaymentSummaryInfoModel extends Equatable {
   /// The currency code (e.g., 'MXN').
   final String currencyCode;
 
-  /// Creates a [PaymentSummaryInfoModel] with all required payment summary fields.
-  const PaymentSummaryInfoModel({
-    required this.planName,
-    required this.totalPrice,
-    required this.shortDescription,
-    required this.startDate,
-    required this.planPrice,
-    required this.iva,
-    required this.currencySymbol,
-    required this.currencyCode,
-  });
-
-  /// Creates a [PaymentSummaryInfoModel] from a JSON map.
-  factory PaymentSummaryInfoModel.fromJson(Map<String, dynamic> json) =>
-      _$PaymentSummaryInfoModelFromJson(json);
-
   /// Converts this model to a JSON map.
   Map<String, dynamic> toJson() => _$PaymentSummaryInfoModelToJson(this);
 
   @override
-  List<Object?> get props => [
-        planName,
-        totalPrice,
-        shortDescription,
-        startDate,
-        planPrice,
-        iva,
-        currencySymbol,
-        currencyCode,
-      ];
+  List<Object?> get props => <Object?>[
+    planName,
+    totalPrice,
+    shortDescription,
+    startDate,
+    planPrice,
+    iva,
+    currencySymbol,
+    currencyCode,
+  ];
 }

@@ -222,7 +222,7 @@ class PaymentItemCardState extends State<PaymentMethodSelectButton> {
                 onTap: () => widget.onDelete(),
                 child: ValueListenableBuilder<bool>(
                   valueListenable: isDraggingLeft,
-                  builder: (context, dragging, child) {
+                  builder: (BuildContext context, bool dragging, Widget? child) {
                     return AnimatedContainer(
                       width: dragging ? StoycoScreenSize.width(context, 56) : 0,
                       height: StoycoScreenSize.height(context, 56),

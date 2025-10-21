@@ -52,7 +52,6 @@ class PaymentSummaryNotifier extends ChangeNotifier {
       currencyCode: 'MXN',
     );
 
-    print('paymentSummaryInfo: $paymentSummaryInfo');
     isLoading = false;
     notifyListeners();
   }
