@@ -5,7 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template custom_tab_bar}
-/// A [CustomTabBar] molecule for the Book Stack Atomic Design System.
+/// A [CustomTabBar] molecule for the Stoyco Subscription Atomic Design System.
 /// Renders a horizontally scrollable tab bar with custom styles, gradient text, and interactive selection.
 ///
 /// ### Atomic Level

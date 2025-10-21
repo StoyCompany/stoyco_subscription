@@ -8,7 +8,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template events_slider}
-/// An [EventsSlider] template for the Book Stack Atomic Design System.
+/// An [EventsSlider] template for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays a horizontal slider of event cards, with a section title and loading skeletons. Shows a scrollable list of [EventCardExclusiveLocked] widgets, or skeleton placeholders when loading. Highly customizable via generic data and style parameters.

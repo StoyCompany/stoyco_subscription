@@ -8,7 +8,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template card_product_exclusive_locked}
-/// A [CardProductExclusiveLocked] organism for the Book Stack Atomic Design System.
+/// A [CardProductExclusiveLocked] organism for the Stoyco Subscription Atomic Design System.
 /// Renders a product card with image, name, category, and locked overlay for exclusive content.
 ///
 /// ### Atomic Level
@@ -46,7 +46,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 /// ```
 /// {@endtemplate}
 /// {@template event_card_exclusive_locked}
-/// An [EventCardExclusiveLocked] organism for the Book Stack Atomic Design System.
+/// An [EventCardExclusiveLocked] organism for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays an event card with image, name, date, and lock status. Shows a locked overlay for exclusive or finished events, and provides tap callbacks for both locked and unlocked states. Highly customizable for use in event listings or exclusive content sections.

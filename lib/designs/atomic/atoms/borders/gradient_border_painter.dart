@@ -3,7 +3,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 
 
 /// {@template gradient_border_painter}
-/// A [GradientBorderPainter] atom for the Book Stack Atomic Design System.
+/// A [GradientBorderPainter] atom for the Stoyco Subscription Atomic Design System.
 /// Paints a rounded rectangle border with a customizable vertical gradient, suitable for cards and containers.
 ///
 /// ### Atomic Level

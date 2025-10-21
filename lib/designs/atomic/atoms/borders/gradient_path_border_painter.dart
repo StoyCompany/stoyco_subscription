@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 
 /// {@template gradient_path_border_painter}
-/// A [GradientPathBorderPainter] atom for the Book Stack Atomic Design System.
+/// A [GradientPathBorderPainter] atom for the Stoyco Subscription Atomic Design System.
 /// Paints a custom path border with a configurable gradient, ideal for advanced card and container shapes.
 ///
 /// ### Atomic Level

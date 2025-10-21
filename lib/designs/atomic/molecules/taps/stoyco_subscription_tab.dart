@@ -3,7 +3,7 @@ import 'package:stoyco_subscription/designs/atomic/atoms/alert/text_with_alert.d
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template subscription_stoyco_tab}
-/// A [SubscriptionStoycoTab] molecule for the Book Stack Atomic Design System.
+/// A [SubscriptionStoycoTab] molecule for the Stoyco Subscription Atomic Design System.
 /// Renders a tab with animated alert indicator and styled text, suitable for tab navigation.
 ///
 /// ### Atomic Level

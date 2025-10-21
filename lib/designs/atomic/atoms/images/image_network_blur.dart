@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template image_network_blur}
-/// An atom widget from the Book Stack Atomic Design System that displays a network image with a customizable blur effect overlay, border radius, and overlay color.
+/// An atom widget from the Stoyco Subscription Atomic Design System that displays a network image with a customizable blur effect overlay, border radius, and overlay color.
 ///
 /// ### Overview
 /// Renders a network image with a blur overlay, supporting custom border radius, blur intensity, overlay color, opacity, and alignment. Useful for backgrounds, cards, or any UI element requiring a blurred image effect.

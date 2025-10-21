@@ -5,7 +5,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 
 /// {@template button_gradient}
-/// A [ButtonGradient] atom for the Book Stack Atomic Design System.
+/// A [ButtonGradient] atom for the Stoyco Subscription Atomic Design System.
 /// Renders a customizable button with gradient borders, background, and interactive states for modern UI experiences.
 ///
 /// ### Atomic Level

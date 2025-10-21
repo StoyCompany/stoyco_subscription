@@ -22,7 +22,7 @@ import 'package:stoyco_subscription/pages/partner_profile/data/models/cultural_a
 /// ```
 /// {@endtemplate}
 /// {@template cultural_assets_slider}
-/// A [CulturalAssetsSlider] organism for the Book Stack Atomic Design System.
+/// A [CulturalAssetsSlider] organism for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays a horizontal slider of cultural asset cards, with a section title and loading skeletons. Shows a scrollable list of [CulturalAssetCard] widgets, or skeleton placeholders when loading. If the asset list is empty and not loading, nothing is rendered.

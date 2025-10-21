@@ -7,7 +7,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_method_model.dart';
 
 /// {@template select_payment_method_section}
-/// A [SelectPaymentMethodSection] organism for the Book Stack Atomic Design System.
+/// A [SelectPaymentMethodSection] organism for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays a section for selecting a payment method, including a list of available payment methods and options to add a new card or use Apple Pay. Designed for use in payment or checkout flows.

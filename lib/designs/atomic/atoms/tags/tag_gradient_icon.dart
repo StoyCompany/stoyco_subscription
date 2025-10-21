@@ -5,7 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
   /// {@template tag_gradient_icon}
-  /// A [TagGradientIcon] atom for the Book Stack Atomic Design System.
+  /// A [TagGradientIcon] atom for the Stoyco Subscription Atomic Design System.
   /// Displays a tag with a gradient background, customizable icon, and text for highlighting status or information.
   ///
   /// ### Atomic Level

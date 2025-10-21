@@ -5,7 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/atoms/tags/tag_locked.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template locked_blur}
-/// A [LockedBlur] molecule for the Book Stack Atomic Design System.
+/// A [LockedBlur] molecule for the Stoyco Subscription Atomic Design System.
 /// Renders a blur overlay with a lock icon and message, used to indicate restricted or exclusive content.
 ///
 /// ### Overview

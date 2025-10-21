@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'payment_summary_info_model.g.dart';
 
 /// {@template payment_summary_info_model}
-/// A data model representing payment summary information for the Book Stack Atomic Design System.
+/// A data model representing payment summary information for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Encapsulates all relevant details for a payment summary, including plan name, pricing, taxes, currency, and a short description. Useful for displaying payment breakdowns in UI components.

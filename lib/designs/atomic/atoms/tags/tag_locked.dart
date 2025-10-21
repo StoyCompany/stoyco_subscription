@@ -6,7 +6,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template tag_locked}
-/// A [TagLocked] atom for the Book Stack Atomic Design System.
+/// A [TagLocked] atom for the Stoyco Subscription Atomic Design System.
 /// Renders a lock tag with icon and message, used for exclusive or restricted content overlays.
 ///
 /// ### Atomic Level

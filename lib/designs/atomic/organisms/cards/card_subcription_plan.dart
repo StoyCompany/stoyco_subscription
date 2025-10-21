@@ -17,7 +17,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/presentation/helper
 
 
 /// {@template card_subscription_plan}
-/// A highly customizable subscription plan card organism for the Book Stack Atomic Design System.
+/// A highly customizable subscription plan card organism for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays detailed information about a subscription plan, including name, price, currency, benefits, and status. Provides actions for renewing, canceling, or subscribing to a plan, with visual cues for active and recommended plans.

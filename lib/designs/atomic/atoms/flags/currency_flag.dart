@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
   /// {@template currency_flag}
-  /// A [CurrencyFlag] atom for the Book Stack Atomic Design System.
+  /// A [CurrencyFlag] atom for the Stoyco Subscription Atomic Design System.
   /// Displays the flag of a currency as an emoji or image, using country and currency metadata.
   ///
   /// ### Atomic Level

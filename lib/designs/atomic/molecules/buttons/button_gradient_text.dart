@@ -8,7 +8,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 enum ButtonGradientTextType { primary, secondary, tertiary, inactive, custom }
 
 /// {@template button_gradient_text}
-/// A [ButtonGradientText] molecule for the Book Stack Atomic Design System.
+/// A [ButtonGradientText] molecule for the Stoyco Subscription Atomic Design System.
 /// Renders a customizable button with gradient borders, backgrounds, and multiple style variants.
 ///
 /// ### Atomic Level

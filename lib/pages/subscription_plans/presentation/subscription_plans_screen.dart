@@ -12,7 +12,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/models/respons
 import 'package:stoyco_subscription/pages/subscription_plans/presentation/helpers/models/card_subscription_plan_params.dart';
 
 /// {@template subscription_plans_list}
-/// A [SubscriptionPlansList] page (template with logic) for the Book Stack Atomic Design System.
+/// A [SubscriptionPlansList] page (template with logic) for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays a responsive list of subscription plans, including monthly and annual options, with loading skeletons, tab navigation, and customizable style parameters. Integrates callbacks for subscription actions and adapts layout for phone and desktop.

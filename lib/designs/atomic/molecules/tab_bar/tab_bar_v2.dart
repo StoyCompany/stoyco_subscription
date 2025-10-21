@@ -5,7 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template stoyco_tab_bar_v2}
-/// A [StoycoTabBarV2] molecule for the Book Stack Atomic Design System.
+/// A [StoycoTabBarV2] molecule for the Stoyco Subscription Atomic Design System.
 /// Renders a styled tab bar with custom indicator, onboarding key support, and alert indicators for tab navigation.
 ///
 /// ### Atomic Level

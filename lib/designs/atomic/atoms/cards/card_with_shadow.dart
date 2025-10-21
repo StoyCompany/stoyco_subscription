@@ -4,7 +4,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template card_with_shadow}
-/// A [CardWithShadow] atom for the Book Stack Atomic Design System.
+/// A [CardWithShadow] atom for the Stoyco Subscription Atomic Design System.
 /// Renders a card with customizable shadow, border, gradient, and padding, suitable for displaying content with visual emphasis.
 ///
 /// ### Atomic Level

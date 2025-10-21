@@ -11,7 +11,7 @@ import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_su
 import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summary_notifier.dart';
 
 /// {@template payment_summary_mobile_screen}
-/// A [PaymentSummaryMobileScreen] page (template with logic) for the Book Stack Atomic Design System.
+/// A [PaymentSummaryMobileScreen] page (template with logic) for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays a mobile-friendly payment summary page, including plan details, payment breakdown, selectable payment methods, and a total-to-pay action button. Integrates with a notifier for state management and loading states. Serves as a high-level template with business logic, composing multiple organisms, molecules, and atoms.

@@ -4,7 +4,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template tab_menu_item}
-/// A [TabMenuItem] molecule for the Book Stack Atomic Design System.
+/// A [TabMenuItem] molecule for the Stoyco Subscription Atomic Design System.
 /// Renders a tabbed menu with description and child content, supporting tab navigation and page view.
 ///
 /// ### Atomic Level

@@ -25,7 +25,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 /// ```
 /// {@endtemplate}
 /// {@template payment_method_select_button}
-/// A [PaymentMethodSelectButton] molecule for the Book Stack Atomic Design System.
+/// A [PaymentMethodSelectButton] molecule for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays a selectable payment method card with swipe-to-delete functionality. Shows a card icon, masked card number, and a radio button for selection. Users can tap to select or swipe left to reveal a delete action.

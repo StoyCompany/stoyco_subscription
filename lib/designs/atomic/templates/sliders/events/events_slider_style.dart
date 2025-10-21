@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 
 /// {@template events_slider_style}
-/// A design model for [EventsSlider] and related Organism-level sliders in the Book Stack Atomic Design System.
+/// A design model for [EventsSlider] and related Organism-level sliders in the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Centralizes all design parameters for event slider and card widgets, enabling consistent styling and easy reuse of colors, paddings, font styles, and more.

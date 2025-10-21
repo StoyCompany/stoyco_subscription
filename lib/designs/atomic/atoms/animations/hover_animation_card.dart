@@ -2,7 +2,7 @@
 import 'package:flutter/widgets.dart';
 
 /// {@template hover_animation_card}
-/// A hover-animated [HoverAnimationCard] atom for the Book Stack Atomic Design System.
+/// A hover-animated [HoverAnimationCard] atom for the Stoyco Subscription Atomic Design System.
 /// Animates its child widget with a translation effect when hovered, providing interactive feedback for desktop and web platforms.
 ///
 /// ### Atomic Level

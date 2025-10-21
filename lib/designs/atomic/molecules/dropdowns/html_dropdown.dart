@@ -5,7 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
   /// {@template html_dropdown}
-  /// A [HtmlDropdown] molecule for the Book Stack Atomic Design System.
+  /// A [HtmlDropdown] molecule for the Stoyco Subscription Atomic Design System.
   /// Displays a dropdown with a title and renders HTML content when expanded, combining atoms for advanced UI.
   ///
   /// ### Atomic Level

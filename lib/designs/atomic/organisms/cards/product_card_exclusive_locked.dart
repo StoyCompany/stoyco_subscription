@@ -6,7 +6,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template card_product_exclusive_locked}
-/// A [CardProductExclusiveLocked] organism for the Book Stack Atomic Design System.
+/// A [CardProductExclusiveLocked] organism for the Stoyco Subscription Atomic Design System.
 /// Renders a product card with image, name, category, and locked overlay for exclusive content.
 ///
 /// ### Atomic Level
@@ -44,7 +44,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 /// ```
 /// {@endtemplate}
 /// {@template product_card_exclusive_locked}
-/// A [ProductCardExclusiveLocked] organism for the Book Stack Atomic Design System.
+/// A [ProductCardExclusiveLocked] organism for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays a product card with image, name, category, and lock status. Shows a locked overlay for exclusive products, and provides tap callbacks for both locked and unlocked states. Highly customizable for use in product listings or exclusive content sections.

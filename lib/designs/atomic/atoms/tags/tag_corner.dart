@@ -7,7 +7,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/designs/types/tag_corner_position.dart';
 
   /// {@template tag_corner}
-  /// A [TagCorner] atom for the Book Stack Atomic Design System.
+  /// A [TagCorner] atom for the Stoyco Subscription Atomic Design System.
   /// Renders a corner tag with a diagonal cut, gradient border, and customizable text, color, and position.
   ///
   /// ### Atomic Level

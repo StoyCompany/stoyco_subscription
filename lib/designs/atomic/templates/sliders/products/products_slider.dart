@@ -8,7 +8,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template products_slider}
-/// A [ProductsSlider] template for the Book Stack Atomic Design System.
+/// A [ProductsSlider] template for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
 /// Displays a horizontal slider of product cards, with a section title and loading skeletons. Shows a scrollable list of [ProductCardExclusiveLocked] widgets, or skeleton placeholders when loading. Highly customizable via generic data and style parameters.
