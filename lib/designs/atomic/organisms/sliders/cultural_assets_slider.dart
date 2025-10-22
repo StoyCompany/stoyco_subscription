@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/cultural_asset_card.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
@@ -20,80 +21,66 @@ import 'package:stoyco_subscription/pages/partner_profile/data/models/response/g
 /// )
 /// ```
 /// {@endtemplate}
+/// {@template cultural_assets_slider}
+/// A [CulturalAssetsSlider] organism for the Stoyco Subscription Atomic Design System.
+///
+/// ### Overview
+/// Displays a horizontal slider of cultural asset cards, with a section title and loading skeletons. Shows a scrollable list of [CulturalAssetCard] widgets, or skeleton placeholders when loading. If the asset list is empty and not loading, nothing is rendered.
+///
+/// ### Atomic Level
+/// **Organism** – Composed of atoms and molecules (cards, skeletons, slider) for asset display and interaction.
+///
+/// ### Parameters
+/// - `culturalAssets`: The list of cultural asset models to display in the slider.
+/// - `isLoading`: Whether the slider is in a loading state and should show skeleton cards. Defaults to false.
+/// - `onTapCulturalAssetExclusive`: Callback when a locked cultural asset card is tapped (optional).
+/// - `key`: Optional widget key.
+///
+/// ### Returns
+/// Renders a column with a section title and a horizontally scrollable list of asset cards or skeletons, suitable for atomic design systems.
+///
+/// ### Example
+/// ```dart
+/// CulturalAssetsSlider(
+///   culturalAssets: myAssetsList,
+///   isLoading: false,
+/// )
+/// ```
+/// {@endtemplate}
 class CulturalAssetsSlider extends StatelessWidget {
   /// Creates a [CulturalAssetsSlider].
   ///
   /// [culturalAssets] is the list of assets to display.
   /// [isLoading] determines whether to show skeleton loaders instead of real content.
+  /// {@macro cultural_assets_slider}
   const CulturalAssetsSlider({
     super.key,
     required this.culturalAssets,
     this.isLoading = false,
     this.onTap,
+    this.onTapCulturalAssetExclusive,
   });
 
   /// The list of cultural asset models to display in the slider.
   final List<CulturalAssetItemModel> culturalAssets;
 
-  /// Whether the slider is in a loading state and should show skeleton cards.
+  /// Whether the slider is in a loading state and should show skeleton cards. Defaults to false.
   final bool isLoading;
 
   final void Function(CulturalAssetItemModel)? onTap;
 
+  /// Callback when a locked cultural asset card is tapped (optional).
+  final VoidCallback? onTapCulturalAssetExclusive;
+
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: StoycoScreenSize.symmetric(context, horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Activos',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: FontFamilyToken.akkuratPro,
-                    fontSize: StoycoScreenSize.fontSize(context, 20),
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: StoycoScreenSize.height(context, 9)),
-          SizedBox(
-            height: StoycoScreenSize.height(context, 226),
-            child: ListView.separated(
-              clipBehavior: Clip.none,
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(width: 20),
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: 3,
-              itemBuilder: (BuildContext context, int index) => SkeletonCard(
-                width: StoycoScreenSize.width(context, 156),
-                height: StoycoScreenSize.height(context, 226),
-                borderRadius: BorderRadius.circular(
-                  StoycoScreenSize.radius(context, 20),
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
-    if (culturalAssets.isEmpty) {
+    if (culturalAssets.isEmpty && !isLoading) {
       return const SizedBox.shrink();
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: StoycoScreenSize.height(context, 9),
       children: <Widget>[
         Padding(
           padding: StoycoScreenSize.symmetric(context, horizontal: 15),
@@ -112,7 +99,6 @@ class CulturalAssetsSlider extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: StoycoScreenSize.height(context, 9)),
         SizedBox(
           height: StoycoScreenSize.height(context, 226),
           width: double.infinity,
@@ -124,13 +110,28 @@ class CulturalAssetsSlider extends StatelessWidget {
                 SizedBox(width: StoycoScreenSize.width(context, 20)),
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
-            itemCount: culturalAssets.length,
-            itemBuilder: (BuildContext context, int index) => CulturalAssetCard(
-              culturalAssetCard: culturalAssets[index],
-              onTap: onTap,
-            ),
+            itemCount: isLoading ? 5 : culturalAssets.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (isLoading) {
+                return SkeletonCard(
+                  width: StoycoScreenSize.width(context, 156),
+                  height: StoycoScreenSize.height(context, 226),
+                  borderRadius: BorderRadius.circular(
+                    StoycoScreenSize.radius(context, 20),
+                  ),
+                );
+              }
+
+              final CulturalAssetItemModel asset = culturalAssets[index];
+              return CulturalAssetCard(
+                culturalAssetCard: asset,
+                onTapCulturalAssetExclusive: onTapCulturalAssetExclusive,
+                onTap: onTap,
+              );
+            },
           ),
         ),
+        Gap(StoycoScreenSize.height(context, 20)),
       ],
     );
   }

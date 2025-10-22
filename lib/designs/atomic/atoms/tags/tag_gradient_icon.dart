@@ -4,26 +4,28 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dar
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
-class TagGradientIcon extends StatelessWidget {
   /// {@template tag_gradient_icon}
-  /// TagGradientIcon
+  /// A [TagGradientIcon] atom for the Stoyco Subscription Atomic Design System.
+  /// Displays a tag with a gradient background, customizable icon, and text for highlighting status or information.
   ///
-  /// An atomic design widget that displays a tag with a gradient background, customizable icon, and text.
+  /// ### Atomic Level
+  /// **Atom** – Smallest UI unit.
   ///
-  /// The gradient starts lighter on the left and becomes darker on the right, ideal for highlighting information or status.
+  /// ### Parameters
+  /// - `title`: Main text of the tag.
+  /// - `titleStyle`: Text style for the tag text (optional).
+  /// - `icon`: Widget for the icon (optional, defaults to SVG star).
+  /// - `width`: Tag width (optional, adapts to content if null).
+  /// - `height`: Tag height. Defaults to 29.
+  /// - `borderRadius`: Border radius for rounded corners. Defaults to 100.
+  /// - `padding`: Inner padding (optional).
+  /// - `margin`: Outer margin (optional).
+  /// - `gradient`: Custom gradient (optional, defaults to dark gradient).
   ///
-  /// Parameters:
-  /// - [title]: Main text of the tag.
-  /// - [titleStyle]: Text style (optional).
-  /// - [icon]: Widget for the icon (optional, defaults to SVG star).
-  /// - [width]: Tag width (optional, adapts to content if null).
-  /// - [height]: Tag height (default 29).
-  /// - [borderRadius]: Border radius (default 100).
-  /// - [padding]: Inner padding (optional).
-  /// - [margin]: Outer margin (optional).
-  /// - [gradient]: Custom gradient (optional, defaults to dark gradient).
+  /// ### Returns
+  /// Renders a tag with gradient background, icon, and styled text, suitable for atomic design systems.
   ///
-  /// Example usage:
+  /// ### Example
   /// ```dart
   /// TagGradientIcon(
   ///   title: 'Premium',
@@ -33,7 +35,9 @@ class TagGradientIcon extends StatelessWidget {
   ///   borderRadius: 80,
   /// )
   /// ```
-  /// {@endtemplate} 
+  /// {@endtemplate}
+class TagGradientIcon extends StatelessWidget {
+  /// {@macro tag_gradient_icon}
   const TagGradientIcon({
     super.key,
     required this.title,
@@ -103,7 +107,10 @@ class TagGradientIcon extends StatelessWidget {
           if (icon != null) ...<Widget>[
             icon!,
           ] else ...<Widget>[
-            StoycoAssets.lib.assets.icons.star.svg(),
+            StoycoAssets.lib.assets.icons.star.svg(
+              fit: BoxFit.cover,
+              package: 'stoyco_subscription',
+            ),
           ],
           Gap(StoycoScreenSize.width(context, 7)),
           Text(

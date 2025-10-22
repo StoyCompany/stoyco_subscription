@@ -6,15 +6,31 @@ import 'package:stoyco_subscription/designs/responsive/round_polygons.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/designs/types/tag_corner_position.dart';
 
-class TagCorner extends StatelessWidget {
   /// {@template tag_corner}
-  /// Native Flutter component for rendering a corner tag with a diagonal cut.
+  /// A [TagCorner] atom for the Stoyco Subscription Atomic Design System.
+  /// Renders a corner tag with a diagonal cut, gradient border, and customizable text, color, and position.
   ///
-  /// This widget is part of Stoyco's atomic design system.
-  /// It allows you to display a tag with a customizable cut in any corner (topRight, topLeft, bottomRight, bottomLeft),
-  /// with gradient borders, shadows, and text rotation handled automatically.
+  /// ### Atomic Level
+  /// **Atom** – Smallest UI unit.
   ///
-  /// Example usage:
+  /// ### Parameters
+  /// - `title`: Text to display inside the tag.
+  /// - `textStyle`: Custom text style for the tag text.
+  /// - `paddingText`: Padding around the text inside the tag.
+  /// - `width`: Width of the tag. Defaults to 100.
+  /// - `height`: Height of the tag. Defaults to 100.
+  /// - `color`: Background color of the tag. Defaults to [StoycoColors.blue].
+  /// - `cutSize`: Depth of the diagonal cut in the selected corner. Defaults to 48.
+  /// - `cornerRadius`: Radius of the diagonal cut corner. Defaults to 20.
+  /// - `borderWidth`: Width of the gradient border. Defaults to 4.
+  /// - `gradientColorsBorder`: Colors for the gradient border. Defaults to design token gradient.
+  /// - `position`: Which corner to cut (default: [TagCornerPosition.topRight]).
+  /// - `shadows`: Optional list of shadows for the tag. Defaults to [StoycoColors.shadowPurple98].
+  ///
+  /// ### Returns
+  /// Renders a corner tag with diagonal cut, gradient border, and styled text, suitable for atomic design systems.
+  ///
+  /// ### Example
   /// ```dart
   /// TagCorner(
   ///   title: 'Recommended',
@@ -25,20 +41,9 @@ class TagCorner extends StatelessWidget {
   ///   gradientColorsBorder: [Colors.red, Colors.blue],
   /// )
   /// ```
-  ///
-  /// Parameters:
-  /// - [title]: Text to display inside the tag.
-  /// - [position]: Which corner to cut (default: topRight).
-  /// - [color]: Background color of the tag.
-  /// - [cornerRadius]: Radius of the diagonal cut.
-  /// - [borderWidth]: Width of the gradient border.
-  /// - [gradientColorsBorder]: Colors for the gradient border.
-  /// - [shadows]: Optional list of shadows.
-  /// - [width], [height]: Size of the tag.
-  /// - [textStyle]: Custom text style.
-  ///
-  /// This widget is designed for atomic design systems and can be reused across your app for consistent UI tokens.
   /// {@endtemplate}
+class TagCorner extends StatelessWidget {
+  /// {@macro tag_corner}
   const TagCorner({
     super.key,
     required this.title,

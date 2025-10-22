@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/headers/subscription_breadcrumbs.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/inputs/subscription_search_bar.dart';
-import 'package:stoyco_subscription/designs/atomic/atoms/tab_bar/tab_bar_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/circular_avatar/subscription_circular_image_with_info.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/tab_bar/tab_bar_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item_map.dart';

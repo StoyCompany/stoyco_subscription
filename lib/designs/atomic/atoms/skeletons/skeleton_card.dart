@@ -3,17 +3,23 @@ import 'package:shimmer/shimmer.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
-class SkeletonCard extends StatelessWidget {
   /// {@template skeleton_card}
-  /// SkeletonCard
+  /// A [SkeletonCard] atom for the Stoyco Subscription Atomic Design System.
+  /// Displays a shimmering skeleton placeholder for loading states, using animated gradients.
   ///
-  /// An atomic design widget that displays a shimmering skeleton placeholder for loading states.
+  /// ### Atomic Level
+  /// **Atom** – Smallest UI unit.
   ///
-  /// This widget uses the [shimmer](https://pub.dev/packages/shimmer) package to animate a gradient effect, simulating content loading.
+  /// ### Parameters
+  /// - `width`: The width of the skeleton card. If null, expands to parent constraints.
+  /// - `height`: The height of the skeleton card. If null, expands to parent constraints.
+  /// - `borderRadius`: The border radius of the skeleton card. Defaults to 25 if not provided.
+  /// - `margin`: The margin around the skeleton card. If null, no margin is applied.
   ///
-  /// It supports design tokens for colors, border radius, and spacing, ensuring consistency in atomic design systems.
+  /// ### Returns
+  /// Renders a shimmering skeleton card using [Shimmer] and design token colors.
   ///
-  /// Example usage:
+  /// ### Example
   /// ```dart
   /// SkeletonCard(
   ///   width: 200,
@@ -23,6 +29,8 @@ class SkeletonCard extends StatelessWidget {
   /// )
   /// ```
   /// {@endtemplate}
+class SkeletonCard extends StatelessWidget {
+  /// {@macro skeleton_card}
   const SkeletonCard({
     super.key,
     this.width,

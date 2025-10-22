@@ -35,7 +35,7 @@ class PartnerProfileDataSource {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onError: (DioException e, ErrorInterceptorHandler handler) async {
-          final requestOptions = e.requestOptions;
+          final RequestOptions requestOptions = e.requestOptions;
 
           // If unauthorized and not already retried, attempt to refresh token and retry once.
           if ((e.response?.statusCode == 401 ||
@@ -57,7 +57,7 @@ class PartnerProfileDataSource {
                 requestOptions.extra['retried'] = true;
 
                 try {
-                  final response = await _dio.fetch(requestOptions);
+                  final Response<dynamic> response = await _dio.fetch(requestOptions);
                   return handler.resolve(response);
                 } catch (err) {
                   return handler.reject(err as DioException);

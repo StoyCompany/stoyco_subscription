@@ -1,9 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/designs/atomic/atoms/tab_bar/tab_bar_custom.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/tab_bar/tab_bar_custom.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
+/// {@template tab_menu_item}
+/// A [TabMenuItem] molecule for the Stoyco Subscription Atomic Design System.
+/// Renders a tabbed menu with description and child content, supporting tab navigation and page view.
+///
+/// ### Atomic Level
+/// **Molecule** – Composed of atoms (tab bar, text, page view) for interactive menu navigation.
+///
+/// ### Parameters
+/// - `tabs`: List of tab labels to display.
+/// - `textDescription`: Optional description text below the tab bar.
+/// - `textDescriptionStyle`: Custom text style for the description (optional).
+/// - `children`: List of widgets to display for each tab (optional).
+/// - `onTabChanged`: Callback when a tab is selected, provides the tab label.
+/// - `initialNavIndex`: The initially selected tab index. Defaults to 0.
+/// - `isLoading`: If true, disables tab interaction. Defaults to false.
+///
+/// ### Returns
+/// Renders a tabbed menu with description and page view, suitable for atomic design systems.
+///
+/// ### Example
+/// ```dart
+/// TabMenuItem(
+///   tabs: ['Tab 1', 'Tab 2'],
+///   textDescription: 'Choose a tab',
+///   children: [Widget1(), Widget2()],
+///   onTabChanged: (tab) {},
+/// )
+/// ```
+/// {@endtemplate}
 class TabMenuItem extends StatefulWidget {
+  /// {@macro tab_menu_item}
   const TabMenuItem({
     super.key, 
     required this.tabs, 
@@ -15,12 +45,25 @@ class TabMenuItem extends StatefulWidget {
     this.isLoading = false,
   });
 
+  /// List of tab labels to display.
   final List<String> tabs;
+
+  /// Optional description text below the tab bar.
   final String? textDescription;
+
+  /// Custom text style for the description (optional).
   final TextStyle? textDescriptionStyle;
+
+  /// List of widgets to display for each tab (optional).
   final List<Widget>? children;
+
+  /// Callback when a tab is selected, provides the tab label.
   final void Function(String)? onTabChanged;
+
+  /// The initially selected tab index. Defaults to 0.
   final int initialNavIndex;
+
+  /// If true, disables tab interaction. Defaults to false.
   final bool isLoading;
 
   @override

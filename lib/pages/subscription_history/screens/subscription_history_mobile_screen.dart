@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:stoyco_subscription/designs/atomic/atoms/tab_bar/tab_bar_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/appbars/custom_subscription_appbar.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/subscription_history_card.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/tab_bar/tab_bar_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -64,6 +64,7 @@ class _SubscriptionHistoryMobileScreenState
           leadingIcon: StoycoAssets.lib.assets.icons.leftArrow.svg(
             height: StoycoScreenSize.height(context, 24),
             width: StoycoScreenSize.width(context, 24),
+            package: 'stoyco_subscription',
           ),
           onLeadingPressed: () {
             Navigator.of(context).pop();

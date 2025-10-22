@@ -44,6 +44,9 @@ class StoycoColors {
   /// Color: #80000000
   static const Color cardBackgroundBlack50 = Color(0x80000000);
 
+  /// Color: #161F27
+  static const Color cardBorderDark = Color(0xFF161F27);
+
   /// Color: #00000000
   static const Color cardBorderGradientEnd = Color(0x00000000);
 
@@ -64,6 +67,9 @@ class StoycoColors {
 
   /// Color: #26FFFFFF
   static const Color cardBorderGradientWhite15 = Color(0x26FFFFFF);
+
+  /// Color: #12191F
+  static const Color cardDarkBackground = Color(0xFF12191F);
 
   /// Color: #304D1FE6
   static const Color cardShadowPurple19 = Color(0x304D1FE6);
@@ -94,6 +100,9 @@ class StoycoColors {
 
   /// Color: #FFBDCB
   static const Color inactiveChip = Color(0xFFFFBDCB);
+
+  /// Color: #DEE4ED
+  static const Color lightGray = Color(0xFFDEE4ED);
 
   /// Color: #253341
   static const Color menuItemBackground = Color(0xFF253341);

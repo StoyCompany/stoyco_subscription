@@ -4,7 +4,36 @@ import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_grad
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
+/// {@template custom_tab_bar}
+/// A [CustomTabBar] molecule for the Stoyco Subscription Atomic Design System.
+/// Renders a horizontally scrollable tab bar with custom styles, gradient text, and interactive selection.
+///
+/// ### Atomic Level
+/// **Molecule** – Composed of multiple atoms (buttons, text) for tab navigation.
+///
+/// ### Parameters
+/// - `width`: The total width of the tab bar. Defaults to 324.
+/// - `height`: The height of the tab bar. Defaults to 40.
+/// - `padding`: Padding around the tab bar. If null, uses design token spacing.
+/// - `tabs`: List of tab labels to display.
+/// - `onTabChanged`: Callback when a tab is selected, provides the tab index.
+/// - `initialNavIndex`: The initially selected tab index.
+/// - `isLoading`: If true, disables tab interaction.
+///
+/// ### Returns
+/// Renders a custom tab bar with styled tab buttons, selection, and scroll behavior.
+///
+/// ### Example
+/// ```dart
+/// CustomTabBar(
+///   tabs: ['Overview', 'Details', 'Settings'],
+///   initialNavIndex: 0,
+///   onTabChanged: (index) {},
+/// )
+/// ```
+/// {@endtemplate}
 class CustomTabBar extends StatefulWidget {
+  /// {@macro custom_tab_bar}
   const CustomTabBar({
     super.key,
     this.width = 324,
@@ -16,12 +45,25 @@ class CustomTabBar extends StatefulWidget {
     this.isLoading = false,
   });
 
+  /// The total width of the tab bar. Defaults to 324.
   final double width;
+
+  /// The height of the tab bar. Defaults to 40.
   final double height;
+
+  /// Padding around the tab bar. If null, uses design token spacing.
   final EdgeInsetsGeometry? padding;
+
+  /// List of tab labels to display.
   final List<String> tabs;
+
+  /// Callback when a tab is selected, provides the tab index.
   final void Function(int index) onTabChanged;
+
+  /// The initially selected tab index.
   final int initialNavIndex;
+
+  /// If true, disables tab interaction.
   final bool isLoading;
 
   @override

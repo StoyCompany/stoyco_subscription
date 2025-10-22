@@ -1,4 +1,4 @@
-import 'package:either_dart/src/either.dart';
+import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscription_tab.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/requests/get_user_subscription_plans_request.dart';

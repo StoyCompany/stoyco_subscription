@@ -79,6 +79,10 @@ class $LibAssetsIconsGen {
   SvgGenImage get bellIcon =>
       const SvgGenImage('lib/assets/icons/bell_icon.svg');
 
+  /// File path: lib/assets/icons/calendarIco.svg
+  SvgGenImage get calendarIco =>
+      const SvgGenImage('lib/assets/icons/calendarIco.svg');
+
   /// File path: lib/assets/icons/close_window.svg
   SvgGenImage get closeWindow =>
       const SvgGenImage('lib/assets/icons/close_window.svg');
@@ -137,6 +141,9 @@ class $LibAssetsIconsGen {
   SvgGenImage get subscriptionIconWeb =>
       const SvgGenImage('lib/assets/icons/subscription_icon_web.svg');
 
+  /// File path: lib/assets/icons/tag_lock.svg
+  SvgGenImage get tagLock => const SvgGenImage('lib/assets/icons/tag_lock.svg');
+
   /// File path: lib/assets/icons/tag_subscription.svg
   SvgGenImage get tagSubscription =>
       const SvgGenImage('lib/assets/icons/tag_subscription.svg');
@@ -155,6 +162,7 @@ class $LibAssetsIconsGen {
     appleLogo,
     arrowRight,
     bellIcon,
+    calendarIco,
     closeWindow,
     culturalAssetCoin,
     dinersClub,
@@ -170,6 +178,7 @@ class $LibAssetsIconsGen {
     subsciptionButtonIcon,
     subscriptionIcon,
     subscriptionIconWeb,
+    tagLock,
     tagSubscription,
     tagSubscriptionSlim,
   ];
