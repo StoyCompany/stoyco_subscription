@@ -37,6 +37,8 @@ CulturalAssetItemModel _$CulturalAssetItemModelFromJson(
   name: json['name'] as String?,
   symbol: json['symbol'] as String?,
   maxSupply: (json['maxSupply'] as num?)?.toInt(),
+  stock: (json['stock'] as num?)?.toInt(),
+  stoyCoins: (json['stoyCoins'] as num?)?.toInt(),
   minted: (json['minted'] as num?)?.toInt(),
   contractAddress: json['contractAddress'] as String?,
   txHash: json['txHash'] as String?,
@@ -53,6 +55,7 @@ CulturalAssetItemModel _$CulturalAssetItemModelFromJson(
       .toList(),
   isExclusive: json['isExclusive'] as bool?,
   isSubscriberOnly: json['isSubscriberOnly'] as bool?,
+  hasAccess: json['hasAccess'] as bool?,
   createdAt: json['createdAt'] == null
       ? null
       : DateTime.parse(json['createdAt'] as String),
@@ -75,6 +78,8 @@ Map<String, dynamic> _$CulturalAssetItemModelToJson(
   'name': instance.name,
   'symbol': instance.symbol,
   'maxSupply': instance.maxSupply,
+  'stock': instance.stock,
+  'stoyCoins': instance.stoyCoins,
   'minted': instance.minted,
   'contractAddress': instance.contractAddress,
   'txHash': instance.txHash,
@@ -89,6 +94,7 @@ Map<String, dynamic> _$CulturalAssetItemModelToJson(
   'categories': instance.categories?.map((e) => e.toJson()).toList(),
   'isExclusive': instance.isExclusive,
   'isSubscriberOnly': instance.isSubscriberOnly,
+  'hasAccess': instance.hasAccess,
   'createdAt': instance.createdAt?.toIso8601String(),
   'updatedAt': instance.updatedAt?.toIso8601String(),
   'accessContent': instance.accessContent?.toJson(),

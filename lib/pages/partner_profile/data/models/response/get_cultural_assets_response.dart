@@ -41,6 +41,8 @@ class CulturalAssetItemModel extends Equatable {
     this.name,
     this.symbol,
     this.maxSupply,
+    this.stock,
+    this.stoyCoins,
     this.minted,
     this.contractAddress,
     this.txHash,
@@ -55,6 +57,7 @@ class CulturalAssetItemModel extends Equatable {
     this.categories,
     this.isExclusive,
     this.isSubscriberOnly,
+    this.hasAccess,
     this.createdAt,
     this.updatedAt,
     this.accessContent,
@@ -67,6 +70,8 @@ class CulturalAssetItemModel extends Equatable {
   final String? name;
   final String? symbol;
   final int? maxSupply;
+  final int? stock;
+  final int? stoyCoins;
   final int? minted;
   final String? contractAddress;
   final String? txHash;
@@ -81,6 +86,7 @@ class CulturalAssetItemModel extends Equatable {
   final List<CategoryModel>? categories;
   final bool? isExclusive;
   final bool? isSubscriberOnly;
+  final bool? hasAccess;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final AccessContentModel? accessContent;
@@ -95,6 +101,8 @@ class CulturalAssetItemModel extends Equatable {
     name,
     symbol,
     maxSupply,
+    stock,
+    stoyCoins,
     minted,
     contractAddress,
     txHash,
@@ -109,6 +117,7 @@ class CulturalAssetItemModel extends Equatable {
     categories,
     isExclusive,
     isSubscriberOnly,
+    hasAccess,
     createdAt,
     updatedAt,
     accessContent,
@@ -160,12 +169,7 @@ class AccessContentModel extends Equatable {
 
 @JsonSerializable(explicitToJson: true)
 class CategoryModel extends Equatable {
-  const CategoryModel({
-    this.id,
-    this.name,
-    this.benefits,
-    this.brands,
-  });
+  const CategoryModel({this.id, this.name, this.benefits, this.brands});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
       _$CategoryModelFromJson(json);
@@ -183,10 +187,7 @@ class CategoryModel extends Equatable {
 
 @JsonSerializable()
 class BenefitModel extends Equatable {
-  const BenefitModel({
-    this.type,
-    this.selected,
-  });
+  const BenefitModel({this.type, this.selected});
 
   factory BenefitModel.fromJson(Map<String, dynamic> json) =>
       _$BenefitModelFromJson(json);
@@ -202,10 +203,7 @@ class BenefitModel extends Equatable {
 
 @JsonSerializable()
 class BrandModel extends Equatable {
-  const BrandModel({
-    this.id,
-    this.name,
-  });
+  const BrandModel({this.id, this.name});
 
   factory BrandModel.fromJson(Map<String, dynamic> json) =>
       _$BrandModelFromJson(json);
