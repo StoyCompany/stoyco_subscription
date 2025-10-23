@@ -21,9 +21,14 @@ import 'package:stoyco_subscription/pages/subscription_history/notifier/subscrip
 /// {@endtemplate}
 class SubscriptionHistoryMobileScreen extends StatefulWidget {
   /// Creates a [SubscriptionHistoryMobileScreen].
-  const SubscriptionHistoryMobileScreen({super.key, this.userId});
+  const SubscriptionHistoryMobileScreen({
+    super.key,
+    this.userId,
+    this.onTapSubscriptionHistoryCard,
+  });
 
   final String? userId;
+  final void Function(String partnerId)? onTapSubscriptionHistoryCard;
 
   @override
   State<SubscriptionHistoryMobileScreen> createState() =>
@@ -90,6 +95,8 @@ class _SubscriptionHistoryMobileScreenState
                     child: SubscriptionHistoryCard(
                       subscriptionHistoryItem:
                           notifier.subscriptionsToShow[index],
+                      onTapSubscriptionHistoryCard:
+                          widget.onTapSubscriptionHistoryCard,
                     ),
                   ),
                   separatorBuilder: (BuildContext context, int index) {
