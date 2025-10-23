@@ -23,7 +23,9 @@ class ExpiredSubscriptionModal extends StatelessWidget {
       child: Column(
         spacing: StoycoScreenSize.height(context, 16),
         children: <Widget>[
-          StoycoAssets.lib.assets.icons.closeWindow.svg(),
+          StoycoAssets.lib.assets.icons.closeWindow.svg(
+            package: 'stoyco_subscription',
+          ),
           Text(
             'Tienes suscripciones vencidas',
             style: TextStyle(

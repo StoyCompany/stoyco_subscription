@@ -21,6 +21,8 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
     this.onTapSubscription,
     this.onTapSubscribe,
     this.userId,
+    this.pageSize,
+    this.onTapLeadingIcon,
   });
 
   /// Callback when a subscription is tapped.
@@ -29,7 +31,11 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
   /// Callback when the subscribe button is tapped.
   final void Function(String id)? onTapSubscribe;
 
+  final VoidCallback? onTapLeadingIcon;
+
   final String? userId;
+
+  final int? pageSize;
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +46,15 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
         onTapSubscription: onTapSubscription,
         onTapSubscribe: onTapSubscribe,
         userId: userId,
+        pageSize: pageSize,
       );
     } else {
       return SubscriptionsCatalogScreenMobile(
         onTapSubscription: onTapSubscription,
         onTapSubscribe: onTapSubscribe,
+        onTapLeadingIcon: onTapLeadingIcon,
         userId: userId,
+        pageSize: pageSize,
       );
     }
   }

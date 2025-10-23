@@ -57,7 +57,7 @@ class CulturalAssetsSlider extends StatelessWidget {
     super.key,
     required this.culturalAssets,
     this.isLoading = false,
-    this.onTap,
+    this.onTapSelectedCulturalAsset,
     this.onTapCulturalAssetExclusive,
   });
 
@@ -67,7 +67,7 @@ class CulturalAssetsSlider extends StatelessWidget {
   /// Whether the slider is in a loading state and should show skeleton cards. Defaults to false.
   final bool isLoading;
 
-  final void Function(CulturalAssetItemModel)? onTap;
+  final ValueChanged<CulturalAssetItemModel>? onTapSelectedCulturalAsset;
 
   /// Callback when a locked cultural asset card is tapped (optional).
   final VoidCallback? onTapCulturalAssetExclusive;
@@ -107,7 +107,7 @@ class CulturalAssetsSlider extends StatelessWidget {
             shrinkWrap: true,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             separatorBuilder: (BuildContext context, int index) =>
-                SizedBox(width: StoycoScreenSize.width(context, 20)),
+                Gap(StoycoScreenSize.width(context, 20)),
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: isLoading ? 5 : culturalAssets.length,
@@ -126,7 +126,7 @@ class CulturalAssetsSlider extends StatelessWidget {
               return CulturalAssetCard(
                 culturalAssetCard: asset,
                 onTapCulturalAssetExclusive: onTapCulturalAssetExclusive,
-                onTap: onTap,
+                onTap: onTapSelectedCulturalAsset,
               );
             },
           ),

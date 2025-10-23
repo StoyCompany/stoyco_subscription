@@ -6,9 +6,14 @@ import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item_map.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/enums/subscription_profile_type.dart';
 
 class SubscriptionCatalogNotifier extends ChangeNotifier {
-  SubscriptionCatalogNotifier(TickerProvider vsync, {this.userId}) {
+  SubscriptionCatalogNotifier(
+    TickerProvider vsync, {
+    this.userId,
+    int? pageSize,
+  }) : pageSize = pageSize ?? 50 {
     tabController = TabController(vsync: vsync, length: tabs.length);
     tabController.addListener(_onTabChanged);
     _fetchCatalog();
@@ -39,7 +44,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
   String searchText = '';
 
   int currentPage = 1;
-  final int pageSize = 50;
+  final int pageSize;
   bool isLoadingMore = false;
   bool hasNextPage = true;
 
@@ -134,19 +139,19 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         musicSubscriptions.addAll(
           newItems.where(
             (SubscriptionCatalogItemMap item) =>
-                item.profile.toLowerCase() == 'music',
+                parseProfileType(item.profile) == SubscriptionProfileType.music,
           ),
         );
         sportSubscriptions.addAll(
           newItems.where(
             (SubscriptionCatalogItemMap item) =>
-                item.profile.toLowerCase() == 'sport',
+                parseProfileType(item.profile) == SubscriptionProfileType.sport,
           ),
         );
         brandSubscriptions.addAll(
           newItems.where(
             (SubscriptionCatalogItemMap item) =>
-                item.profile.toLowerCase() == 'brands',
+                parseProfileType(item.profile) == SubscriptionProfileType.brand,
           ),
         );
 
@@ -170,14 +175,14 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     while (hasNextPage) {
       final Either<Failure, GetSubscriptionCatalogResponse> result =
           await SubscriptionCatalogService.instance.getSubscriptionCatalog(
-        userId: userId,
-        page: currentPage,
-        pageSize: pageSize,
-      );
+            userId: userId,
+            page: currentPage,
+            pageSize: pageSize,
+          );
       result.fold(
         (Failure failure) {
           StoyCoLogger.error('Error al obtener catálogo: $failure');
-          hasNextPage = false; 
+          hasNextPage = false;
         },
         (GetSubscriptionCatalogResponse response) {
           final List<SubscriptionCatalogItemMap> allItems = response.data
@@ -197,20 +202,22 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
           musicSubscriptions.addAll(
             allItems.where(
               (SubscriptionCatalogItemMap item) =>
-                  item.profile.toLowerCase() == 'music',
+                  parseProfileType(item.profile) ==
+                  SubscriptionProfileType.music,
             ),
           );
           sportSubscriptions.addAll(
             allItems.where(
               (SubscriptionCatalogItemMap item) =>
-                  item.profile.toLowerCase() == 'sport',
+                  parseProfileType(item.profile) ==
+                  SubscriptionProfileType.sport,
             ),
           );
           brandSubscriptions.addAll(
             allItems.where(
               (SubscriptionCatalogItemMap item) =>
-                  item.profile.toLowerCase() == 'brand' ||
-                  item.profile.toLowerCase() == 'brands',
+                  parseProfileType(item.profile) ==
+                  SubscriptionProfileType.brand,
             ),
           );
 
