@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/images/image_network_blur.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -108,29 +109,14 @@ class SubscriptionHistoryCard extends StatelessWidget {
                   ),
                 ),
               ),
-              ClipRRect(
-                borderRadius: BorderRadiusGeometry.all(
-                  Radius.circular(StoycoScreenSize.radius(context, 9)),
-                ),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: subscriptionHistoryItem.planImageUrl,
-                  placeholder: (BuildContext context, String url) =>
-                      const DecoratedBox(
-                        decoration: BoxDecoration(color: Colors.black12),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.black45,
-                            ),
-                          ),
-                        ),
-                      ),
-                  errorWidget:
-                      (BuildContext context, String url, Object error) =>
-                          const Icon(Icons.error),
-                ),
+              ImageNetworkBlur(
+                imageUrl: subscriptionHistoryItem.planImageUrl,
+                radius: StoycoScreenSize.radius(context, 9),
+                width: double.infinity,
+                height: StoycoScreenSize.height(context, 164),
+                fit: BoxFit.cover,
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 spacing: StoycoScreenSize.width(context, 25),
