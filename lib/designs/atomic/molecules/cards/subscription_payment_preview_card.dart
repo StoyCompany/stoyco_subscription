@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/flags/currency_flag.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
 
 /// {@template subscription_payment_preview_card}
 /// A card widget that displays a preview of the user's subscription payment details.
@@ -37,7 +37,7 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
   const SubscriptionPaymentPreviewCard({super.key, this.paymentSummaryInfo});
 
   /// The model containing the payment summary information to display.
-  final PaymentSummaryInfoModel? paymentSummaryInfo;
+  final PaymentSummaryInfoResponse? paymentSummaryInfo;
 
   @override
   Widget build(BuildContext context) => Container(
@@ -80,10 +80,9 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: StoycoScreenSize.height(context, 4),
-          children: <Widget>
-          [
+          children: <Widget>[
             Text(
-              paymentSummaryInfo?.planName ?? 'Plan Premium',
+              paymentSummaryInfo?.title ?? 'Plan Premium',
               style: GoogleFonts.montserrat(
                 textStyle: TextStyle(
                   color: StoycoColors.softWhite,
@@ -96,7 +95,7 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
               spacing: StoycoScreenSize.width(context, 8),
               children: <Widget>[
                 Text(
-                  '${paymentSummaryInfo?.currencySymbol ?? r'$'}${paymentSummaryInfo?.totalPrice}',
+                  '${paymentSummaryInfo?.breakdown.currencySymbol ?? r'$'}${paymentSummaryInfo?.breakdown.totalAmount}',
                   style: GoogleFonts.montserrat(
                     textStyle: TextStyle(
                       color: StoycoColors.softWhite,
@@ -109,7 +108,7 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                   spacing: StoycoScreenSize.width(context, 4),
                   children: <Widget>[
                     Text(
-                      '${paymentSummaryInfo?.currencyCode}',
+                      '${paymentSummaryInfo?.breakdown.currencyCode}',
                       style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           color: StoycoColors.iconDefault,
@@ -121,26 +120,27 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                     CurrencyFlag(
                       height: StoycoScreenSize.height(context, 16),
                       width: StoycoScreenSize.width(context, 24),
-                      currencyCode: paymentSummaryInfo?.currencyCode ?? 'MXN',
+                      currencyCode:
+                          paymentSummaryInfo?.breakdown.currencyCode ?? 'MXN',
                     ),
                   ],
                 ),
               ],
             ),
             Text(
-              paymentSummaryInfo?.shortDescription ?? '',
+              paymentSummaryInfo?.trialSubtitle ?? '',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.montserrat(
-              textStyle: TextStyle(
-                color: StoycoColors.softWhite,
-                fontWeight: FontWeight.w700,
-                fontSize: StoycoScreenSize.fontSize(context, 16),
-              ),
+                textStyle: TextStyle(
+                  color: StoycoColors.softWhite,
+                  fontWeight: FontWeight.w700,
+                  fontSize: StoycoScreenSize.fontSize(context, 16),
+                ),
               ),
             ),
             Text(
-              'A partir del ${paymentSummaryInfo?.startDate ?? '25 oct 2025'}: ${paymentSummaryInfo?.totalPrice} ${paymentSummaryInfo?.currencySymbol ?? ''}/mes.',
+              paymentSummaryInfo?.paymentStartNote ?? '',
               style: GoogleFonts.montserrat(
                 textStyle: TextStyle(
                   color: StoycoColors.softWhite,

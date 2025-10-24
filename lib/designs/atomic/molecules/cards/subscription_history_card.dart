@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/images/image_network_blur.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -28,14 +29,27 @@ class SubscriptionHistoryCard extends StatelessWidget {
   const SubscriptionHistoryCard({
     super.key,
     required this.subscriptionHistoryItem,
+    this.onTapSubscriptionHistoryCard,
   });
 
   /// The model containing the subscription history item data.
   final UserSubscriptionPlan subscriptionHistoryItem;
 
+  final void Function(String partnerId)? onTapSubscriptionHistoryCard;
+
   static const List<String> _months = <String>[
-    'ene', 'feb', 'mar', 'abr', 'may', 'jun',
-    'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+    'ene',
+    'feb',
+    'mar',
+    'abr',
+    'may',
+    'jun',
+    'jul',
+    'ago',
+    'sep',
+    'oct',
+    'nov',
+    'dic',
   ];
 
   /// Formats a date string to 'dd MMM yyyy' using Spanish month abbreviations.
@@ -69,148 +83,138 @@ class SubscriptionHistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: StoycoColors.backgroundGrey,
-        borderRadius: BorderRadius.circular(
-          StoycoScreenSize.radius(context, 16),
+    return GestureDetector(
+      onTap: () =>
+          onTapSubscriptionHistoryCard?.call(subscriptionHistoryItem.partnerId),
+      child: Container(
+        decoration: BoxDecoration(
+          color: StoycoColors.backgroundGrey,
+          borderRadius: BorderRadius.circular(
+            StoycoScreenSize.radius(context, 16),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: StoycoScreenSize.all(context, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: StoycoScreenSize.height(context, 8),
-          children: <Widget>[
-            Text(
-              'Te suscribiste a: ',
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  color: StoycoColors.softWhite,
-                  fontWeight: FontWeight.w700,
-                  fontSize: StoycoScreenSize.fontSize(context, 12),
+        child: Padding(
+          padding: StoycoScreenSize.all(context, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: StoycoScreenSize.height(context, 8),
+            children: <Widget>[
+              Text(
+                'Te suscribiste a: ',
+                style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    color: StoycoColors.softWhite,
+                    fontWeight: FontWeight.w700,
+                    fontSize: StoycoScreenSize.fontSize(context, 12),
+                  ),
                 ),
               ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadiusGeometry.all(
-                Radius.circular(StoycoScreenSize.radius(context, 9)),
-              ),
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
+              ImageNetworkBlur(
                 imageUrl: subscriptionHistoryItem.planImageUrl,
-                placeholder: (BuildContext context, String url) =>
-                    const DecoratedBox(
-                      decoration: BoxDecoration(color: Colors.black12),
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.black45,
-                          ),
-                        ),
-                      ),
-                    ),
-                errorWidget: (BuildContext context, String url, Object error) =>
-                    const Icon(Icons.error),
+                radius: StoycoScreenSize.radius(context, 9),
+                width: double.infinity,
+                height: StoycoScreenSize.height(context, 164),
+                fit: BoxFit.cover,
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              spacing: StoycoScreenSize.width(context, 25),
-              children: <Widget>[
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: StoycoScreenSize.width(context, 177),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: StoycoScreenSize.height(context, 4),
-                    children: <Widget>[
-                      Text(
-                        subscriptionHistoryItem.partnerName,
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            color: StoycoColors.softWhite,
-                            fontWeight: FontWeight.w700,
-                            fontSize: StoycoScreenSize.fontSize(context, 16),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                spacing: StoycoScreenSize.width(context, 25),
+                children: <Widget>[
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: StoycoScreenSize.width(context, 177),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: StoycoScreenSize.height(context, 4),
+                      children: <Widget>[
+                        Text(
+                          subscriptionHistoryItem.partnerName,
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              color: StoycoColors.softWhite,
+                              fontWeight: FontWeight.w700,
+                              fontSize: StoycoScreenSize.fontSize(context, 16),
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                        '${subscriptionHistoryItem.planName} (${subscriptionHistoryItem.recurrenceType}) ${subscriptionHistoryItem.price} ${subscriptionHistoryItem.currencyCode}',
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            color: StoycoColors.softWhite,
+                        Text(
+                          '${subscriptionHistoryItem.planName} (${subscriptionHistoryItem.recurrenceType}) ${subscriptionHistoryItem.price} ${subscriptionHistoryItem.currencyCode}',
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              color: StoycoColors.softWhite,
+                              fontWeight: FontWeight.w400,
+                              fontSize: StoycoScreenSize.fontSize(context, 12),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '${_formatDate(subscriptionHistoryItem.subscriptionStartDate)} - ${_formatDate(subscriptionHistoryItem.subscriptionEndDate)}',
+                          style: TextStyle(
+                            fontFamily: FontFamilyToken.akkuratPro,
+                            color: StoycoColors.hint,
                             fontWeight: FontWeight.w400,
                             fontSize: StoycoScreenSize.fontSize(context, 12),
                           ),
                         ),
-                      ),
-                      Text(
-                        '${_formatDate(subscriptionHistoryItem.subscriptionStartDate)} - ${_formatDate(subscriptionHistoryItem.subscriptionEndDate)}',
-                        style: TextStyle(
-                          fontFamily: FontFamilyToken.akkuratPro,
-                          color: StoycoColors.hint,
-                          fontWeight: FontWeight.w400,
-                          fontSize: StoycoScreenSize.fontSize(context, 12),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: StoycoScreenSize.width(context, 100),
-                  ),
-                  child: Column(
-                    spacing: StoycoScreenSize.height(context, 4),
-                    children: <Widget>[
-                      Chip(
-                        labelStyle: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            color: StoycoColors.deepCharcoal,
-                            fontWeight: FontWeight.w400,
-                            fontSize: StoycoScreenSize.fontSize(context, 12),
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: StoycoScreenSize.width(context, 100),
+                    ),
+                    child: Column(
+                      spacing: StoycoScreenSize.height(context, 4),
+                      children: <Widget>[
+                        Chip(
+                          labelStyle: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              color: StoycoColors.deepCharcoal,
+                              fontWeight: FontWeight.w400,
+                              fontSize: StoycoScreenSize.fontSize(context, 12),
+                            ),
                           ),
-                        ),
-                        backgroundColor:
+                          backgroundColor:
+                              subscriptionHistoryItem.subscribedIsActive
+                              ? StoycoColors.activeChip
+                              : StoycoColors.inactiveChip,
+                          padding: StoycoScreenSize.symmetric(
+                            context,
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              StoycoScreenSize.radius(context, 13),
+                            ),
+                          ),
+                          label: Text(
                             subscriptionHistoryItem.subscribedIsActive
-                            ? StoycoColors.activeChip
-                            : StoycoColors.inactiveChip,
-                        padding: StoycoScreenSize.symmetric(
-                          context,
-                          horizontal: 12,
-                          vertical: 4,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            StoycoScreenSize.radius(context, 13),
+                                ? 'Activo'
+                                : 'Inactivo',
                           ),
                         ),
-                        label: Text(
-                          subscriptionHistoryItem.subscribedIsActive
-                              ? 'Activo'
-                              : 'Inactivo',
-                        ),
-                      ),
-                      Text(
-                        (subscriptionHistoryItem.subscribedIsActive)
-                            ? 'Ver suscripción'
-                            : 'Ver planes',
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
-                            color: StoycoColors.softWhite,
-                            fontWeight: FontWeight.w400,
-                            fontSize: StoycoScreenSize.fontSize(context, 12),
+                        Text(
+                          (subscriptionHistoryItem.subscribedIsActive)
+                              ? 'Ver suscripción'
+                              : 'Ver planes',
+                          style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                              color: StoycoColors.softWhite,
+                              fontWeight: FontWeight.w400,
+                              fontSize: StoycoScreenSize.fontSize(context, 12),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

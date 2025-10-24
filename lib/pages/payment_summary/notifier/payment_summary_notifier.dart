@@ -1,5 +1,8 @@
+import 'package:either_dart/either.dart';
 import 'package:flutter/widgets.dart';
-import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/payment_summary_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 
 /// A [ChangeNotifier] that manages the state for the payment summary view.
 ///
@@ -17,17 +20,18 @@ import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_su
 class PaymentSummaryNotifier extends ChangeNotifier {
   /// Creates a [PaymentSummaryNotifier].
   ///
-  /// Optionally provide a [subscriptionId] to load a specific payment summary.
+  /// Optionally provide a [planId] to load a specific payment summary.
   /// Automatically loads mock payment summary data on initialization.
-  PaymentSummaryNotifier({this.subscriptionId}) {
-    loadMockPaymentSummary();
+  PaymentSummaryNotifier({this.planId, this.recurrenceType}) {
+    loadPaymentSummary(planId, recurrenceType);
   }
 
   /// The subscription ID for which to load the payment summary.
-  final String? subscriptionId;
+  final String? planId;
+  final String? recurrenceType;
 
   /// The current payment summary information.
-  PaymentSummaryInfoModel? paymentSummaryInfo;
+  PaymentSummaryInfoResponse? paymentSummaryInfo;
 
   /// Whether the payment summary is currently loading.
   bool isLoading = true;
@@ -36,20 +40,31 @@ class PaymentSummaryNotifier extends ChangeNotifier {
   ///
   /// Sets [isLoading] to true while loading, then updates [paymentSummaryInfo]
   /// with mock data and sets [isLoading] to false.
-  Future<void> loadMockPaymentSummary() async {
+  Future<void> loadPaymentSummary(
+    String? planId,
+    String? recurrenceType,
+  ) async {
+    if (planId == null || recurrenceType == null) {
+      isLoading = false;
+      notifyListeners();
+      return;
+    }
     isLoading = true;
     notifyListeners();
 
-    // Mock data
-    paymentSummaryInfo = const PaymentSummaryInfoModel(
-      planName: 'Plan Premium',
-      totalPrice: 299.99,
-      shortDescription: 'Acceso ilimitado a todos los contenidos premium.',
-      startDate: '2024-06-01',
-      planPrice: 259.99,
-      iva: 40.00,
-      currencySymbol: r'$',
-      currencyCode: 'MXN',
+    final Either<Failure, PaymentSummaryInfoResponse> result =
+        await PaymentSummaryService.instance.getPaymentSummaryByPlan(
+          planId: planId,
+          recurrenceType: recurrenceType,
+        );
+
+    result.fold(
+      (Failure failure) {
+        paymentSummaryInfo = null;
+      },
+      (PaymentSummaryInfoResponse response) {
+        paymentSummaryInfo = response;
+      },
     );
 
     isLoading = false;

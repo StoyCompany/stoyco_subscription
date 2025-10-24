@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## 1.1.0 - 2025-10-22
+
+### Added
+
+- Subscription summary integration
+- Cultural assets integration
+- Init modal setup for expired suscriptions notification
+
+## [Unreleased]
+
 ## 1.0.0 - 2025-10-21
 
 ### Added

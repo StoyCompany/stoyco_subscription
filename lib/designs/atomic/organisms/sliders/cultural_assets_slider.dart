@@ -4,7 +4,7 @@ import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/cultural_asset_card.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/partner_profile/data/models/cultural_asset_card_model.dart';
+import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
 
 /// {@template cultural_assets_slider}
 /// A horizontal slider widget that displays a list of cultural asset cards.
@@ -57,14 +57,17 @@ class CulturalAssetsSlider extends StatelessWidget {
     super.key,
     required this.culturalAssets,
     this.isLoading = false,
+    this.onTapSelectedCulturalAsset,
     this.onTapCulturalAssetExclusive,
   });
 
   /// The list of cultural asset models to display in the slider.
-  final List<CulturalAssetCardModel> culturalAssets;
+  final List<CulturalAssetItemModel> culturalAssets;
 
   /// Whether the slider is in a loading state and should show skeleton cards. Defaults to false.
   final bool isLoading;
+
+  final ValueChanged<CulturalAssetItemModel>? onTapSelectedCulturalAsset;
 
   /// Callback when a locked cultural asset card is tapped (optional).
   final VoidCallback? onTapCulturalAssetExclusive;
@@ -80,10 +83,7 @@ class CulturalAssetsSlider extends StatelessWidget {
       spacing: StoycoScreenSize.height(context, 9),
       children: <Widget>[
         Padding(
-          padding: StoycoScreenSize.symmetric(
-            context, 
-            horizontal: 15,
-          ),
+          padding: StoycoScreenSize.symmetric(context, horizontal: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -106,24 +106,27 @@ class CulturalAssetsSlider extends StatelessWidget {
             clipBehavior: Clip.none,
             shrinkWrap: true,
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            separatorBuilder: (BuildContext context, int index) => SizedBox(width: StoycoScreenSize.width(context, 20)),
+            separatorBuilder: (BuildContext context, int index) =>
+                Gap(StoycoScreenSize.width(context, 20)),
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: isLoading ? 5 : culturalAssets.length,
             itemBuilder: (BuildContext context, int index) {
-
               if (isLoading) {
                 return SkeletonCard(
                   width: StoycoScreenSize.width(context, 156),
                   height: StoycoScreenSize.height(context, 226),
-                  borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, 20)),
+                  borderRadius: BorderRadius.circular(
+                    StoycoScreenSize.radius(context, 20),
+                  ),
                 );
               }
 
-              final CulturalAssetCardModel asset = culturalAssets[index];
+              final CulturalAssetItemModel asset = culturalAssets[index];
               return CulturalAssetCard(
                 culturalAssetCard: asset,
                 onTapCulturalAssetExclusive: onTapCulturalAssetExclusive,
+                onTap: onTapSelectedCulturalAsset,
               );
             },
           ),

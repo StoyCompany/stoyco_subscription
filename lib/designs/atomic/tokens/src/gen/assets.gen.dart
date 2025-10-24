@@ -83,6 +83,10 @@ class $LibAssetsIconsGen {
   SvgGenImage get calendarIco =>
       const SvgGenImage('lib/assets/icons/calendarIco.svg');
 
+  /// File path: lib/assets/icons/close_window.svg
+  SvgGenImage get closeWindow =>
+      const SvgGenImage('lib/assets/icons/close_window.svg');
+
   /// File path: lib/assets/icons/cultural_asset_coin.svg
   SvgGenImage get culturalAssetCoin =>
       const SvgGenImage('lib/assets/icons/cultural_asset_coin.svg');
@@ -159,6 +163,7 @@ class $LibAssetsIconsGen {
     arrowRight,
     bellIcon,
     calendarIco,
+    closeWindow,
     culturalAssetCoin,
     dinersClub,
     discover,
@@ -307,7 +312,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String? package,
+    String? package = 'stoyco_subscription',
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,

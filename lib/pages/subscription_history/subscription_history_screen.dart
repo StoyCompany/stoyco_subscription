@@ -16,16 +16,25 @@ import 'package:stoyco_subscription/pages/subscription_history/screens/subscript
 /// {@endtemplate}
 class ResponsiveSubscriptionHistoryScreen extends StatelessWidget {
   /// Creates a [ResponsiveSubscriptionHistoryScreen].
-  const ResponsiveSubscriptionHistoryScreen({super.key, this.userId});
+  const ResponsiveSubscriptionHistoryScreen({
+    super.key,
+    this.userId,
+    this.onTapSubscriptionHistoryCard,
+  });
 
   final String? userId;
+
+  final void Function(String partnerId)? onTapSubscriptionHistoryCard;
 
   @override
   Widget build(BuildContext context) {
     if (!StoycoScreenSize.isPhone(context)) {
       return const Center(child: Text('En Desarrollo'));
     } else {
-      return SubscriptionHistoryMobileScreen(userId: userId ?? '');
+      return SubscriptionHistoryMobileScreen(
+        userId: userId ?? '',
+        onTapSubscriptionHistoryCard: onTapSubscriptionHistoryCard,
+      );
     }
   }
 }

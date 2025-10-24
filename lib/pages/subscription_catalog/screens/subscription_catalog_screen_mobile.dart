@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/inputs/subscription_search_bar.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/circular_avatar/subscription_circular_image_with_info.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/tab_bar/tab_bar_v2.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -37,6 +38,8 @@ class SubscriptionsCatalogScreenMobile extends StatefulWidget {
     this.onTapSubscription,
     this.onTapSubscribe,
     this.userId,
+    this.pageSize,
+    this.onTapLeadingIcon,
   });
 
   /// Callback triggered when a subscription item is tapped.
@@ -47,7 +50,11 @@ class SubscriptionsCatalogScreenMobile extends StatefulWidget {
   /// Receives the [id] of the subscription.
   final void Function(String id)? onTapSubscribe;
 
+  final VoidCallback? onTapLeadingIcon;
+
   final String? userId;
+
+  final int? pageSize;
 
   @override
   State<SubscriptionsCatalogScreenMobile> createState() =>
@@ -67,7 +74,11 @@ class _SubscriptionsCatalogScreenMobileState
   void initState() {
     super.initState();
     onTapSubscription = widget.onTapSubscription;
-    notifier = SubscriptionCatalogNotifier(this, userId: widget.userId);
+    notifier = SubscriptionCatalogNotifier(
+      this,
+      userId: widget.userId,
+      pageSize: widget.pageSize,
+    );
     notifier.addListener(_onNotifierChanged);
   }
 
@@ -97,7 +108,15 @@ class _SubscriptionsCatalogScreenMobileState
               backgroundColor: StoycoColors.deepCharcoal,
               surfaceTintColor: StoycoColors.deepCharcoal,
               expandedHeight: StoycoScreenSize.height(context, 24),
-              automaticallyImplyLeading: true,
+              automaticallyImplyLeading: false,
+              leading: IconButton(
+                onPressed: widget.onTapLeadingIcon,
+                icon: StoycoAssets.lib.assets.icons.leftArrow.svg(
+                  height: StoycoScreenSize.height(context, 24),
+                  width: StoycoScreenSize.width(context, 24),
+                  package: 'stoyco_subscription',
+                ),
+              ),
               elevation: 0,
               centerTitle: true,
               title: Text(
