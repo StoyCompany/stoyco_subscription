@@ -15,6 +15,7 @@
     <color name="darkBlue">#1C197F</color>
     <color name="deepCharcoal">#0F151A</color>
     <color name="error">#D81736</color>
+    <color name="errorText">#DE2424</color>
     <color name="grayText">#D9D9D9</color>
     <color name="hint">#92929D</color>
     <color name="iconDefault">#D5D5E0</color>
