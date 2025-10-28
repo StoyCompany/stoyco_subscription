@@ -105,7 +105,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             if (StoycoScreenSize.isPhone(context)) ...<Widget>[
-              StoycoAssets.lib.assets.icons.tagSubscription.svg(
+              StoycoAssets.lib.assets.icons.plan.tagSubscription.svg(
                 width: widget.styleParams.tagSubscriptionWidth,
                 height: widget.styleParams.tagSubscriptionHeight,
                 package: 'stoyco_subscription',
@@ -126,7 +126,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
               ),
               Gap(StoycoScreenSize.height(context, 16)),
             ] else ...<Widget>[
-              StoycoAssets.lib.assets.icons.tagSubscriptionSlim.svg(
+              StoycoAssets.lib.assets.icons.plan.tagSubscriptionSlim.svg(
                 width: widget.styleParams.tagSubscriptionWidth,
                 height: widget.styleParams.tagSubscriptionHeight,
                 package: 'stoyco_subscription',

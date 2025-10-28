@@ -101,7 +101,7 @@ class _HtmlDropdownState extends State<HtmlDropdown> {
           trailing: AnimatedRotation(
             turns: expanded ? 0.25 : 0,
             duration: const Duration(milliseconds: 200),
-            child: widget.arrowIcon ?? StoycoAssets.lib.assets.icons.arrowRight.svg(
+            child: widget.arrowIcon ?? StoycoAssets.lib.assets.icons.plan.arrowRight.svg(
               package: 'stoyco_subscription',
             ),
           ),

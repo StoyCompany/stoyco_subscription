@@ -107,7 +107,7 @@ class TagGradientIcon extends StatelessWidget {
           if (icon != null) ...<Widget>[
             icon!,
           ] else ...<Widget>[
-            StoycoAssets.lib.assets.icons.star.svg(
+            StoycoAssets.lib.assets.icons.plan.star.svg(
               fit: BoxFit.cover,
               package: 'stoyco_subscription',
             ),

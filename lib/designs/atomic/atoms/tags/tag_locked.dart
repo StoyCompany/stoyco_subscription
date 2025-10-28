@@ -111,7 +111,7 @@ class TagLocked extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          StoycoAssets.lib.assets.icons.tagLock.svg(
+          StoycoAssets.lib.assets.icons.exclusiveContent.tagLock.svg(
             fit: BoxFit.cover,
             package: 'stoyco_subscription',
           ),

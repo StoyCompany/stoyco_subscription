@@ -115,8 +115,8 @@ class PaymentItemCardState extends State<PaymentMethodSelectButton> {
   Widget build(BuildContext context) {
     final String cardNumber = '•••• •••• •••• ${widget.lastDigits}';
     final String svgSelectedCard = widget.isSelected
-        ? StoycoAssets.lib.assets.icons.radiobuttonsSelected.path
-        : StoycoAssets.lib.assets.icons.radiobuttonsNoSelected.path;
+        ? StoycoAssets.lib.assets.icons.payment.radiobuttonsSelected.path
+        : StoycoAssets.lib.assets.icons.payment.radiobuttonsNoSelected.path;
 
     return Dismissible(
       key: ValueKey<String>(widget.lastDigits),
