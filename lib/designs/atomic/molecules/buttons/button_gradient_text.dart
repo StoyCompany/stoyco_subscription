@@ -1,9 +1,14 @@
+
 import 'package:flutter/widgets.dart';
+import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/buttons/button_gradient.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+
+/// Enum to control icon position in [ButtonGradientText].
+enum ButtonGradientTextIconPosition { none, left, right }
 
 enum ButtonGradientTextType { primary, secondary, tertiary, inactive, custom }
 
@@ -72,7 +77,14 @@ class ButtonGradientText extends StatelessWidget {
     this.splashColor,
     this.focusColor,
     this.highlightColor,
+    this.iconWidget,
+    this.iconPosition = ButtonGradientTextIconPosition.none,
   });
+  /// Optional icon widget to display in the button (left or right).
+  final Widget? iconWidget;
+
+  /// Controls the icon position (none, left, right).
+  final ButtonGradientTextIconPosition iconPosition;
 
   /// The widget to display as button content. If provided, overrides [text].
   final Widget? textWidget;
@@ -285,14 +297,63 @@ class ButtonGradientText extends StatelessWidget {
       onPressed: type == ButtonGradientTextType.inactive ? null : onPressed,
       child: Padding(
         padding: paddingContent ?? StoycoScreenSize.symmetric(context, horizontal: 24, vertical: 16),
-        child: textWidget ?? Text(
-          text,
-          textAlign: textAlign ?? TextAlign.center,
-          maxLines: null,
-          softWrap: true,
-          style: style,
-        ),
+        child: _buildContent(context, style),
       ),
     );
+
   }
-}
+
+  Widget _buildContent(BuildContext context, TextStyle? style) {
+    if (iconWidget == null || iconPosition == ButtonGradientTextIconPosition.none) {
+      return textWidget ?? Text(
+        text,
+        textAlign: textAlign ?? TextAlign.center,
+        maxLines: null,
+        softWrap: true,
+        style: style,
+      );
+    }
+    if (iconPosition == ButtonGradientTextIconPosition.left) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          iconWidget!,
+          Gap(StoycoScreenSize.width(context, 8)),
+          const SizedBox(width: 8),
+          textWidget ?? Text(
+            text,
+            textAlign: textAlign ?? TextAlign.center,
+            maxLines: null,
+            softWrap: true,
+            style: style,
+          ),
+        ],
+      );
+    }
+    if (iconPosition == ButtonGradientTextIconPosition.right) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          textWidget ?? Text(
+            text,
+            textAlign: textAlign ?? TextAlign.center,
+            maxLines: null,
+            softWrap: true,
+            style: style,
+          ),
+          Gap(StoycoScreenSize.width(context, 8)),
+          iconWidget!,
+        ],
+      );
+    }
+    return textWidget ?? Text(
+      text,
+      textAlign: textAlign ?? TextAlign.center,
+      maxLines: null,
+      softWrap: true,
+      style: style,
+    );
+  }
+  }
