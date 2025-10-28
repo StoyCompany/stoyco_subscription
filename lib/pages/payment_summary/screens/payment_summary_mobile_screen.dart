@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:stoyco_subscription/designs/atomic/atoms/buttons/button_gradient.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/subscription_payment_preview_card.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/sections/payment_information_section.dart';
-import 'package:stoyco_subscription/designs/atomic/organisms/sections/select_payment_method_section.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -35,18 +34,26 @@ import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summa
 /// {@endtemplate}
 class PaymentSummaryMobileScreen extends StatefulWidget {
   /// {@macro payment_summary_mobile_screen}
-  const PaymentSummaryMobileScreen({super.key, this.subscriptionId});
+  const PaymentSummaryMobileScreen({
+    super.key, 
+    this.subscriptionId,
+    this.onTapPaymentSubscriptionPlan,
+    this.selectPaymentMethodSection,
+  });
 
   /// The optional subscription ID to load payment summary data for.
   final String? subscriptionId;
 
+  /// Callback for when the payment subscription plan is tapped.
+  final VoidCallback? onTapPaymentSubscriptionPlan;
+
+  final Widget? selectPaymentMethodSection;
+
   @override
-  State<PaymentSummaryMobileScreen> createState() =>
-      _PaymentSummaryMobileScreenState();
+  State<PaymentSummaryMobileScreen> createState() => _PaymentSummaryMobileScreenState();
 }
 
-class _PaymentSummaryMobileScreenState
-  extends State<PaymentSummaryMobileScreen> {
+class _PaymentSummaryMobileScreenState extends State<PaymentSummaryMobileScreen> {
   late PaymentSummaryNotifier notifier;
 
   @override
@@ -125,7 +132,7 @@ class _PaymentSummaryMobileScreenState
           actions: <Widget>[
             IconButton(
               onPressed: () {},
-              icon: StoycoAssets.lib.assets.icons.bellIcon.svg(
+              icon: StoycoAssets.lib.assets.icons.payment.bellIcon.svg(
                 height: StoycoScreenSize.height(context, 24),
                 width: StoycoScreenSize.width(context, 24),
                 package: 'stoyco_subscription',
@@ -134,29 +141,17 @@ class _PaymentSummaryMobileScreenState
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: isLoading
-            ? null
-            : SizedBox(
-                height: StoycoScreenSize.height(context, 56),
-                child: ButtonGradient(
-                  backgroundGradientColor: const LinearGradient(
-                    colors: <Color>[StoycoColors.darkBlue, StoycoColors.blue],
-                  ),
-                  borderRadius: 16,
-                  width: StoycoScreenSize.width(context, 330),
-                  child: Center(
-                    child: Text(
-                      getTotalToPayText(),
-                      style: GoogleFonts.montserrat(
-                        textStyle: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: StoycoScreenSize.fontSize(context, 16),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+        floatingActionButton: ButtonGradientText(
+          type: isLoading ? ButtonGradientTextType.inactive : ButtonGradientTextType.primary,
+          paddingButton: StoycoScreenSize.fromLTRB(
+            context,
+            bottom: 5,
+            right: 16,
+            left: 16,
+          ),
+          text: getTotalToPayText(),
+          onPressed: widget.onTapPaymentSubscriptionPlan,
+        ), 
         body: isLoading
             ? const Center(
                 child: CircularProgressIndicator(color: Colors.white),
@@ -173,7 +168,7 @@ class _PaymentSummaryMobileScreenState
                     PaymentInformationSection(
                       items: getPaymentInfoItems(),
                     ),
-                    const SelectPaymentMethodSection(),
+                    widget.selectPaymentMethodSection ?? const SizedBox.shrink(),
                   ],
                 ),
               ),
