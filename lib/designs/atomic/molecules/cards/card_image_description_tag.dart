@@ -54,25 +54,13 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 ///   ),
 ///   tagAlignment: Alignment.topRight,
 ///   paddingContent: EdgeInsets.all(8),
+///   paddingCard: EdgeInsets.all(12),
+///   marginCard: EdgeInsets.all(16),
 /// )
 /// ```
 /// {@endtemplate}
 class CardImageDescriptionTag extends StatelessWidget {
-  /// Creates a [CardImageDescriptionTag] widget.
-  ///
-  /// [cardWidth] - The width of the card. If null, expands to parent constraints.
-  /// [cardHeight] - The height of the card. If null, expands to parent constraints.
-  /// [cardBorderRadius] - The border radius of the card. Defaults to 24.
-  /// [imageUrl] - The main image URL for the card.
-  /// [imageHeight] - The height of the image. Defaults to 160.
-  /// [imageWidth] - The width of the image. Defaults to full width.
-  /// [imageBorderRadius] - The border radius for the image. Defaults to top corners rounded.
-  /// [imagePlaceholder] - Widget to show while the image is loading. Defaults to [SkeletonCard].
-  /// [imageErrorPlaceholder] - Widget to show if the image fails to load. Defaults to [SkeletonCard].
-  /// [description] - The main description widget below the image.
-  /// [tag] - Optional floating widget (tag/badge) to overlay on the card.
-  /// [tagAlignment] - Alignment for the floating tag. Defaults to [Alignment.topRight].
-  /// [paddingContent] - Padding for the content inside the card.
+  /// {@macro card_image_description_tag}
   const CardImageDescriptionTag({
     super.key,
     this.cardWidth,
@@ -88,6 +76,8 @@ class CardImageDescriptionTag extends StatelessWidget {
     this.tagAlignment = Alignment.topRight,
     this.tag,
     this.paddingContent,
+    this.paddingCard,
+    this.marginCard,
   });
 
   /// The width of the card. If null, expands to parent constraints.
@@ -129,13 +119,20 @@ class CardImageDescriptionTag extends StatelessWidget {
   /// Padding for the content inside the card.
   final EdgeInsetsGeometry? paddingContent;
 
+  /// Padding for the card.
+  final EdgeInsetsGeometry? paddingCard;
+
+  /// Margin for the card.
+  final EdgeInsetsGeometry? marginCard;
+
   @override
   Widget build(BuildContext context) {
     return CardWithShadow(
       width: cardWidth,
       height: cardHeight,
       borderRadius: StoycoScreenSize.radius(context, cardBorderRadius),
-      paddingChildren: EdgeInsets.zero,
+      padding: paddingCard,
+      margin: marginCard,
       child: ClipRRect(
         child: Stack(
           children: <Widget>[
