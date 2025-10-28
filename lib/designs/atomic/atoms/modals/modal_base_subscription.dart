@@ -91,7 +91,7 @@ class ModalBaseSubscription extends StatelessWidget {
         );
         buttonText = 'Continuar';
       case ModalBaseSubscriptionType.error:
-        icon = StoycoAssets.lib.assets.icons.creditCardValidation.svg(
+        icon = StoycoAssets.lib.assets.icons.plan.creditCardValidation.svg(
           package: 'stoyco_subscription',
           width: StoycoScreenSize.height(context, 72),
           height: StoycoScreenSize.height(context, 72),

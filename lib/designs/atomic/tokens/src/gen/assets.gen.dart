@@ -50,50 +50,25 @@ class $LibAssetsColorsGen {
 class $LibAssetsIconsGen {
   const $LibAssetsIconsGen();
 
-  /// Directory path: lib/assets/icons/catalog
-  $LibAssetsIconsCatalogGen get catalog => const $LibAssetsIconsCatalogGen();
+  /// Directory path: lib/assets/icons/common
+  $LibAssetsIconsCommonGen get common => const $LibAssetsIconsCommonGen();
 
-  /// File path: lib/assets/icons/credit_card_validation.svg
-  SvgGenImage get creditCardValidation =>
-      const SvgGenImage('lib/assets/icons/credit_card_validation.svg');
-
-  /// File path: lib/assets/icons/cultural_asset_coin.svg
-  SvgGenImage get culturalAssetCoin =>
-      const SvgGenImage('lib/assets/icons/cultural_asset_coin.svg');
-
-  /// File path: lib/assets/icons/double_right_arrow.svg
-  SvgGenImage get doubleRightArrow =>
-      const SvgGenImage('lib/assets/icons/double_right_arrow.svg');
+  /// Directory path: lib/assets/icons/cultural_assets
+  $LibAssetsIconsCulturalAssetsGen get culturalAssets =>
+      const $LibAssetsIconsCulturalAssetsGen();
 
   /// Directory path: lib/assets/icons/events
   $LibAssetsIconsEventsGen get events => const $LibAssetsIconsEventsGen();
 
-  /// File path: lib/assets/icons/exclamacion.svg
-  SvgGenImage get exclamacion =>
-      const SvgGenImage('lib/assets/icons/exclamacion.svg');
-
   /// Directory path: lib/assets/icons/exclusive_content
   $LibAssetsIconsExclusiveContentGen get exclusiveContent =>
       const $LibAssetsIconsExclusiveContentGen();
-
-  /// File path: lib/assets/icons/left_arrow.svg
-  SvgGenImage get leftArrow =>
-      const SvgGenImage('lib/assets/icons/left_arrow.svg');
 
   /// Directory path: lib/assets/icons/payment
   $LibAssetsIconsPaymentGen get payment => const $LibAssetsIconsPaymentGen();
 
   /// Directory path: lib/assets/icons/plan
   $LibAssetsIconsPlanGen get plan => const $LibAssetsIconsPlanGen();
-
-  /// List of all assets
-  List<SvgGenImage> get values => [
-    creditCardValidation,
-    culturalAssetCoin,
-    doubleRightArrow,
-    exclamacion,
-    leftArrow,
-  ];
 }
 
 class $LibAssetsImagesGen {
@@ -121,19 +96,74 @@ class $LibAssetsMocksGen {
   ];
 }
 
-class $LibAssetsIconsCatalogGen {
-  const $LibAssetsIconsCatalogGen();
+class $LibAssetsIconsCommonGen {
+  const $LibAssetsIconsCommonGen();
 
-  /// File path: lib/assets/icons/catalog/alert_icon.svg
+  /// File path: lib/assets/icons/common/alert_icon.svg
   SvgGenImage get alertIcon =>
-      const SvgGenImage('lib/assets/icons/catalog/alert_icon.svg');
+      const SvgGenImage('lib/assets/icons/common/alert_icon.svg');
 
-  /// File path: lib/assets/icons/catalog/search_navbar.svg
+  /// File path: lib/assets/icons/common/arrow_right.svg
+  SvgGenImage get arrowRight =>
+      const SvgGenImage('lib/assets/icons/common/arrow_right.svg');
+
+  /// File path: lib/assets/icons/common/bell_icon.svg
+  SvgGenImage get bellIcon =>
+      const SvgGenImage('lib/assets/icons/common/bell_icon.svg');
+
+  /// File path: lib/assets/icons/common/close_window.svg
+  SvgGenImage get closeWindow =>
+      const SvgGenImage('lib/assets/icons/common/close_window.svg');
+
+  /// File path: lib/assets/icons/common/double_right_arrow.svg
+  SvgGenImage get doubleRightArrow =>
+      const SvgGenImage('lib/assets/icons/common/double_right_arrow.svg');
+
+  /// File path: lib/assets/icons/common/exclamacion.svg
+  SvgGenImage get exclamacion =>
+      const SvgGenImage('lib/assets/icons/common/exclamacion.svg');
+
+  /// File path: lib/assets/icons/common/left_arrow.svg
+  SvgGenImage get leftArrow =>
+      const SvgGenImage('lib/assets/icons/common/left_arrow.svg');
+
+  /// File path: lib/assets/icons/common/plus_icon.svg
+  SvgGenImage get plusIcon =>
+      const SvgGenImage('lib/assets/icons/common/plus_icon.svg');
+
+  /// File path: lib/assets/icons/common/right_arrow.svg
+  SvgGenImage get rightArrow =>
+      const SvgGenImage('lib/assets/icons/common/right_arrow.svg');
+
+  /// File path: lib/assets/icons/common/search_navbar.svg
   SvgGenImage get searchNavbar =>
-      const SvgGenImage('lib/assets/icons/catalog/search_navbar.svg');
+      const SvgGenImage('lib/assets/icons/common/search_navbar.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [alertIcon, searchNavbar];
+  List<SvgGenImage> get values => [
+    alertIcon,
+    arrowRight,
+    bellIcon,
+    closeWindow,
+    doubleRightArrow,
+    exclamacion,
+    leftArrow,
+    plusIcon,
+    rightArrow,
+    searchNavbar,
+  ];
+}
+
+class $LibAssetsIconsCulturalAssetsGen {
+  const $LibAssetsIconsCulturalAssetsGen();
+
+  /// File path: lib/assets/icons/cultural_assets/cultural_asset_coin.svg
+  SvgGenImage get culturalAssetCoin => const SvgGenImage(
+    'lib/assets/icons/cultural_assets/cultural_asset_coin.svg',
+  );
+
+  /// List of all assets
+  List<SvgGenImage> get values => [culturalAssetCoin];
 }
 
 class $LibAssetsIconsEventsGen {
@@ -170,54 +200,24 @@ class $LibAssetsIconsPaymentGen {
   SvgGenImage get appleLogo =>
       const SvgGenImage('lib/assets/icons/payment/apple_logo.svg');
 
-  /// File path: lib/assets/icons/payment/bell_icon.svg
-  SvgGenImage get bellIcon =>
-      const SvgGenImage('lib/assets/icons/payment/bell_icon.svg');
-
   /// File path: lib/assets/icons/payment/card_cvv.svg
   SvgGenImage get cardCvv =>
       const SvgGenImage('lib/assets/icons/payment/card_cvv.svg');
-
-  /// File path: lib/assets/icons/payment/plus_icon.svg
-  SvgGenImage get plusIcon =>
-      const SvgGenImage('lib/assets/icons/payment/plus_icon.svg');
-
-  /// File path: lib/assets/icons/payment/radiobuttons_no_selected.svg
-  SvgGenImage get radiobuttonsNoSelected => const SvgGenImage(
-    'lib/assets/icons/payment/radiobuttons_no_selected.svg',
-  );
-
-  /// File path: lib/assets/icons/payment/radiobuttons_selected.svg
-  SvgGenImage get radiobuttonsSelected =>
-      const SvgGenImage('lib/assets/icons/payment/radiobuttons_selected.svg');
-
-  /// File path: lib/assets/icons/payment/right_arrow.svg
-  SvgGenImage get rightArrow =>
-      const SvgGenImage('lib/assets/icons/payment/right_arrow.svg');
 
   /// File path: lib/assets/icons/payment/visa_white.svg
   SvgGenImage get visaWhite =>
       const SvgGenImage('lib/assets/icons/payment/visa_white.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [
-    appleLogo,
-    bellIcon,
-    cardCvv,
-    plusIcon,
-    radiobuttonsNoSelected,
-    radiobuttonsSelected,
-    rightArrow,
-    visaWhite,
-  ];
+  List<SvgGenImage> get values => [appleLogo, cardCvv, visaWhite];
 }
 
 class $LibAssetsIconsPlanGen {
   const $LibAssetsIconsPlanGen();
 
-  /// File path: lib/assets/icons/plan/arrow_right.svg
-  SvgGenImage get arrowRight =>
-      const SvgGenImage('lib/assets/icons/plan/arrow_right.svg');
+  /// File path: lib/assets/icons/plan/credit_card_validation.svg
+  SvgGenImage get creditCardValidation =>
+      const SvgGenImage('lib/assets/icons/plan/credit_card_validation.svg');
 
   /// File path: lib/assets/icons/plan/star.svg
   SvgGenImage get star => const SvgGenImage('lib/assets/icons/plan/star.svg');
@@ -240,7 +240,7 @@ class $LibAssetsIconsPlanGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
-    arrowRight,
+    creditCardValidation,
     star,
     subscriptionIcon,
     subscriptionIconWeb,

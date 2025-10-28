@@ -193,7 +193,7 @@ class CardSubscriptionPlan extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    StoycoAssets.lib.assets.icons.exclamacion.svg(
+                    StoycoAssets.lib.assets.icons.common.exclamacion.svg(
                       width: styleParams.exclamationIconWidth,
                       height: styleParams.exclamationIconHeight,
                       package: 'stoyco_subscription',

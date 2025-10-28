@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscription_tab.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/get_subscription_catalog_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_service.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/enums/subscription_profile_type.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item_map.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart';
 
 class SubscriptionCatalogNotifier extends ChangeNotifier {
-  SubscriptionCatalogNotifier(TickerProvider vsync, {this.userId}) {
+  SubscriptionCatalogNotifier(
+    TickerProvider vsync, {
+    this.userId,
+    int? pageSize,
+  }) : pageSize = pageSize ?? 50 {
     tabController = TabController(vsync: vsync, length: tabs.length);
     tabController.addListener(_onTabChanged);
     _fetchCatalog();
@@ -39,7 +44,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
   String searchText = '';
 
   int currentPage = 1;
-  final int pageSize = 20;
+  final int pageSize;
   bool isLoadingMore = false;
   bool hasNextPage = true;
 
@@ -134,19 +139,19 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         musicSubscriptions.addAll(
           newItems.where(
             (SubscriptionCatalogItemMap item) =>
-                item.profile.toLowerCase() == 'music',
+                parseProfileType(item.profile) == SubscriptionProfileType.music,
           ),
         );
         sportSubscriptions.addAll(
           newItems.where(
             (SubscriptionCatalogItemMap item) =>
-                item.profile.toLowerCase() == 'sport',
+                parseProfileType(item.profile) == SubscriptionProfileType.sport,
           ),
         );
         brandSubscriptions.addAll(
           newItems.where(
             (SubscriptionCatalogItemMap item) =>
-                item.profile.toLowerCase() == 'brands',
+                parseProfileType(item.profile) == SubscriptionProfileType.brand,
           ),
         );
 
@@ -163,56 +168,66 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     currentPage = 1;
     hasNextPage = true;
     isLoadingMore = false;
-    final Either<Failure, GetSubscriptionCatalogResponse> result =
-        await SubscriptionCatalogService.instance.getSubscriptionCatalog(
-          userId: userId,
-          page: currentPage,
-          pageSize: pageSize,
-        );
-    result.fold(
-      (Failure failure) {
-        StoyCoLogger.error('Error al obtener catálogo: $failure');
-      },
-      (GetSubscriptionCatalogResponse response) {
-        final List<SubscriptionCatalogItemMap> allItems = response.data
-            .map(
-              (SubscriptionCatalogItem item) => SubscriptionCatalogItemMap(
-                id: item.subscriptionId,
-                imageUrl: item.partnerImageUrl,
-                title: item.partnerName,
-                subscribed: item.isSubscribed,
-                partnerId: item.partnerId,
-                profile: item.profile,
-                hasSubscription: item.hasSubscription,
-              ),
-            )
-            .toList();
+    musicSubscriptions.clear();
+    sportSubscriptions.clear();
+    brandSubscriptions.clear();
 
-        musicSubscriptions = allItems
-            .where(
+    while (hasNextPage) {
+      final Either<Failure, GetSubscriptionCatalogResponse> result =
+          await SubscriptionCatalogService.instance.getSubscriptionCatalog(
+            userId: userId,
+            page: currentPage,
+            pageSize: pageSize,
+          );
+      result.fold(
+        (Failure failure) {
+          StoyCoLogger.error('Error al obtener catálogo: $failure');
+          hasNextPage = false;
+        },
+        (GetSubscriptionCatalogResponse response) {
+          final List<SubscriptionCatalogItemMap> allItems = response.data
+              .map(
+                (SubscriptionCatalogItem item) => SubscriptionCatalogItemMap(
+                  id: item.subscriptionId,
+                  imageUrl: item.partnerImageUrl,
+                  title: item.partnerName,
+                  subscribed: item.isSubscribed,
+                  partnerId: item.partnerId,
+                  profile: item.profile,
+                  hasSubscription: item.hasSubscription,
+                ),
+              )
+              .toList();
+
+          musicSubscriptions.addAll(
+            allItems.where(
               (SubscriptionCatalogItemMap item) =>
-                  item.profile.toLowerCase() == 'music',
-            )
-            .toList();
-
-        sportSubscriptions = allItems
-            .where(
+                  parseProfileType(item.profile) ==
+                  SubscriptionProfileType.music,
+            ),
+          );
+          sportSubscriptions.addAll(
+            allItems.where(
               (SubscriptionCatalogItemMap item) =>
-                  item.profile.toLowerCase() == 'sport',
-            )
-            .toList();
-
-        brandSubscriptions = allItems
-            .where(
+                  parseProfileType(item.profile) ==
+                  SubscriptionProfileType.sport,
+            ),
+          );
+          brandSubscriptions.addAll(
+            allItems.where(
               (SubscriptionCatalogItemMap item) =>
-                  item.profile.toLowerCase() == 'brand' ||
-                  item.profile.toLowerCase() == 'brands',
-            )
-            .toList();
+                  parseProfileType(item.profile) ==
+                  SubscriptionProfileType.brand,
+            ),
+          );
 
-        changeTab(selectedIndex);
-        notifyListeners();
-      },
-    );
+          hasNextPage = response.pagination.hasNextPage;
+          currentPage++;
+        },
+      );
+    }
+
+    changeTab(selectedIndex);
+    notifyListeners();
   }
 }

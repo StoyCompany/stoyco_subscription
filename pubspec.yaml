@@ -1,6 +1,6 @@
 name: stoyco_subscription
 description: "A new Flutter package project."
-version: 1.0.0
+version: 1.1.0
 homepage: null
 
 environment:
@@ -41,7 +41,8 @@ flutter:
   assets:
     - lib/assets/colors/
     - lib/assets/icons/
-    - lib/assets/icons/catalog/
+    - lib/assets/icons/common/
+    - lib/assets/icons/cultural_assets/
     - lib/assets/icons/events/
     - lib/assets/icons/exclusive_content/
     - lib/assets/icons/payment/

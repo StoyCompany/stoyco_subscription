@@ -336,7 +336,7 @@ class _AddCardPaymentState extends State<AddCardPayment> {
     return ButtonGradientText(
       text: 'Siguiente',
       iconPosition: ButtonGradientTextIconPosition.right,
-      iconWidget: StoycoAssets.lib.assets.icons.payment.rightArrow.svg(
+      iconWidget: StoycoAssets.lib.assets.icons.common.rightArrow.svg(
         package: 'stoyco_subscription',
       ),
       type: notifier.isDisabled ? ButtonGradientTextType.inactive : ButtonGradientTextType.primary,

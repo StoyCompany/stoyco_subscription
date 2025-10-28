@@ -1,177 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/subscription_payment_preview_card.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/sections/payment_information_section.dart';
-import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
-import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
-import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_summary_info_model.dart';
+import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
 import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summary_notifier.dart';
 
 /// {@template payment_summary_mobile_screen}
-/// A [PaymentSummaryMobileScreen] page (template with logic) for the Stoyco Subscription Atomic Design System.
+/// Displays the content of the payment summary for mobile devices.
 ///
-/// ### Overview
-/// Displays a mobile-friendly payment summary page, including plan details, payment breakdown, selectable payment methods, and a total-to-pay action button. Integrates with a notifier for state management and loading states. Serves as a high-level template with business logic, composing multiple organisms, molecules, and atoms.
+/// This widget does not include a [Scaffold], [AppBar], or floating action button.
+/// It expects the [PaymentSummaryNotifier] and loading state to be managed by the parent.
 ///
-/// ### Atomic Level
-/// **Page** – High-level layout structure with business logic, composed of templates, organisms, molecules, and atoms for payment summary and checkout flows.
+/// The content includes:
+///  - A preview card with the payment summary information.
+///  - A section with payment breakdown details (plan and IVA).
+///  - A section to select the payment method.
 ///
-/// ### Parameters
-/// - `subscriptionId`: The optional subscription ID to load payment summary data for.
-/// - `key`: Optional widget key.
-///
-/// ### Returns
-/// Renders a scaffolded mobile payment summary page with app bar, loading indicator, payment details, and action button.
-///
-/// ### Example
+/// Example usage:
 /// ```dart
-/// const PaymentSummaryMobileScreen(
-///   subscriptionId: 'sub_123',
+/// PaymentSummaryMobileScreen(
+///   notifier: myNotifier,
+///   isLoading: false,
 /// )
 /// ```
+///
 /// {@endtemplate}
-class PaymentSummaryMobileScreen extends StatefulWidget {
-  /// {@macro payment_summary_mobile_screen}
+class PaymentSummaryMobileScreen extends StatelessWidget {
+  /// Creates a [PaymentSummaryMobileScreen].
+  ///
+  /// [notifier] provides the payment summary data.
+  /// [isLoading] controls whether to show a loading indicator.
   const PaymentSummaryMobileScreen({
-    super.key, 
-    this.subscriptionId,
-    this.onTapPaymentSubscriptionPlan,
-    this.selectPaymentMethodSection,
+    super.key,
+    required this.notifier,
+    required this.isLoading,
+    this.selectPaymentMethodSection = const SizedBox.shrink(),
   });
 
-  /// The optional subscription ID to load payment summary data for.
-  final String? subscriptionId;
+  /// The notifier that holds the payment summary information.
+  final PaymentSummaryNotifier notifier;
 
-  /// Callback for when the payment subscription plan is tapped.
-  final VoidCallback? onTapPaymentSubscriptionPlan;
+  /// Whether the content is loading.
+  final bool isLoading;
 
-  final Widget? selectPaymentMethodSection;
+  final Widget selectPaymentMethodSection;
 
-  @override
-  State<PaymentSummaryMobileScreen> createState() => _PaymentSummaryMobileScreenState();
-}
-
-class _PaymentSummaryMobileScreenState extends State<PaymentSummaryMobileScreen> {
-  late PaymentSummaryNotifier notifier;
-
-  @override
-  void initState() {
-    super.initState();
-    notifier = PaymentSummaryNotifier(subscriptionId: widget.subscriptionId);
-    notifier.addListener(_onNotifierChanged);
-  }
-
-  @override
-  void dispose() {
-    notifier.removeListener(_onNotifierChanged);
-    notifier.dispose();
-    super.dispose();
-  }
-
-  void _onNotifierChanged() {
-    setState(() {});
-  }
-
-  String getTotalToPayText() {
-    final PaymentSummaryInfoModel? info = notifier.paymentSummaryInfo;
-    final String code = info?.currencyCode ?? 'MXN';
-    final String symbol = info?.currencySymbol ?? r'$';
-    final String total = info?.totalPrice.toStringAsFixed(2) ?? '';
-    return 'Total a pagar $code $symbol$total';
-  }
-
+  /// Returns a list of key-value pairs with payment information items.
+  ///
+  /// Each item contains a 'key' (label) and a 'value' (amount with currency).
   List<Map<String, String>> getPaymentInfoItems() {
-    final PaymentSummaryInfoModel? info = notifier.paymentSummaryInfo;
-    final String code = info?.currencyCode ?? 'MXN';
-    final String symbol = info?.currencySymbol ?? r'$';
-    return <Map<String, String>>
-    [
-      <String, String>
-      
-      {
+    final PaymentSummaryInfoResponse? info = notifier.paymentSummaryInfo;
+    final String code = info?.breakdown.currencyCode ?? 'MXN';
+    final String symbol = info?.breakdown.currencySymbol ?? r'$';
+    return <Map<String, String>>[
+      <String, String>{
         'key': 'Plan',
-        'value': '$code $symbol${info?.planPrice.toStringAsFixed(2) ?? '0.00'}',
+        'value':
+            '$code $symbol${info?.breakdown.planAmount.toStringAsFixed(2) ?? '0.00'}',
       },
       <String, String>{
         'key': 'IVA',
-        'value': '$code $symbol${info?.iva.toStringAsFixed(2) ?? ''}',
+        'value':
+            '$code $symbol${info?.breakdown.ivaAmount.toStringAsFixed(2) ?? ''}',
       },
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoading = notifier.isLoading;
-
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      color: StoycoColors.deepCharcoal,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {Navigator.of(context).pop();},
-            icon: StoycoAssets.lib.assets.icons.leftArrow.svg(
-              height: StoycoScreenSize.height(context, 24),
-              width: StoycoScreenSize.width(context, 24),
-              package: 'stoyco_subscription',
-            ),
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.white),
+      );
+    }
+    return Padding(
+      padding: StoycoScreenSize.symmetric(context, horizontal: 23),
+      child: Column(
+        spacing: StoycoScreenSize.height(context, 24),
+        children: <Widget>[
+          SizedBox(height: StoycoScreenSize.height(context, 59)),
+          /// Displays the payment summary preview card.
+          SubscriptionPaymentPreviewCard(
+            paymentSummaryInfo: notifier.paymentSummaryInfo,
           ),
-          title: Center(
-            child: Text(
-              'Resumen de compra',
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: StoycoScreenSize.fontSize(context, 16),
-                ),
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {},
-              icon: StoycoAssets.lib.assets.icons.payment.bellIcon.svg(
-                height: StoycoScreenSize.height(context, 24),
-                width: StoycoScreenSize.width(context, 24),
-                package: 'stoyco_subscription',
-              ),
-            ),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: ButtonGradientText(
-          type: isLoading ? ButtonGradientTextType.inactive : ButtonGradientTextType.primary,
-          paddingButton: StoycoScreenSize.fromLTRB(
-            context,
-            bottom: 5,
-            right: 16,
-            left: 16,
-          ),
-          text: getTotalToPayText(),
-          onPressed: widget.onTapPaymentSubscriptionPlan,
-        ), 
-        body: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              )
-            : Padding(
-                padding: StoycoScreenSize.symmetric(context, horizontal: 23),
-                child: Column(
-                  spacing: StoycoScreenSize.height(context, 24),
-                  children: <Widget>[
-                    SizedBox(height: StoycoScreenSize.height(context, 59)),
-                    SubscriptionPaymentPreviewCard(
-                      paymentSummaryInfo: notifier.paymentSummaryInfo,
-                    ),
-                    PaymentInformationSection(
-                      items: getPaymentInfoItems(),
-                    ),
-                    widget.selectPaymentMethodSection ?? const SizedBox.shrink(),
-                  ],
-                ),
-              ),
+          /// Displays the payment breakdown section.
+          PaymentInformationSection(items: getPaymentInfoItems()),
+          /// Displays the payment method selection section.
+          selectPaymentMethodSection,
+        ],
       ),
     );
   }

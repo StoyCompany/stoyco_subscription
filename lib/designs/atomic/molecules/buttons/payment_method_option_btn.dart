@@ -46,6 +46,13 @@ class PaymentMethodOptionBtn extends StatelessWidget {
     return ButtonGradient(
       borderRadius: StoycoScreenSize.radius(context, 16),
       backgroundColor: StoycoColors.backgroundGrey,
+      boxShadow: const <BoxShadow>[
+        BoxShadow(
+          color: Color(0x2B344580),
+          blurRadius: 30,
+          offset: Offset(0, -20),
+        ),
+      ],
       onPressed: onTap,
       child: Padding(
         padding: StoycoScreenSize.symmetric(context, vertical: 16),

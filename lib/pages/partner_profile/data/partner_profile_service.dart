@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
+import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/lowest_price_plan_response_model.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/subscription_is_active_response.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/partner_profile_data_source.dart';
@@ -50,7 +51,6 @@ class PartnerProfileService {
     this.functionToUpdateToken,
   }) {
     _dataSource = PartnerProfileDataSource(environment: environment);
-    _dataSource.setRefreshTokenCallback(functionToUpdateToken);
     _repository = PartnerProfileRepository(_dataSource, userToken);
     _repository.updateToken(userToken);
     _dataSource.updateToken(userToken);
@@ -154,6 +154,25 @@ class PartnerProfileService {
       );
     } on Exception catch (error) {
       return Left<Failure, SubscriptionIsActiveResponse>(
+        ExceptionFailure.decode(error),
+      );
+    }
+  }
+
+  Future<Either<Failure, GetCulturalAssetsResponse>>
+  getCulturalAssetsByCommunityOwner(String partnerId) async {
+    try {
+      final GetCulturalAssetsResponse result = await _repository
+          .getCulturalAssetsByCommunityOwner(partnerId: partnerId);
+      return Right<Failure, GetCulturalAssetsResponse>(result);
+    } on DioException catch (error) {
+      return Left<Failure, GetCulturalAssetsResponse>(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left<Failure, GetCulturalAssetsResponse>(
+        ErrorFailure.decode(error),
+      );
+    } on Exception catch (error) {
+      return Left<Failure, GetCulturalAssetsResponse>(
         ExceptionFailure.decode(error),
       );
     }

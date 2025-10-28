@@ -1,3 +1,4 @@
+import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/lowest_price_plan_response_model.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/subscription_is_active_response.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/partner_profile_data_source.dart';
@@ -38,5 +39,11 @@ class PartnerProfileRepository {
     required String partnerId,
   }) {
     return _dataSource.getLastUserPlanByPartner(partnerId);
+  }
+
+  Future<GetCulturalAssetsResponse> getCulturalAssetsByCommunityOwner({
+    required String partnerId,
+  }) async {
+    return _dataSource.getCulturalAssetsByCommunityOwner(partnerId);
   }
 }

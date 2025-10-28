@@ -23,6 +23,7 @@ class SubscriptionsCatalogScreenWeb extends StatefulWidget {
     this.onTapSubscription,
     this.onTapSubscribe,
     this.userId,
+    this.pageSize,
     super.key,
   });
 
@@ -35,6 +36,8 @@ class SubscriptionsCatalogScreenWeb extends StatefulWidget {
   final void Function(String id)? onTapSubscribe;
 
   final String? userId;
+
+  final int? pageSize;
 
   @override
   State<SubscriptionsCatalogScreenWeb> createState() =>
@@ -55,7 +58,11 @@ class _SubscriptionsCatalogScreenWebState
     super.initState();
 
     onTapSubscription = widget.onTapSubscription;
-    notifier = SubscriptionCatalogNotifier(this, userId: widget.userId);
+    notifier = SubscriptionCatalogNotifier(
+      this,
+      userId: widget.userId,
+      pageSize: widget.pageSize,
+    );
     notifier.addListener(_onNotifierChanged);
   }
 
