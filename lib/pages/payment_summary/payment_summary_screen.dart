@@ -8,10 +8,12 @@ class PaymentSummaryScreen extends StatelessWidget {
     super.key,
     required this.notifier,
     required this.isLoading,
+    required this.selectPaymentMethodSection,
   });
 
   final PaymentSummaryNotifier notifier;
   final bool isLoading;
+  final Widget selectPaymentMethodSection;
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class PaymentSummaryScreen extends StatelessWidget {
       return PaymentSummaryMobileScreen(
         notifier: notifier,
         isLoading: isLoading,
+        selectPaymentMethodSection: selectPaymentMethodSection,
       );
     }
   }
