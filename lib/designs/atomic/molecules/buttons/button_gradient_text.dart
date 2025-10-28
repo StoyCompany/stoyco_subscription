@@ -356,4 +356,4 @@ class ButtonGradientText extends StatelessWidget {
       style: style,
     );
   }
-  }
+}
