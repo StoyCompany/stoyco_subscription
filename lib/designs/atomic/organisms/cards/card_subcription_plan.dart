@@ -115,14 +115,20 @@ class CardSubscriptionPlan extends StatelessWidget {
               ) : null,
         description: Column(
           children: <Widget>[
-            Text(
-              plan.name,
-              style: styleParams.planNameTextStyle ?? GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: StoycoScreenSize.fontSize(context, styleParams.titleFontSize),
-                  color: StoycoColors.softWhite,
+            if (plan.imageUrl.isEmpty && plan.subscribed)
+              Gap(StoycoScreenSize.height(context, 40)),
+            Padding(
+              padding: StoycoScreenSize.symmetric(context, horizontal: 16),
+              child: Text(
+                plan.name,
+                style: styleParams.planNameTextStyle ?? GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: StoycoScreenSize.fontSize(context, styleParams.titleFontSize),
+                    color: StoycoColors.softWhite,
+                  ),
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
             Gap(StoycoScreenSize.width(context, 10)),
