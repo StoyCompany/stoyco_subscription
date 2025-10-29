@@ -3,7 +3,7 @@ import 'package:stoyco_subscription/designs/atomic/molecules/cards/subscription_
 import 'package:stoyco_subscription/designs/atomic/organisms/sections/payment_information_section.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
-import 'package:stoyco_subscription/pages/payment_summary/notifier/payment_summary_notifier.dart';
+import 'package:stoyco_subscription/pages/payment_summary/helpers/format_payment_info_items.dart';
 
 /// {@template payment_summary_mobile_screen}
 /// Displays the content of the payment summary for mobile devices.
@@ -32,39 +32,18 @@ class PaymentSummaryMobileScreen extends StatelessWidget {
   /// [isLoading] controls whether to show a loading indicator.
   const PaymentSummaryMobileScreen({
     super.key,
-    required this.notifier,
     required this.isLoading,
+    required this.paymentSummaryInfo,
     this.selectPaymentMethodSection = const SizedBox.shrink(),
   });
 
-  /// The notifier that holds the payment summary information.
-  final PaymentSummaryNotifier notifier;
+  /// The payment summary information.
+  final PaymentSummaryInfoResponse paymentSummaryInfo;
 
   /// Whether the content is loading.
   final bool isLoading;
 
   final Widget selectPaymentMethodSection;
-
-  /// Returns a list of key-value pairs with payment information items.
-  ///
-  /// Each item contains a 'key' (label) and a 'value' (amount with currency).
-  List<Map<String, String>> getPaymentInfoItems() {
-    final PaymentSummaryInfoResponse? info = notifier.paymentSummaryInfo;
-    final String code = info?.breakdown.currencyCode ?? 'MXN';
-    final String symbol = info?.breakdown.currencySymbol ?? r'$';
-    return <Map<String, String>>[
-      <String, String>{
-        'key': 'Plan',
-        'value':
-            '$code $symbol${info?.breakdown.planAmount.toStringAsFixed(2) ?? '0.00'}',
-      },
-      <String, String>{
-        'key': 'IVA',
-        'value':
-            '$code $symbol${info?.breakdown.ivaAmount.toStringAsFixed(2) ?? ''}',
-      },
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,13 +57,14 @@ class PaymentSummaryMobileScreen extends StatelessWidget {
       child: Column(
         spacing: StoycoScreenSize.height(context, 24),
         children: <Widget>[
-          SizedBox(height: StoycoScreenSize.height(context, 59)),
           /// Displays the payment summary preview card.
           SubscriptionPaymentPreviewCard(
-            paymentSummaryInfo: notifier.paymentSummaryInfo,
+            paymentSummaryInfo: paymentSummaryInfo,
           ),
           /// Displays the payment breakdown section.
-          PaymentInformationSection(items: getPaymentInfoItems()),
+          PaymentInformationSection(
+            items: getPaymentInfoItems(paymentSummaryInfo),
+          ),
           /// Displays the payment method selection section.
           selectPaymentMethodSection,
         ],
