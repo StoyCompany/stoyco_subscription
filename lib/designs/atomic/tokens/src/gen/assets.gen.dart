@@ -254,7 +254,7 @@ class $LibAssetsImagesPaymentGen {
 
   /// File path: lib/assets/images/payment/american-express.png
   AssetGenImage get americanExpress =>
-      const AssetGenImage('lib/assets/images/payment/american-express.png');
+      const AssetGenImage('lib/assets/images/payment/american_express.png');
 
   /// File path: lib/assets/images/payment/card_payment.png
   AssetGenImage get cardPayment =>
@@ -262,7 +262,7 @@ class $LibAssetsImagesPaymentGen {
 
   /// File path: lib/assets/images/payment/diners-club.png
   AssetGenImage get dinersClub =>
-      const AssetGenImage('lib/assets/images/payment/diners-club.png');
+      const AssetGenImage('lib/assets/images/payment/diners_club.png');
 
   /// File path: lib/assets/images/payment/discover.png
   AssetGenImage get discover =>
