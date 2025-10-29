@@ -52,6 +52,12 @@ class AddCardPaymentNotifier extends ChangeNotifier {
 
   bool isAllValid() => errorCardNumber == null && errorCardExpiry == null && errorCardCvv == null && errorCardHolderName == null;
 
+  void validateCardHolderName() {
+    errorCardHolderName = PaymentCard.checkCardHolderName(cardHolderNameController.text);
+    validateIsDisabled();
+    notifyListeners();
+  }
+
   void validateCardExpiry() {
     errorCardExpiry = PaymentCard.checkExpiration(cardExpiryController.text);
     validateIsDisabled();
@@ -90,17 +96,71 @@ class AddCardPaymentNotifier extends ChangeNotifier {
   }
 
   String maskedCardNumber(String input) {
-    // Elimina espacios y deja solo dígitos
     final String digits = input.replaceAll(RegExp(r'\D'), '');
     if (digits.isEmpty) {
       return '';
     }
-    final String visible = digits.length >= 4 ? digits.substring(digits.length - 4) : digits;
-    final int maskedLength = digits.length > 4 ? digits.length - 4 : 0;
-    final String masked = List<String>.filled(maskedLength, '*').join();
-    // Agrupa en bloques de 4
-    final String full = (masked + visible).padLeft(16, '*');
-    return full.replaceAllMapped(RegExp(r'.{1,4}'), (Match m) => '${m.group(0)} ').trim();
+    final PaymentCardType type = PaymentCardType.number(digits);
+    final List<String> blocks = <String>[];
+    int visibleCount = 4;
+    List<int> blockSizes = <int>[4, 4, 4, 4];
+    if (type == PaymentCardType.americanExpress) {
+      blockSizes = <int>[4, 6, 5];
+      visibleCount = 5;
+    }
+    int idx = 0;
+    final int len = digits.length;
+    int remaining = len;
+    for (final int size in blockSizes) {
+      if (remaining <= 0) {
+        break;
+      }
+      final int take = remaining >= size ? size : remaining;
+      blocks.add(digits.substring(idx, idx + take));
+      idx += take;
+      remaining -= take;
+    }
+    // Enmascara todos los bloques menos el último visible
+    // Si no hay suficientes dígitos para mostrar el bloque visible, muestra lo que hay
+    if (len <= visibleCount) {
+      return digits;
+    }
+    // Construye el resultado
+    String result = '';
+    for (int i = 0; i < blocks.length; i++) {
+      if (type == PaymentCardType.americanExpress) {
+        // Amex: 4-6-5, solo el último bloque muestra los últimos 5 dígitos
+        if (i < blocks.length - 1) {
+          // Enmascara completamente los bloques anteriores
+          result += List<String>.filled(blocks[i].length, '*').join();
+        } else {
+          final int blockLen = blocks[i].length;
+          if (blockLen < 5) {
+            result += blocks[i];
+          } else {
+            result += List<String>.filled(blockLen - 5, '*').join();
+            result += blocks[i].substring(blockLen - 5);
+          }
+        }
+      } else {
+        // Otras tarjetas: bloques de 4, último bloque muestra los últimos 4
+        if (i < blocks.length - 1) {
+          result += List<String>.filled(blocks[i].length, '*').join();
+        } else {
+          final int blockLen = blocks[i].length;
+          if (blockLen <= visibleCount) {
+            result += blocks[i];
+          } else {
+            result += List<String>.filled(blockLen - visibleCount, '*').join();
+            result += blocks[i].substring(blockLen - visibleCount);
+          }
+        }
+      }
+      if (i < blocks.length - 1) {
+        result += ' ';
+      }
+    }
+    return result.trim();
   }
 
   void setErrorsCardNumber(int cardNumberLenght) {
@@ -111,23 +171,8 @@ class AddCardPaymentNotifier extends ChangeNotifier {
   }
 
   void onCardHolderNameChange(BuildContext context) {
-    final String value = cardHolderNameController.text;
-    // Permitir solo letras, espacios y acentos comunes
-    final RegExp validChars = RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+');
-    if (value.isEmpty) {
-      errorCardHolderName = 'El nombre no puede estar vacío';
-    } else if (!validChars.hasMatch(value)) {
-      errorCardHolderName = 'El nombre no debe contener caracteres especiales ni números';
-      // Eliminar caracteres inválidos automáticamente
-      cardHolderNameController.text = value.replaceAll(RegExp(r'[^a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]'), '');
-      cardHolderNameController.selection = TextSelection.fromPosition(
-        TextPosition(offset: cardHolderNameController.text.length),
-      );
-    } else {
-      errorCardHolderName = null;
-    }
-    validateIsDisabled();
-    notifyListeners();
+    notSpecialCharacters(cardHolderNameController);
+    validateCardHolderName();
   }
 
   void onCardNumberChange(BuildContext context) {
@@ -146,6 +191,7 @@ class AddCardPaymentNotifier extends ChangeNotifier {
       case PaymentCardType.unknown:
         break;
     }
+    notSpecialCharacters(cardNumberController);
     validateIsDisabled();
     notifyListeners();
   }
@@ -153,36 +199,9 @@ class AddCardPaymentNotifier extends ChangeNotifier {
   void onCardExpiryChange(BuildContext context) {
     validateCardExpiry();
 
-    if (cardExpiryController.text.contains(' ')) {
-      cardExpiryController.text = cardExpiryController.text.replaceAll(' ', '');
-      cardExpiryController.selection = TextSelection.fromPosition(
-        TextPosition(
-          offset: cardExpiryController.text.length,
-        ),
-      );
-    }
-
-    if (cardExpiryController.text.contains(RegExp(r'[/!@#$%^&*(),.?":{}|<>]'))) {
-      cardExpiryController.text = cardExpiryController.text.replaceAll(
-        RegExp(r'[/!@#$%^&*(),.?":{}|<>]'),
-        '',
-      );
-      cardExpiryController.selection = TextSelection.fromPosition(
-        TextPosition(
-          offset: cardExpiryController.text.length,
-        ),
-      );
-    }
-
-    if (cardExpiryController.text.contains(RegExp(r'[a-zA-Z]'))) {
-      cardExpiryController.text =
-          cardExpiryController.text.replaceAll(RegExp(r'[a-zA-Z]'), '');
-      cardExpiryController.selection = TextSelection.fromPosition(
-        TextPosition(
-          offset: cardExpiryController.text.length,
-        ),
-      );
-    }
+    notSpaces(cardExpiryController);
+    notSpecialCharacters(cardExpiryController);
+    notLetters(cardExpiryController);
 
     if (cardExpiryController.text.length >= 4 && errorCardExpiry == null) {
       cardExpiryController.text = cardExpiryController.text.substring(0, 4);
@@ -254,17 +273,10 @@ class AddCardPaymentNotifier extends ChangeNotifier {
         ),
       );
     }
-    if (cardCvvController.text.contains(' ') || cardCvvController.text.contains(RegExp(r'[a-zA-Z]'))) {
-      cardCvvController.text = cardCvvController.text.replaceAll(' ', '');
-      cardCvvController.text = cardCvvController.text.replaceAll(RegExp(r'[a-zA-Z]'), '');
-      cardCvvController.selection = TextSelection.fromPosition(
-        TextPosition(
-          offset: cardCvvController.text.length,
-        ),
-      );
-    }
-
-    cardCvvController.text = cardCvvController.text.replaceAll(RegExp(r'[^\w\s]+'), '');
+    
+    notSpaces(cardCvvController);
+    notSpecialCharacters(cardCvvController);
+    notLetters(cardCvvController);
 
     cardCvvController.selection = TextSelection.fromPosition(
       TextPosition(
@@ -274,14 +286,40 @@ class AddCardPaymentNotifier extends ChangeNotifier {
 
     if (
       cardCvvController.text.length == 3 && 
-      PaymentCardType.number( cardNumberController.text.replaceAll(' ', '')) !=
-      PaymentCardType.americanExpress ||
+      PaymentCardType.number( cardNumberController.text.replaceAll(' ', '')) != PaymentCardType.americanExpress ||
       (PaymentCardType.number( cardNumberController.text.replaceAll(' ', '')) == PaymentCardType.americanExpress && cardCvvController.text.length == 4)
     ) {
       final FocusScopeNode currentFocus = FocusScope.of(context);
       if (!currentFocus.hasPrimaryFocus) {
         currentFocus.unfocus();
       }
+    }
+  }
+
+  void notSpecialCharacters(TextEditingController controller) {
+    if (controller.text.contains(RegExp(r'[/!@#$%^&*(),.?":{}|<>]'))) {
+      controller.text = controller.text.replaceAll(RegExp(r'[/!@#$%^&*(),.?":{}|<>]'), '');
+      controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length),
+      );
+    }
+  }
+
+  void notLetters(TextEditingController controller) {
+    if (controller.text.contains(RegExp(r'[a-zA-Z]'))) {
+      controller.text = controller.text.replaceAll(RegExp(r'[a-zA-Z]'), '');
+      controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length),
+      );
+    }
+  }
+
+  void notSpaces(TextEditingController controller) {
+    if (controller.text.contains(' ')) {
+      controller.text = controller.text.replaceAll(' ', '');
+      controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length),
+      );
     }
   }
 
@@ -381,13 +419,6 @@ class AddCardPaymentNotifier extends ChangeNotifier {
         TextPosition(offset: cardNumberController.text.length),
       );
     }
-
-    if (cardNumberController.text.contains(RegExp(r'[/!@#$%^&*(),.?":{}|<>]'))) {
-      cardNumberController.text = cardNumberController.text.replaceAll(RegExp(r'[/!@#$%^&*(),.?":{}|<>]'), '');
-      cardNumberController.selection = TextSelection.fromPosition(
-        TextPosition(offset: cardNumberController.text.length),
-      );
-    }
   }
 
   void rulesForCardNumber15Digits(BuildContext context) {
@@ -456,18 +487,6 @@ class AddCardPaymentNotifier extends ChangeNotifier {
       if (cardNumberController.text.length > 11) {
         cardNumberController.text = '${cardNumberController.text.substring(0, 11)} ${cardNumberController.text.substring(11)}';
       }
-      cardNumberController.selection = TextSelection.fromPosition(
-        TextPosition(
-          offset: cardNumberController.text.length,
-        ),
-      );
-    }
-
-    if (cardNumberController.text.contains(RegExp(r'[/!@#$%^&*(),.?":{}|<>]'))) {
-      cardNumberController.text = cardNumberController.text.replaceAll(
-        RegExp(r'[/!@#$%^&*(),.?":{}|<>]'),
-        '',
-      );
       cardNumberController.selection = TextSelection.fromPosition(
         TextPosition(
           offset: cardNumberController.text.length,
@@ -543,18 +562,6 @@ class AddCardPaymentNotifier extends ChangeNotifier {
       if (cardNumberController.text.length > 11) {
         cardNumberController.text = '${cardNumberController.text.substring(0, 11)} ${cardNumberController.text.substring(11)}';
       }
-      cardNumberController.selection = TextSelection.fromPosition(
-        TextPosition(
-          offset: cardNumberController.text.length,
-        ),
-      );
-    }
-
-    if (cardNumberController.text.contains(RegExp(r'[/!@#$%^&*(),.?":{}|<>]'))) {
-      cardNumberController.text = cardNumberController.text.replaceAll(
-        RegExp(r'[/!@#$%^&*(),.?":{}|<>]'),
-        '',
-      );
       cardNumberController.selection = TextSelection.fromPosition(
         TextPosition(
           offset: cardNumberController.text.length,

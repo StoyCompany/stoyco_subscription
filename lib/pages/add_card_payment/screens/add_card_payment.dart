@@ -133,33 +133,41 @@ class _AddCardPaymentState extends State<AddCardPayment> {
           StoycoAssets.lib.assets.images.payment.cardPayment.image(
             width: StoycoScreenSize.width(context, 343),
             height: StoycoScreenSize.height(context, 188),
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             package: 'stoyco_subscription',
           ),
           Positioned(
-            top: StoycoScreenSize.height(context, 24),
-            right: StoycoScreenSize.width(context, 40),
-            child: notifier.cardType == PaymentCardType.unknown || notifier.cardType == PaymentCardType.visa   
-            ? SvgGenImage(notifier.cardType.icon).svg(
-              fit: BoxFit.contain,
-              package: 'stoyco_subscription',
-            )
-            : AssetGenImage(notifier.cardType.icon).image(
-              width: StoycoScreenSize.width(context, 48),
-              height: StoycoScreenSize.height(context, 48),
-              fit: BoxFit.contain,
-              package: 'stoyco_subscription',
-            ),
+            top: StoycoScreenSize.height(context, 8),
+            right: StoycoScreenSize.width(context, 46),
+            child: notifier.cardType == PaymentCardType.unknown
+            ? const SizedBox.shrink()
+            : SizedBox(
+                width: StoycoScreenSize.width(context, 70),
+                height: StoycoScreenSize.height(context, 55),
+                child: Center(
+                  child: notifier.cardType.icon.endsWith('.svg')
+                      ? SvgGenImage(notifier.cardType.icon).svg(
+                          fit: BoxFit.contain,
+                          width: StoycoScreenSize.width(context, 40),
+                          height: StoycoScreenSize.height(context, 30),
+                          package: 'stoyco_subscription',
+                        )
+                      : AssetGenImage(notifier.cardType.icon).image(
+                          width: StoycoScreenSize.width(context, 65),
+                          height: StoycoScreenSize.height(context, 55),
+                          fit: BoxFit.contain,
+                          package: 'stoyco_subscription',
+                        ),
+                ),
+              ),
           ),
-          // Contenido centrado
           Padding(
-            padding: StoycoScreenSize.symmetric(context, horizontal: 40),
+            padding: StoycoScreenSize.symmetric(context, horizontal: 48),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Gap(StoycoScreenSize.height(context, 60)),
-                // Número de tarjeta centrado y enmascarado
+                Gap(StoycoScreenSize.height(context, 52)),
                 Text(
                   notifier.maskedCardNumber(
                     notifier.cardNumberController.text,
@@ -177,8 +185,7 @@ class _AddCardPaymentState extends State<AddCardPayment> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                Gap(StoycoScreenSize.height(context, 25)),
-                // Nombre y fecha centrados abajo
+                Gap(StoycoScreenSize.height(context, 33)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -249,7 +256,7 @@ class _AddCardPaymentState extends State<AddCardPayment> {
                             Align(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                notifier.cardExpiryController.text.isEmpty ? 'MM/AA' : notifier.cardExpiryController.text,
+                                notifier.cardExpiryController.text,
                                 style: GoogleFonts.montserrat(
                                   textStyle: TextStyle(
                                     color: StoycoColors.text,

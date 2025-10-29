@@ -49,11 +49,9 @@ class PaymentCard {
     String? errorResponse;
     if (securityCode.isEmpty) {
       errorResponse = 'El CVV es requerido';
-    } else if (!(securityCode.length == 3 &&
-            PaymentCardType.number(cardNumber.replaceAll(' ', '')) != 
-            PaymentCardType.americanExpress ||
-            (PaymentCardType.number(cardNumber.replaceAll(' ', '')) == PaymentCardType.americanExpress &&
-            securityCode.length == 4))) {
+    } else if (!(securityCode.length == 3 && PaymentCardType.number(cardNumber.replaceAll(' ', '')) != 
+            PaymentCardType.americanExpress || (PaymentCardType.number(cardNumber.replaceAll(' ', '')) == 
+            PaymentCardType.americanExpress && securityCode.length == 4))) {
       errorResponse = 'El CVV es inválido';
     } else if (!RegExp(r'^[0-9]+$').hasMatch(securityCode)) {
       errorResponse = 'El CVV es inválido';
@@ -74,6 +72,19 @@ class PaymentCard {
       final RegExp regex = RegExp(r'^[0-9]+$');
       if (!regex.hasMatch(cardNumber.replaceAll(' ', ''))) {
         errorResponse = 'El número de tarjeta es inválido';
+      }
+    }
+    return errorResponse;
+  }
+
+  static String? checkCardHolderName(String text) {
+    String? errorResponse;
+    if (text.isEmpty) {
+      errorResponse = 'El nombre del titular es requerido';
+    } else {
+      final RegExp validChars = RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$');
+      if (!validChars.hasMatch(text)) {
+        errorResponse = 'El nombre del titular es inválido';
       }
     }
     return errorResponse;
