@@ -28,15 +28,15 @@ class PaymentCard {
       errorResponse = 'La fecha de expiración es inválida';
     } else {
       final DateTime now = DateTime.now();
-      final DateTime limit = DateTime(now.year + 20, now.month, now.day);
+      const int maxYear = 2034;
       final DateTime expiry = DateTime(
         2000 + int.parse(cardExpiration.substring(3, 5)),
         int.parse(cardExpiration.substring(0, 2)),
       );
       if (expiry.isBefore(DateTime(now.year, now.month))) {
         errorResponse = 'La fecha de expiración no puede ser menor a la actual';
-      } else if (expiry.isAfter(limit)) {
-        errorResponse = 'La fecha de expiración no puede ser mayor a 20 años desde hoy';
+      } else if (expiry.year > maxYear) {
+        errorResponse = 'La fecha de expiración no puede ser mayor a 2034';
       } else {
         errorResponse = null;
       }
