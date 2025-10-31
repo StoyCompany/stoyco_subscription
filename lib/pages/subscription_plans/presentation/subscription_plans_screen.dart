@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/tap_menu_items/tab_menu_item.dart';
-import 'package:stoyco_subscription/designs/atomic/organisms/cards/card_subcription_plan.dart';
+import 'package:stoyco_subscription/designs/atomic/organisms/cards/subscription_plan_card.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -269,7 +269,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                                         ) {
                                           return SizedBox(
                                             width: cardWidth,
-                                            child: CardSubscriptionPlan(
+                                            child: SubscriptionPlanCard(
                                               key: ValueKey<String>(plan.id),
                                               plan: plan,
                                               onTapCancelSubscription: widget
@@ -322,7 +322,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                                         ) {
                                           return SizedBox(
                                             width: cardWidth,
-                                            child: CardSubscriptionPlan(
+                                            child: SubscriptionPlanCard(
                                               key: ValueKey<String>(plan.id),
                                               plan: plan,
                                               onTapCancelSubscription: widget

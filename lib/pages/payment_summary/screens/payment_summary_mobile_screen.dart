@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/designs/atomic/molecules/cards/subscription_payment_preview_card.dart';
+import 'package:stoyco_subscription/designs/atomic/organisms/cards/subscription_payment_preview_card.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/sections/payment_information_section.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';

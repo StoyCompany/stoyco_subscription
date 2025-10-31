@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/inputs/subscription_text_form.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/card_gradient_multicheck.dart';
+import 'package:stoyco_subscription/designs/atomic/organisms/cards/subscription_plan_payment_info_card.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
@@ -11,19 +12,66 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/add_card_payment/enums/payment_card_type.dart';
 import 'package:stoyco_subscription/pages/add_card_payment/notifier/add_card_payment_notifier.dart';
 
+import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
+
+/// {@template add_card_payment}
+/// An [AddCardPayment] Page for the Stoyco Subscription Atomic Design System.
+/// Displays a complete payment form for adding a card, including payment summary, card details, terms acceptance, and submit button.
+///
+/// ### Atomic Level
+/// **Page** – Composed of molecules and atoms for complex payment flow integration.
+///
+/// ### Parameters
+/// - `paymentSummaryInfo`: Optional payment summary data model for displaying plan/payment info.
+/// - `onTapTerms`: Callback to navigate to terms and conditions.
+/// - `onTapPrivacy`: Callback to navigate to privacy policy.
+/// - `onTapAddCardPayment`: Callback executed when the user submits the payment form.
+///
+/// ### Returns
+/// Renders a scrollable payment form with card details, summary, terms acceptance, and a submit button.
+///
+/// ### Example
+/// ```dart
+/// AddCardPayment(
+///   paymentSummaryInfo: paymentSummaryInfo,
+///   onTapTerms: () {},
+///   onTapPrivacy: () {},
+///   onTapAddCardPayment: ({
+///     required cardHolderName,
+///     required cardNumber,
+///     required cardExpiry,
+///     required cardCvv,
+///     required seedDate,
+///     required isError,
+///     required errorMessage,
+///   }) async {},
+/// )
+/// ```
+/// {@endtemplate}
+
+/// {@macro add_card_payment}
 class AddCardPayment extends StatefulWidget {
+  /// Creates an [AddCardPayment] Page for the Stoyco Subscription Design System.
+  ///
+  /// - [paymentSummaryInfo]: Optional payment summary data model for displaying plan/payment info.
+  /// - [onTapTerms]: Callback to navigate to terms and conditions.
+  /// - [onTapPrivacy]: Callback to navigate to privacy policy.
+  /// - [onTapAddCardPayment]: Callback executed when the user submits the payment form.
   const AddCardPayment({
     super.key,
+    this.paymentSummaryInfo,
     required this.onTapTerms,
     required this.onTapPrivacy, 
     required this.onTapAddCardPayment,
   });
 
-  @override
-  State<AddCardPayment> createState() => _AddCardPaymentState();
-
+  /// Optional payment summary data model for displaying plan/payment info.
+  final PaymentSummaryInfoResponse? paymentSummaryInfo;
+  /// Callback to navigate to terms and conditions.
   final VoidCallback onTapTerms;
+  /// Callback to navigate to privacy policy.
   final VoidCallback onTapPrivacy;
+  /// Callback executed when the user submits the payment form.
   final Future<void> Function({
     required String cardHolderName,
     required String cardNumber,
@@ -32,8 +80,10 @@ class AddCardPayment extends StatefulWidget {
     required String seedDate,
     required bool isError,
     required String errorMessage,
-    required bool isAutoRenew,
   }) onTapAddCardPayment;
+
+  @override
+  State<AddCardPayment> createState() => _AddCardPaymentState();
 }
 
 class _AddCardPaymentState extends State<AddCardPayment> {
@@ -75,14 +125,18 @@ class _AddCardPaymentState extends State<AddCardPayment> {
             _buildPaymentInfoContent(),
             Gap(StoycoScreenSize.height(context, 40)),
             _buildFormContent(),
+            if (widget.paymentSummaryInfo != null) ...<Widget>[
+              Gap(StoycoScreenSize.height(context, 40)),
+              SubscriptionPlanPaymentInfoCard(
+                paymentSummaryInfo: widget.paymentSummaryInfo!,
+              ),
+            ],
             Gap(StoycoScreenSize.height(context, 40)),
             TermsPrivacyAutoRenewCard(
               valueTerms: notifier.valueTerms,
               valuePrivacy: notifier.valuePrivacy,
-              valueAutoRenew: notifier.valueAutoRenew,
               onChangedTerms: (bool? v) => notifier.onChangedTerms(v),
               onChangedPrivacy: (bool? v) => notifier.onChangedPrivacy(v),
-              onChangedAutoRenew: (bool? v) => notifier.onChangedAutoRenew(v),
               onTapTerms: widget.onTapTerms,
               onTapPrivacy: widget.onTapPrivacy,
             ),
@@ -141,25 +195,26 @@ class _AddCardPaymentState extends State<AddCardPayment> {
             right: StoycoScreenSize.width(context, 46),
             child: notifier.cardType == PaymentCardType.unknown
             ? const SizedBox.shrink()
-            : SizedBox(
-                width: StoycoScreenSize.width(context, 70),
-                height: StoycoScreenSize.height(context, 55),
-                child: Center(
-                  child: notifier.cardType.icon.endsWith('.svg')
-                      ? SvgGenImage(notifier.cardType.icon).svg(
-                          fit: BoxFit.contain,
-                          width: StoycoScreenSize.width(context, 40),
-                          height: StoycoScreenSize.height(context, 30),
-                          package: 'stoyco_subscription',
-                        )
-                      : AssetGenImage(notifier.cardType.icon).image(
-                          width: StoycoScreenSize.width(context, 65),
-                          height: StoycoScreenSize.height(context, 55),
-                          fit: BoxFit.contain,
-                          package: 'stoyco_subscription',
-                        ),
+            : Padding(
+              padding: StoycoScreenSize.fromLTRB(context, top: 17),
+              child: SizedBox(
+                  width: StoycoScreenSize.width(context, 70),
+                  height: StoycoScreenSize.height(context, 24),
+                  child: Center(
+                    child: notifier.cardType.icon.endsWith('.svg')
+                    ? SvgGenImage(notifier.cardType.icon).svg(
+                      fit: BoxFit.contain,
+                      width: StoycoScreenSize.width(context, 40),
+                      package: 'stoyco_subscription',
+                    )
+                    : AssetGenImage(notifier.cardType.icon).image(
+                      fit: BoxFit.contain,
+                      width: StoycoScreenSize.width(context, 65),
+                      package: 'stoyco_subscription',
+                    ),
+                  ),
                 ),
-              ),
+            ),
           ),
           Padding(
             padding: StoycoScreenSize.symmetric(context, horizontal: 48),
@@ -326,12 +381,17 @@ class _AddCardPaymentState extends State<AddCardPayment> {
           suffixIcon: Padding(
             padding: StoycoScreenSize.fromLTRB(
               context,
-              right: 12,
+              right: 16,
+              bottom: 14,
+              top: 14,
             ),
-            child: StoycoAssets.lib.assets.icons.payment.cardCvv.svg(
-              width: StoycoScreenSize.width(context, 5),
-              height: StoycoScreenSize.width(context, 5),
-              package: 'stoyco_subscription',
+            child: SizedBox(
+              width: StoycoScreenSize.width(context, 14),
+              height: StoycoScreenSize.width(context, 14),
+              child: StoycoAssets.lib.assets.icons.payment.cardCvv.svg(
+                fit: BoxFit.contain,
+                package: 'stoyco_subscription',
+              ),
             ),
           ),
         ),
@@ -346,17 +406,17 @@ class _AddCardPaymentState extends State<AddCardPayment> {
       iconWidget: StoycoAssets.lib.assets.icons.common.rightArrow.svg(
         package: 'stoyco_subscription',
       ),
-      type: notifier.isDisabled ? ButtonGradientTextType.inactive : ButtonGradientTextType.primary,
+      type: notifier.isDisabled ? ButtonGradientTextType.inactive : notifier.isLoading ? ButtonGradientTextType.loading : ButtonGradientTextType.primary,
       onPressed: notifier.isDisabled
           ? null
           : () async {
+              notifier.toggleLoading();
               final String cardHolderName = notifier.cardHolderNameController.text.trim();
               final String cardNumber = notifier.cardNumberController.text.replaceAll(' ', '');
               final String cardExpiry = notifier.cardExpiryController.text.replaceAll('/', '');
               final String cardCvv = notifier.cardCvvController.text;
               final String seedDate = notifier.getSeedDate();
               final String? errorMessage = notifier.errorCardCvv ?? notifier.errorCardExpiry ?? notifier.errorCardNumber ?? notifier.errorCardHolderName;
-              final bool isAutoRenew = notifier.valueAutoRenew;
               await widget.onTapAddCardPayment(
                 cardHolderName: cardHolderName,
                 cardNumber: cardNumber,
@@ -365,8 +425,8 @@ class _AddCardPaymentState extends State<AddCardPayment> {
                 seedDate: seedDate,
                 isError: errorMessage != null,
                 errorMessage: errorMessage ?? 'No hay errores.',
-                isAutoRenew: isAutoRenew,
               );
+              notifier.toggleLoading();
               notifier.validateIsDisabled();
             },
     );
