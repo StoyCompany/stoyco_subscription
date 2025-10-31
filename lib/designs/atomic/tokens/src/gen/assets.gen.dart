@@ -111,6 +111,10 @@ class $LibAssetsIconsCommonGen {
   SvgGenImage get bellIcon =>
       const SvgGenImage('lib/assets/icons/common/bell_icon.svg');
 
+  /// File path: lib/assets/icons/common/check_box.svg
+  SvgGenImage get checkBox =>
+      const SvgGenImage('lib/assets/icons/common/check_box.svg');
+
   /// File path: lib/assets/icons/common/close_window.svg
   SvgGenImage get closeWindow =>
       const SvgGenImage('lib/assets/icons/common/close_window.svg');
@@ -144,6 +148,7 @@ class $LibAssetsIconsCommonGen {
     alertIcon,
     arrowRight,
     bellIcon,
+    checkBox,
     closeWindow,
     doubleRightArrow,
     exclamacion,
@@ -252,7 +257,7 @@ class $LibAssetsIconsPlanGen {
 class $LibAssetsImagesPaymentGen {
   const $LibAssetsImagesPaymentGen();
 
-  /// File path: lib/assets/images/payment/american-express.png
+  /// File path: lib/assets/images/payment/american_express.png
   AssetGenImage get americanExpress =>
       const AssetGenImage('lib/assets/images/payment/american_express.png');
 
@@ -260,7 +265,7 @@ class $LibAssetsImagesPaymentGen {
   AssetGenImage get cardPayment =>
       const AssetGenImage('lib/assets/images/payment/card_payment.png');
 
-  /// File path: lib/assets/images/payment/diners-club.png
+  /// File path: lib/assets/images/payment/diners_club.png
   AssetGenImage get dinersClub =>
       const AssetGenImage('lib/assets/images/payment/diners_club.png');
 
@@ -276,10 +281,6 @@ class $LibAssetsImagesPaymentGen {
   AssetGenImage get mastercard =>
       const AssetGenImage('lib/assets/images/payment/mastercard.png');
 
-  /// File path: lib/assets/images/payment/visa.png
-  AssetGenImage get visa =>
-      const AssetGenImage('lib/assets/images/payment/visa.png');
-
   /// List of all assets
   List<AssetGenImage> get values => [
     americanExpress,
@@ -288,7 +289,6 @@ class $LibAssetsImagesPaymentGen {
     discover,
     jcb,
     mastercard,
-    visa,
   ];
 }
 
