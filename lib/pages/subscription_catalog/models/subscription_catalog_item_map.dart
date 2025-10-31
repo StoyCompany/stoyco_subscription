@@ -13,6 +13,7 @@ class SubscriptionCatalogItemMap extends Equatable {
     required this.partnerId,
     required this.profile,
     required this.hasSubscription,
+    required this.isExpired,
   });
 
   factory SubscriptionCatalogItemMap.fromJson(Map<String, dynamic> json) =>
@@ -25,6 +26,7 @@ class SubscriptionCatalogItemMap extends Equatable {
   final String partnerId;
   final String profile;
   final bool hasSubscription;
+  final bool isExpired;
 
   Map<String, dynamic> toJson() => _$SubscriptionCatalogItemMapToJson(this);
 
@@ -37,5 +39,6 @@ class SubscriptionCatalogItemMap extends Equatable {
     partnerId,
     profile,
     hasSubscription,
+    isExpired,
   ];
 }
