@@ -1,5 +1,6 @@
 
-import 'package:flutter/widgets.dart';
+
+import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
@@ -10,7 +11,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 /// Enum to control icon position in [ButtonGradientText].
 enum ButtonGradientTextIconPosition { none, left, right }
 
-enum ButtonGradientTextType { primary, secondary, tertiary, inactive, custom }
+enum ButtonGradientTextType { primary, secondary, tertiary, inactive, loading, custom }
 
 /// {@template button_gradient_text}
 /// A [ButtonGradientText] molecule for the Stoyco Subscription Atomic Design System.
@@ -40,6 +41,8 @@ enum ButtonGradientTextType { primary, secondary, tertiary, inactive, custom }
 /// - `splashColor`: Splash color for interactive states.
 /// - `focusColor`: Focus color for interactive states.
 /// - `highlightColor`: Highlight color for interactive states.
+/// - `iconWidget`: Optional icon widget to display in the button (left or right).
+/// - `iconPosition`: Controls the icon position (none, left, right).
 ///
 /// ### Returns
 /// Renders a button with gradient border, background, and styled text, supporting multiple variants for atomic design systems.
@@ -53,8 +56,32 @@ enum ButtonGradientTextType { primary, secondary, tertiary, inactive, custom }
 /// )
 /// ```
 /// {@endtemplate}
+
 class ButtonGradientText extends StatelessWidget {
-  /// {@macro button_gradient_text}
+  /// Creates a [ButtonGradientText] molecule for the Stoyco Subscription Design System.
+  ///
+  /// - [textWidget]: The widget to display as button content. If provided, overrides [text].
+  /// - [text]: The label displayed inside the button.
+  /// - [type]: The button style variant, defined by [ButtonGradientTextType].
+  /// - [width]: The width of the button.
+  /// - [height]: The height of the button.
+  /// - [onPressed]: Callback executed when the button is tapped.
+  /// - [paddingButton]: Internal padding for the button.
+  /// - [paddingContent]: Internal padding for the button content.
+  /// - [textAlign]: Alignment for the button text.
+  /// - [textStyle]: Custom text style for the label.
+  /// - [borderWidth]: Width of the button border.
+  /// - [borderRadius]: Border radius for rounded corners.
+  /// - [boxShadow]: List of shadows applied to the button.
+  /// - [gradientBorder]: Custom gradient border for the button.
+  /// - [backgroundGradientColor]: Custom gradient for the background.
+  /// - [backgroundColor]: Solid background color (used if no gradient).
+  /// - [hoverColor]: Hover color for interactive states.
+  /// - [splashColor]: Splash color for interactive states.
+  /// - [focusColor]: Focus color for interactive states.
+  /// - [highlightColor]: Highlight color for interactive states.
+  /// - [iconWidget]: Optional icon widget to display in the button (left or right).
+  /// - [iconPosition]: Controls the icon position (none, left, right).
   const ButtonGradientText({
     super.key,
     this.textWidget,
@@ -104,7 +131,7 @@ class ButtonGradientText extends StatelessWidget {
   /// Callback executed when the button is tapped.
   final VoidCallback? onPressed;
 
-  /// Internal padding for the button
+  /// Internal padding for the button.
   final EdgeInsetsGeometry? paddingButton;
   
   /// Internal padding for the button content.
@@ -262,7 +289,7 @@ class ButtonGradientText extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         );
-      case ButtonGradientTextType.inactive:
+      case ButtonGradientTextType.inactive || ButtonGradientTextType.loading:
         border = gradientBorder;
         shadows = boxShadow;
         backgroundC = backgroundColor ?? StoycoColors.hint;
@@ -294,7 +321,7 @@ class ButtonGradientText extends StatelessWidget {
       splashColor: splashColor,
       focusColor: focusColor,
       highlightColor: highlightColor,
-      onPressed: type == ButtonGradientTextType.inactive ? null : onPressed,
+      onPressed: (type == ButtonGradientTextType.inactive || type == ButtonGradientTextType.loading) ? null : onPressed,
       child: Padding(
         padding: paddingContent ?? StoycoScreenSize.symmetric(context, horizontal: 24, vertical: 16),
         child: _buildContent(context, style),
@@ -304,6 +331,20 @@ class ButtonGradientText extends StatelessWidget {
   }
 
   Widget _buildContent(BuildContext context, TextStyle? style) {
+    if (type == ButtonGradientTextType.loading) {
+      return Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: height ?? StoycoScreenSize.width(context, 24),
+            height: height ?? StoycoScreenSize.width(context, 24),
+            child: const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(StoycoColors.white2),
+            ),
+          ),
+        ],
+      );
+    }
     if (iconWidget == null || iconPosition == ButtonGradientTextIconPosition.none) {
       return textWidget ?? Text(
         text,
