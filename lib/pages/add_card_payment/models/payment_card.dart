@@ -81,10 +81,16 @@ class PaymentCard {
     String? errorResponse;
     if (text.isEmpty) {
       errorResponse = 'El nombre del titular es requerido';
+    } else if (text.length < 2) {
+      errorResponse = 'El nombre del titular debe tener al menos 2 caracteres';
+    } else if (text.length > 50) {
+      errorResponse = 'El nombre del titular no puede exceder 50 caracteres';
     } else {
       final RegExp validChars = RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$');
       if (!validChars.hasMatch(text)) {
         errorResponse = 'El nombre del titular es inválido';
+      } else {
+        errorResponse = null;
       }
     }
     return errorResponse;
