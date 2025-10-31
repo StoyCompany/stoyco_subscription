@@ -1,54 +1,73 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/borders/gradient_path_border_painter.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/round_polygons.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/designs/types/tag_corner_position.dart';
 
-  /// {@template tag_corner}
-  /// A [TagCorner] atom for the Stoyco Subscription Atomic Design System.
-  /// Renders a corner tag with a diagonal cut, gradient border, and customizable text, color, and position.
-  ///
-  /// ### Atomic Level
-  /// **Atom** – Smallest UI unit.
-  ///
-  /// ### Parameters
-  /// - `title`: Text to display inside the tag.
-  /// - `textStyle`: Custom text style for the tag text.
-  /// - `paddingText`: Padding around the text inside the tag.
-  /// - `width`: Width of the tag. Defaults to 100.
-  /// - `height`: Height of the tag. Defaults to 100.
-  /// - `color`: Background color of the tag. Defaults to [StoycoColors.blue].
-  /// - `cutSize`: Depth of the diagonal cut in the selected corner. Defaults to 48.
-  /// - `cornerRadius`: Radius of the diagonal cut corner. Defaults to 20.
-  /// - `borderWidth`: Width of the gradient border. Defaults to 4.
-  /// - `gradientColorsBorder`: Colors for the gradient border. Defaults to design token gradient.
-  /// - `position`: Which corner to cut (default: [TagCornerPosition.topRight]).
-  /// - `shadows`: Optional list of shadows for the tag. Defaults to [StoycoColors.shadowPurple98].
-  ///
-  /// ### Returns
-  /// Renders a corner tag with diagonal cut, gradient border, and styled text, suitable for atomic design systems.
-  ///
-  /// ### Example
-  /// ```dart
-  /// TagCorner(
-  ///   title: 'Recommended',
-  ///   position: TagCornerPosition.bottomLeft,
-  ///   color: Colors.blue,
-  ///   cornerRadius: 16,
-  ///   borderWidth: 2,
-  ///   gradientColorsBorder: [Colors.red, Colors.blue],
-  /// )
-  /// ```
-  /// {@endtemplate}
+/// {@template tag_corner}
+/// A [TagCorner] atom for the Stoyco Subscription Atomic Design System.
+/// Renders a corner tag with a diagonal cut, gradient border, and customizable text, color, and position.
+///
+/// ### Atomic Level
+/// **Atom** – Smallest UI unit.
+///
+/// ### Parameters
+/// - `title`: Text to display inside the tag.
+/// - `textStyle`: Custom text style for the tag text.
+/// - `paddingText`: Padding around the text inside the tag.
+/// - `showExclamationIcon`: Whether to show an exclamation icon above the text.
+/// - `width`: Width of the tag. Defaults to 100.
+/// - `height`: Height of the tag. Defaults to 100.
+/// - `color`: Background color of the tag. Defaults to [StoycoColors.blue].
+/// - `cutSize`: Depth of the diagonal cut in the selected corner. Defaults to 48.
+/// - `cornerRadius`: Radius of the diagonal cut corner. Defaults to 20.
+/// - `borderWidth`: Width of the gradient border. Defaults to 4.
+/// - `gradientColorsBorder`: Colors for the gradient border. Defaults to design token gradient.
+/// - `position`: Which corner to cut (default: [TagCornerPosition.topRight]).
+/// - `shadows`: Optional list of shadows for the tag. Defaults to [StoycoColors.shadowPurple98].
+///
+/// ### Returns
+/// Renders a corner tag with diagonal cut, gradient border, and styled text, suitable for atomic design systems.
+///
+/// ### Example
+/// ```dart
+/// TagCorner(
+///   title: 'Recommended',
+///   position: TagCornerPosition.bottomLeft,
+///   color: Colors.blue,
+///   cornerRadius: 16,
+///   borderWidth: 2,
+///   gradientColorsBorder: [Colors.red, Colors.blue],
+/// )
+/// ```
+/// {@endtemplate}
 class TagCorner extends StatelessWidget {
-  /// {@macro tag_corner}
+/// {@macro tag_corner}
+  /// Creates a [TagCorner] atom for the Stoyco Subscription Design System.
+  ///
+  /// - [title]: Text to display inside the tag.
+  /// - [textStyle]: Custom text style for the tag text.
+  /// - [paddingText]: Padding around the text inside the tag.
+  /// - [showExclamationIcon]: Whether to show an exclamation icon above the text.
+  /// - [width]: Width of the tag. Defaults to 100.
+  /// - [height]: Height of the tag. Defaults to 100.
+  /// - [color]: Background color of the tag. Defaults to [StoycoColors.blue].
+  /// - [cutSize]: Depth of the diagonal cut in the selected corner. Defaults to 48.
+  /// - [cornerRadius]: Radius of the diagonal cut corner. Defaults to 20.
+  /// - [borderWidth]: Width of the gradient border. Defaults to 4.
+  /// - [gradientColorsBorder]: Colors for the gradient border. Defaults to design token gradient.
+  /// - [position]: Which corner to cut (default: [TagCornerPosition.topRight]).
+  /// - [shadows]: Optional list of shadows for the tag. Defaults to [StoycoColors.shadowPurple98].
   const TagCorner({
     super.key,
     required this.title,
     this.textStyle,
     this.paddingText,
+    this.showExclamationIcon = false,
     this.width = 100,
     this.height = 100,
     this.color = StoycoColors.blue,
@@ -84,8 +103,11 @@ class TagCorner extends StatelessWidget {
   /// Text to display inside the tag.
   final String title;
 
-  /// Background color of the tag.
+  /// Background color of the tag. Defaults to [StoycoColors.blue].
   final Color color;
+
+  /// Whether to show an exclamation icon above the text.
+  final bool showExclamationIcon;
 
   /// Custom text style for the tag text.
   final TextStyle? textStyle;
@@ -93,28 +115,28 @@ class TagCorner extends StatelessWidget {
   /// Padding around the text inside the tag.
   final EdgeInsets? paddingText;
 
-  /// Width of the tag.
+  /// Width of the tag. Defaults to 100.
   final double width;
 
-  /// Height of the tag.
+  /// Height of the tag. Defaults to 100.
   final double height;
 
-  /// Depth of the diagonal cut in the selected corner.
+  /// Depth of the diagonal cut in the selected corner. Defaults to 48.
   final double cutSize;
 
-  /// Radius of the diagonal cut corner.
+  /// Radius of the diagonal cut corner. Defaults to 20.
   final double cornerRadius;
 
-  /// Width of the gradient border.
+  /// Width of the gradient border. Defaults to 4.
   final double borderWidth;
 
-  /// Colors for the gradient border.
+  /// Colors for the gradient border. Defaults to design token gradient.
   final List<Color> gradientColorsBorder;
 
-  /// Which corner to cut (default: topRight).
+  /// Which corner to cut. Defaults to [TagCornerPosition.topRight].
   final TagCornerPosition position;
 
-  /// Optional list of shadows for the tag.
+  /// Optional list of shadows for the tag. Defaults to [StoycoColors.shadowPurple98].
   final List<BoxShadow> shadows;
 
   @override
@@ -160,17 +182,30 @@ class TagCorner extends StatelessWidget {
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
-                  padding: paddingText ?? StoycoScreenSize.fromLTRB(context, top: 14),
-                  child: Text(
-                    title,
-                    style: textStyle ?? GoogleFonts.montserrat(
-                      textStyle: TextStyle(
-                        color: StoycoColors.softWhite,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Montserrat',
-                        fontSize: StoycoScreenSize.fontSize(context, 14),
+                  padding: paddingText ?? StoycoScreenSize.fromLTRB(context, top: showExclamationIcon ? 0 : 14 ),
+                  child: Column(
+                    children: <Widget>[
+                      if (showExclamationIcon)
+                      Padding(
+                        padding: StoycoScreenSize.fromLTRB(context, top: 4, bottom: 4),
+                        child: StoycoAssets.lib.assets.icons.common.exclamacion.svg(
+                          width: StoycoScreenSize.width(context, 12),
+                          height: StoycoScreenSize.width(context, 12),
+                          package: 'stoyco_subscription',
+                        ),
                       ),
-                    ),
+                      Text(
+                        title,
+                        style: textStyle ?? GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            color: StoycoColors.softWhite,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Montserrat',
+                            fontSize: StoycoScreenSize.fontSize(context, 14),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

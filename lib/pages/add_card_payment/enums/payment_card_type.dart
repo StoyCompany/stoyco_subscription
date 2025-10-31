@@ -70,20 +70,21 @@ enum PaymentCardType {
   String get icon {
     switch (this) {
       case PaymentCardType.visa:
-        return StoycoAssets.lib.assets.icons.visaWhite.path;
+        return StoycoAssets.lib.assets.icons.payment.visaWhite.path;
       case PaymentCardType.mastercard:
-        return StoycoAssets.lib.assets.icons.mastercard.path;
+        return StoycoAssets.lib.assets.images.payment.mastercard.path;
       case PaymentCardType.americanExpress:
-        return StoycoAssets.lib.assets.icons.americanExpress.path;
+        return StoycoAssets.lib.assets.images.payment.americanExpress.path;
       case PaymentCardType.discover:
-        return StoycoAssets.lib.assets.icons.discover.path;
+        return StoycoAssets.lib.assets.images.payment.discover.path;
       case PaymentCardType.dinersClub:
+        return StoycoAssets.lib.assets.images.payment.dinersClub.path;
       case PaymentCardType.dinersClub14:
-        return StoycoAssets.lib.assets.icons.dinersClub.path;
+        return StoycoAssets.lib.assets.images.payment.dinersClub.path;
       case PaymentCardType.jcb:
-        return StoycoAssets.lib.assets.icons.jcb.path;
+        return StoycoAssets.lib.assets.images.payment.jcb.path;
       case PaymentCardType.unknown:
-        return StoycoAssets.lib.assets.icons.visaWhite.path;
+        return StoycoAssets.lib.assets.icons.payment.visaWhite.path;
     }
   }
 

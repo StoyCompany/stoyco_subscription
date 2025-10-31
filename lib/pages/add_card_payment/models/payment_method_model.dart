@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:stoyco_subscription/pages/payment_summary/data/models/payment_card_type.dart';
+import 'package:stoyco_subscription/pages/add_card_payment/enums/payment_card_type.dart';
 
 part 'payment_method_model.g.dart';
 
