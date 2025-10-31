@@ -31,7 +31,6 @@ class AddCardPaymentNotifier extends ChangeNotifier {
 
   bool valueTerms = false;
   bool valuePrivacy = false;
-  bool valueAutoRenew = false;
 
   void onChangedTerms(bool? v) {
     valueTerms = v ?? false;
@@ -42,11 +41,6 @@ class AddCardPaymentNotifier extends ChangeNotifier {
   void onChangedPrivacy(bool? v) {
     valuePrivacy = v ?? false;
     validateIsDisabled();
-    notifyListeners();
-  }
-
-  void onChangedAutoRenew(bool? v) {
-    valueAutoRenew = v ?? false;
     notifyListeners();
   }
 
@@ -96,7 +90,7 @@ class AddCardPaymentNotifier extends ChangeNotifier {
   }
 
   String maskedCardNumber(String input) {
-    final String digits = input.replaceAll(RegExp(r'\D'), '');
+    final String digits = input.replaceAll(' ', '');
     if (digits.isEmpty) {
       return '';
     }
@@ -108,6 +102,12 @@ class AddCardPaymentNotifier extends ChangeNotifier {
       blockSizes = <int>[4, 6, 5];
       visibleCount = 5;
     }
+
+    if (type == PaymentCardType.dinersClub14) {
+      blockSizes = <int>[4, 6, 4];
+      visibleCount = 4;
+    }
+    
     int idx = 0;
     final int len = digits.length;
     int remaining = len;
@@ -129,18 +129,32 @@ class AddCardPaymentNotifier extends ChangeNotifier {
     String result = '';
     for (int i = 0; i < blocks.length; i++) {
       if (type == PaymentCardType.americanExpress) {
-        // Amex: 4-6-5, solo el último bloque muestra los últimos 5 dígitos
-        if (i < blocks.length - 1) {
-          // Enmascara completamente los bloques anteriores
+        // Amex: 4-6-5
+        if (i == 0) {
+          // Primer bloque (4): siempre enmascarado
           result += List<String>.filled(blocks[i].length, '*').join();
-        } else {
-          final int blockLen = blocks[i].length;
-          if (blockLen < 5) {
-            result += blocks[i];
-          } else {
-            result += List<String>.filled(blockLen - 5, '*').join();
-            result += blocks[i].substring(blockLen - 5);
-          }
+        } else if (i == 1) {
+          // Segundo bloque (6): siempre enmascarado
+          result += ' ';
+          result += List<String>.filled(blocks[i].length, '*').join();
+        } else if (i == 2) {
+          // Último bloque (5): muestra los dígitos reales
+          result += ' ';
+          result += blocks[i];
+        }
+      } else if (type == PaymentCardType.dinersClub14) {
+        // Diners Club 14: 4-6-4
+        if (i == 0) {
+          // Primer bloque (4): siempre enmascarado
+          result += List<String>.filled(blocks[i].length, '*').join();
+        } else if (i == 1) {
+          // Segundo bloque (6): siempre enmascarado
+          result += ' ';
+          result += List<String>.filled(blocks[i].length, '*').join();
+        } else if (i == 2) {
+          // Último bloque (4): muestra los dígitos reales
+          result += ' ';
+          result += blocks[i];
         }
       } else {
         // Otras tarjetas: bloques de 4, último bloque muestra los últimos 4
