@@ -54,16 +54,22 @@ class PaymentMethodOptionBtn extends StatelessWidget {
         ),
       ],
       onPressed: onTap,
+
       child: Padding(
-        padding: StoycoScreenSize.symmetric(context, vertical: 16, horizontal: 56),
+        padding: StoycoScreenSize.symmetric(
+          context,
+          vertical: 16,
+          horizontal: 56,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: StoycoScreenSize.width(context, 8),
           children: <Widget>[
             SizedBox(
               width: StoycoScreenSize.width(context, 24),
               child: Center(child: icon),
             ),
-            SizedBox(width: StoycoScreenSize.width(context, 8)),
+
             Expanded(
               child: Center(
                 child: Text(
@@ -79,7 +85,6 @@ class PaymentMethodOptionBtn extends StatelessWidget {
                 ),
               ),
             ),
-            // Simetría con el margen derecho
           ],
         ),
       ),
