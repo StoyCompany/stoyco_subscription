@@ -3,6 +3,16 @@
 
 ## [Unreleased]
 
+## 2.0.1 - 2025-11-05
+
+### Adjusted
+
+- Adjust GlassmorphicContainer height adaptation for SubscriptionPaymentPreviewCard
+- Adjust PaymentInformationSection horizontal padding
+- Adjust SelectPaymentMethodSection horizontal padding and icon and text alignment
+
+## [Unreleased]
+
 ## 2.0.0 (ddc12ee) - 2025-10-31
 
 ### Added

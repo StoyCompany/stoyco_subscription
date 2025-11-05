@@ -54,22 +54,34 @@ class PaymentMethodOptionBtn extends StatelessWidget {
         ),
       ],
       onPressed: onTap,
+
       child: Padding(
-        padding: StoycoScreenSize.symmetric(context, vertical: 16),
+        padding: StoycoScreenSize.symmetric(
+          context,
+          vertical: 16,
+          horizontal: 56,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: StoycoScreenSize.width(context, 8),
           children: <Widget>[
-            SizedBox(width: StoycoScreenSize.width(context, 63)),
-            icon,
-            SizedBox(width: StoycoScreenSize.width(context, 8)),
-            Text(
-              textAlign: TextAlign.center,
-              text,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  color: StoycoColors.text,
-                  fontSize: StoycoScreenSize.fontSize(context, 16),
-                  fontWeight: FontWeight.w700,
+            SizedBox(
+              width: StoycoScreenSize.width(context, 24),
+              child: Center(child: icon),
+            ),
+
+            Expanded(
+              child: Center(
+                child: Text(
+                  textAlign: TextAlign.center,
+                  text,
+                  style: GoogleFonts.montserrat(
+                    textStyle: TextStyle(
+                      color: StoycoColors.text,
+                      fontSize: StoycoScreenSize.fontSize(context, 16),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
               ),
             ),
