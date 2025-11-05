@@ -16,7 +16,7 @@ class PaymentInformationSection extends StatelessWidget {
         }
         final Map<String, String> item = items[index ~/ 2];
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 12, ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
