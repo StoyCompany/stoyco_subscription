@@ -16,7 +16,7 @@ class PaymentInformationSection extends StatelessWidget {
         }
         final Map<String, String> item = items[index ~/ 2];
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, ),
+          padding: StoycoScreenSize.symmetric(context, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -32,7 +32,7 @@ class PaymentInformationSection extends StatelessWidget {
               ),
               Text(
                 item['value'] ?? '',
-                 style: GoogleFonts.montserrat(
+                style: GoogleFonts.montserrat(
                   textStyle: TextStyle(
                     color: StoycoColors.softWhite,
                     fontWeight: FontWeight.w700,
