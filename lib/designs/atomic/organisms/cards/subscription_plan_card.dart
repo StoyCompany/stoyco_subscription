@@ -16,7 +16,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/models/respons
 import 'package:stoyco_subscription/pages/subscription_plans/presentation/helpers/models/card_subscription_plan_params.dart';
 
 
-/// {@template card_subscription_plan}
+/// {@template subscription_plan_card}
 /// A highly customizable subscription plan card organism for the Stoyco Subscription Atomic Design System.
 ///
 /// ### Overview
@@ -38,7 +38,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/presentation/helper
 ///
 /// ### Example
 /// ```dart
-/// CardSubscriptionPlan(
+/// SubscriptionPlanCard(
 ///   plan: myPlan,
 ///   styleParams: myStyleParams,
 ///   onTapRenewSubscription: (plan) => print('Renew: \\${plan.name}'),
@@ -47,10 +47,10 @@ import 'package:stoyco_subscription/pages/subscription_plans/presentation/helper
 /// )
 /// ```
 /// {@endtemplate}
-class CardSubscriptionPlan extends StatelessWidget {
+class SubscriptionPlanCard extends StatelessWidget {
 
-  /// {@macro card_subscription_plan}
-  const CardSubscriptionPlan({
+  /// {@macro subscription_plan_card}
+  const SubscriptionPlanCard({
     super.key,
     required this.plan,
     required this.onTapRenewSubscription,
@@ -92,6 +92,7 @@ class CardSubscriptionPlan extends StatelessWidget {
           ? TagCorner(
               key: ValueKey<String>('tagCorner_${plan.id}'), 
               title: 'Actual',
+              showExclamationIcon: plan.messageSuscriptionStatus.contains('No pudimos renovar tu suscripción'),
               height: styleParams.tagCornerHeight,
               width: styleParams.tagCornerWidth,
               cutSize: styleParams.tagCornerCutSize,
@@ -115,14 +116,20 @@ class CardSubscriptionPlan extends StatelessWidget {
               ) : null,
         description: Column(
           children: <Widget>[
-            Text(
-              plan.name,
-              style: styleParams.planNameTextStyle ?? GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: StoycoScreenSize.fontSize(context, styleParams.titleFontSize),
-                  color: StoycoColors.softWhite,
+            if (plan.imageUrl.isEmpty && plan.subscribed)
+              Gap(StoycoScreenSize.height(context, 40)),
+            Padding(
+              padding: StoycoScreenSize.symmetric(context, horizontal: 16),
+              child: Text(
+                plan.name,
+                style: styleParams.planNameTextStyle ?? GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: StoycoScreenSize.fontSize(context, styleParams.titleFontSize),
+                    color: StoycoColors.softWhite,
+                  ),
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
             Gap(StoycoScreenSize.width(context, 10)),
@@ -187,7 +194,7 @@ class CardSubscriptionPlan extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    StoycoAssets.lib.assets.icons.exclamacion.svg(
+                    StoycoAssets.lib.assets.icons.common.exclamacion.svg(
                       width: styleParams.exclamationIconWidth,
                       height: styleParams.exclamationIconHeight,
                       package: 'stoyco_subscription',

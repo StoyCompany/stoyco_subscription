@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscription_tab.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/get_subscription_catalog_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_service.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/enums/subscription_profile_type.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item_map.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart';
-import 'package:stoyco_subscription/pages/subscription_catalog/models/enums/subscription_profile_type.dart';
 
 class SubscriptionCatalogNotifier extends ChangeNotifier {
   SubscriptionCatalogNotifier(

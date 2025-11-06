@@ -115,9 +115,8 @@ class PartnerProfileDataSource {
   Future<LowestPricePlanResponseModel> getLowestPricePlanByPartner(
     String partnerId,
   ) async {
-    final String url =
-        '${environment.baseUrl()}subscriptions/lowestPricePlan/partner/$partnerId';
-    final headers = <String, String>{};
+    final String url = '${environment.baseUrl()}subscriptions/lowestPricePlan/partner/$partnerId';
+    final Map<String, String> headers = <String, String>{};
     if (_userToken.isNotEmpty) {
       headers['Authorization'] = 'Bearer $_userToken';
     }
@@ -136,7 +135,7 @@ class PartnerProfileDataSource {
   ) async {
     final String url =
         '${environment.baseUrl()}subscriptions/plan-last-user/partner/$partnerId';
-    final headers = <String, String>{};
+    final Map<String, String> headers = <String, String>{};
     if (_userToken.isNotEmpty) {
       headers['Authorization'] = 'Bearer $_userToken';
     }
@@ -152,7 +151,7 @@ class PartnerProfileDataSource {
   ) async {
     final String url =
         '${environment.baseUrl()}cultural-assets/community-owner/$partnerId';
-    final headers = _getHeaders();
+    final Map<String, String> headers = _getHeaders();
     final Response<Map<String, dynamic>> response = await _dio.get(
       url,
       options: Options(headers: headers),

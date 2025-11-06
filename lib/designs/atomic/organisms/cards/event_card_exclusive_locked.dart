@@ -278,7 +278,7 @@ class EventCardExclusiveLocked extends StatelessWidget {
                               const SizedBox(height: 5),
                               Row(
                                 children: <Widget>[
-                                  StoycoAssets.lib.assets.icons.calendarIco.svg(
+                                  StoycoAssets.lib.assets.icons.events.calendarIco.svg(
                                     package: 'stoyco_subscription',
                                     width: 15,
                                     height: 15,

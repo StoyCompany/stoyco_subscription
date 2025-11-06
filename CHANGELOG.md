@@ -1,6 +1,63 @@
+
 # Changelog
 
 ## [Unreleased]
+
+## 2.0.1 - 2025-11-05
+
+### Adjusted
+
+- Adjust GlassmorphicContainer height adaptation for SubscriptionPaymentPreviewCard
+- Adjust PaymentInformationSection horizontal padding
+- Adjust SelectPaymentMethodSection horizontal padding and icon and text alignment
+
+## [Unreleased]
+
+## 2.0.0 (ddc12ee) - 2025-10-31
+
+### Added
+- AddCardPayment page now includes payment summary info and refactored import paths
+- SubscriptionPlanCard component for displaying subscription plan details and actions
+- SubscriptionPlanCancelCard component for displaying subscription plan cancellation details
+- SubscriptionPaymentPreviewCard component for displaying subscription payment details
+- CurrencyWidthFlag component for formatted price, currency code, and flag
+- SubscriptionPlanPaymentInfoCard component for payment summary information
+- CardGradient component for customizable gradient card UI
+- CustomCheckboxRow component for customizable checkbox functionality
+- Card holder name validation and improved input handling in AddCardPaymentNotifier
+- AddCardPaymentNotifier for managing payment card input and validation
+- AddCardPayment screen with form and validation for card details
+- PaymentCard and PaymentMethodModel for handling payment card details and validation
+- CardSubscriptionPlanCancel widget for displaying subscription plan details
+- CardImageDescriptionTag with padding and margin properties for improved layout control
+- TermsPrivacyAutoRenewCard widget for managing subscription terms and privacy agreements
+- ModalBaseSubscription widget for styled modal dialogs
+- SubscriptionTextForm widget for customizable text input
+- New payment icons and images
+
+### Changed
+- Removed auto-renew option and updated card number masking logic for Diners Club
+- Expiration date validation now restricts maximum year to 2034
+- Refactored date formatting function into StoycoDateFormatters class
+- Updated payment image file paths and names for consistency
+- ButtonGradientText component now supports loading state and icon customization
+- TagCorner component enhanced with showExclamationIcon parameter
+- PaymentSummaryScreen and PaymentSummaryMobileScreen enhanced with additional parameters for payment plan interaction
+- selectPaymentMethodSection parameter added to PaymentSummaryScreen for improved payment method selection
+- CardSubscriptionPlan layout enhanced with conditional spacing and centered text
+- Asset paths for icons updated across multiple components
+- Dependencies reorganized in pubspec.yaml for better clarity and structure
+
+### Fixed
+- Updated jcb payment image for consistency
+- Correct closing brace in ButtonGradientText class
+
+### Removed
+- Unused subscription plan card components
+- Unused payment method related files
+
+### Documentation
+- Enhanced documentation for TermsPrivacyAutoRenewCard and other components
 
 ## 1.1.0 - 2025-10-22
 
@@ -9,8 +66,6 @@
 - Subscription summary integration
 - Cultural assets integration
 - Init modal setup for expired suscriptions notification
-
-## [Unreleased]
 
 ## 1.0.0 - 2025-10-21
 
@@ -57,9 +112,6 @@
 - Added subscription history screen design
 - Added subscription history integration
 
-
-## [Unreleased]
-
 ## 0.8.0
 
 ### Features
@@ -68,8 +120,6 @@
 - Added payment summary card
 - Added payment summary info list
 - Added payment method buttons
-
-## [Unreleased]
 
 ## 0.7.0
 
@@ -80,15 +130,11 @@
 - Added PartnerProfileSubscriptionBtn component
 - Added CulturalAssetSlider and CulturalAssetCard components
 
-## [Unreleased]
-
 ## 0.6.1
 
 ### Features
 
 - Add hasSubscription param and hide Subscribe button depending on it
-
-## [Unreleased]
 
 ## 0.6.0
 
@@ -97,15 +143,11 @@
 - Add page and pageSize to getSubscriptionCatalogService
 - Implement subscription catalog service in catalog screen to fetch real data
 
-## [Unreleased]
-
 ## 0.5.4
 
 ### Features
 
 - Search icon refactor
-
-## [Unreleased]
 
 ## 0.5.3
 
@@ -114,16 +156,12 @@
 - Added default package 'stoyco_subscription' name in assets.gen for assets tokens
 - replace SvgPicture.asset with generated asset references in multiple components
 
-## [Unreleased]
-
 ## 0.5.2
 
 ### Features
 
 - Add receiving of auth token for subscription_catalog_service init
 - Update service, repository and datasource accordingly, to receive auth token.
-
-## [Unreleased]
 
 ## 0.5.1
 
@@ -150,8 +188,6 @@
 ## Fixes
 
 - Adjust screen sizes, paddings and text sizes for catalog related widgets
-
-## [Unreleased]
 
 ## 0.4.0
 

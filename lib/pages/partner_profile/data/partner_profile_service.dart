@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
-import 'package:stoyco_subscription/pages/partner_profile/data/models/cultural_asset_card_model.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/lowest_price_plan_response_model.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/subscription_is_active_response.dart';

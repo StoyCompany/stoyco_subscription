@@ -154,7 +154,7 @@ class AccessContentModel extends Equatable {
   Map<String, dynamic> toJson() => _$AccessContentModelToJson(this);
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
     id,
     planIds,
     contentType,
@@ -182,7 +182,7 @@ class CategoryModel extends Equatable {
   Map<String, dynamic> toJson() => _$CategoryModelToJson(this);
 
   @override
-  List<Object?> get props => [id, name, benefits, brands];
+  List<Object?> get props => <Object?>[id, name, benefits, brands];
 }
 
 @JsonSerializable()
@@ -198,7 +198,7 @@ class BenefitModel extends Equatable {
   Map<String, dynamic> toJson() => _$BenefitModelToJson(this);
 
   @override
-  List<Object?> get props => [type, selected];
+  List<Object?> get props => <Object?>[type, selected];
 }
 
 @JsonSerializable()
@@ -214,5 +214,5 @@ class BrandModel extends Equatable {
   Map<String, dynamic> toJson() => _$BrandModelToJson(this);
 
   @override
-  List<Object?> get props => [id, name];
+  List<Object?> get props => <Object?>[id, name];
 }

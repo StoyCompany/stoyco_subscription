@@ -30,6 +30,9 @@ class $LibAssetsGen {
   /// Directory path: lib/assets/icons
   $LibAssetsIconsGen get icons => const $LibAssetsIconsGen();
 
+  /// Directory path: lib/assets/images
+  $LibAssetsImagesGen get images => const $LibAssetsImagesGen();
+
   /// Directory path: lib/assets/mocks
   $LibAssetsMocksGen get mocks => const $LibAssetsMocksGen();
 }
@@ -47,141 +50,32 @@ class $LibAssetsColorsGen {
 class $LibAssetsIconsGen {
   const $LibAssetsIconsGen();
 
-  /// File path: lib/assets/icons/Radiobuttons_no_selected.svg
-  SvgGenImage get radiobuttonsNoSelected =>
-      const SvgGenImage('lib/assets/icons/Radiobuttons_no_selected.svg');
+  /// Directory path: lib/assets/icons/common
+  $LibAssetsIconsCommonGen get common => const $LibAssetsIconsCommonGen();
 
-  /// File path: lib/assets/icons/Radiobuttons_selected.svg
-  SvgGenImage get radiobuttonsSelected =>
-      const SvgGenImage('lib/assets/icons/Radiobuttons_selected.svg');
+  /// Directory path: lib/assets/icons/cultural_assets
+  $LibAssetsIconsCulturalAssetsGen get culturalAssets =>
+      const $LibAssetsIconsCulturalAssetsGen();
 
-  /// File path: lib/assets/icons/Visa_white.svg
-  SvgGenImage get visaWhite =>
-      const SvgGenImage('lib/assets/icons/Visa_white.svg');
+  /// Directory path: lib/assets/icons/events
+  $LibAssetsIconsEventsGen get events => const $LibAssetsIconsEventsGen();
 
-  /// File path: lib/assets/icons/alert_icon.svg
-  SvgGenImage get alertIcon =>
-      const SvgGenImage('lib/assets/icons/alert_icon.svg');
+  /// Directory path: lib/assets/icons/exclusive_content
+  $LibAssetsIconsExclusiveContentGen get exclusiveContent =>
+      const $LibAssetsIconsExclusiveContentGen();
 
-  /// File path: lib/assets/icons/american-express.png
-  AssetGenImage get americanExpress =>
-      const AssetGenImage('lib/assets/icons/american-express.png');
+  /// Directory path: lib/assets/icons/payment
+  $LibAssetsIconsPaymentGen get payment => const $LibAssetsIconsPaymentGen();
 
-  /// File path: lib/assets/icons/apple_logo.svg
-  SvgGenImage get appleLogo =>
-      const SvgGenImage('lib/assets/icons/apple_logo.svg');
+  /// Directory path: lib/assets/icons/plan
+  $LibAssetsIconsPlanGen get plan => const $LibAssetsIconsPlanGen();
+}
 
-  /// File path: lib/assets/icons/arrow_right.svg
-  SvgGenImage get arrowRight =>
-      const SvgGenImage('lib/assets/icons/arrow_right.svg');
+class $LibAssetsImagesGen {
+  const $LibAssetsImagesGen();
 
-  /// File path: lib/assets/icons/bell_icon.svg
-  SvgGenImage get bellIcon =>
-      const SvgGenImage('lib/assets/icons/bell_icon.svg');
-
-  /// File path: lib/assets/icons/calendarIco.svg
-  SvgGenImage get calendarIco =>
-      const SvgGenImage('lib/assets/icons/calendarIco.svg');
-
-  /// File path: lib/assets/icons/close_window.svg
-  SvgGenImage get closeWindow =>
-      const SvgGenImage('lib/assets/icons/close_window.svg');
-
-  /// File path: lib/assets/icons/cultural_asset_coin.svg
-  SvgGenImage get culturalAssetCoin =>
-      const SvgGenImage('lib/assets/icons/cultural_asset_coin.svg');
-
-  /// File path: lib/assets/icons/diners-club.png
-  AssetGenImage get dinersClub =>
-      const AssetGenImage('lib/assets/icons/diners-club.png');
-
-  /// File path: lib/assets/icons/discover.png
-  AssetGenImage get discover =>
-      const AssetGenImage('lib/assets/icons/discover.png');
-
-  /// File path: lib/assets/icons/double_right_arrow.svg
-  SvgGenImage get doubleRightArrow =>
-      const SvgGenImage('lib/assets/icons/double_right_arrow.svg');
-
-  /// File path: lib/assets/icons/exclamacion.svg
-  SvgGenImage get exclamacion =>
-      const SvgGenImage('lib/assets/icons/exclamacion.svg');
-
-  /// File path: lib/assets/icons/jcb.png
-  AssetGenImage get jcb => const AssetGenImage('lib/assets/icons/jcb.png');
-
-  /// File path: lib/assets/icons/left_arrow.svg
-  SvgGenImage get leftArrow =>
-      const SvgGenImage('lib/assets/icons/left_arrow.svg');
-
-  /// File path: lib/assets/icons/mastercard.png
-  AssetGenImage get mastercard =>
-      const AssetGenImage('lib/assets/icons/mastercard.png');
-
-  /// File path: lib/assets/icons/plus_icon.svg
-  SvgGenImage get plusIcon =>
-      const SvgGenImage('lib/assets/icons/plus_icon.svg');
-
-  /// File path: lib/assets/icons/search_navbar.svg
-  SvgGenImage get searchNavbar =>
-      const SvgGenImage('lib/assets/icons/search_navbar.svg');
-
-  /// File path: lib/assets/icons/star.svg
-  SvgGenImage get star => const SvgGenImage('lib/assets/icons/star.svg');
-
-  /// File path: lib/assets/icons/subsciption_button_icon.svg
-  SvgGenImage get subsciptionButtonIcon =>
-      const SvgGenImage('lib/assets/icons/subsciption_button_icon.svg');
-
-  /// File path: lib/assets/icons/subscription_icon.svg
-  SvgGenImage get subscriptionIcon =>
-      const SvgGenImage('lib/assets/icons/subscription_icon.svg');
-
-  /// File path: lib/assets/icons/subscription_icon_web.svg
-  SvgGenImage get subscriptionIconWeb =>
-      const SvgGenImage('lib/assets/icons/subscription_icon_web.svg');
-
-  /// File path: lib/assets/icons/tag_lock.svg
-  SvgGenImage get tagLock => const SvgGenImage('lib/assets/icons/tag_lock.svg');
-
-  /// File path: lib/assets/icons/tag_subscription.svg
-  SvgGenImage get tagSubscription =>
-      const SvgGenImage('lib/assets/icons/tag_subscription.svg');
-
-  /// File path: lib/assets/icons/tag_subscription_slim.svg
-  SvgGenImage get tagSubscriptionSlim =>
-      const SvgGenImage('lib/assets/icons/tag_subscription_slim.svg');
-
-  /// List of all assets
-  List<dynamic> get values => [
-    radiobuttonsNoSelected,
-    radiobuttonsSelected,
-    visaWhite,
-    alertIcon,
-    americanExpress,
-    appleLogo,
-    arrowRight,
-    bellIcon,
-    calendarIco,
-    closeWindow,
-    culturalAssetCoin,
-    dinersClub,
-    discover,
-    doubleRightArrow,
-    exclamacion,
-    jcb,
-    leftArrow,
-    mastercard,
-    plusIcon,
-    searchNavbar,
-    star,
-    subsciptionButtonIcon,
-    subscriptionIcon,
-    subscriptionIconWeb,
-    tagLock,
-    tagSubscription,
-    tagSubscriptionSlim,
-  ];
+  /// Directory path: lib/assets/images/payment
+  $LibAssetsImagesPaymentGen get payment => const $LibAssetsImagesPaymentGen();
 }
 
 class $LibAssetsMocksGen {
@@ -199,6 +93,202 @@ class $LibAssetsMocksGen {
   List<String> get values => [
     paymentSummaryInfoResponse,
     subscriptionPlanByUser,
+  ];
+}
+
+class $LibAssetsIconsCommonGen {
+  const $LibAssetsIconsCommonGen();
+
+  /// File path: lib/assets/icons/common/alert_icon.svg
+  SvgGenImage get alertIcon =>
+      const SvgGenImage('lib/assets/icons/common/alert_icon.svg');
+
+  /// File path: lib/assets/icons/common/arrow_right.svg
+  SvgGenImage get arrowRight =>
+      const SvgGenImage('lib/assets/icons/common/arrow_right.svg');
+
+  /// File path: lib/assets/icons/common/bell_icon.svg
+  SvgGenImage get bellIcon =>
+      const SvgGenImage('lib/assets/icons/common/bell_icon.svg');
+
+  /// File path: lib/assets/icons/common/check_box.svg
+  SvgGenImage get checkBox =>
+      const SvgGenImage('lib/assets/icons/common/check_box.svg');
+
+  /// File path: lib/assets/icons/common/close_window.svg
+  SvgGenImage get closeWindow =>
+      const SvgGenImage('lib/assets/icons/common/close_window.svg');
+
+  /// File path: lib/assets/icons/common/double_right_arrow.svg
+  SvgGenImage get doubleRightArrow =>
+      const SvgGenImage('lib/assets/icons/common/double_right_arrow.svg');
+
+  /// File path: lib/assets/icons/common/exclamacion.svg
+  SvgGenImage get exclamacion =>
+      const SvgGenImage('lib/assets/icons/common/exclamacion.svg');
+
+  /// File path: lib/assets/icons/common/left_arrow.svg
+  SvgGenImage get leftArrow =>
+      const SvgGenImage('lib/assets/icons/common/left_arrow.svg');
+
+  /// File path: lib/assets/icons/common/plus_icon.svg
+  SvgGenImage get plusIcon =>
+      const SvgGenImage('lib/assets/icons/common/plus_icon.svg');
+
+  /// File path: lib/assets/icons/common/right_arrow.svg
+  SvgGenImage get rightArrow =>
+      const SvgGenImage('lib/assets/icons/common/right_arrow.svg');
+
+  /// File path: lib/assets/icons/common/search_navbar.svg
+  SvgGenImage get searchNavbar =>
+      const SvgGenImage('lib/assets/icons/common/search_navbar.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+    alertIcon,
+    arrowRight,
+    bellIcon,
+    checkBox,
+    closeWindow,
+    doubleRightArrow,
+    exclamacion,
+    leftArrow,
+    plusIcon,
+    rightArrow,
+    searchNavbar,
+  ];
+}
+
+class $LibAssetsIconsCulturalAssetsGen {
+  const $LibAssetsIconsCulturalAssetsGen();
+
+  /// File path: lib/assets/icons/cultural_assets/cultural_asset_coin.svg
+  SvgGenImage get culturalAssetCoin => const SvgGenImage(
+    'lib/assets/icons/cultural_assets/cultural_asset_coin.svg',
+  );
+
+  /// List of all assets
+  List<SvgGenImage> get values => [culturalAssetCoin];
+}
+
+class $LibAssetsIconsEventsGen {
+  const $LibAssetsIconsEventsGen();
+
+  /// File path: lib/assets/icons/events/calendarIco.svg
+  SvgGenImage get calendarIco =>
+      const SvgGenImage('lib/assets/icons/events/calendarIco.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [calendarIco];
+}
+
+class $LibAssetsIconsExclusiveContentGen {
+  const $LibAssetsIconsExclusiveContentGen();
+
+  /// File path: lib/assets/icons/exclusive_content/subsciption_button_icon.svg
+  SvgGenImage get subsciptionButtonIcon => const SvgGenImage(
+    'lib/assets/icons/exclusive_content/subsciption_button_icon.svg',
+  );
+
+  /// File path: lib/assets/icons/exclusive_content/tag_lock.svg
+  SvgGenImage get tagLock =>
+      const SvgGenImage('lib/assets/icons/exclusive_content/tag_lock.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [subsciptionButtonIcon, tagLock];
+}
+
+class $LibAssetsIconsPaymentGen {
+  const $LibAssetsIconsPaymentGen();
+
+  /// File path: lib/assets/icons/payment/apple_logo.svg
+  SvgGenImage get appleLogo =>
+      const SvgGenImage('lib/assets/icons/payment/apple_logo.svg');
+
+  /// File path: lib/assets/icons/payment/card_cvv.svg
+  SvgGenImage get cardCvv =>
+      const SvgGenImage('lib/assets/icons/payment/card_cvv.svg');
+
+  /// File path: lib/assets/icons/payment/visa_white.svg
+  SvgGenImage get visaWhite =>
+      const SvgGenImage('lib/assets/icons/payment/visa_white.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [appleLogo, cardCvv, visaWhite];
+}
+
+class $LibAssetsIconsPlanGen {
+  const $LibAssetsIconsPlanGen();
+
+  /// File path: lib/assets/icons/plan/credit_card_validation.svg
+  SvgGenImage get creditCardValidation =>
+      const SvgGenImage('lib/assets/icons/plan/credit_card_validation.svg');
+
+  /// File path: lib/assets/icons/plan/star.svg
+  SvgGenImage get star => const SvgGenImage('lib/assets/icons/plan/star.svg');
+
+  /// File path: lib/assets/icons/plan/subscription_icon.svg
+  SvgGenImage get subscriptionIcon =>
+      const SvgGenImage('lib/assets/icons/plan/subscription_icon.svg');
+
+  /// File path: lib/assets/icons/plan/subscription_icon_web.svg
+  SvgGenImage get subscriptionIconWeb =>
+      const SvgGenImage('lib/assets/icons/plan/subscription_icon_web.svg');
+
+  /// File path: lib/assets/icons/plan/tag_subscription.svg
+  SvgGenImage get tagSubscription =>
+      const SvgGenImage('lib/assets/icons/plan/tag_subscription.svg');
+
+  /// File path: lib/assets/icons/plan/tag_subscription_slim.svg
+  SvgGenImage get tagSubscriptionSlim =>
+      const SvgGenImage('lib/assets/icons/plan/tag_subscription_slim.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+    creditCardValidation,
+    star,
+    subscriptionIcon,
+    subscriptionIconWeb,
+    tagSubscription,
+    tagSubscriptionSlim,
+  ];
+}
+
+class $LibAssetsImagesPaymentGen {
+  const $LibAssetsImagesPaymentGen();
+
+  /// File path: lib/assets/images/payment/american_express.png
+  AssetGenImage get americanExpress =>
+      const AssetGenImage('lib/assets/images/payment/american_express.png');
+
+  /// File path: lib/assets/images/payment/card_payment.png
+  AssetGenImage get cardPayment =>
+      const AssetGenImage('lib/assets/images/payment/card_payment.png');
+
+  /// File path: lib/assets/images/payment/diners_club.png
+  AssetGenImage get dinersClub =>
+      const AssetGenImage('lib/assets/images/payment/diners_club.png');
+
+  /// File path: lib/assets/images/payment/discover.png
+  AssetGenImage get discover =>
+      const AssetGenImage('lib/assets/images/payment/discover.png');
+
+  /// File path: lib/assets/images/payment/jcb.png
+  AssetGenImage get jcb =>
+      const AssetGenImage('lib/assets/images/payment/jcb.png');
+
+  /// File path: lib/assets/images/payment/mastercard.png
+  AssetGenImage get mastercard =>
+      const AssetGenImage('lib/assets/images/payment/mastercard.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+    americanExpress,
+    cardPayment,
+    dinersClub,
+    discover,
+    jcb,
+    mastercard,
   ];
 }
 
@@ -312,7 +402,7 @@ class SvgGenImage {
     Key? key,
     bool matchTextDirection = false,
     AssetBundle? bundle,
-    String? package = 'stoyco_subscription',
+    String? package,
     double? width,
     double? height,
     BoxFit fit = BoxFit.contain,
