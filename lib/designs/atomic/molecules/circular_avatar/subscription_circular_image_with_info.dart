@@ -176,7 +176,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                           spacing: StoycoScreenSize.width(context, 8),
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            StoycoAssets.lib.assets.icons.alertIcon.svg(
+                            StoycoAssets.lib.assets.icons.common.alertIcon.svg(
                               height: StoycoScreenSize.height(context, 16),
                               width: StoycoScreenSize.width(context, 16),
                             ),
