@@ -151,18 +151,24 @@ class SubscriptionHistoryCard extends StatelessWidget {
                                 : 'Inactivo',
                           ),
                         ),
-                        Text(
-                          (subscriptionHistoryItem.subscribedIsActive)
-                              ? 'Ver suscripción'
-                              : 'Ver planes',
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
-                              color: StoycoColors.softWhite,
-                              fontWeight: FontWeight.w400,
-                              fontSize: StoycoScreenSize.fontSize(context, 12),
-                            ),
-                          ),
-                        ),
+
+                        (subscriptionHistoryItem.planIsDeleted)
+                            ? const SizedBox.shrink()
+                            : Text(
+                                (subscriptionHistoryItem.subscribedIsActive)
+                                    ? 'Ver suscripción'
+                                    : 'Ver planes',
+                                style: GoogleFonts.montserrat(
+                                  textStyle: TextStyle(
+                                    color: StoycoColors.softWhite,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: StoycoScreenSize.fontSize(
+                                      context,
+                                      12,
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
