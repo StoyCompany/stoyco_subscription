@@ -88,6 +88,7 @@ class UserSubscriptionPlan extends Equatable {
     required this.subscriptionStartDate,
     required this.subscriptionEndDate,
     required this.hasActivePlan,
+    required this.planIsDeleted
   });
 
   /// Creates a [UserSubscriptionPlan] from a JSON map.
@@ -136,6 +137,9 @@ class UserSubscriptionPlan extends Equatable {
   /// Whether the user has an active plan.
   final bool hasActivePlan;
 
+  /// Whether the plan has been deleted.
+  final bool planIsDeleted;
+
   /// Converts this object to a JSON map.
   Map<String, dynamic> toJson() => _$UserSubscriptionPlanToJson(this);
 
@@ -155,5 +159,6 @@ class UserSubscriptionPlan extends Equatable {
         subscriptionStartDate,
         subscriptionEndDate,
         hasActivePlan,
+        planIsDeleted,
       ];
 }

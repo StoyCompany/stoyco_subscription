@@ -1,6 +1,16 @@
 
 # Changelog
 
+
+## [Unreleased]
+
+## 2.0.2 - 2025-11-07
+
+### Features
+
+- Added isPlanDeleted field in subscription history related model
+- Shrink Text widget showing 'Ver planes' or 'Ver suscripción' state in case that the plan has been deleted
+
 ## [Unreleased]
 
 ## 2.0.1 - 2025-11-05
