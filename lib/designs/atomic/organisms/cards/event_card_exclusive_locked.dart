@@ -88,7 +88,7 @@ import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 /// )
 /// ```
 /// {@endtemplate}
-class EventCardExclusiveLocked extends StatelessWidget {
+class EventCardExclusiveLocked extends StatefulWidget {
   /// {@macro event_card_exclusive_locked}
   const EventCardExclusiveLocked({
     super.key,
@@ -112,46 +112,75 @@ class EventCardExclusiveLocked extends StatelessWidget {
 
   /// The main image URL for the event card.
   final String imageUrl;
+
   /// The event name to display.
   final String name;
+
   /// The event date to display.
   final String date;
+
   /// If true, displays locked overlay and disables normal tap. Defaults to true.
   final bool isLocked;
+
   /// If true, shows a finished label and disables normal tap.
   final bool isFinished;
+
   /// Callback when the unlocked event card is tapped.
   final VoidCallback? onTapEvent;
+
   /// Callback when the locked event card is tapped.
   final VoidCallback? onTapEventExclusive;
 
   /// Widget to show while the image is loading (optional).
   final Widget? imagePlaceholder;
+
   /// Widget to show if the image fails to load (optional).
   final Widget? imageError;
+
   /// Height of the card. Defaults to 200.
   final double heightCard;
+
   /// Width of the card. Defaults to 200.
   final double widthCard;
+
   /// Border radius for the card. Defaults to 16.
   final double borderRadiusCard;
+
   /// Background color for the card. Defaults to [StoycoColors.white2].
   final Color backgroundColorCard;
+
   /// Padding for the content inside the card (optional).
   final EdgeInsetsGeometry? paddingContentCard;
 
   /// Custom text style for the event name (optional).
   final TextStyle? nameFontStyle;
+
   /// Custom text style for the event date (optional).
   final TextStyle? dateFontStyle;
 
   @override
-  Widget build(BuildContext context) => InkWell(
-      borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, borderRadiusCard)),
-      onTap: (!isFinished && isLocked) ? onTapEventExclusive : onTapEvent,
+  State<EventCardExclusiveLocked> createState() =>
+      _EventCardExclusiveLockedState();
+}
+
+class _EventCardExclusiveLockedState extends State<EventCardExclusiveLocked> {
+  bool _isInfoHovered = false;
+
+  @override
+  Widget build(BuildContext context) => MouseRegion(
+    cursor: SystemMouseCursors.click,
+    onEnter: (_) => setState(() => _isInfoHovered = true),
+    onExit: (_) => setState(() => _isInfoHovered = false),
+    child: InkWell(
+      borderRadius: BorderRadius.circular(
+        StoycoScreenSize.radius(context, widget.borderRadiusCard),
+      ),
+      onTap: (!widget.isFinished && widget.isLocked)
+          ? widget.onTapEventExclusive
+          : widget.onTapEvent,
       child: SizedBox(
-        width: StoycoScreenSize.width(context, widthCard),
-        height: StoycoScreenSize.height(context, heightCard),
+        width: StoycoScreenSize.width(context, widget.widthCard),
+        height: StoycoScreenSize.height(context, widget.heightCard),
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) => Stack(
             children: <Widget>[
@@ -174,14 +203,14 @@ class EventCardExclusiveLocked extends StatelessWidget {
                         height: constraints.maxHeight,
                         width: double.infinity,
                         radius: 15,
-                        imageUrl: imageUrl,
-                        isBlur: !isFinished && isLocked,
+                        imageUrl: widget.imageUrl,
+                        isBlur: !widget.isFinished && widget.isLocked,
                         alignment: Alignment.topCenter,
                       ),
                       Align(
                         alignment: Alignment.topRight,
                         child: TagLocked(
-                          isLocked: !isFinished && isLocked,
+                          isLocked: !widget.isFinished && widget.isLocked,
                         ),
                       ),
                     ],
@@ -189,7 +218,7 @@ class EventCardExclusiveLocked extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: isFinished,
+                visible: widget.isFinished,
                 child: Positioned(
                   top: 5,
                   right: 5,
@@ -202,10 +231,7 @@ class EventCardExclusiveLocked extends StatelessWidget {
                           begin: Alignment.topRight,
                           end: Alignment.bottomRight,
                           stops: <double>[0, 1],
-                          colors: <Color>[
-                            Color(0xff7F0065),
-                            Color(0xffED0095),
-                          ],
+                          colors: <Color>[Color(0xff7F0065), Color(0xffED0095)],
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(9)),
                       ),
@@ -240,67 +266,74 @@ class EventCardExclusiveLocked extends StatelessWidget {
                     bottomRight: Radius.circular(15),
                   ),
                   child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                    child: SizedBox(
+                    filter: ImageFilter.blur(
+                      sigmaX: _isInfoHovered ? 8 : 5,
+                      sigmaY: _isInfoHovered ? 8 : 5,
+                    ),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
                       width: constraints.maxWidth,
                       height: constraints.maxHeight * 0.35,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(15),
-                            bottomRight: Radius.circular(15),
-                          ),
-                          color: const Color.fromARGB(15, 255, 255, 255),
-                          border: Border.all(
-                            width: 0.6,
-                            color: const Color(0xFFd9d9d8),
-                          ),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                name,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                textAlign: TextAlign.start,
-                                maxLines: 1,
+                        color: _isInfoHovered
+                            ? const Color.fromARGB(40, 255, 255, 255)
+                            : const Color.fromARGB(15, 255, 255, 255),
+                        border: Border.all(
+                          width: 0.6,
+                          color: const Color(0xFFd9d9d8),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              widget.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
                                 overflow: TextOverflow.ellipsis,
-                                textScaler: TextScaler.noScaling,
                               ),
-                              const SizedBox(height: 5),
-                              Row(
-                                children: <Widget>[
-                                  StoycoAssets.lib.assets.icons.events.calendarIco.svg(
-                                    package: 'stoyco_subscription',
-                                    width: 15,
-                                    height: 15,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Flexible(
-                                    child: Text(
-                                      date,
-                                      style: dateFontStyle ?? const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
+                              textAlign: TextAlign.start,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textScaler: TextScaler.noScaling,
+                            ),
+                            const SizedBox(height: 5),
+                            Row(
+                              children: <Widget>[
+                                StoycoAssets.lib.assets.icons.events.calendarIco
+                                    .svg(
+                                      package: 'stoyco_subscription',
+                                      width: 15,
+                                      height: 15,
                                     ),
+                                const SizedBox(width: 5),
+                                Flexible(
+                                  child: Text(
+                                    widget.date,
+                                    style:
+                                        widget.dateFontStyle ??
+                                        const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                   ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -311,5 +344,6 @@ class EventCardExclusiveLocked extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  );
 }
