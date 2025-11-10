@@ -45,6 +45,7 @@ UserSubscriptionPlan _$UserSubscriptionPlanFromJson(
   subscriptionStartDate: json['subscriptionStartDate'] as String,
   subscriptionEndDate: json['subscriptionEndDate'] as String,
   hasActivePlan: json['hasActivePlan'] as bool,
+  planIsDeleted: json['planIsDeleted'] as bool,
 );
 
 Map<String, dynamic> _$UserSubscriptionPlanToJson(
@@ -64,4 +65,5 @@ Map<String, dynamic> _$UserSubscriptionPlanToJson(
   'subscriptionStartDate': instance.subscriptionStartDate,
   'subscriptionEndDate': instance.subscriptionEndDate,
   'hasActivePlan': instance.hasActivePlan,
+  'planIsDeleted': instance.planIsDeleted,
 };
