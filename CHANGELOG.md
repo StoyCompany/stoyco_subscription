@@ -1,6 +1,18 @@
-
 # Changelog
 
+## [Unreleased]
+
+## 2.0.3 - 2025-11-11
+
+### Features
+
+- Implemented Active Subscription Management
+- Added ActiveSubscriptionRepository for handling active subscription data retrieval and token management.
+- Introduced ActiveSubscriptionService for managing active subscriptions with caching and Firebase Auth integration.
+- Created models for ActiveUserPlanResponse and ActiveUserPlan to structure API responses.
+- Implemented caching strategy for subscription data with automatic refresh and cache clearing on user logout.
+- Developed comprehensive tests for ActiveSubscriptionService and its methods, ensuring correct functionality and error handling.
+- Added environment configurations for different API base URLs.
 
 ## [Unreleased]
 
@@ -26,6 +38,7 @@
 ## 2.0.0 (ddc12ee) - 2025-10-31
 
 ### Added
+
 - AddCardPayment page now includes payment summary info and refactored import paths
 - SubscriptionPlanCard component for displaying subscription plan details and actions
 - SubscriptionPlanCancelCard component for displaying subscription plan cancellation details
@@ -46,6 +59,7 @@
 - New payment icons and images
 
 ### Changed
+
 - Removed auto-renew option and updated card number masking logic for Diners Club
 - Expiration date validation now restricts maximum year to 2034
 - Refactored date formatting function into StoycoDateFormatters class
@@ -59,14 +73,17 @@
 - Dependencies reorganized in pubspec.yaml for better clarity and structure
 
 ### Fixed
+
 - Updated jcb payment image for consistency
 - Correct closing brace in ButtonGradientText class
 
 ### Removed
+
 - Unused subscription plan card components
 - Unused payment method related files
 
 ### Documentation
+
 - Enhanced documentation for TermsPrivacyAutoRenewCard and other components
 
 ## 1.1.0 - 2025-10-22
