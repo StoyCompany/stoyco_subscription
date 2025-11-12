@@ -1,5 +1,7 @@
 # Changelog
 
+## [Unreleased]
+
 ## 2.0.3 - 2025-11-11
 
 ### Features
