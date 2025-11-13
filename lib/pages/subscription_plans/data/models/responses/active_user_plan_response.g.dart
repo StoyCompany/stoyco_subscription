@@ -30,7 +30,7 @@ Map<String, dynamic> _$ActiveUserPlanResponseToJson(
 
 ActiveUserPlan _$ActiveUserPlanFromJson(Map<String, dynamic> json) =>
     ActiveUserPlan(
-      id: json['_id'] as String,
+      id: json['id'] as String,
       plan: PlanInfo.fromJson(json['plan'] as Map<String, dynamic>),
       partnerId: json['partnerId'] as String,
       userId: json['userId'] as String,
@@ -50,7 +50,7 @@ ActiveUserPlan _$ActiveUserPlanFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$ActiveUserPlanToJson(ActiveUserPlan instance) =>
     <String, dynamic>{
-      '_id': instance.id,
+      'id': instance.id,
       'plan': instance.plan,
       'partnerId': instance.partnerId,
       'userId': instance.userId,

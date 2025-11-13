@@ -477,27 +477,38 @@ class ActiveSubscriptionService {
   /// - `false`: User does not have access to the content
   ///
   /// This method checks if any of the user's active subscriptions includes
-  /// the specified content access in their plan's accesses list.
+  /// access to the content by matching the plan IDs from the user's subscriptions
+  /// with the plan IDs specified in the [AccessContent] object.
   ///
   /// **Caching Behavior:**
   /// - Uses the same caching strategy as [getActiveUserSubscriptions]
   /// - Pass [forceRefresh] to bypass cache
   ///
-  /// Parameters:
-  /// - [contentId]: The content/access identifier to check (e.g., 'events', 'exclusive_content')
+  /// **Parameters:**
+  /// - [content]: The [AccessContent] object containing content information and
+  ///   authorized plan IDs
   /// - [partnerId]: Optional partner ID to restrict the search to a specific partner
   /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
   ///
-  /// Example:
+  /// **Example:**
   /// ```dart
-  /// // Check if user has access to events content
-  /// final result = await service.hasAccessToContent(
-  ///   contentId: 'events',
+  /// // Create an AccessContent object
+  /// final eventContent = AccessContent(
+  ///   contentId: 'event_123',
+  ///   partnerId: '507f1f77bcf86cd799439012',
+  ///   planIds: ['plan_1', 'plan_2', 'plan_3'],
+  ///   visibleFrom: DateTime(2024, 1, 1),
+  ///   visibleUntil: DateTime(2024, 12, 31),
   /// );
   ///
-  /// // Check if user has access to events from a specific partner
+  /// // Check if user has access to this content
+  /// final result = await service.hasAccessToContent(
+  ///   content: eventContent,
+  /// );
+  ///
+  /// // Check if user has access from a specific partner
   /// final partnerResult = await service.hasAccessToContent(
-  ///   contentId: 'events',
+  ///   content: eventContent,
   ///   partnerId: '507f1f77bcf86cd799439012',
   /// );
   ///
@@ -536,7 +547,9 @@ class ActiveSubscriptionService {
           : activeSubscriptions;
 
       // Collect all plan IDs from filtered subscriptions
-      final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
+      final Set<String> userPlanIds = filteredSubscriptions
+          .map((ActiveUserPlan plan) => plan.plan.id)
+          .toSet();
 
       final bool hasAccess = content.planIds.any(userPlanIds.contains);
 
@@ -546,52 +559,85 @@ class ActiveSubscriptionService {
 
   /// Checks user access to multiple contents at once.
   ///
-  /// Returns an [Either] with a [Map<String, bool>] on success or [Failure] on error.
-  /// The map keys are content IDs and values indicate whether the user has access.
+  /// Returns an [Either] with a [Map<AccessContent, bool>] on success or [Failure] on error.
+  /// The map keys are [AccessContent] objects and values indicate whether the user has access.
   ///
   /// This method is more efficient than calling [hasAccessToContent] multiple times
-  /// because it only fetches the subscriptions once.
+  /// because it only fetches the subscriptions once and processes all content checks
+  /// in a single operation.
   ///
   /// **Caching Behavior:**
   /// - Uses the same caching strategy as [getActiveUserSubscriptions]
   /// - Pass [forceRefresh] to bypass cache
   ///
-  /// Parameters:
-  /// - [contentIds]: List of content/access identifiers to check
+  /// **Parameters:**
+  /// - [contents]: List of [AccessContent] objects to check access for
   /// - [partnerId]: Optional partner ID to restrict the search to a specific partner
   /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
   ///
-  /// Example:
+  /// **Example:**
   /// ```dart
+  /// // Create multiple AccessContent objects
+  /// final eventContent = AccessContent(
+  ///   contentId: 'event_123',
+  ///   partnerId: '507f1f77bcf86cd799439012',
+  ///   planIds: ['plan_1', 'plan_2'],
+  ///   visibleFrom: DateTime(2024, 1, 1),
+  ///   visibleUntil: DateTime(2024, 12, 31),
+  /// );
+  ///
+  /// final exclusiveContent = AccessContent(
+  ///   contentId: 'exclusive_456',
+  ///   partnerId: '507f1f77bcf86cd799439012',
+  ///   planIds: ['plan_3', 'plan_4'],
+  ///   visibleFrom: DateTime(2024, 1, 1),
+  ///   visibleUntil: DateTime(2024, 12, 31),
+  /// );
+  ///
+  /// final culturalAssetContent = AccessContent(
+  ///   contentId: 'asset_789',
+  ///   partnerId: '507f1f77bcf86cd799439012',
+  ///   planIds: ['plan_5'],
+  ///   visibleFrom: DateTime(2024, 1, 1),
+  ///   visibleUntil: DateTime(2024, 12, 31),
+  /// );
+  ///
+  /// // Check access to multiple contents
   /// final result = await service.checkMultipleContentAccess(
-  ///   contentIds: ['events', 'exclusive_content', 'cultural_assets'],
+  ///   contents: [eventContent, exclusiveContent, culturalAssetContent],
+  /// );
+  ///
+  /// // With partner filter
+  /// final filteredResult = await service.checkMultipleContentAccess(
+  ///   contents: [eventContent, exclusiveContent, culturalAssetContent],
+  ///   partnerId: '507f1f77bcf86cd799439012',
   /// );
   ///
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
   ///   (accessMap) {
-  ///     accessMap.forEach((contentId, hasAccess) {
-  ///       print('$contentId: ${hasAccess ? "✅" : "❌"}');
+  ///     accessMap.forEach((content, hasAccess) {
+  ///       print('${content.contentId}: ${hasAccess ? "✅" : "❌"}');
   ///     });
   ///   },
   /// );
   ///
   /// // Example output:
-  /// // events: ✅
-  /// // exclusive_content: ✅
-  /// // cultural_assets: ❌
+  /// // event_123: ✅
+  /// // exclusive_456: ✅
+  /// // asset_789: ❌
   /// ```
   Future<Either<Failure, Map<AccessContent, bool>>> checkMultipleContentAccess({
     required List<AccessContent> contents,
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result =
+        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
 
     return result.fold(
       (Failure failure) => Left<Failure, Map<AccessContent, bool>>(failure),
       (ActiveUserPlanResponse response) {
-
         // Apply partner filter if provided
         final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
             ? response.data.where(
@@ -600,7 +646,9 @@ class ActiveSubscriptionService {
             : response.data;
 
         // Collect all accesses from filtered subscriptions
-        final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
+        final Set<String> userPlanIds = filteredSubscriptions
+            .map((ActiveUserPlan plan) => plan.plan.id)
+            .toSet();
 
         // Build result map
         final Map<AccessContent, bool> accessMap = <AccessContent, bool>{};

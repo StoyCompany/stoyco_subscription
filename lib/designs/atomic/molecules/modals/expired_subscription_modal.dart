@@ -8,14 +8,67 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dar
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
+/// {@template expired_subscription_modal}
+/// Modal dialog displayed when a user has expired subscriptions.
+///
+/// Shows a notification about payment processing failures and prompts
+/// the user to update their payment information to renew their subscription.
+///
+/// **Features:**
+/// - Displays warning message about expired subscriptions
+/// - Explains payment processing failure
+/// - Provides action button to renew subscription
+/// - Includes close button for dismissal
+/// - Responsive design that adapts to screen size
+///
+/// **Usage:**
+/// ```dart
+/// showDialog(
+///   context: context,
+///   builder: (context) => ExpiredSubscriptionModal(
+///     onTapCloseButton: () => Navigator.pop(context),
+///     onTapMainButton: () {
+///       Navigator.pop(context);
+///       Navigator.push(
+///         context,
+///         MaterialPageRoute(
+///           builder: (_) => PaymentUpdateScreen(),
+///         ),
+///       );
+///     },
+///   ),
+/// );
+/// ```
+/// {@endtemplate}
 class ExpiredSubscriptionModal extends StatelessWidget {
+  /// {@macro expired_subscription_modal}
   const ExpiredSubscriptionModal({
     super.key,
     required this.onTapCloseButton,
     required this.onTapMainButton,
   });
 
+  /// Callback invoked when the close button (X) is tapped.
+  ///
+  /// Typically used to dismiss the modal without taking action.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// onTapCloseButton: () => Navigator.pop(context),
+  /// ```
   final VoidCallback onTapCloseButton;
+
+  /// Callback invoked when the "Renovar ahora" (Renew now) button is tapped.
+  ///
+  /// Should navigate the user to the payment update or renewal flow.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// onTapMainButton: () {
+  ///   Navigator.pop(context);
+  ///   navigateToPaymentUpdate();
+  /// },
+  /// ```
   final VoidCallback onTapMainButton;
 
   @override
@@ -28,6 +81,7 @@ class ExpiredSubscriptionModal extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           spacing: StoycoScreenSize.height(context, 16),
           children: <Widget>[
+            // Close button
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -41,6 +95,7 @@ class ExpiredSubscriptionModal extends StatelessWidget {
                 ),
               ],
             ),
+            // Title
             Text(
               'Tienes suscripciones vencidas',
               textAlign: TextAlign.center,
@@ -51,6 +106,7 @@ class ExpiredSubscriptionModal extends StatelessWidget {
                 color: StoycoColors.text,
               ),
             ),
+            // Description
             Text(
               'No pudimos procesar el pago con tu tarjeta. Actualiza tus datos para seguir disfrutando de beneficios exclusivos.',
               textAlign: TextAlign.center,
@@ -62,6 +118,7 @@ class ExpiredSubscriptionModal extends StatelessWidget {
                 ),
               ),
             ),
+            // Renew button
             ButtonGradient(
               onPressed: onTapMainButton,
               width: double.infinity,

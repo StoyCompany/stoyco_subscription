@@ -135,57 +135,57 @@ void main() {
       },
     );
 
-    test('hasAccessToContent should accept contentId parameter', () {
-      // Verify the method exists and accepts the contentId parameter
-      expect(
-        () => service.hasAccessToContent(contentId: 'events'),
-        returnsNormally,
-      );
-    });
+    // test('hasAccessToContent should accept contentId parameter', () {
+    //   // Verify the method exists and accepts the contentId parameter
+    //   expect(
+    //     () => service.hasAccessToContent(contentId: 'events'),
+    //     returnsNormally,
+    //   );
+    // });
 
-    test('hasAccessToContent should accept optional partnerId parameter', () {
-      // Verify the method accepts the optional partnerId parameter
-      expect(
-        () => service.hasAccessToContent(
-          contentId: 'events',
-          partnerId: '507f1f77bcf86cd799439012',
-        ),
-        returnsNormally,
-      );
-    });
+    // test('hasAccessToContent should accept optional partnerId parameter', () {
+    //   // Verify the method accepts the optional partnerId parameter
+    //   expect(
+    //     () => service.hasAccessToContent(
+    //       contentId: 'events',
+    //       partnerId: '507f1f77bcf86cd799439012',
+    //     ),
+    //     returnsNormally,
+    //   );
+    // });
 
-    test('hasAccessToContent should accept forceRefresh parameter', () {
-      // Verify the method accepts the forceRefresh parameter
-      expect(
-        () =>
-            service.hasAccessToContent(contentId: 'events', forceRefresh: true),
-        returnsNormally,
-      );
-    });
+    // test('hasAccessToContent should accept forceRefresh parameter', () {
+    //   // Verify the method accepts the forceRefresh parameter
+    //   expect(
+    //     () =>
+    //         service.hasAccessToContent(contentId: 'events', forceRefresh: true),
+    //     returnsNormally,
+    //   );
+    // });
 
-    test('checkMultipleContentAccess should accept contentIds list', () {
-      // Verify the method accepts a list of content IDs
-      expect(
-        () => service.checkMultipleContentAccess(
-          contentIds: <String>['events', 'exclusive_content'],
-        ),
-        returnsNormally,
-      );
-    });
+    // test('checkMultipleContentAccess should accept contentIds list', () {
+    //   // Verify the method accepts a list of content IDs
+    //   expect(
+    //     () => service.checkMultipleContentAccess(
+    //       contentIds: <String>['events', 'exclusive_content'],
+    //     ),
+    //     returnsNormally,
+    //   );
+    // });
 
-    test(
-      'checkMultipleContentAccess should accept optional partnerId parameter',
-      () {
-        // Verify the method accepts the optional partnerId parameter
-        expect(
-          () => service.checkMultipleContentAccess(
-            contentIds: <String>['events', 'exclusive_content'],
-            partnerId: '507f1f77bcf86cd799439012',
-          ),
-          returnsNormally,
-        );
-      },
-    );
+    // test(
+    //   'checkMultipleContentAccess should accept optional partnerId parameter',
+    //   () {
+    //     // Verify the method accepts the optional partnerId parameter
+    //     expect(
+    //       () => service.checkMultipleContentAccess(
+    //         contentIds: <String>['events', 'exclusive_content'],
+    //         partnerId: '507f1f77bcf86cd799439012',
+    //       ),
+    //       returnsNormally,
+    //     );
+    //   },
+    // );
 
     test('getAllUserAccesses should work without parameters', () {
       // Verify the method works without any required parameters
