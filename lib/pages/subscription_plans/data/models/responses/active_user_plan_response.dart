@@ -87,48 +87,38 @@ class ActiveUserPlan extends Equatable {
   @JsonKey(name: '_id')
   final String id;
 
+
   /// Information about the subscription plan.
-  @JsonKey(name: 'Plan')
   final PlanInfo plan;
 
   /// MongoDB ObjectId of the partner.
-  @JsonKey(name: 'Partner_id')
   final String partnerId;
 
   /// Firebase user ID.
-  @JsonKey(name: 'User_id')
   final String userId;
 
-  /// Recurrence type (e.g., "monthly", "yearly").
-  @JsonKey(name: 'Recurrence')
+  /// Recurrence type (e.g., "Monthly", "Yearly").
   final String recurrence;
 
   /// Date when the user subscribed to this plan.
-  @JsonKey(name: 'Subscribed_at')
   final DateTime subscribedAt;
 
   /// Whether the subscription is currently active.
-  @JsonKey(name: 'Is_active')
   final bool isActive;
 
   /// Start date of the trial period (if applicable).
-  @JsonKey(name: 'Trial_start_date')
   final DateTime? trialStartDate;
 
   /// End date of the trial period (if applicable).
-  @JsonKey(name: 'Trial_end_date')
   final DateTime? trialEndDate;
 
   /// Date when the subscription ends.
-  @JsonKey(name: 'End_date')
   final DateTime endDate;
 
   /// Date when the record was created.
-  @JsonKey(name: 'Created_at')
   final DateTime createdAt;
 
   /// Date when the record was last modified.
-  @JsonKey(name: 'Modified_at')
   final DateTime modifiedAt;
 
   /// Converts this object to a JSON map.
@@ -171,19 +161,15 @@ class PlanInfo extends Equatable {
       _$PlanInfoFromJson(json);
 
   /// MongoDB ObjectId of the plan.
-  @JsonKey(name: '_id')
   final String id;
 
   /// Name of the subscription plan.
-  @JsonKey(name: 'Name')
   final String name;
 
   /// Whether the plan has been deleted.
-  @JsonKey(name: 'Is_deleted')
   final bool isDeleted;
 
   /// List of access permissions or features included in the plan.
-  @JsonKey(name: 'Accesses')
   final List<String> accesses;
 
   /// Converts this object to a JSON map.
