@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.4 - 2025 - 11 - 13
+
+## Features
+
+- Added Expired subscription modal component
+- Added AccessContent model for content accesses retrieval
+
 ## [Unreleased]
 
 ## 2.0.3 - 2025-11-11
