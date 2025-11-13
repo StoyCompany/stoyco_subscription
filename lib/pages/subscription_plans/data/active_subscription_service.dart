@@ -9,6 +9,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/error.d
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/responses/active_user_plan_response.dart';
 
 /// {@template active_subscription_service}
@@ -512,7 +513,7 @@ class ActiveSubscriptionService {
   /// );
   /// ```
   Future<Either<Failure, bool>> hasAccessToContent({
-    required String contentId,
+    required AccessContent content,
     String? partnerId,
     bool forceRefresh = false,
   }) async {
@@ -534,10 +535,10 @@ class ActiveSubscriptionService {
             )
           : activeSubscriptions;
 
-      // Check if any subscription has access to the content
-      final bool hasAccess = filteredSubscriptions.any(
-        (ActiveUserPlan plan) => plan.plan.accesses.contains(contentId),
-      );
+      // Collect all plan IDs from filtered subscriptions
+      final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
+
+      final bool hasAccess = content.planIds.any(userPlanIds.contains);
 
       return Right<Failure, bool>(hasAccess);
     });
@@ -580,41 +581,33 @@ class ActiveSubscriptionService {
   /// // exclusive_content: ✅
   /// // cultural_assets: ❌
   /// ```
-  Future<Either<Failure, Map<String, bool>>> checkMultipleContentAccess({
-    required List<String> contentIds,
+  Future<Either<Failure, Map<AccessContent, bool>>> checkMultipleContentAccess({
+    required List<AccessContent> contents,
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
 
     return result.fold(
-      (Failure failure) => Left<Failure, Map<String, bool>>(failure),
+      (Failure failure) => Left<Failure, Map<AccessContent, bool>>(failure),
       (ActiveUserPlanResponse response) {
-        // Filter active subscriptions
-        final Iterable<ActiveUserPlan> activeSubscriptions = response.data
-            .where((ActiveUserPlan plan) => plan.isActive);
 
         // Apply partner filter if provided
         final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
-            ? activeSubscriptions.where(
+            ? response.data.where(
                 (ActiveUserPlan plan) => plan.partnerId == partnerId,
               )
-            : activeSubscriptions;
+            : response.data;
 
         // Collect all accesses from filtered subscriptions
-        final Set<String> availableAccesses = <String>{};
-        for (final ActiveUserPlan plan in filteredSubscriptions) {
-          availableAccesses.addAll(plan.plan.accesses);
-        }
+        final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
 
         // Build result map
-        final Map<String, bool> accessMap = <String, bool>{};
-        for (final String contentId in contentIds) {
-          accessMap[contentId] = availableAccesses.contains(contentId);
+        final Map<AccessContent, bool> accessMap = <AccessContent, bool>{};
+        for (final AccessContent content in contents) {
+          accessMap[content] = content.planIds.any(userPlanIds.contains);
         }
-
-        return Right<Failure, Map<String, bool>>(accessMap);
+        return Right<Failure, Map<AccessContent, bool>>(accessMap);
       },
     );
   }
