@@ -1,6 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stoyco_subscription/designs/atomic/atoms/images/image_network_blur.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -94,21 +94,19 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
+            ImageNetworkBlur(
+              imageUrl: imageUrl,
+              radius: StoycoScreenSize.radius(context, imageW / 2),
               width: StoycoScreenSize.width(context, imageW),
               height: StoycoScreenSize.height(context, imageH),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(999),
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  fit: BoxFit.cover,
-                ),
+              fit: BoxFit.cover,
+              imageError: Container(
+                width: StoycoScreenSize.width(context, imageW),
+                height: StoycoScreenSize.height(context, imageH),
+                color: StoycoColors.backgroundGrey,
+                child: const Icon(Icons.error),
               ),
             ),
-
             SizedBox(
               child: Text(
                 maxLines: 1,

@@ -5,8 +5,27 @@ import 'package:stoyco_subscription/pages/add_card_payment/enums/payment_card_ty
 import 'package:stoyco_subscription/pages/add_card_payment/models/payment_card.dart';
 
 
+
 class AddCardPaymentNotifier extends ChangeNotifier {
-  AddCardPaymentNotifier();
+  AddCardPaymentNotifier({
+    FocusNode? cardHolderNameFocusNode,
+    FocusNode? cardNumberFocusNode,
+    FocusNode? cardExpiryFocusNode,
+    FocusNode? cardCvvFocusNode,
+  }) {
+    if (cardHolderNameFocusNode != null) {
+      this.cardHolderNameFocusNode = cardHolderNameFocusNode;
+    }
+    if (cardNumberFocusNode != null) {
+      this.cardNumberFocusNode = cardNumberFocusNode;
+    }
+    if (cardExpiryFocusNode != null) {
+      this.cardExpiryFocusNode = cardExpiryFocusNode;
+    }
+    if (cardCvvFocusNode != null) {
+      this.cardCvvFocusNode = cardCvvFocusNode;
+    }
+  }
 
   bool isDisabled = true;
 
@@ -101,13 +120,15 @@ class AddCardPaymentNotifier extends ChangeNotifier {
     if (type == PaymentCardType.americanExpress) {
       blockSizes = <int>[4, 6, 5];
       visibleCount = 5;
-    }
-
-    if (type == PaymentCardType.dinersClub14) {
+    } else if (type == PaymentCardType.dinersClub14) {
       blockSizes = <int>[4, 6, 4];
       visibleCount = 4;
+    } else if (type == PaymentCardType.unionPay && digits.length > 16) {
+      // UnionPay 19 digits: 4-4-4-4-3
+      blockSizes = <int>[4, 4, 4, 4, 3];
+      visibleCount = 3;
     }
-    
+
     int idx = 0;
     final int len = digits.length;
     int remaining = len;
@@ -120,44 +141,44 @@ class AddCardPaymentNotifier extends ChangeNotifier {
       idx += take;
       remaining -= take;
     }
-    // Enmascara todos los bloques menos el último visible
-    // Si no hay suficientes dígitos para mostrar el bloque visible, muestra lo que hay
+    // Mask all blocks except the last visible
     if (len <= visibleCount) {
       return digits;
     }
-    // Construye el resultado
     String result = '';
     for (int i = 0; i < blocks.length; i++) {
       if (type == PaymentCardType.americanExpress) {
         // Amex: 4-6-5
         if (i == 0) {
-          // Primer bloque (4): siempre enmascarado
           result += List<String>.filled(blocks[i].length, '*').join();
         } else if (i == 1) {
-          // Segundo bloque (6): siempre enmascarado
           result += ' ';
           result += List<String>.filled(blocks[i].length, '*').join();
         } else if (i == 2) {
-          // Último bloque (5): muestra los dígitos reales
           result += ' ';
           result += blocks[i];
         }
       } else if (type == PaymentCardType.dinersClub14) {
         // Diners Club 14: 4-6-4
         if (i == 0) {
-          // Primer bloque (4): siempre enmascarado
           result += List<String>.filled(blocks[i].length, '*').join();
         } else if (i == 1) {
-          // Segundo bloque (6): siempre enmascarado
           result += ' ';
           result += List<String>.filled(blocks[i].length, '*').join();
         } else if (i == 2) {
-          // Último bloque (4): muestra los dígitos reales
+          result += ' ';
+          result += blocks[i];
+        }
+      } else if (type == PaymentCardType.unionPay && blockSizes.length == 5) {
+        // UnionPay 19: 4-4-4-4-3, mask all except last block
+        if (i < blocks.length - 1) {
+          result += List<String>.filled(blocks[i].length, '*').join();
+        } else {
           result += ' ';
           result += blocks[i];
         }
       } else {
-        // Otras tarjetas: bloques de 4, último bloque muestra los últimos 4
+        // Other cards: 4-4-4-4, mask all except last 4
         if (i < blocks.length - 1) {
           result += List<String>.filled(blocks[i].length, '*').join();
         } else {
@@ -191,19 +212,20 @@ class AddCardPaymentNotifier extends ChangeNotifier {
 
   void onCardNumberChange(BuildContext context) {
     cardType = PaymentCardType.number(cardNumberController.text.replaceAll(' ', ''));
-    switch (cardType) {
-      case PaymentCardType.visa:
-      case PaymentCardType.mastercard:
-      case PaymentCardType.discover:
-      case PaymentCardType.dinersClub:
-      case PaymentCardType.jcb:
+    if (cardType == PaymentCardType.americanExpress) {
+      rulesForCardNumber15Digits(context);
+    } else if (cardType == PaymentCardType.dinersClub14) {
+      rulesForCardNumber14Digits(context);
+    } else if (cardType == PaymentCardType.unionPay) {
+      if (cardNumberController.text.replaceAll(' ', '').length > 16) {
+        rulesForCardNumber19Digits(context);
+      } else {
+        // UnionPay 16, 17, 18 digits: treat as 16 for formatting/validation
         rulesForCardNumber16Digits(context);
-      case PaymentCardType.americanExpress:
-        rulesForCardNumber15Digits(context);
-      case PaymentCardType.dinersClub14:
-        rulesForCardNumber14Digits(context);
-      case PaymentCardType.unknown:
-        break;
+      }
+    } else {
+      // Default: 16 digits (Visa, Mastercard, Discover, DinersClub, JCB, unknown, etc.)
+      rulesForCardNumber16Digits(context);
     }
     notSpecialCharacters(cardNumberController);
     validateIsDisabled();
@@ -349,6 +371,57 @@ class AddCardPaymentNotifier extends ChangeNotifier {
     ];
     final String decoded = utf8.decode(base64Url.decode(info[1] + info[0] + info[2] + info[3] + info[5] + info[4]));
     return '${startDate.day}${startDate.month}${startDate.hour}${startDate.minute}$decoded';
+  }
+
+  void rulesForCardNumber19Digits(BuildContext context) {
+    setErrorsCardNumber(19);
+    final String cleanedText = cardNumberController.text.replaceAll(' ', '');
+
+    if (cleanedText.length >= 19 && errorCardNumber == null) {
+      if (cardNumberController.text.length > 23) {
+        cardNumberController.text = cardNumberController.text.substring(0, 23);
+      }
+      final FocusScopeNode currentFocus = FocusScope.of(context);
+      if (!currentFocus.hasPrimaryFocus) {
+        currentFocus.unfocus();
+      }
+      FocusScope.of(context).requestFocus(cardExpiryFocusNode);
+    } else if (cleanedText.length > 19) {
+      if (cardNumberController.text.length > 23) {
+        cardNumberController.text = cardNumberController.text.substring(0, 23);
+      }
+      cardNumberController.selection = TextSelection.fromPosition(
+        TextPosition(offset: cardNumberController.text.length),
+      );
+    }
+
+    // Insert spaces after every 4 digits
+    for (int i = 4; i < cardNumberController.text.length; i += 5) {
+      if (cardNumberController.text.length > i && cardNumberController.text[i] != ' ') {
+        cardNumberController.text = '${cardNumberController.text.substring(0, i)} ${cardNumberController.text.substring(i)}';
+        cardNumberController.selection = TextSelection.fromPosition(
+          TextPosition(offset: cardNumberController.text.length),
+        );
+      }
+    }
+
+    if (cardNumberController.text.contains(RegExp(r'[a-zA-Z]'))) {
+      cardNumberController.text = cardNumberController.text.replaceAll(RegExp(r'[a-zA-Z]'), '');
+      cardNumberController.selection = TextSelection.fromPosition(
+        TextPosition(offset: cardNumberController.text.length),
+      );
+    }
+
+    // Remove spaces if not at correct positions
+    final List<int> validSpacePositions = <int>[4, 9, 14, 19];
+    for (int i = 0; i < cardNumberController.text.length; i++) {
+      if (cardNumberController.text[i] == ' ' && !validSpacePositions.contains(i)) {
+        cardNumberController.text = cardNumberController.text.replaceFirst(' ', '');
+        cardNumberController.selection = TextSelection.fromPosition(
+          TextPosition(offset: cardNumberController.text.length),
+        );
+      }
+    }
   }
 
   void rulesForCardNumber16Digits(BuildContext context) {
