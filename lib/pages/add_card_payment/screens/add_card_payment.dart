@@ -87,12 +87,26 @@ class AddCardPayment extends StatefulWidget {
 }
 
 class _AddCardPaymentState extends State<AddCardPayment> {
+
   late final AddCardPaymentNotifier notifier;
+  late final FocusNode cardHolderNameFocusNode;
+  late final FocusNode cardNumberFocusNode;
+  late final FocusNode cardExpiryFocusNode;
+  late final FocusNode cardCvvFocusNode;
 
   @override
   void initState() {
     super.initState();
-    notifier = AddCardPaymentNotifier();
+    cardHolderNameFocusNode = FocusNode();
+    cardNumberFocusNode = FocusNode();
+    cardExpiryFocusNode = FocusNode();
+    cardCvvFocusNode = FocusNode();
+    notifier = AddCardPaymentNotifier(
+      cardHolderNameFocusNode: cardHolderNameFocusNode,
+      cardNumberFocusNode: cardNumberFocusNode,
+      cardExpiryFocusNode: cardExpiryFocusNode,
+      cardCvvFocusNode: cardCvvFocusNode,
+    );
     notifier.addListener(_onNotifierChanged);
   }
 
@@ -102,9 +116,10 @@ class _AddCardPaymentState extends State<AddCardPayment> {
     notifier.cardNumberController.dispose();
     notifier.cardExpiryController.dispose();
     notifier.cardCvvController.dispose();
-    notifier.cardNumberFocusNode.dispose();
-    notifier.cardExpiryFocusNode.dispose();
-    notifier.cardCvvFocusNode.dispose();
+    cardHolderNameFocusNode.dispose();
+    cardNumberFocusNode.dispose();
+    cardExpiryFocusNode.dispose();
+    cardCvvFocusNode.dispose();
     super.dispose();
   }
 
@@ -116,35 +131,33 @@ class _AddCardPaymentState extends State<AddCardPayment> {
   Widget build(BuildContext context) {
     return Padding(
       padding: StoycoScreenSize.symmetric(context, horizontal: 24),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            _buildTitleContent(),
+      child: ListView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+        children: <Widget>[
+          _buildTitleContent(),
+          Gap(StoycoScreenSize.height(context, 40)),
+          _buildPaymentInfoContent(),
+          Gap(StoycoScreenSize.height(context, 40)),
+          _buildFormContent(),
+          if (widget.paymentSummaryInfo != null) ...<Widget>[
             Gap(StoycoScreenSize.height(context, 40)),
-            _buildPaymentInfoContent(),
-            Gap(StoycoScreenSize.height(context, 40)),
-            _buildFormContent(),
-            if (widget.paymentSummaryInfo != null) ...<Widget>[
-              Gap(StoycoScreenSize.height(context, 40)),
-              SubscriptionPlanPaymentInfoCard(
-                paymentSummaryInfo: widget.paymentSummaryInfo!,
-              ),
-            ],
-            Gap(StoycoScreenSize.height(context, 40)),
-            TermsPrivacyAutoRenewCard(
-              valueTerms: notifier.valueTerms,
-              valuePrivacy: notifier.valuePrivacy,
-              onChangedTerms: (bool? v) => notifier.onChangedTerms(v),
-              onChangedPrivacy: (bool? v) => notifier.onChangedPrivacy(v),
-              onTapTerms: widget.onTapTerms,
-              onTapPrivacy: widget.onTapPrivacy,
+            SubscriptionPlanPaymentInfoCard(
+              paymentSummaryInfo: widget.paymentSummaryInfo!,
             ),
-            Gap(StoycoScreenSize.height(context, 40)),
-            _buildButtonContent(),
-            Gap(StoycoScreenSize.height(context, 40)),
           ],
-        ),
+          Gap(StoycoScreenSize.height(context, 40)),
+          TermsPrivacyAutoRenewCard(
+            valueTerms: notifier.valueTerms,
+            valuePrivacy: notifier.valuePrivacy,
+            onChangedTerms: (bool? v) => notifier.onChangedTerms(v),
+            onChangedPrivacy: (bool? v) => notifier.onChangedPrivacy(v),
+            onTapTerms: widget.onTapTerms,
+            onTapPrivacy: widget.onTapPrivacy,
+          ),
+          Gap(StoycoScreenSize.height(context, 40)),
+          _buildButtonContent(),
+          Gap(StoycoScreenSize.height(context, 40)),
+        ],
       ),
     );
   }
@@ -194,27 +207,27 @@ class _AddCardPaymentState extends State<AddCardPayment> {
             top: StoycoScreenSize.height(context, 8),
             right: StoycoScreenSize.width(context, 46),
             child: notifier.cardType == PaymentCardType.unknown
-            ? const SizedBox.shrink()
-            : Padding(
-              padding: StoycoScreenSize.fromLTRB(context, top: 17),
-              child: SizedBox(
-                  width: StoycoScreenSize.width(context, 70),
-                  height: StoycoScreenSize.height(context, 24),
-                  child: Center(
-                    child: notifier.cardType.icon.endsWith('.svg')
-                    ? SvgGenImage(notifier.cardType.icon).svg(
-                      fit: BoxFit.contain,
-                      width: StoycoScreenSize.width(context, 40),
-                      package: 'stoyco_subscription',
-                    )
-                    : AssetGenImage(notifier.cardType.icon).image(
-                      fit: BoxFit.contain,
-                      width: StoycoScreenSize.width(context, 65),
-                      package: 'stoyco_subscription',
+                ? const SizedBox.shrink()
+                : Padding(
+                    padding: StoycoScreenSize.fromLTRB(context, top: 17),
+                    child: SizedBox(
+                      width: StoycoScreenSize.width(context, 70),
+                      height: StoycoScreenSize.height(context, 24),
+                      child: Center(
+                        child: notifier.cardType.icon.endsWith('.svg')
+                            ? SvgGenImage(notifier.cardType.icon).svg(
+                                fit: BoxFit.contain,
+                                width: StoycoScreenSize.width(context, 40),
+                                package: 'stoyco_subscription',
+                              )
+                            : AssetGenImage(notifier.cardType.icon).image(
+                                fit: BoxFit.contain,
+                                width: StoycoScreenSize.width(context, 65),
+                                package: 'stoyco_subscription',
+                              ),
+                      ),
                     ),
                   ),
-                ),
-            ),
           ),
           Padding(
             padding: StoycoScreenSize.symmetric(context, horizontal: 48),

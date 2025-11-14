@@ -31,7 +31,7 @@ class SubscriptionPlansService {
   factory SubscriptionPlansService({
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
-    Future<String?>? functionToUpdateToken,
+    Future<String?> Function()? functionToUpdateToken,
   }) {
     instance = SubscriptionPlansService._(
       environment: environment,
@@ -80,8 +80,8 @@ class SubscriptionPlansService {
   /// Internal data source for subscription plans.
   late SubscriptionPlansDataSource _subscriptionPlansDataSource;
 
-  /// Optional function to update the user token if it becomes invalid.
-  Future<String?>? functionToUpdateToken;
+  /// Callback function to refresh the authentication token.
+  Future<String?> Function()? functionToUpdateToken;
 
   /// Updates the user token and associated repositories.
   ///
@@ -100,7 +100,7 @@ class SubscriptionPlansService {
       if (functionToUpdateToken == null) {
         throw FunctionToUpdateTokenNotSetException();
       }
-      final String? newToken = await functionToUpdateToken;
+      final String? newToken = await functionToUpdateToken?.call();
       if (newToken != null && newToken.isNotEmpty) {
         userToken = newToken;
         _subscriptionPlansRepository.updateToken(newToken);
@@ -114,7 +114,7 @@ class SubscriptionPlansService {
   /// Sets the function to update the user token.
   ///
   /// - [function]: The function to update the token.
-  void setFunctionToUpdateToken(Future<String?>? function) {
+  void setFunctionToUpdateToken(Future<String?> Function()? function) {
     functionToUpdateToken = function;
   }
 

@@ -281,6 +281,10 @@ class $LibAssetsImagesPaymentGen {
   AssetGenImage get mastercard =>
       const AssetGenImage('lib/assets/images/payment/mastercard.png');
 
+  /// File path: lib/assets/images/payment/union_pay.png
+  AssetGenImage get unionPay =>
+      const AssetGenImage('lib/assets/images/payment/union_pay.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     americanExpress,
@@ -289,6 +293,7 @@ class $LibAssetsImagesPaymentGen {
     discover,
     jcb,
     mastercard,
+    unionPay,
   ];
 }
 
