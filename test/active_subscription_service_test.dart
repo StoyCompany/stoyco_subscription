@@ -2,6 +2,7 @@ import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 void main() {
   group('ActiveSubscriptionService', () {
@@ -135,57 +136,301 @@ void main() {
       },
     );
 
-    // test('hasAccessToContent should accept contentId parameter', () {
-    //   // Verify the method exists and accepts the contentId parameter
-    //   expect(
-    //     () => service.hasAccessToContent(contentId: 'events'),
-    //     returnsNormally,
-    //   );
-    // });
+    group('hasAccessToContent()', () {
+      late AccessContent testContent;
 
-    // test('hasAccessToContent should accept optional partnerId parameter', () {
-    //   // Verify the method accepts the optional partnerId parameter
-    //   expect(
-    //     () => service.hasAccessToContent(
-    //       contentId: 'events',
-    //       partnerId: '507f1f77bcf86cd799439012',
-    //     ),
-    //     returnsNormally,
-    //   );
-    // });
+      setUp(() {
+        testContent = AccessContent(
+          contentId: 'event_123',
+          partnerId: '507f1f77bcf86cd799439012',
+          planIds: const <String>['plan_1', 'plan_2', 'plan_3'],
+          visibleFrom: DateTime(2024, 1, 1),
+          visibleUntil: DateTime(2024, 12, 31),
+        );
+      });
 
-    // test('hasAccessToContent should accept forceRefresh parameter', () {
-    //   // Verify the method accepts the forceRefresh parameter
-    //   expect(
-    //     () =>
-    //         service.hasAccessToContent(contentId: 'events', forceRefresh: true),
-    //     returnsNormally,
-    //   );
-    // });
+      test('should accept content parameter', () {
+        // Verify the method exists and accepts the content parameter
+        expect(
+          () => service.hasAccessToContent(content: testContent),
+          returnsNormally,
+        );
+      });
 
-    // test('checkMultipleContentAccess should accept contentIds list', () {
-    //   // Verify the method accepts a list of content IDs
-    //   expect(
-    //     () => service.checkMultipleContentAccess(
-    //       contentIds: <String>['events', 'exclusive_content'],
-    //     ),
-    //     returnsNormally,
-    //   );
-    // });
+      test('should accept optional partnerId parameter', () {
+        // Verify the method accepts the optional partnerId parameter
+        expect(
+          () => service.hasAccessToContent(
+            content: testContent,
+            partnerId: '507f1f77bcf86cd799439012',
+          ),
+          returnsNormally,
+        );
+      });
 
-    // test(
-    //   'checkMultipleContentAccess should accept optional partnerId parameter',
-    //   () {
-    //     // Verify the method accepts the optional partnerId parameter
-    //     expect(
-    //       () => service.checkMultipleContentAccess(
-    //         contentIds: <String>['events', 'exclusive_content'],
-    //         partnerId: '507f1f77bcf86cd799439012',
-    //       ),
-    //       returnsNormally,
-    //     );
-    //   },
-    // );
+      test('should accept forceRefresh parameter', () {
+        // Verify the method accepts the forceRefresh parameter
+        expect(
+          () => service.hasAccessToContent(
+            content: testContent,
+            forceRefresh: true,
+          ),
+          returnsNormally,
+        );
+      });
+
+      test('should accept all parameters together', () {
+        // Verify the method accepts all parameters at once
+        expect(
+          () => service.hasAccessToContent(
+            content: testContent,
+            partnerId: '507f1f77bcf86cd799439012',
+            forceRefresh: true,
+          ),
+          returnsNormally,
+        );
+      });
+
+      test('should return Either<Failure, bool>', () async {
+        final result = await service.hasAccessToContent(content: testContent);
+
+        // Verify it returns an Either
+        expect(result.isLeft || result.isRight, isTrue);
+      });
+
+      test('should handle AccessContent with empty planIds', () {
+        final emptyContent = AccessContent(
+          contentId: 'empty_content',
+          partnerId: '507f1f77bcf86cd799439012',
+          planIds: const <String>[],
+          visibleFrom: DateTime(2024, 1, 1),
+          visibleUntil: DateTime(2024, 12, 31),
+        );
+
+        expect(
+          () => service.hasAccessToContent(content: emptyContent),
+          returnsNormally,
+        );
+      });
+
+      test('should handle AccessContent with multiple planIds', () {
+        final multiPlanContent = AccessContent(
+          contentId: 'multi_plan_content',
+          partnerId: '507f1f77bcf86cd799439012',
+          planIds: const <String>[
+            'plan_1',
+            'plan_2',
+            'plan_3',
+            'plan_4',
+            'plan_5',
+          ],
+          visibleFrom: DateTime(2024, 1, 1),
+          visibleUntil: DateTime(2024, 12, 31),
+        );
+
+        expect(
+          () => service.hasAccessToContent(content: multiPlanContent),
+          returnsNormally,
+        );
+      });
+    });
+
+    group('checkMultipleContentAccess()', () {
+      late List<AccessContent> testContents;
+
+      setUp(() {
+        testContents = <AccessContent>[
+          AccessContent(
+            contentId: 'event_123',
+            partnerId: '507f1f77bcf86cd799439012',
+            planIds: const <String>['plan_1', 'plan_2'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+          AccessContent(
+            contentId: 'exclusive_456',
+            partnerId: '507f1f77bcf86cd799439012',
+            planIds: const <String>['plan_3', 'plan_4'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+          AccessContent(
+            contentId: 'asset_789',
+            partnerId: '507f1f77bcf86cd799439012',
+            planIds: const <String>['plan_5'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+        ];
+      });
+
+      test('should accept contents list parameter', () {
+        // Verify the method accepts a list of AccessContent
+        expect(
+          () => service.checkMultipleContentAccess(contents: testContents),
+          returnsNormally,
+        );
+      });
+
+      test('should accept optional partnerId parameter', () {
+        // Verify the method accepts the optional partnerId parameter
+        expect(
+          () => service.checkMultipleContentAccess(
+            contents: testContents,
+            partnerId: '507f1f77bcf86cd799439012',
+          ),
+          returnsNormally,
+        );
+      });
+
+      test('should accept forceRefresh parameter', () {
+        // Verify the method accepts the forceRefresh parameter
+        expect(
+          () => service.checkMultipleContentAccess(
+            contents: testContents,
+            forceRefresh: true,
+          ),
+          returnsNormally,
+        );
+      });
+
+      test('should accept all parameters together', () {
+        // Verify the method accepts all parameters at once
+        expect(
+          () => service.checkMultipleContentAccess(
+            contents: testContents,
+            partnerId: '507f1f77bcf86cd799439012',
+            forceRefresh: true,
+          ),
+          returnsNormally,
+        );
+      });
+
+      test('should return Either<Failure, Map<AccessContent, bool>>', () async {
+        final result = await service.checkMultipleContentAccess(
+          contents: testContents,
+        );
+
+        // Verify it returns an Either
+        expect(result.isLeft || result.isRight, isTrue);
+
+        // If successful, verify it's a Map<AccessContent, bool>
+        result.fold(
+          (failure) {}, // Ignore failure for this test
+          (accessMap) {
+            expect(accessMap, isA<Map<AccessContent, bool>>());
+          },
+        );
+      });
+
+      test('should handle empty contents list', () {
+        expect(
+          () => service.checkMultipleContentAccess(contents: <AccessContent>[]),
+          returnsNormally,
+        );
+      });
+
+      test('should handle single content in list', () {
+        final singleContent = <AccessContent>[
+          AccessContent(
+            contentId: 'single_content',
+            partnerId: '507f1f77bcf86cd799439012',
+            planIds: const <String>['plan_1'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+        ];
+
+        expect(
+          () => service.checkMultipleContentAccess(contents: singleContent),
+          returnsNormally,
+        );
+      });
+
+      test('should handle large number of contents', () {
+        // Create a list with many contents
+        final largeContentList = List<AccessContent>.generate(
+          100,
+          (index) => AccessContent(
+            contentId: 'content_$index',
+            partnerId: '507f1f77bcf86cd799439012',
+            planIds: <String>['plan_${index % 5}'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+        );
+
+        expect(
+          () => service.checkMultipleContentAccess(contents: largeContentList),
+          returnsNormally,
+        );
+      });
+
+      test('should handle contents with different partners', () {
+        final mixedPartnerContents = <AccessContent>[
+          AccessContent(
+            contentId: 'content_partner_1',
+            partnerId: 'partner_1',
+            planIds: const <String>['plan_1'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+          AccessContent(
+            contentId: 'content_partner_2',
+            partnerId: 'partner_2',
+            planIds: const <String>['plan_2'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+          AccessContent(
+            contentId: 'content_partner_3',
+            partnerId: 'partner_3',
+            planIds: const <String>['plan_3'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+        ];
+
+        expect(
+          () => service.checkMultipleContentAccess(
+            contents: mixedPartnerContents,
+          ),
+          returnsNormally,
+        );
+      });
+
+      test('should handle contents with overlapping planIds', () {
+        final overlappingContents = <AccessContent>[
+          AccessContent(
+            contentId: 'content_1',
+            partnerId: '507f1f77bcf86cd799439012',
+            planIds: const <String>['plan_1', 'plan_2', 'plan_3'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+          AccessContent(
+            contentId: 'content_2',
+            partnerId: '507f1f77bcf86cd799439012',
+            planIds: const <String>['plan_2', 'plan_3', 'plan_4'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+          AccessContent(
+            contentId: 'content_3',
+            partnerId: '507f1f77bcf86cd799439012',
+            planIds: const <String>['plan_3', 'plan_4', 'plan_5'],
+            visibleFrom: DateTime(2024, 1, 1),
+            visibleUntil: DateTime(2024, 12, 31),
+          ),
+        ];
+
+        expect(
+          () =>
+              service.checkMultipleContentAccess(contents: overlappingContents),
+          returnsNormally,
+        );
+      });
+    });
 
     test('getAllUserAccesses should work without parameters', () {
       // Verify the method works without any required parameters

@@ -166,13 +166,15 @@ class _LockedBlurState extends State<LockedBlur> {
             children: <Widget>[
               // Original content
               widget.child,
-              
+
               // Blur and overlay effects (only when locked)
               if (widget.isLocked) ...<Widget>[
                 ClipRRect(
-                  borderRadius: widget.borderRadius ??
+                  borderRadius:
+                      widget.borderRadius ??
                       BorderRadius.circular(
-                          StoycoScreenSize.radius(context, widget.radius)),
+                        StoycoScreenSize.radius(context, widget.radius),
+                      ),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(
                       sigmaX: widget.blurSigmaX + (_isHovered ? 2.0 : 0.0),

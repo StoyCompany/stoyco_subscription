@@ -187,12 +187,14 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLocked> {
               Positioned(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(35),
+                    borderRadius: BorderRadius.circular(
+                      StoycoScreenSize.radius(context, 35),
+                    ),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 10,
+                        spreadRadius: StoycoScreenSize.radius(context, 2),
+                        blurRadius: StoycoScreenSize.radius(context, 10),
                         offset: const Offset(0, 5),
                       ),
                     ],
@@ -202,7 +204,7 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLocked> {
                       ImageNetworkBlur(
                         height: constraints.maxHeight,
                         width: double.infinity,
-                        radius: 15,
+                        radius: StoycoScreenSize.radius(context, 15),
                         imageUrl: widget.imageUrl,
                         isBlur: !widget.isFinished && widget.isLocked,
                         alignment: Alignment.topCenter,
@@ -236,16 +238,19 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLocked> {
                         borderRadius: BorderRadius.all(Radius.circular(9)),
                       ),
                       child: Container(
-                        padding: const EdgeInsets.all(2.0),
+                        padding: StoycoScreenSize.all(context, 2),
                         child: SizedBox(
                           width: constraints.maxWidth * 0.11,
-                          child: const Align(
+                          child: Align(
                             alignment: Alignment.bottomCenter,
                             child: Text(
                               'Finalizado',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 13,
+                                fontSize: StoycoScreenSize.fontSize(
+                                  context,
+                                  13,
+                                ),
                                 fontWeight: FontWeight.w600,
                               ),
                               textAlign: TextAlign.center,
@@ -261,9 +266,13 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLocked> {
               Positioned(
                 bottom: 0,
                 child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    bottomRight: Radius.circular(15),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(
+                      StoycoScreenSize.radius(context, 15),
+                    ),
+                    bottomRight: Radius.circular(
+                      StoycoScreenSize.radius(context, 15),
+                    ),
                   ),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(
@@ -275,29 +284,40 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLocked> {
                       width: constraints.maxWidth,
                       height: constraints.maxHeight * 0.35,
                       decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(
+                            StoycoScreenSize.radius(context, 15),
+                          ),
+                          bottomRight: Radius.circular(
+                            StoycoScreenSize.radius(context, 15),
+                          ),
                         ),
                         color: _isInfoHovered
                             ? const Color.fromARGB(40, 255, 255, 255)
                             : const Color.fromARGB(15, 255, 255, 255),
                         border: Border.all(
-                          width: 0.6,
+                          width: StoycoScreenSize.width(context, 0.6),
                           color: const Color(0xFFd9d9d8),
                         ),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                        padding: StoycoScreenSize.symmetric(
+                          context,
+                          horizontal: 15.0,
+                        ),
                         child: Column(
+                          spacing: StoycoScreenSize.height(context, 5),
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
                               widget.name,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: StoycoScreenSize.fontSize(
+                                  context,
+                                  16,
+                                ),
                                 fontWeight: FontWeight.w700,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -306,24 +326,32 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLocked> {
                               overflow: TextOverflow.ellipsis,
                               textScaler: TextScaler.noScaling,
                             ),
-                            const SizedBox(height: 5),
                             Row(
+                              spacing: StoycoScreenSize.width(context, 5),
                               children: <Widget>[
                                 StoycoAssets.lib.assets.icons.events.calendarIco
                                     .svg(
                                       package: 'stoyco_subscription',
-                                      width: 15,
-                                      height: 15,
+                                      width: StoycoScreenSize.width(
+                                        context,
+                                        15,
+                                      ),
+                                      height: StoycoScreenSize.height(
+                                        context,
+                                        15,
+                                      ),
                                     ),
-                                const SizedBox(width: 5),
                                 Flexible(
                                   child: Text(
                                     widget.date,
                                     style:
                                         widget.dateFontStyle ??
-                                        const TextStyle(
+                                        TextStyle(
                                           color: Colors.white,
-                                          fontSize: 12,
+                                          fontSize: StoycoScreenSize.fontSize(
+                                            context,
+                                            12,
+                                          ),
                                           fontWeight: FontWeight.w400,
                                         ),
                                     textAlign: TextAlign.start,
