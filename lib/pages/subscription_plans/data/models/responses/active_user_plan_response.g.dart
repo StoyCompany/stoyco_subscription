@@ -30,52 +30,52 @@ Map<String, dynamic> _$ActiveUserPlanResponseToJson(
 
 ActiveUserPlan _$ActiveUserPlanFromJson(Map<String, dynamic> json) =>
     ActiveUserPlan(
-      id: json['_id'] as String,
-      plan: PlanInfo.fromJson(json['Plan'] as Map<String, dynamic>),
-      partnerId: json['Partner_id'] as String,
-      userId: json['User_id'] as String,
-      recurrence: json['Recurrence'] as String,
-      subscribedAt: DateTime.parse(json['Subscribed_at'] as String),
-      isActive: json['Is_active'] as bool,
-      trialStartDate: json['Trial_start_date'] == null
+      id: json['id'] as String,
+      plan: PlanInfo.fromJson(json['plan'] as Map<String, dynamic>),
+      partnerId: json['partnerId'] as String,
+      userId: json['userId'] as String,
+      recurrence: json['recurrence'] as String,
+      subscribedAt: DateTime.parse(json['subscribedAt'] as String),
+      isActive: json['isActive'] as bool,
+      trialStartDate: json['trialStartDate'] == null
           ? null
-          : DateTime.parse(json['Trial_start_date'] as String),
-      trialEndDate: json['Trial_end_date'] == null
+          : DateTime.parse(json['trialStartDate'] as String),
+      trialEndDate: json['trialEndDate'] == null
           ? null
-          : DateTime.parse(json['Trial_end_date'] as String),
-      endDate: DateTime.parse(json['End_date'] as String),
-      createdAt: DateTime.parse(json['Created_at'] as String),
-      modifiedAt: DateTime.parse(json['Modified_at'] as String),
+          : DateTime.parse(json['trialEndDate'] as String),
+      endDate: DateTime.parse(json['endDate'] as String),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      modifiedAt: DateTime.parse(json['modifiedAt'] as String),
     );
 
 Map<String, dynamic> _$ActiveUserPlanToJson(ActiveUserPlan instance) =>
     <String, dynamic>{
-      '_id': instance.id,
-      'Plan': instance.plan,
-      'Partner_id': instance.partnerId,
-      'User_id': instance.userId,
-      'Recurrence': instance.recurrence,
-      'Subscribed_at': instance.subscribedAt.toIso8601String(),
-      'Is_active': instance.isActive,
-      'Trial_start_date': instance.trialStartDate?.toIso8601String(),
-      'Trial_end_date': instance.trialEndDate?.toIso8601String(),
-      'End_date': instance.endDate.toIso8601String(),
-      'Created_at': instance.createdAt.toIso8601String(),
-      'Modified_at': instance.modifiedAt.toIso8601String(),
+      'id': instance.id,
+      'plan': instance.plan,
+      'partnerId': instance.partnerId,
+      'userId': instance.userId,
+      'recurrence': instance.recurrence,
+      'subscribedAt': instance.subscribedAt.toIso8601String(),
+      'isActive': instance.isActive,
+      'trialStartDate': instance.trialStartDate?.toIso8601String(),
+      'trialEndDate': instance.trialEndDate?.toIso8601String(),
+      'endDate': instance.endDate.toIso8601String(),
+      'createdAt': instance.createdAt.toIso8601String(),
+      'modifiedAt': instance.modifiedAt.toIso8601String(),
     };
 
 PlanInfo _$PlanInfoFromJson(Map<String, dynamic> json) => PlanInfo(
-  id: json['_id'] as String,
-  name: json['Name'] as String,
-  isDeleted: json['Is_deleted'] as bool,
-  accesses: (json['Accesses'] as List<dynamic>)
+  id: json['id'] as String,
+  name: json['name'] as String,
+  isDeleted: json['isDeleted'] as bool,
+  accesses: (json['accesses'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
 );
 
 Map<String, dynamic> _$PlanInfoToJson(PlanInfo instance) => <String, dynamic>{
-  '_id': instance.id,
-  'Name': instance.name,
-  'Is_deleted': instance.isDeleted,
-  'Accesses': instance.accesses,
+  'id': instance.id,
+  'name': instance.name,
+  'isDeleted': instance.isDeleted,
+  'accesses': instance.accesses,
 };

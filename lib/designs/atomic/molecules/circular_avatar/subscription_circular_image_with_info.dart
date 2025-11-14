@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -42,7 +43,9 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
     this.imageWidth,
     this.imageHeight,
     this.onTapSubscribe,
+    this.onTapWhenExpired,
     this.hasSubscription,
+    this.isExpired,
   });
 
   /// The title displayed below the image.
@@ -55,6 +58,9 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
   final bool? subscribed;
   final bool? hasSubscription;
 
+  // Whether the user subscription is expired
+  final bool? isExpired;
+
   //Image width and height
   final double? imageWidth;
   final double? imageHeight;
@@ -66,6 +72,8 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
   final VoidCallback? onTap;
 
   final VoidCallback? onTapSubscribe;
+
+  final VoidCallback? onTapWhenExpired;
 
   /// Optional margin for the widget.
   final EdgeInsetsGeometry? margin;
@@ -131,7 +139,9 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
             // Botón solo si hasSubscription es false o null
             if (hasSubscription ?? false)
               InkWell(
-                onTap: onTapSubscribe,
+                onTap: ((isExpired ?? false) && (subscribed ?? false))
+                    ? onTapWhenExpired
+                    : onTapSubscribe,
                 child: Container(
                   padding: StoycoScreenSize.symmetric(
                     context,
@@ -161,16 +171,41 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                             end: Alignment.centerRight,
                           ),
                   ),
-                  child: Text(
-                    subscribed ?? false ? 'Ver suscripción' : 'Suscribirme',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: StoycoScreenSize.fontSize(context, 15.31),
-                      fontFamily: FontFamilyToken.akkuratPro,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
+                  child: (isExpired ?? false) && (subscribed ?? false)
+                      ? Row(
+                          spacing: StoycoScreenSize.width(context, 8),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            StoycoAssets.lib.assets.icons.common.alertIcon.svg(
+                              height: StoycoScreenSize.height(context, 16),
+                              width: StoycoScreenSize.width(context, 16),
+                            ),
+                            Text(
+                              'Renovar',
+                              style: TextStyle(
+                                fontSize: StoycoScreenSize.fontSize(
+                                  context,
+                                  15.31,
+                                ),
+                                fontFamily: FontFamilyToken.akkuratPro,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Text(
+                          subscribed ?? false
+                              ? 'Ver suscripción'
+                              : 'Suscribirme',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: StoycoScreenSize.fontSize(context, 15.31),
+                            fontFamily: FontFamilyToken.akkuratPro,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
                 ),
               ),
           ],

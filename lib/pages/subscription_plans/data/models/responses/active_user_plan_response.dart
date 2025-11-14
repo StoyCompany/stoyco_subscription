@@ -4,10 +4,19 @@ import 'package:json_annotation/json_annotation.dart';
 part 'active_user_plan_response.g.dart';
 
 /// {@template active_user_plan_response}
-/// Model representing the response for active user plans API.
+/// Response model containing active subscription plans for a user.
 ///
-/// Contains metadata about the request (error, messages, count)
-/// and a list of [ActiveUserPlan] objects.
+/// Includes metadata (error code, messages, count) and a list of
+/// [ActiveUserPlan] objects representing the user's active subscriptions.
+///
+/// **Example:**
+/// ```dart
+/// final response = ActiveUserPlanResponse.fromJson(apiResponse);
+/// print('User has ${response.count} active subscriptions');
+/// for (final plan in response.data) {
+///   print('Plan: ${plan.plan.name}');
+/// }
+/// ```
 /// {@endtemplate}
 @JsonSerializable()
 class ActiveUserPlanResponse extends Equatable {
@@ -20,46 +29,52 @@ class ActiveUserPlanResponse extends Equatable {
     required this.data,
   });
 
-  /// Creates an [ActiveUserPlanResponse] from a JSON map.
+  /// Creates an [ActiveUserPlanResponse] from JSON.
   factory ActiveUserPlanResponse.fromJson(Map<String, dynamic> json) =>
       _$ActiveUserPlanResponseFromJson(json);
 
-  /// Error code returned by the API.
+  /// Error code (0 = success, non-zero = error).
   final int error;
 
   /// User-friendly error message.
-  @JsonKey(name: 'messageError')
   final String messageError;
 
   /// Technical error message for debugging.
-  @JsonKey(name: 'tecMessageError')
   final String tecMessageError;
 
-  /// Number of active subscription plans returned.
+  /// Number of active subscription plans.
   final int count;
 
   /// List of active user subscription plans.
   final List<ActiveUserPlan> data;
 
-  /// Converts this object to a JSON map.
+  /// Converts to JSON.
   Map<String, dynamic> toJson() => _$ActiveUserPlanResponseToJson(this);
 
   @override
   List<Object?> get props => <Object?>[
-    error,
-    messageError,
-    tecMessageError,
-    count,
-    data,
-  ];
+        error,
+        messageError,
+        tecMessageError,
+        count,
+        data,
+      ];
 }
 
 /// {@template active_user_plan}
-/// Model representing an active user subscription plan.
+/// Represents a user's active subscription plan.
 ///
-/// Maps to the UserPlan model from the .NET backend.
-/// Contains details about the plan, partner, recurrence,
-/// subscription dates, and trial information.
+/// Contains plan details, partner info, subscription dates, trial information,
+/// and recurrence settings. Maps to the UserPlan model from the backend.
+///
+/// **Example:**
+/// ```dart
+/// final userPlan = ActiveUserPlan.fromJson(json);
+/// if (userPlan.isActive) {
+///   print('Active until: ${userPlan.endDate}');
+///   print('Accesses: ${userPlan.plan.accesses.join(", ")}');
+/// }
+/// ```
 /// {@endtemplate}
 @JsonSerializable()
 class ActiveUserPlan extends Equatable {
@@ -79,82 +94,79 @@ class ActiveUserPlan extends Equatable {
     required this.modifiedAt,
   });
 
-  /// Creates an [ActiveUserPlan] from a JSON map.
+  /// Creates an [ActiveUserPlan] from JSON.
   factory ActiveUserPlan.fromJson(Map<String, dynamic> json) =>
       _$ActiveUserPlanFromJson(json);
 
-  /// MongoDB ObjectId of the user plan document.
-  @JsonKey(name: '_id')
+  /// Unique identifier (MongoDB ObjectId).
   final String id;
 
-  /// Information about the subscription plan.
-  @JsonKey(name: 'Plan')
+  /// Subscription plan information.
   final PlanInfo plan;
 
-  /// MongoDB ObjectId of the partner.
-  @JsonKey(name: 'Partner_id')
+  /// Partner's unique identifier (MongoDB ObjectId).
   final String partnerId;
 
-  /// Firebase user ID.
-  @JsonKey(name: 'User_id')
+  /// User's unique identifier (Firebase UID).
   final String userId;
 
-  /// Recurrence type (e.g., "monthly", "yearly").
-  @JsonKey(name: 'Recurrence')
+  /// Billing recurrence (e.g., "Monthly", "Yearly").
   final String recurrence;
 
-  /// Date when the user subscribed to this plan.
-  @JsonKey(name: 'Subscribed_at')
+  /// Subscription start date.
   final DateTime subscribedAt;
 
   /// Whether the subscription is currently active.
-  @JsonKey(name: 'Is_active')
   final bool isActive;
 
-  /// Start date of the trial period (if applicable).
-  @JsonKey(name: 'Trial_start_date')
+  /// Trial period start date (if applicable).
   final DateTime? trialStartDate;
 
-  /// End date of the trial period (if applicable).
-  @JsonKey(name: 'Trial_end_date')
+  /// Trial period end date (if applicable).
   final DateTime? trialEndDate;
 
-  /// Date when the subscription ends.
-  @JsonKey(name: 'End_date')
+  /// Subscription end date.
   final DateTime endDate;
 
-  /// Date when the record was created.
-  @JsonKey(name: 'Created_at')
+  /// Record creation date.
   final DateTime createdAt;
 
-  /// Date when the record was last modified.
-  @JsonKey(name: 'Modified_at')
+  /// Last modification date.
   final DateTime modifiedAt;
 
-  /// Converts this object to a JSON map.
+  /// Converts to JSON.
   Map<String, dynamic> toJson() => _$ActiveUserPlanToJson(this);
 
   @override
   List<Object?> get props => <Object?>[
-    id,
-    plan,
-    partnerId,
-    userId,
-    recurrence,
-    subscribedAt,
-    isActive,
-    trialStartDate,
-    trialEndDate,
-    endDate,
-    createdAt,
-    modifiedAt,
-  ];
+        id,
+        plan,
+        partnerId,
+        userId,
+        recurrence,
+        subscribedAt,
+        isActive,
+        trialStartDate,
+        trialEndDate,
+        endDate,
+        createdAt,
+        modifiedAt,
+      ];
 }
 
 /// {@template plan_info}
-/// Model representing plan information within a user subscription.
+/// Information about a subscription plan.
 ///
-/// Maps to the PlanInfo model from the .NET backend.
+/// Contains plan metadata including name, ID, deletion status,
+/// and access permissions. Maps to the PlanInfo model from the backend.
+///
+/// **Example:**
+/// ```dart
+/// final planInfo = PlanInfo.fromJson(json);
+/// if (!planInfo.isDeleted && planInfo.accesses.contains('events')) {
+///   print('${planInfo.name} includes event access');
+/// }
+/// ```
 /// {@endtemplate}
 @JsonSerializable()
 class PlanInfo extends Equatable {
@@ -166,27 +178,23 @@ class PlanInfo extends Equatable {
     required this.accesses,
   });
 
-  /// Creates a [PlanInfo] from a JSON map.
+  /// Creates a [PlanInfo] from JSON.
   factory PlanInfo.fromJson(Map<String, dynamic> json) =>
       _$PlanInfoFromJson(json);
 
-  /// MongoDB ObjectId of the plan.
-  @JsonKey(name: '_id')
+  /// Plan unique identifier (MongoDB ObjectId).
   final String id;
 
-  /// Name of the subscription plan.
-  @JsonKey(name: 'Name')
+  /// Display name of the plan.
   final String name;
 
-  /// Whether the plan has been deleted.
-  @JsonKey(name: 'Is_deleted')
+  /// Whether the plan has been soft-deleted.
   final bool isDeleted;
 
-  /// List of access permissions or features included in the plan.
-  @JsonKey(name: 'Accesses')
+  /// List of content/feature access permissions (e.g., 'events', 'exclusive_content').
   final List<String> accesses;
 
-  /// Converts this object to a JSON map.
+  /// Converts to JSON.
   Map<String, dynamic> toJson() => _$PlanInfoToJson(this);
 
   @override

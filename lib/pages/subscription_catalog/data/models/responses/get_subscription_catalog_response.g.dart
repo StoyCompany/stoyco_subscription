@@ -59,6 +59,7 @@ SubscriptionCatalogItem _$SubscriptionCatalogItemFromJson(
   profile: json['profile'] as String,
   hasSubscription: json['hasSubscription'] as bool,
   isSubscribed: json['isSubscribed'] as bool,
+  isExpired: json['isExpired'] as bool,
 );
 
 Map<String, dynamic> _$SubscriptionCatalogItemToJson(
@@ -71,4 +72,5 @@ Map<String, dynamic> _$SubscriptionCatalogItemToJson(
   'profile': instance.profile,
   'hasSubscription': instance.hasSubscription,
   'isSubscribed': instance.isSubscribed,
+  'isExpired': instance.isExpired,
 };
