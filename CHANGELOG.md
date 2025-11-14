@@ -1,6 +1,19 @@
 # Changelog
 
-## 2.0.4 - 2025 - 11 - 13
+## 2.0.5 - 2025-11-14
+
+### Features
+- Added TagIcon widget and padlock SVG asset with associated colors.
+- Enhanced card number handling and added UnionPay support.
+
+### Fixes
+- Set default package name for SvgGenImage to 'stoyco_subscription'.
+- Updated functionToUpdateToken type to a callback for better clarity and usage.
+
+### Other
+- Merged changes from feature/STOYCO-21 and feaure/STOYCO-21 branches.
+
+## 2.0.4 - 2025-11-13
 
 ## Features
 
