@@ -55,8 +55,6 @@ class SubscriptionTextForm extends StatelessWidget {
     this.errorStyle,
     this.errorMaxLines = 3,
     this.onChanged,
-    this.obscureText = false,
-    this.obscuringCharacter = '•',
     this.keyboardType = TextInputType.text,
     this.style,
     this.suffixIcon,
@@ -83,10 +81,6 @@ class SubscriptionTextForm extends StatelessWidget {
   final int? errorMaxLines;
   /// Callback when the text changes.
   final ValueChanged<String>? onChanged;
-  /// Whether to hide the input (e.g., for passwords).
-  final bool obscureText;
-  /// Character used for obscuring text. Defaults to '•'.
-  final String obscuringCharacter;
   /// Keyboard type for input. Defaults to [TextInputType.text].
   final TextInputType keyboardType;
   /// Custom style for the input text.
@@ -98,9 +92,7 @@ class SubscriptionTextForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      obscuringCharacter: obscuringCharacter,
-      obscureText: obscureText,
+    return TextField(
       controller: controller,
       focusNode: focusNode,
       keyboardType: keyboardType,

@@ -32,6 +32,9 @@ const _$PaymentCardTypeEnumMap = {
   PaymentCardType.discover: 'discover',
   PaymentCardType.dinersClub14: 'dinersClub14',
   PaymentCardType.dinersClub: 'dinersClub',
+  PaymentCardType.bccard: 'bccard',
+  PaymentCardType.dinacard: 'dinacard',
   PaymentCardType.jcb: 'jcb',
+  PaymentCardType.unionPay: 'unionPay',
   PaymentCardType.unknown: 'unknown',
 };
