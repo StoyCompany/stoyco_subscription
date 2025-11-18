@@ -447,8 +447,7 @@ class ActiveSubscriptionService {
   ///   },
   /// );
   /// ```
-  Future<Either<Failure, List<ActiveUserPlan>>>
-  getActiveSubscriptionsForPartner({
+  Future<Either<Failure, List<ActiveUserPlan>>> getActiveSubscriptionsForPartner({
     required String partnerId,
     bool forceRefresh = false,
   }) async {
@@ -523,139 +522,35 @@ class ActiveSubscriptionService {
   ///   },
   /// );
   /// ```
-  Future<Either<Failure, bool>> hasAccessToContent({
-    required AccessContent content,
+  Future<bool> hasAccessToContent({
+    required AccessContent? accessContent,
+    required bool isSubscriptionOnly,
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
-
-    return result.fold((Failure failure) => Left<Failure, bool>(failure), (
-      ActiveUserPlanResponse response,
-    ) {
-      // Filter active subscriptions
-      final Iterable<ActiveUserPlan> activeSubscriptions = response.data.where(
-        (ActiveUserPlan plan) => plan.isActive,
-      );
-
-      // Apply partner filter if provided
-      final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
-          ? activeSubscriptions.where(
-              (ActiveUserPlan plan) => plan.partnerId == partnerId,
-            )
-          : activeSubscriptions;
-
-      // Collect all plan IDs from filtered subscriptions
-      final Set<String> userPlanIds = filteredSubscriptions
-          .map((ActiveUserPlan plan) => plan.plan.id)
-          .toSet();
-
-      final bool hasAccess = content.planIds.any(userPlanIds.contains);
-
-      return Right<Failure, bool>(hasAccess);
-    });
-  }
-
-  /// Checks user access to multiple contents at once.
-  ///
-  /// Returns an [Either] with a [Map<AccessContent, bool>] on success or [Failure] on error.
-  /// The map keys are [AccessContent] objects and values indicate whether the user has access.
-  ///
-  /// This method is more efficient than calling [hasAccessToContent] multiple times
-  /// because it only fetches the subscriptions once and processes all content checks
-  /// in a single operation.
-  ///
-  /// **Caching Behavior:**
-  /// - Uses the same caching strategy as [getActiveUserSubscriptions]
-  /// - Pass [forceRefresh] to bypass cache
-  ///
-  /// **Parameters:**
-  /// - [contents]: List of [AccessContent] objects to check access for
-  /// - [partnerId]: Optional partner ID to restrict the search to a specific partner
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
-  ///
-  /// **Example:**
-  /// ```dart
-  /// // Create multiple AccessContent objects
-  /// final eventContent = AccessContent(
-  ///   contentId: 'event_123',
-  ///   partnerId: '507f1f77bcf86cd799439012',
-  ///   planIds: ['plan_1', 'plan_2'],
-  ///   visibleFrom: DateTime(2024, 1, 1),
-  ///   visibleUntil: DateTime(2024, 12, 31),
-  /// );
-  ///
-  /// final exclusiveContent = AccessContent(
-  ///   contentId: 'exclusive_456',
-  ///   partnerId: '507f1f77bcf86cd799439012',
-  ///   planIds: ['plan_3', 'plan_4'],
-  ///   visibleFrom: DateTime(2024, 1, 1),
-  ///   visibleUntil: DateTime(2024, 12, 31),
-  /// );
-  ///
-  /// final culturalAssetContent = AccessContent(
-  ///   contentId: 'asset_789',
-  ///   partnerId: '507f1f77bcf86cd799439012',
-  ///   planIds: ['plan_5'],
-  ///   visibleFrom: DateTime(2024, 1, 1),
-  ///   visibleUntil: DateTime(2024, 12, 31),
-  /// );
-  ///
-  /// // Check access to multiple contents
-  /// final result = await service.checkMultipleContentAccess(
-  ///   contents: [eventContent, exclusiveContent, culturalAssetContent],
-  /// );
-  ///
-  /// // With partner filter
-  /// final filteredResult = await service.checkMultipleContentAccess(
-  ///   contents: [eventContent, exclusiveContent, culturalAssetContent],
-  ///   partnerId: '507f1f77bcf86cd799439012',
-  /// );
-  ///
-  /// result.fold(
-  ///   (failure) => print('Error: ${failure.message}'),
-  ///   (accessMap) {
-  ///     accessMap.forEach((content, hasAccess) {
-  ///       print('${content.contentId}: ${hasAccess ? "✅" : "❌"}');
-  ///     });
-  ///   },
-  /// );
-  ///
-  /// // Example output:
-  /// // event_123: ✅
-  /// // exclusive_456: ✅
-  /// // asset_789: ❌
-  /// ```
-  Future<Either<Failure, Map<AccessContent, bool>>> checkMultipleContentAccess({
-    required List<AccessContent> contents,
-    String? partnerId,
-    bool forceRefresh = false,
-  }) async {
-    final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
-
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
     return result.fold(
-      (Failure failure) => Left<Failure, Map<AccessContent, bool>>(failure),
+      (Failure failure) {
+        StoyCoLogger.error(
+          'Multiple content access check failed: ${failure.message}',
+          tag: 'SubscriptionStatusService',
+        );
+        return !isSubscriptionOnly;
+      },
       (ActiveUserPlanResponse response) {
-        // Apply partner filter if provided
-        final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
-            ? response.data.where(
-                (ActiveUserPlan plan) => plan.partnerId == partnerId,
-              )
-            : response.data;
-
-        // Collect all accesses from filtered subscriptions
-        final Set<String> userPlanIds = filteredSubscriptions
-            .map((ActiveUserPlan plan) => plan.plan.id)
-            .toSet();
-
-        // Build result map
-        final Map<AccessContent, bool> accessMap = <AccessContent, bool>{};
-        for (final AccessContent content in contents) {
-          accessMap[content] = content.planIds.any(userPlanIds.contains);
+        final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null ? response.data.where((ActiveUserPlan plan) => plan.partnerId == partnerId) : response.data;
+        final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
+        bool hasAccess;
+        if (!isSubscriptionOnly) {
+          hasAccess = true;
+        } else {
+          if (accessContent == null) {
+            hasAccess = false;
+          } else {
+            hasAccess = accessContent.planIds.any(userPlanIds.contains);
+          }
         }
-        return Right<Failure, Map<AccessContent, bool>>(accessMap);
+        return hasAccess;
       },
     );
   }
@@ -689,7 +584,7 @@ class ActiveSubscriptionService {
   ///   getIsSubscriptionOnly: (model) => model.isSubscriptionOnly,
   /// );
   /// ```
-  Future<Either<Failure, List<T>>> checkMultipleContentAccessGenerated<T>({
+  Future<List<T>> hasAccessToMultipleContent<T>({
     required List<T> contents,
     required AccessContent? Function(T) getAccessContent,
     required T Function(T, bool) hasAccessToContent,
@@ -698,14 +593,21 @@ class ActiveSubscriptionService {
     bool forceRefresh = false,
   }) async {
     final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
-
     return result.fold(
-      (Failure failure) => Left<Failure, List<T>>(failure),
+      (Failure failure) {
+        StoyCoLogger.error(
+          'Multiple content access check failed: ${failure.message}',
+          tag: 'SubscriptionStatusService',
+        );
+        return _handleErrorContents<T>(
+          contents: contents,
+          getIsSubscriptionOnly: getIsSubscriptionOnly,
+          hasAccessToContent: hasAccessToContent,
+        );
+      },
       (ActiveUserPlanResponse response) {
         final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null ? response.data.where((ActiveUserPlan plan) => plan.partnerId == partnerId) : response.data;
-
         final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
-
         final List<T> resultList = contents.map((T item) {
           final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
           bool hasAccess;
@@ -721,11 +623,22 @@ class ActiveSubscriptionService {
           }
           return hasAccessToContent(item, hasAccess);
         }).toList();
-
-        return Right<Failure, List<T>>(resultList);
+        return resultList;
       },
     );
   }
+
+  /// Returns contents with hasAccess set to false for items where getIsSubscriptionOnly is true.
+  List<T> _handleErrorContents<T>({
+    required List<T> contents,
+    required bool Function(T) getIsSubscriptionOnly,
+    required T Function(T, bool) hasAccessToContent,
+  }) => contents.map((T item) {
+    if (getIsSubscriptionOnly(item)) {
+      return hasAccessToContent(item, false);
+    }
+    return item;
+  }).toList();
 
   /// Gets all available content accesses for the user.
   ///

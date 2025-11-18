@@ -57,7 +57,9 @@ class PartnerProfileDataSource {
                 requestOptions.extra['retried'] = true;
 
                 try {
-                  final Response<dynamic> response = await _dio.fetch(requestOptions);
+                  final Response<dynamic> response = await _dio.fetch(
+                    requestOptions,
+                  );
                   return handler.resolve(response);
                 } catch (err) {
                   return handler.reject(err as DioException);
@@ -115,7 +117,8 @@ class PartnerProfileDataSource {
   Future<LowestPricePlanResponseModel> getLowestPricePlanByPartner(
     String partnerId,
   ) async {
-    final String url = '${environment.baseUrl()}subscriptions/lowestPricePlan/partner/$partnerId';
+    final String url =
+        '${environment.baseUrl()}subscriptions/lowestPricePlan/partner/$partnerId';
     final Map<String, String> headers = <String, String>{};
     if (_userToken.isNotEmpty) {
       headers['Authorization'] = 'Bearer $_userToken';
@@ -150,7 +153,7 @@ class PartnerProfileDataSource {
     String partnerId,
   ) async {
     final String url =
-        '${environment.baseUrl()}cultural-assets/community-owner/$partnerId';
+        '${environment.web3BaseUrl()}collection/community-owner-id/$partnerId';
     final Map<String, String> headers = _getHeaders();
     final Response<Map<String, dynamic>> response = await _dio.get(
       url,
