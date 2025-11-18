@@ -124,6 +124,12 @@ class EventsSlider<T> extends StatelessWidget {
               borderRadius: BorderRadius.circular(style.borderRadiusCard),
             );
           }
+
+          // Safety check to prevent RangeError
+          if (index >= events.length) {
+            return const SizedBox.shrink();
+          }
+
           final T event = events[index];
           return EventCardExclusiveLocked(
             key: ValueKey<String>('event_exclusive_locked_$index'),
