@@ -42,6 +42,8 @@ mixin ContentAccessValidatorMixin {
   /// This must be implemented by the class using this mixin.
   AccessContent get contentAccess;
 
+  bool get isSubscriptionOnly;
+
   /// Validates if the current user has access to this content.
   ///
   /// Returns an [Either] with a [bool] on success or [Failure] on error.
@@ -70,53 +72,16 @@ mixin ContentAccessValidatorMixin {
   ///   (hasAccess) => print('Has access: hasAccess'),
   /// );
   /// ```
-  Future<Either<Failure, bool>> validateAccess({
+  Future<bool> validateAccess({
     required ActiveSubscriptionService service,
     String? partnerId,
     bool forceRefresh = false,
   }) async {
     return service.hasAccessToContent(
-      content: contentAccess,
+      accessContent: contentAccess,
+      isSubscriptionOnly: isSubscriptionOnly,
       partnerId: partnerId,
       forceRefresh: forceRefresh,
-    );
-  }
-
-  /// Validates if the current user has access to this content.
-  ///
-  /// This is a simpler version that returns a boolean directly instead of an Either.
-  /// Returns `false` if there's an error.
-  ///
-  /// **Parameters:**
-  /// - [service]: The [ActiveSubscriptionService] instance to use for validation
-  /// - [partnerId]: Optional partner ID to restrict validation to a specific partner
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh subscription data
-  ///
-  /// **Example:**
-  /// ```dart
-  /// final hasAccess = await content.hasAccess(
-  ///   service: ActiveSubscriptionService.instance,
-  /// );
-  ///
-  /// if (hasAccess) {
-  ///   print('User can view this content');
-  /// } else {
-  ///   print('User needs a subscription to view this content');
-  /// }
-  /// ```
-  Future<bool> hasAccess({
-    required ActiveSubscriptionService service,
-    String? partnerId,
-    bool forceRefresh = false,
-  }) async {
-    final Either<Failure, bool> result = await validateAccess(
-      service: service,
-      partnerId: partnerId,
-      forceRefresh: forceRefresh,
-    );
-    return result.fold(
-      (Failure failure) => false,
-      (bool hasAccess) => hasAccess,
     );
   }
 
@@ -183,7 +148,7 @@ mixin ContentAccessValidatorMixin {
     }
 
     // Then check subscription access
-    return hasAccess(
+    return validateAccess(
       service: service,
       partnerId: partnerId,
       forceRefresh: forceRefresh,
@@ -236,7 +201,7 @@ mixin ContentAccessValidatorMixin {
     }
 
     // Check subscription access
-    final bool hasValidSubscription = await hasAccess(
+    final bool hasValidSubscription = await validateAccess(
       service: service,
       partnerId: partnerId,
       forceRefresh: forceRefresh,
@@ -317,102 +282,34 @@ mixin ContentAccessValidatorMixin {
 /// {@endtemplate}
 mixin MultiContentAccessValidatorMixin {
   /// List of [AccessContent] objects that define access rules for this content.
-  ///
   /// This must be implemented by the class using this mixin.
   List<AccessContent> get contentAccesses;
 
-  /// Validates access for all content access rules.
-  ///
-  /// Returns an [Either] with a [Map] where keys are [AccessContent] objects
-  /// and values are booleans indicating if user has access.
-  ///
-  /// **Parameters:**
-  /// - [service]: The [ActiveSubscriptionService] instance to use for validation
-  /// - [partnerId]: Optional partner ID to restrict validation to a specific partner
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh subscription data
-  ///
-  /// **Example:**
-  /// ```dart
-  /// final result = await content.validateMultipleAccess(
-  ///   service: ActiveSubscriptionService.instance,
-  /// );
-  ///
-  /// result.fold(
-  ///   (failure) => print('Error: ${failure.message}'),
-  ///   (accessMap) {
-  ///     accessMap.forEach((content, hasAccess) {
-  ///       print('${content.contentId}: $hasAccess');
-  ///     });
-  ///   },
-  /// );
-  /// ```
-  Future<Either<Failure, Map<AccessContent, bool>>> validateMultipleAccess({
+  /// Returns the list of items to validate access for.
+  List<T> multiContentItems<T>();
+
+  /// Returns the [AccessContent] for a given item.
+  AccessContent? getAccessContentForItem<T>(T item);
+
+  /// Returns the item with its access field set.
+  T setItemAccess<T>(T item, bool hasAccess);
+
+  /// Returns whether the item requires subscription-only access.
+  bool isItemSubscriptionOnly<T>(T item);
+
+  /// Validates access for all items using the above methods.
+  Future<List<T>> validateMultipleAccess<T>({
     required ActiveSubscriptionService service,
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    return service.checkMultipleContentAccess(
-      contents: contentAccesses,
+    return service.hasAccessToMultiplesContent(
+      contents: multiContentItems<T>(),
+      getAccessContent: getAccessContentForItem,
+      hasAccessToContent: setItemAccess,
+      getIsSubscriptionOnly: isItemSubscriptionOnly,
       partnerId: partnerId,
       forceRefresh: forceRefresh,
-    );
-  }
-
-  /// Checks if user has access to at least one of the content access rules.
-  ///
-  /// Returns `true` if user has access to any of the content accesses.
-  ///
-  /// **Example:**
-  /// ```dart
-  /// if (await content.hasAccessToAny(service: service)) {
-  ///   print('User has some level of access');
-  /// }
-  /// ```
-  Future<bool> hasAccessToAny({
-    required ActiveSubscriptionService service,
-    String? partnerId,
-    bool forceRefresh = false,
-  }) async {
-    final Either<Failure, Map<AccessContent, bool>> result =
-        await validateMultipleAccess(
-          service: service,
-          partnerId: partnerId,
-          forceRefresh: forceRefresh,
-        );
-
-    return result.fold(
-      (Failure failure) => false,
-      (Map<AccessContent, bool> accessMap) =>
-          accessMap.values.any((bool hasAccess) => hasAccess),
-    );
-  }
-
-  /// Checks if user has access to all content access rules.
-  ///
-  /// Returns `true` only if user has access to every content access.
-  ///
-  /// **Example:**
-  /// ```dart
-  /// if (await content.hasAccessToAll(service: service)) {
-  ///   print('User has full access to everything');
-  /// }
-  /// ```
-  Future<bool> hasAccessToAll({
-    required ActiveSubscriptionService service,
-    String? partnerId,
-    bool forceRefresh = false,
-  }) async {
-    final Either<Failure, Map<AccessContent, bool>> result =
-        await validateMultipleAccess(
-          service: service,
-          partnerId: partnerId,
-          forceRefresh: forceRefresh,
-        );
-
-    return result.fold(
-      (Failure failure) => false,
-      (Map<AccessContent, bool> accessMap) =>
-          accessMap.values.every((bool hasAccess) => hasAccess),
     );
   }
 }

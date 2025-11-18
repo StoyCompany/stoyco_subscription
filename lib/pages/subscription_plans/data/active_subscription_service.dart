@@ -584,7 +584,7 @@ class ActiveSubscriptionService {
   ///   getIsSubscriptionOnly: (model) => model.isSubscriptionOnly,
   /// );
   /// ```
-  Future<List<T>> hasAccessToMultipleContent<T>({
+  Future<List<T>> hasAccessToMultiplesContent<T>({
     required List<T> contents,
     required AccessContent? Function(T) getAccessContent,
     required T Function(T, bool) hasAccessToContent,
