@@ -149,11 +149,7 @@ class SubscriptionPlansService {
   /// ```
   Future<Either<Failure, bool>> subscribeToPlan(SubscribeRequest request) async {
     try {
-      final Either<Failure, bool> result = await _subscriptionPlansRepository.subscribeToPlan(request);
-      return result.fold(
-        (Failure failure) => Left<Failure, bool>(failure),
-        (bool value) => Right<Failure, bool>(value),
-      );
+      return await _subscriptionPlansRepository.subscribeToPlan(request);
     } catch (e) {
       return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error subscribing to plan: $e')));
     }
@@ -174,11 +170,7 @@ class SubscriptionPlansService {
   /// ```
   Future<Either<Failure, bool>> unsubscribe(String planId) async {
     try {
-      final Either<Failure, bool> result = await _subscriptionPlansRepository.unsubscribe(planId);
-      return result.fold(
-        (Failure failure) => Left<Failure, bool>(failure),
-        (bool value) => Right<Failure, bool>(value),
-      );
+      return await _subscriptionPlansRepository.unsubscribe(planId);
     } catch (e) {
       return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error unsubscribing plan: $e')));
     }
@@ -199,11 +191,7 @@ class SubscriptionPlansService {
   /// ```
   Future<Either<Failure, bool>> renewSubscription(String planId) async {
     try {
-      final Either<Failure, bool> result = await _subscriptionPlansRepository.renewSubscription(planId);
-      return result.fold(
-        (Failure failure) => Left<Failure, bool>(failure),
-        (bool value) => Right<Failure, bool>(value),
-      );
+      return await _subscriptionPlansRepository.renewSubscription(planId);
     } catch (e) {
       return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error renewing subscription: $e')));
     }
@@ -224,11 +212,7 @@ class SubscriptionPlansService {
   /// ```
   Future<Either<Failure, bool>> updateSubscriptionPaymentMethod(SubscriptionMethodModificationRequest request) async {
     try {
-      final Either<Failure, bool> result = await _subscriptionPlansRepository.updateSubscriptionPaymentMethod(request);
-      return result.fold(
-        (Failure failure) => Left<Failure, bool>(failure),
-        (bool value) => Right<Failure, bool>(value),
-      );
+      return await _subscriptionPlansRepository.updateSubscriptionPaymentMethod(request);
     } catch (e) {
       return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error updating payment method: $e')));
     }
