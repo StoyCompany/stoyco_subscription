@@ -35,18 +35,18 @@ class PaymentSummaryRepository with RepositoryCacheMixin {
     required String planId,
     required String recurrenceType,
   }) async {
-    final result = await cachedCall<PaymentSummaryInfoResponse>(
+    final Either<Failure, PaymentSummaryInfoResponse> result = await cachedCall<PaymentSummaryInfoResponse>(
       key: 'payment_summary_${planId}_$recurrenceType',
       ttl: const Duration(minutes: 5),
       fetcher: () async {
         try {
-          final data = await _dataSource.getPaymentSummaryByPlan(
+          final PaymentSummaryInfoResponse data = await _dataSource.getPaymentSummaryByPlan(
             planId: planId,
             recurrenceType: recurrenceType,
           );
-          return Right(data);
+          return Right<Failure, PaymentSummaryInfoResponse>(data);
         } catch (e) {
-          return Left(
+          return Left<Failure, PaymentSummaryInfoResponse>(
             ExceptionFailure.decode(
               e is Exception ? e : Exception(e.toString()),
             ),
@@ -54,6 +54,6 @@ class PaymentSummaryRepository with RepositoryCacheMixin {
         }
       },
     );
-    return result.fold((l) => throw Exception(l.message), (r) => r);
+    return result.fold((Failure l) => throw Exception(l.message), (PaymentSummaryInfoResponse r) => r);
   }
 }

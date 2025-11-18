@@ -40,16 +40,15 @@ class SubscriptionCatalogRepository with RepositoryCacheMixin {
   Future<UserSubscriptionPlanResponse> getUserSubscriptionPlans(
     GetUserSubscriptionPlansRequest request,
   ) async {
-    final result = await cachedCall<UserSubscriptionPlanResponse>(
+    final Either<Failure, UserSubscriptionPlanResponse> result = await cachedCall<UserSubscriptionPlanResponse>(
       key: 'user_subscription_plans_${request.userId}',
       ttl: const Duration(minutes: 4),
       fetcher: () async {
         try {
-          final Response<Map<String, dynamic>> response = await _dataSource
-              .getUserSubscriptionPlans(request);
-          return Right(UserSubscriptionPlanResponse.fromJson(response.data!));
+          final Response<Map<String, dynamic>> response = await _dataSource.getUserSubscriptionPlans(request);
+          return Right<Failure, UserSubscriptionPlanResponse>(UserSubscriptionPlanResponse.fromJson(response.data!));
         } catch (e) {
-          return Left(
+          return Left<Failure, UserSubscriptionPlanResponse>(
             ExceptionFailure.decode(
               e is Exception ? e : Exception(e.toString()),
             ),
@@ -57,7 +56,7 @@ class SubscriptionCatalogRepository with RepositoryCacheMixin {
         }
       },
     );
-    return result.fold((l) => throw Exception(l.message), (r) => r);
+    return result.fold((Failure l) => throw Exception(l.message), (UserSubscriptionPlanResponse r) => r);
   }
 
   /// Fetches the general subscription catalog.
@@ -69,22 +68,20 @@ class SubscriptionCatalogRepository with RepositoryCacheMixin {
     int? page,
     int? pageSize,
   }) async {
-    final cacheKey =
-        'subscription_catalog_${userId ?? "all"}_${page ?? 1}_${pageSize ?? 10}';
-    final result = await cachedCall<GetSubscriptionCatalogResponse>(
+    final String cacheKey = 'subscription_catalog_${userId ?? "all"}_${page ?? 1}_${pageSize ?? 10}';
+    final Either<Failure, GetSubscriptionCatalogResponse> result = await cachedCall<GetSubscriptionCatalogResponse>(
       key: cacheKey,
       ttl: const Duration(minutes: 5),
       fetcher: () async {
         try {
-          final Response<Map<String, dynamic>> response = await _dataSource
-              .getSubscriptionCatalog(
-                userId: userId,
-                page: page,
-                pageSize: pageSize,
-              );
-          return Right(GetSubscriptionCatalogResponse.fromJson(response.data!));
+          final Response<Map<String, dynamic>> response = await _dataSource.getSubscriptionCatalog(
+            userId: userId,
+            page: page,
+            pageSize: pageSize,
+          );
+          return  Right<Failure, GetSubscriptionCatalogResponse>(GetSubscriptionCatalogResponse.fromJson(response.data!));
         } catch (e) {
-          return Left(
+          return Left<Failure, GetSubscriptionCatalogResponse>(
             ExceptionFailure.decode(
               e is Exception ? e : Exception(e.toString()),
             ),
@@ -92,6 +89,6 @@ class SubscriptionCatalogRepository with RepositoryCacheMixin {
         }
       },
     );
-    return result.fold((l) => throw Exception(l.message), (r) => r);
+    return result.fold((Failure l) => throw Exception(l.message), (GetSubscriptionCatalogResponse r) => r);
   }
 }

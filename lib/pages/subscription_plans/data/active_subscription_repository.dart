@@ -33,7 +33,7 @@ class ActiveSubscriptionRepository with RepositoryCacheMixin {
   ///
   /// Throws [DioException] if the API request fails.
   Future<ActiveUserPlanResponse> getActiveUserSubscriptions() async {
-    final result = await cachedCall<ActiveUserPlanResponse>(
+    final Either<Failure, ActiveUserPlanResponse> result = await cachedCall<ActiveUserPlanResponse>(
       key: 'active_user_subscriptions',
       ttl: const Duration(minutes: 3),
       fetcher: () async {
@@ -47,10 +47,9 @@ class ActiveSubscriptionRepository with RepositoryCacheMixin {
               message: 'Response data is null',
             );
           }
-
-          return Right(ActiveUserPlanResponse.fromJson(response.data!));
+          return Right<Failure, ActiveUserPlanResponse>(ActiveUserPlanResponse.fromJson(response.data!));
         } catch (e) {
-          return Left(
+          return Left<Failure, ActiveUserPlanResponse>(
             ExceptionFailure.decode(
               e is Exception ? e : Exception(e.toString()),
             ),
@@ -58,6 +57,6 @@ class ActiveSubscriptionRepository with RepositoryCacheMixin {
         }
       },
     );
-    return result.fold((l) => throw Exception(l.message), (r) => r);
+    return result.fold((Failure l) => throw Exception(l.message), (ActiveUserPlanResponse r) => r);
   }
 }
