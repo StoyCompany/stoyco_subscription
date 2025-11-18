@@ -480,6 +480,10 @@ class ActiveSubscriptionService {
   /// access to the content by matching the plan IDs from the user's subscriptions
   /// with the plan IDs specified in the [AccessContent] object.
   ///
+  /// **Null Safety:**
+  /// - If [content.planIds] is null or empty, returns `false`
+  /// - Safely handles null values in [AccessContent] fields
+  ///
   /// **Caching Behavior:**
   /// - Uses the same caching strategy as [getActiveUserSubscriptions]
   /// - Pass [forceRefresh] to bypass cache
@@ -506,10 +510,13 @@ class ActiveSubscriptionService {
   ///   content: eventContent,
   /// );
   ///
-  /// // Check if user has access from a specific partner
-  /// final partnerResult = await service.hasAccessToContent(
-  ///   content: eventContent,
-  ///   partnerId: '507f1f77bcf86cd799439012',
+  /// // With nullable fields
+  /// final partialContent = AccessContent(
+  ///   contentId: 'event_456',
+  ///   planIds: null, // Returns false
+  /// );
+  /// final result2 = await service.hasAccessToContent(
+  ///   content: partialContent,
   /// );
   ///
   /// result.fold(
@@ -528,6 +535,11 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
+    // Early return if planIds is empty
+    if (content.planIds.isEmpty) {
+      return const Right<Failure, bool>(false);
+    }
+
     final Either<Failure, ActiveUserPlanResponse> result =
         await getActiveUserSubscriptions(forceRefresh: forceRefresh);
 
@@ -551,6 +563,7 @@ class ActiveSubscriptionService {
           .map((ActiveUserPlan plan) => plan.plan.id)
           .toSet();
 
+      // Check if user has any of the required plans
       final bool hasAccess = content.planIds.any(userPlanIds.contains);
 
       return Right<Failure, bool>(hasAccess);
@@ -565,6 +578,11 @@ class ActiveSubscriptionService {
   /// This method is more efficient than calling [hasAccessToContent] multiple times
   /// because it only fetches the subscriptions once and processes all content checks
   /// in a single operation.
+  ///
+  /// **Null Safety:**
+  /// - For each content with null or empty [planIds], returns `false`
+  /// - Safely handles null values in [AccessContent] fields
+  /// - All contents in the list will be present in the result map
   ///
   /// **Caching Behavior:**
   /// - Uses the same caching strategy as [getActiveUserSubscriptions]
@@ -594,23 +612,14 @@ class ActiveSubscriptionService {
   ///   visibleUntil: DateTime(2024, 12, 31),
   /// );
   ///
-  /// final culturalAssetContent = AccessContent(
-  ///   contentId: 'asset_789',
-  ///   partnerId: '507f1f77bcf86cd799439012',
-  ///   planIds: ['plan_5'],
-  ///   visibleFrom: DateTime(2024, 1, 1),
-  ///   visibleUntil: DateTime(2024, 12, 31),
+  /// final partialContent = AccessContent(
+  ///   contentId: 'partial_789',
+  ///   planIds: null, // Will return false
   /// );
   ///
   /// // Check access to multiple contents
   /// final result = await service.checkMultipleContentAccess(
-  ///   contents: [eventContent, exclusiveContent, culturalAssetContent],
-  /// );
-  ///
-  /// // With partner filter
-  /// final filteredResult = await service.checkMultipleContentAccess(
-  ///   contents: [eventContent, exclusiveContent, culturalAssetContent],
-  ///   partnerId: '507f1f77bcf86cd799439012',
+  ///   contents: [eventContent, exclusiveContent, partialContent],
   /// );
   ///
   /// result.fold(
@@ -625,7 +634,7 @@ class ActiveSubscriptionService {
   /// // Example output:
   /// // event_123: ✅
   /// // exclusive_456: ✅
-  /// // asset_789: ❌
+  /// // partial_789: ❌ (because planIds is null)
   /// ```
   Future<Either<Failure, Map<AccessContent, bool>>> checkMultipleContentAccess({
     required List<AccessContent> contents,
@@ -645,7 +654,7 @@ class ActiveSubscriptionService {
               )
             : response.data;
 
-        // Collect all accesses from filtered subscriptions
+        // Collect all plan IDs from filtered subscriptions
         final Set<String> userPlanIds = filteredSubscriptions
             .map((ActiveUserPlan plan) => plan.plan.id)
             .toSet();
@@ -653,8 +662,13 @@ class ActiveSubscriptionService {
         // Build result map
         final Map<AccessContent, bool> accessMap = <AccessContent, bool>{};
         for (final AccessContent content in contents) {
-          accessMap[content] = content.planIds.any(userPlanIds.contains);
+          if (content.planIds.isEmpty) {
+            accessMap[content] = false;
+          } else {
+            accessMap[content] = content.planIds.any(userPlanIds.contains);
+          }
         }
+        
         return Right<Failure, Map<AccessContent, bool>>(accessMap);
       },
     );

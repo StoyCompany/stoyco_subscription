@@ -29,13 +29,17 @@ part 'access_content.g.dart';
 @JsonSerializable()
 class AccessContent extends Equatable {
   /// {@macro access_content}
-  const AccessContent({
-    required this.contentId,
-    required this.partnerId,
-    required this.planIds,
-    required this.visibleFrom,
-    required this.visibleUntil,
-  });
+  AccessContent({
+    this.contentId = '',
+    this.partnerId = '',
+    this.planIds = const <String>[],
+    DateTime? visibleFrom,
+    DateTime? visibleUntil,
+  }) : visibleFrom = visibleFrom ?? _defaultDateTime,
+       visibleUntil = visibleUntil ?? _defaultDateTime;
+
+  /// Default DateTime used when no date is provided.
+  static final DateTime _defaultDateTime = DateTime(1970, 1, 1);
 
   /// Creates an [AccessContent] from a JSON object.
   ///
@@ -62,19 +66,19 @@ class AccessContent extends Equatable {
   /// to an [AccessContent] object without going through JSON serialization.
   ///
   /// This factory handles flexible DateTime parsing, accepting both String
-  /// (ISO 8601 format) and DateTime objects.
+  /// (ISO 8601 format) and DateTime objects. Missing fields use default values.
   ///
   /// **Parameters:**
   /// - [map]: Map containing the access content data with keys:
-  ///   - `contentId`: String - Unique identifier for the content
-  ///   - `partnerId`: String - Partner who owns the content
-  ///   - `planIds`: List<String> - Subscription plans that grant access
-  ///   - `visibleFrom`: String or DateTime - Start of visibility period
-  ///   - `visibleUntil`: String or DateTime - End of visibility period
+  ///   - `contentId`: String - Unique identifier (defaults to empty string)
+  ///   - `partnerId`: String - Partner ID (defaults to empty string)
+  ///   - `planIds`: List<String> - Plan IDs (defaults to empty list)
+  ///   - `visibleFrom`: String or DateTime (defaults to 1970-01-01)
+  ///   - `visibleUntil`: String or DateTime (defaults to 1970-01-01)
   ///
   /// **Example:**
   /// ```dart
-  /// // With String dates (ISO 8601)
+  /// // Complete data
   /// final map1 = {
   ///   'contentId': 'event_123',
   ///   'partnerId': '507f1f77bcf86cd799439012',
@@ -84,29 +88,34 @@ class AccessContent extends Equatable {
   /// };
   /// final accessContent1 = AccessContent.fromMap(map1);
   ///
-  /// // With DateTime objects
+  /// // Partial data (uses defaults)
   /// final map2 = {
-  ///   'contentId': 'exclusive_456',
-  ///   'partnerId': '507f1f77bcf86cd799439012',
-  ///   'planIds': ['premium_plan'],
-  ///   'visibleFrom': DateTime(2024, 6, 1),
-  ///   'visibleUntil': DateTime(2024, 6, 30),
+  ///   'contentId': 'event_456',
   /// };
   /// final accessContent2 = AccessContent.fromMap(map2);
+  /// // contentId: 'event_456'
+  /// // partnerId: ''
+  /// // planIds: []
+  /// // visibleFrom: DateTime(1970, 1, 1)
+  /// // visibleUntil: DateTime(1970, 1, 1)
   /// ```
   factory AccessContent.fromMap(Map<String, dynamic> map) {
     return AccessContent(
-      contentId: map['contentId'] as String,
-      partnerId: map['partnerId'] as String,
-      planIds: (map['planIds'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      visibleFrom: map['visibleFrom'] is String
-          ? DateTime.parse(map['visibleFrom'] as String)
-          : map['visibleFrom'] as DateTime,
-      visibleUntil: map['visibleUntil'] is String
-          ? DateTime.parse(map['visibleUntil'] as String)
-          : map['visibleUntil'] as DateTime,
+      contentId: map['contentId'] as String? ?? '',
+      partnerId: map['partnerId'] as String? ?? '',
+      planIds: map['planIds'] != null
+          ? (map['planIds'] as List<dynamic>).map((e) => e as String).toList()
+          : const <String>[],
+      visibleFrom: map['visibleFrom'] != null
+          ? (map['visibleFrom'] is String
+                ? DateTime.parse(map['visibleFrom'] as String)
+                : map['visibleFrom'] as DateTime)
+          : null,
+      visibleUntil: map['visibleUntil'] != null
+          ? (map['visibleUntil'] is String
+                ? DateTime.parse(map['visibleUntil'] as String)
+                : map['visibleUntil'] as DateTime)
+          : null,
     );
   }
 
@@ -115,12 +124,16 @@ class AccessContent extends Equatable {
   /// This is typically a MongoDB ObjectId or similar unique identifier that
   /// references the actual content (event, exclusive material, cultural asset, etc.).
   ///
+  /// Defaults to empty string if not provided.
+  ///
   /// **Example:** `'6914f916eb0355ca86422025'`
   final String contentId;
 
   /// Unique identifier for the partner who owns this content.
   ///
   /// Used to filter and manage content access on a per-partner basis.
+  ///
+  /// Defaults to empty string if not provided.
   ///
   /// **Example:** `'66f5bd918d77fca522545f01'`
   final String partnerId;
@@ -130,6 +143,8 @@ class AccessContent extends Equatable {
   /// If a user has any of these plans active, they can access the content.
   /// Multiple plans can be specified to allow different subscription tiers
   /// to access the same content.
+  ///
+  /// Defaults to empty list if not provided.
   ///
   /// **Example:**
   /// ```dart
@@ -143,6 +158,8 @@ class AccessContent extends Equatable {
   /// Content will not be accessible before this date, even if the user
   /// has the required subscription plan.
   ///
+  /// Defaults to `DateTime(1970, 1, 1)` if not provided.
+  ///
   /// **Example:**
   /// ```dart
   /// visibleFrom: DateTime(2024, 1, 1, 0, 0, 0)
@@ -154,6 +171,8 @@ class AccessContent extends Equatable {
   ///
   /// Content will not be accessible after this date, even if the user
   /// has the required subscription plan.
+  ///
+  /// Defaults to `DateTime(1970, 1, 1)` if not provided.
   ///
   /// **Example:**
   /// ```dart

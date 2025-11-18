@@ -31,7 +31,7 @@ class SubscriptionPlansService {
   factory SubscriptionPlansService({
     StoycoEnvironment environment = StoycoEnvironment.development,
     String userToken = '',
-    Future<String?> Function()? functionToUpdateToken,
+    Future<String?>? Function()? functionToUpdateToken,
   }) {
     instance = SubscriptionPlansService._(
       environment: environment,
@@ -81,7 +81,7 @@ class SubscriptionPlansService {
   late SubscriptionPlansDataSource _subscriptionPlansDataSource;
 
   /// Callback function to refresh the authentication token.
-  Future<String?> Function()? functionToUpdateToken;
+  Future<String?>? Function()? functionToUpdateToken;
 
   /// Updates the user token and associated repositories.
   ///
