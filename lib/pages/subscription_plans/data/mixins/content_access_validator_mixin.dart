@@ -40,7 +40,7 @@ mixin ContentAccessValidatorMixin {
   /// The [AccessContent] object that defines access rules for this content.
   ///
   /// This must be implemented by the class using this mixin.
-  AccessContent get contentAccess;
+  AccessContent? get contentAccess;
 
   bool get isSubscriptionOnly;
 
@@ -100,14 +100,12 @@ mixin ContentAccessValidatorMixin {
   /// }
   /// ```
   bool isCurrentlyVisible() {
-    if (contentAccess.visibleFrom == null ||
-        contentAccess.visibleUntil == null) {
+    if (contentAccess?.visibleFrom == null || contentAccess?.visibleUntil == null) {
       // If no time restrictions, consider it always visible
       return true;
     }
     final DateTime now = DateTime.now();
-    return now.isAfter(contentAccess.visibleFrom!) &&
-        now.isBefore(contentAccess.visibleUntil!);
+    return now.isAfter(contentAccess!.visibleFrom!) && now.isBefore(contentAccess!.visibleUntil!);
   }
 
   /// Checks both time visibility and subscription access.
@@ -189,15 +187,13 @@ mixin ContentAccessValidatorMixin {
     final DateTime now = DateTime.now();
 
     // Check if content is not yet available
-    if (contentAccess.visibleFrom != null &&
-        now.isBefore(contentAccess.visibleFrom!)) {
-      return 'Este contenido estará disponible a partir del ${_formatDate(contentAccess.visibleFrom!)}';
+    if (contentAccess?.visibleFrom != null && now.isBefore(contentAccess!.visibleFrom!)) {
+      return 'Este contenido estará disponible a partir del ${_formatDate(contentAccess!.visibleFrom!)}';
     }
 
     // Check if content has expired
-    if (contentAccess.visibleUntil != null &&
-        now.isAfter(contentAccess.visibleUntil!)) {
-      return 'Este contenido ya no está disponible. Estuvo disponible hasta el ${_formatDate(contentAccess.visibleUntil!)}';
+    if (contentAccess?.visibleUntil != null && now.isAfter(contentAccess!.visibleUntil!)) {
+      return 'Este contenido ya no está disponible. Estuvo disponible hasta el ${_formatDate(contentAccess!.visibleUntil!)}';
     }
 
     // Check subscription access
