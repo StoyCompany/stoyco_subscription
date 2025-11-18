@@ -54,19 +54,16 @@ CulturalAssetItemModel _$CulturalAssetItemModelFromJson(
       ?.map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
       .toList(),
   isExclusive: json['isExclusive'] as bool?,
-  isSubscriberOnly: json['isSubscriberOnly'] as bool?,
-  hasAccess: json['hasAccess'] as bool?,
   createdAt: json['createdAt'] == null
       ? null
       : DateTime.parse(json['createdAt'] as String),
   updatedAt: json['updatedAt'] == null
       ? null
       : DateTime.parse(json['updatedAt'] as String),
+  isSubscriberOnly: json['isSubscriberOnly'] as bool? ?? false,
   accessContent: json['accessContent'] == null
       ? null
-      : AccessContentModel.fromJson(
-          json['accessContent'] as Map<String, dynamic>,
-        ),
+      : AccessContent.fromJson(json['accessContent'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$CulturalAssetItemModelToJson(
@@ -93,10 +90,9 @@ Map<String, dynamic> _$CulturalAssetItemModelToJson(
   'experienceOrProductName': instance.experienceOrProductName,
   'categories': instance.categories?.map((e) => e.toJson()).toList(),
   'isExclusive': instance.isExclusive,
-  'isSubscriberOnly': instance.isSubscriberOnly,
-  'hasAccess': instance.hasAccess,
   'createdAt': instance.createdAt?.toIso8601String(),
   'updatedAt': instance.updatedAt?.toIso8601String(),
+  'isSubscriberOnly': instance.isSubscriberOnly,
   'accessContent': instance.accessContent?.toJson(),
 };
 

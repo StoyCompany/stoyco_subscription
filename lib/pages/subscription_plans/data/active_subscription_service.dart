@@ -660,6 +660,73 @@ class ActiveSubscriptionService {
     );
   }
 
+  /// Checks user access for a generic list of models and returns them populated with access status.
+  ///
+  /// This method efficiently determines access for each item in [contents],
+  /// populating the model with its access status based on subscription rules.
+  ///
+  /// - If [getIsSubscriptionOnly] returns `false`, the user is granted immediate public access.
+  /// - If [getIsSubscriptionOnly] returns `true`, access is validated against the user's active subscription plan IDs and the item's [AccessContent].
+  /// - The [hasAccessToContent] callback is used to return the model with its access field populated.
+  ///
+  /// ### Parameters
+  /// - `contents`: List of models to check access for.
+  /// - `getAccessContent`: Returns the [AccessContent] for a given model.
+  /// - `hasAccessToContent`: Returns the model with its access field set.
+  /// - `getIsSubscriptionOnly`: Returns whether the model requires subscription-only access.
+  /// - `partnerId`: Optional partner filter for subscription validation.
+  /// - `forceRefresh`: If true, bypasses cache and fetches fresh data.
+  ///
+  /// ### Returns
+  /// An [Either] containing a list of models of type `T` with their access status populated, or a [Failure] on error.
+  ///
+  /// ### Example
+  /// ```dart
+  /// final result = await service.checkMultipleContentAccessGenerated<MyModel>(
+  ///   contents: myModelList,
+  ///   getAccessContent: (model) => model.accessContent,
+  ///   hasAccessToContent: (model, hasAccess) => model.copyWith(hasAccess: hasAccess),
+  ///   getIsSubscriptionOnly: (model) => model.isSubscriptionOnly,
+  /// );
+  /// ```
+  Future<Either<Failure, List<T>>> checkMultipleContentAccessGenerated<T>({
+    required List<T> contents,
+    required AccessContent? Function(T) getAccessContent,
+    required T Function(T, bool) hasAccessToContent,
+    required bool Function(T) getIsSubscriptionOnly,
+    String? partnerId,
+    bool forceRefresh = false,
+  }) async {
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+
+    return result.fold(
+      (Failure failure) => Left<Failure, List<T>>(failure),
+      (ActiveUserPlanResponse response) {
+        final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null ? response.data.where((ActiveUserPlan plan) => plan.partnerId == partnerId) : response.data;
+
+        final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
+
+        final List<T> resultList = contents.map((T item) {
+          final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
+          bool hasAccess;
+          if (!isSubscriptionOnly) {
+            hasAccess = true;
+          } else {
+            final AccessContent? content = getAccessContent(item);
+            if (content == null) {
+              hasAccess = false;
+            } else {
+              hasAccess = content.planIds.any(userPlanIds.contains);
+            }
+          }
+          return hasAccessToContent(item, hasAccess);
+        }).toList();
+
+        return Right<Failure, List<T>>(resultList);
+      },
+    );
+  }
+
   /// Gets all available content accesses for the user.
   ///
   /// Returns an [Either] with a [Set<String>] on success or [Failure] on error.
