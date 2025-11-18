@@ -1,6 +1,21 @@
 # Changelog
 
-## [Unreleased]
+
+## [2.0.7] - 2025-11-18
+
+### Features
+
+- Added new subscription management methods to Service, Repository, and DataSource:
+  - `subscribeToPlan(SubscribeRequest request)`
+  - `unsubscribe(String planId)`
+  - `renewSubscription(String planId)`
+  - `updateSubscriptionPaymentMethod(SubscriptionMethodModificationRequest request)`
+  - All methods are documented in English, following atomic design system context.
+
+### Technical Details
+
+- Adjusted types for subscription methods to use primitives (`String planId`) for unsubscribe and renew operations, improving API clarity and usability.
+- Unified method signatures and documentation for consistency across layers.
 
 ## 2.0.6 - 2025-11-17
 
