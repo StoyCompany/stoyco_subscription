@@ -277,33 +277,22 @@ mixin ContentAccessValidatorMixin {
 /// ```
 /// {@endtemplate}
 mixin MultiContentAccessValidatorMixin {
-  /// List of [AccessContent] objects that define access rules for this content.
-  /// This must be implemented by the class using this mixin.
-  List<AccessContent> get contentAccesses;
-
-  /// Returns the list of items to validate access for.
-  List<T> multiContentItems<T>();
-
-  /// Returns the [AccessContent] for a given item.
-  AccessContent? getAccessContentForItem<T>(T item);
-
-  /// Returns the item with its access field set.
-  T setItemAccess<T>(T item, bool hasAccess);
-
-  /// Returns whether the item requires subscription-only access.
-  bool isItemSubscriptionOnly<T>(T item);
 
   /// Validates access for all items using the above methods.
   Future<List<T>> validateMultipleAccess<T>({
     required ActiveSubscriptionService service,
+    required List<T> contents,
+    required AccessContent? Function(T) getAccessContent,
+    required T Function(T, bool) hasAccessToContent,
+    required bool Function(T) getIsSubscriptionOnly,
     String? partnerId,
     bool forceRefresh = false,
   }) async {
     return service.hasAccessToMultiplesContent(
-      contents: multiContentItems<T>(),
-      getAccessContent: getAccessContentForItem,
-      hasAccessToContent: setItemAccess,
-      getIsSubscriptionOnly: isItemSubscriptionOnly,
+      contents: contents,
+      getAccessContent: getAccessContent,
+      hasAccessToContent: hasAccessToContent,
+      getIsSubscriptionOnly: getIsSubscriptionOnly,
       partnerId: partnerId,
       forceRefresh: forceRefresh,
     );
