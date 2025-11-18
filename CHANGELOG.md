@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.6 - 2025-11-18
+
+## Features
+
+- Enhance null safety and default values in AccessContent model and related methods
+
 ## 2.0.5 - 2025-11-14
 
 ### Features
