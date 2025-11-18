@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/get_subscription_plans_request.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_request.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_method_modification_request.dart';
 
 class SubscriptionPlansDataSource{
 
@@ -25,6 +27,7 @@ class SubscriptionPlansDataSource{
   /// Gets the headers for authenticated requests, including the Authorization header
   Map<String, String> _getHeaders() => <String, String>{
     'Authorization': 'Bearer $_userToken',
+    'Content-Type': 'application/json',
   };
 
   Future<Response<Map<String, dynamic>>> getSubscriptionPlans(GetSubscriptionPlansRequest request) async {
@@ -34,6 +37,43 @@ class SubscriptionPlansDataSource{
       queryParameters: <String, dynamic>{
         'userId': request.idUser,
       },
+      options: Options(headers: _getHeaders()),
+    );
+  }
+
+  Future<Response<Map<String, dynamic>>> subscribeToPlan(SubscribeRequest request) async {
+    final String url = '${_environment.baseUrl()}user-plans/subscribe';
+    return _dio.post(
+      url,
+      data: request.toJson(),
+      options: Options(headers: _getHeaders()),
+    );
+  }
+
+  Future<Response<Map<String, dynamic>>> unsubscribe(String planId) async {
+    final String url = '${_environment.baseUrl()}user-plans/unsubscribe';
+    return _dio.post(
+      url,
+      data: <String, String>{
+        'planId': planId,
+      },
+      options: Options(headers: _getHeaders()),
+    );
+  }
+  
+  Future<Response<Map<String, dynamic>>> renewSubscription(String planId) async {
+    final String url = '${_environment.baseUrl()}user-plans/subscription/$planId/renew';
+    return _dio.post(
+      url,
+      options: Options(headers: _getHeaders()),
+    );
+  }
+
+  Future<Response<Map<String, dynamic>>> updateSubscriptionPaymentMethod(SubscriptionMethodModificationRequest request) async {
+    final String url = '${_environment.baseUrl()}user-plans/subscription/payment-method';
+    return _dio.put(
+      url,
+      data: request.toJson(),
       options: Options(headers: _getHeaders()),
     );
   }
