@@ -37,6 +37,21 @@ class AccessContent extends Equatable {
     required this.visibleUntil,
   });
 
+  /// Creates an empty [AccessContent] with default values.
+  ///
+  /// This is useful for initialization or placeholder scenarios.
+  ///
+  /// **Example:**
+  /// ```dart
+  /// final emptyAccess = AccessContent.empty();
+  /// ```
+  AccessContent.empty()
+    : contentId = null,
+      partnerId = null,
+      planIds = null,
+      visibleFrom = null,
+      visibleUntil = null;
+
   /// Creates an [AccessContent] from a JSON object.
   ///
   /// This factory uses the generated JSON serialization code.
@@ -116,14 +131,14 @@ class AccessContent extends Equatable {
   /// references the actual content (event, exclusive material, cultural asset, etc.).
   ///
   /// **Example:** `'6914f916eb0355ca86422025'`
-  final String contentId;
+  final String? contentId;
 
   /// Unique identifier for the partner who owns this content.
   ///
   /// Used to filter and manage content access on a per-partner basis.
   ///
   /// **Example:** `'66f5bd918d77fca522545f01'`
-  final String partnerId;
+  final String? partnerId;
 
   /// List of subscription plan IDs that grant access to this content.
   ///
@@ -136,7 +151,7 @@ class AccessContent extends Equatable {
   /// planIds: ['basic_plan', 'premium_plan', 'vip_plan']
   /// // Users with any of these three plans can access the content
   /// ```
-  final List<String> planIds;
+  final List<String>? planIds;
 
   /// The date and time from which the content becomes visible.
   ///
@@ -148,7 +163,7 @@ class AccessContent extends Equatable {
   /// visibleFrom: DateTime(2024, 1, 1, 0, 0, 0)
   /// // Content available starting January 1, 2024
   /// ```
-  final DateTime visibleFrom;
+  final DateTime? visibleFrom;
 
   /// The date and time until which the content remains visible.
   ///
@@ -160,7 +175,7 @@ class AccessContent extends Equatable {
   /// visibleUntil: DateTime(2024, 12, 31, 23, 59, 59)
   /// // Content available until December 31, 2024
   /// ```
-  final DateTime visibleUntil;
+  final DateTime? visibleUntil;
 
   /// Converts this [AccessContent] to a JSON object.
   ///
@@ -206,8 +221,8 @@ class AccessContent extends Equatable {
       'contentId': contentId,
       'partnerId': partnerId,
       'planIds': planIds,
-      'visibleFrom': visibleFrom.toIso8601String(),
-      'visibleUntil': visibleUntil.toIso8601String(),
+      'visibleFrom': visibleFrom?.toIso8601String(),
+      'visibleUntil': visibleUntil?.toIso8601String(),
     };
   }
 
@@ -223,4 +238,7 @@ class AccessContent extends Equatable {
     visibleFrom,
     visibleUntil,
   ];
+
+  /// Checks if this [AccessContent] instance is empty.
+  bool get isEmpty => this == AccessContent.empty();
 }

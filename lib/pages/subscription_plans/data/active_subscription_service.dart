@@ -528,6 +528,9 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
+    if (content.isEmpty) {
+      return const Right<Failure, bool>(true);
+    }
     final Either<Failure, ActiveUserPlanResponse> result =
         await getActiveUserSubscriptions(forceRefresh: forceRefresh);
 
@@ -551,7 +554,8 @@ class ActiveSubscriptionService {
           .map((ActiveUserPlan plan) => plan.plan.id)
           .toSet();
 
-      final bool hasAccess = content.planIds.any(userPlanIds.contains);
+      final bool hasAccess =
+          content.planIds?.any(userPlanIds.contains) ?? false;
 
       return Right<Failure, bool>(hasAccess);
     });
@@ -653,7 +657,8 @@ class ActiveSubscriptionService {
         // Build result map
         final Map<AccessContent, bool> accessMap = <AccessContent, bool>{};
         for (final AccessContent content in contents) {
-          accessMap[content] = content.planIds.any(userPlanIds.contains);
+          accessMap[content] =
+              content.planIds?.any(userPlanIds.contains) ?? false;
         }
         return Right<Failure, Map<AccessContent, bool>>(accessMap);
       },
