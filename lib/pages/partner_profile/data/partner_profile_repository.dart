@@ -5,17 +5,26 @@ import 'package:stoyco_subscription/pages/partner_profile/data/models/response/g
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/lowest_price_plan_response_model.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/subscription_is_active_response.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/partner_profile_data_source.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/mixins/content_access_validator_mixin.dart';
 
 /// Repository class for partner profile-related operations.
 ///
 /// This repository acts as an abstraction layer between the data source and the service,
 /// providing methods to fetch partner subscription data and manage the user's authentication token.
-class PartnerProfileRepository with RepositoryCacheMixin {
+class PartnerProfileRepository with RepositoryCacheMixin, MultiContentAccessValidatorMixin {
   /// Creates a [PartnerProfileRepository] with the given [PartnerProfileDataSource] and [userToken].
-  PartnerProfileRepository(this._dataSource, this.userToken);
+  PartnerProfileRepository({
+    required PartnerProfileDataSource dataSource, 
+    required ActiveSubscriptionService activeSubscriptionService,
+    String? userToken
+  }): _dataSource = dataSource,
+      _activeSubscriptionService = activeSubscriptionService,
+      userToken = userToken ?? '';
 
   /// The data source used for network operations.
   final PartnerProfileDataSource _dataSource;
+  final ActiveSubscriptionService _activeSubscriptionService;
 
   /// The user's authentication token.
   late String userToken;
@@ -35,15 +44,16 @@ class PartnerProfileRepository with RepositoryCacheMixin {
   Future<LowestPricePlanResponseModel> getLowestPricePlanByPartner({
     required String partnerId,
   }) async {
-    final result = await cachedCall<LowestPricePlanResponseModel>(
+    
+    final Either<Failure, LowestPricePlanResponseModel> result = await cachedCall<LowestPricePlanResponseModel>(
       key: 'lowest_price_plan_$partnerId',
       ttl: const Duration(minutes: 10),
       fetcher: () async {
         try {
-          final data = await _dataSource.getLowestPricePlanByPartner(partnerId);
-          return Right(data);
+          final LowestPricePlanResponseModel data = await _dataSource.getLowestPricePlanByPartner(partnerId);
+          return Right<Failure, LowestPricePlanResponseModel>(data);
         } catch (e) {
-          return Left(
+          return Left<Failure, LowestPricePlanResponseModel>(
             ExceptionFailure.decode(
               e is Exception ? e : Exception(e.toString()),
             ),
@@ -51,7 +61,7 @@ class PartnerProfileRepository with RepositoryCacheMixin {
         }
       },
     );
-    return result.fold((l) => throw Exception(l.message), (r) => r);
+    return result.fold((Failure l) => throw Exception(l.message), (LowestPricePlanResponseModel r) => r);
   }
 
   /// Fetches the last active user subscription for the given [partnerId].
@@ -61,15 +71,15 @@ class PartnerProfileRepository with RepositoryCacheMixin {
   Future<SubscriptionIsActiveResponse> getLastUserPlanByPartner({
     required String partnerId,
   }) async {
-    final result = await cachedCall<SubscriptionIsActiveResponse>(
+    final Either<Failure, SubscriptionIsActiveResponse> result = await cachedCall<SubscriptionIsActiveResponse>(
       key: 'last_user_plan_$partnerId',
       ttl: const Duration(minutes: 5),
       fetcher: () async {
         try {
-          final data = await _dataSource.getLastUserPlanByPartner(partnerId);
-          return Right(data);
+          final SubscriptionIsActiveResponse data = await _dataSource.getLastUserPlanByPartner(partnerId);
+          return Right<Failure, SubscriptionIsActiveResponse>(data);
         } catch (e) {
-          return Left(
+          return Left<Failure, SubscriptionIsActiveResponse>(
             ExceptionFailure.decode(
               e is Exception ? e : Exception(e.toString()),
             ),
@@ -77,7 +87,7 @@ class PartnerProfileRepository with RepositoryCacheMixin {
         }
       },
     );
-    return result.fold((l) => throw Exception(l.message), (r) => r);
+    return result.fold((Failure l) => throw Exception(l.message), (SubscriptionIsActiveResponse r) => r);
   }
 
   /// Fetches cultural assets for the given [partnerId].
@@ -87,17 +97,26 @@ class PartnerProfileRepository with RepositoryCacheMixin {
   Future<GetCulturalAssetsResponse> getCulturalAssetsByCommunityOwner({
     required String partnerId,
   }) async {
-    final result = await cachedCall<GetCulturalAssetsResponse>(
+    final Either<Failure, GetCulturalAssetsResponse> result = await cachedCall<GetCulturalAssetsResponse>(
       key: 'cultural_assets_$partnerId',
       ttl: const Duration(minutes: 15),
       fetcher: () async {
         try {
-          final data = await _dataSource.getCulturalAssetsByCommunityOwner(
+          final GetCulturalAssetsResponse data = await _dataSource.getCulturalAssetsByCommunityOwner(
             partnerId,
           );
-          return Right(data);
+          data.copyWith(
+            data: await  validateMultipleAccess<CulturalAssetItemModel>(
+              service: _activeSubscriptionService,
+              contents: data.data ?? <CulturalAssetItemModel>[],
+              getAccessContent: (CulturalAssetItemModel item) => item.accessContent,
+              hasAccessToContent: (CulturalAssetItemModel item, bool hasAccess) => item.copyWith(hasAccessWithSubscription: hasAccess),
+              getIsSubscriptionOnly: (CulturalAssetItemModel item) => item.isSubscriberOnly,
+            ),
+          );
+          return Right<Failure, GetCulturalAssetsResponse>(data);
         } catch (e) {
-          return Left(
+          return Left<Failure, GetCulturalAssetsResponse>(
             ExceptionFailure.decode(
               e is Exception ? e : Exception(e.toString()),
             ),
@@ -105,6 +124,6 @@ class PartnerProfileRepository with RepositoryCacheMixin {
         }
       },
     );
-    return result.fold((l) => throw Exception(l.message), (r) => r);
+    return result.fold((Failure l) => throw Exception(l.message), (GetCulturalAssetsResponse r) => r);
   }
 }

@@ -21,6 +21,23 @@ class GetCulturalAssetsResponse extends Equatable {
   final int? count;
   final List<CulturalAssetItemModel>? data;
 
+
+  GetCulturalAssetsResponse copyWith({
+    int? error,
+    String? messageError,
+    String? tecMessageError,
+    int? count,
+    List<CulturalAssetItemModel>? data,
+  }) {
+    return GetCulturalAssetsResponse(
+      error: error ?? this.error,
+      messageError: messageError ?? this.messageError,
+      tecMessageError: tecMessageError ?? this.tecMessageError,
+      count: count ?? this.count,
+      data: data ?? this.data,
+    );
+  }
+
   Map<String, dynamic> toJson() => _$GetCulturalAssetsResponseToJson(this);
 
   @override
@@ -60,9 +77,9 @@ class CulturalAssetItemModel extends Equatable {
     this.createdAt,
     this.updatedAt,
     this.isSubscriberOnly = false,
-    bool? hasAccess,
+    bool? hasAccessWithSubscription,
     this.accessContent,
-  }) : hasAccess = hasAccess ?? !isSubscriberOnly;
+  }) : hasAccessWithSubscription = hasAccessWithSubscription ?? !isSubscriberOnly;
 
   factory CulturalAssetItemModel.fromJson(Map<String, dynamic> json) => _$CulturalAssetItemModelFromJson(json);
 
@@ -92,7 +109,7 @@ class CulturalAssetItemModel extends Equatable {
   final bool isSubscriberOnly;
   /// This value is constructed in the frontend and is not mapped from backend JSON.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  final bool hasAccess;
+  final bool hasAccessWithSubscription;
   final AccessContent? accessContent;
 
   CulturalAssetItemModel copyWith({
@@ -120,7 +137,7 @@ class CulturalAssetItemModel extends Equatable {
     DateTime? createdAt,
     DateTime? updatedAt,
     bool? isSubscriberOnly,
-    bool? hasAccess,
+    bool? hasAccessWithSubscription,
     AccessContent? accessContent,
   }) {
     return CulturalAssetItemModel(
@@ -148,7 +165,7 @@ class CulturalAssetItemModel extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
-      hasAccess: hasAccess ?? this.hasAccess,
+      hasAccessWithSubscription: hasAccessWithSubscription ?? this.hasAccessWithSubscription,
       accessContent: accessContent ?? this.accessContent,
     );
   }
@@ -179,7 +196,7 @@ class CulturalAssetItemModel extends Equatable {
     categories,
     isExclusive,
     isSubscriberOnly,
-    hasAccess,
+    hasAccessWithSubscription,
     createdAt,
     updatedAt,
     accessContent,
