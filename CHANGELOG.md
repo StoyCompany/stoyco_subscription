@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## 2.0.10 - 2025-11-18
+
+**refactor:** Simplify slider layout by replacing Column with SizedBox and optimizing ListView structure
+
 ## 2.0.6 - 2025-11-17
 
 ### Features
