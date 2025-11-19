@@ -1,45 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
+import 'package:stoyco_subscription/designs/atomic/organisms/lock_subscription/subscription_indicator_position.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 
 /// Configuration class for the subscription indicator position
-class SubscriptionIndicatorPosition {
-  const SubscriptionIndicatorPosition({
-    this.left,
-    this.right,
-    this.top,
-    this.bottom,
-  }) : assert(
-         (left != null && right == null) ||
-             (left == null && right != null) ||
-             (left == null && right == null),
-         'Cannot provide both left and right positions',
-       ),
-       assert(
-         (top != null && bottom == null) ||
-             (top == null && bottom != null) ||
-             (top == null && bottom == null),
-         'Cannot provide both top and bottom positions',
-       );
-
-  /// Distance from the left edge. If null, uses [right] or defaults to 8
-  final double? left;
-
-  /// Distance from the right edge. If null and [left] is null, no horizontal positioning is applied
-  final double? right;
-
-  /// Distance from the top edge. If null, uses [bottom] or defaults to 25
-  final double? top;
-
-  /// Distance from the bottom edge. If null and [top] is null, no vertical positioning is applied
-  final double? bottom;
-
-  /// Default position: left: 8, top: 25
-  static const SubscriptionIndicatorPosition defaultPosition =
-      SubscriptionIndicatorPosition(left: 8, top: 25);
-}
 
 class SubscriptionLockedContent extends StatelessWidget {
   const SubscriptionLockedContent({
@@ -47,10 +13,7 @@ class SubscriptionLockedContent extends StatelessWidget {
     required this.child,
     required this.isLocked,
     this.scale = 1.0,
-    this.indicatorPosition = const SubscriptionIndicatorPosition(
-      left: 8,
-      top: 25,
-    ),
+    this.indicatorPosition = SubscriptionIndicatorPosition.defaultPosition,
     this.onLockedTap,
   });
 

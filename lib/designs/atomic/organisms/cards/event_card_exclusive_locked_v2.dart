@@ -183,9 +183,11 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLockedV2> {
           ? widget.onTapEventExclusive
           : widget.onTapEvent,
       child: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: StoycoColors.gray,
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: BorderRadius.all(
+            Radius.circular(StoycoScreenSize.radius(context, 8)),
+          ),
         ),
         width: StoycoScreenSize.width(context, widget.widthCard),
         height: StoycoScreenSize.height(context, widget.heightCard),
@@ -194,9 +196,11 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLockedV2> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(StoycoScreenSize.radius(context, 8)),
+                  topRight: Radius.circular(
+                    StoycoScreenSize.radius(context, 8),
+                  ),
                 ),
                 child: ImageNetworkBlur(
                   height: StoycoScreenSize.height(context, 152),
@@ -268,7 +272,7 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLockedV2> {
                 ),
               ),
             ],
-          )
+          ),
         ),
       ),
     ),

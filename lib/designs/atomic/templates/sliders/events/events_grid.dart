@@ -4,6 +4,7 @@ import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card
 import 'package:stoyco_subscription/designs/atomic/organisms/cards/event_card_exclusive_locked.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/cards/event_card_exclusive_locked_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/lock_subscription/basic_subs_card.dart';
+import 'package:stoyco_subscription/designs/atomic/organisms/lock_subscription/subscription_indicator_position.dart';
 import 'package:stoyco_subscription/designs/atomic/templates/sliders/events/events_slider_style.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
@@ -64,6 +65,10 @@ class EventsGrid<T> extends StatelessWidget {
     required this.onTapEventExclusive,
     required this.getValueMoney,
     required this.apectRatio,
+    this.numberColums = 2,
+    this.mainAxisSpacing = 20,
+    this.crossAxisSpacing = 20,
+    this.scale = 0.8,
     this.isLoading = false,
     this.style = const EventsSliderStyle(),
   });
@@ -103,6 +108,14 @@ class EventsGrid<T> extends StatelessWidget {
 
   final double apectRatio;
 
+  final int numberColums;
+
+  final double mainAxisSpacing;
+
+  final double crossAxisSpacing;
+
+  final double scale;
+
   /// Style model for all design parameters. Defaults to [EventsSliderStyle].
   final EventsSliderStyle style;
 
@@ -118,9 +131,9 @@ class EventsGrid<T> extends StatelessWidget {
       padding: StoycoScreenSize.symmetric(context, horizontal: 20),
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // porque antes era un slider horizontal
-        mainAxisSpacing: StoycoScreenSize.width(context, 20),
-        crossAxisSpacing: StoycoScreenSize.width(context, 20),
+        crossAxisCount: numberColums, // porque antes era un slider horizontal
+        mainAxisSpacing: StoycoScreenSize.width(context, mainAxisSpacing),
+        crossAxisSpacing: StoycoScreenSize.width(context, crossAxisSpacing),
         childAspectRatio: apectRatio,
       ),
       itemCount: isLoading ? 3 : events.length,
@@ -132,16 +145,19 @@ class EventsGrid<T> extends StatelessWidget {
             borderRadius: BorderRadius.circular(style.borderRadiusCard),
           );
         }
-    
+
         if (index >= events.length) {
           return const SizedBox.shrink();
         }
-    
+
         final T event = events[index];
         return SubscriptionLockedContent(
-          scale: 0.8,
+          scale: scale,
           isLocked: getIsLocked(event),
-          indicatorPosition: SubscriptionIndicatorPosition(left: 0, top: 25),
+          indicatorPosition: const SubscriptionIndicatorPosition(
+            left: 0,
+            top: 25,
+          ),
           child: EventCardExclusiveLockedV2(
             key: ValueKey<String>('event_exclusive_locked_$index'),
             imageUrl: getImageUrl(event),
