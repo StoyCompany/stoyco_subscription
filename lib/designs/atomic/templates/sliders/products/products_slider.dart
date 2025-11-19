@@ -63,22 +63,31 @@ class ProductsSlider<T> extends StatelessWidget {
 
   /// Title of the slider. Defaults to 'Merch'.
   final String title;
+
   /// Returns whether the product is locked.
   final bool Function(T product) getIsLocked;
+
   /// Returns the name value for a product.
   final String Function(T product) getName;
+
   /// Returns the category value for a product.
   final String Function(T product) getCategory;
+
   /// Returns the imageUrl value for a product.
   final String Function(T product) getImageUrl;
+
   /// Called when a product is tapped.
   final ValueChanged<T> onTapProduct;
+
   /// Called when an exclusive product is tapped.
   final ValueChanged<T> onTapProductExclusive;
+
   /// List of products to display in the slider.
   final List<T> products;
+
   /// Whether the slider is in a loading state. Defaults to false.
   final bool isLoading;
+
   /// Style model for all design parameters. Defaults to [ProductsSliderStyle].
   final ProductsSliderStyle style;
 
@@ -88,73 +97,48 @@ class ProductsSlider<T> extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: StoycoScreenSize.height(context, 9),
-      children: <Widget>[
-        Padding(
-          padding: StoycoScreenSize.symmetric(context, horizontal: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                title,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: StoycoScreenSize.fontSize(context, 20),
-                  fontWeight: FontWeight.bold,
-                  color: StoycoColors.text,
-                  fontFamily: FontFamilyToken.akkuratPro,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: StoycoScreenSize.height(context, style.heightCard),
-          width: double.infinity,
-          child: ListView.separated(
-            clipBehavior: Clip.none,
-            shrinkWrap: true,
-            padding: StoycoScreenSize.symmetric(context, horizontal: 20),
-            separatorBuilder: (BuildContext context, int index) {
-              return Gap(StoycoScreenSize.width(context, 20));
-            },
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: isLoading ? 5 : products.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (isLoading) {
-                return SkeletonCard(
-                  width: StoycoScreenSize.width(context, style.widthCard),
-                  height: StoycoScreenSize.height(context, style.heightCard),
-                  borderRadius: BorderRadius.circular(style.borderRadiusCard),
-                );
-              }
-              final T product = products[index];
-              return ProductCardExclusiveLocked(
-                key: ValueKey<String>('product_exclusive_locked_$index'),
-                imageUrl: getImageUrl(product),
-                name: getName(product),
-                category: getCategory(product),
-                isLocked: getIsLocked(product),
-                onTapProduct: () => onTapProduct(product),
-                onTapProductExclusive: () => onTapProductExclusive(product),
-                backgroundColorCard: style.backgroundColorCard,
-                borderRadiusCard: style.borderRadiusCard,
-                categoryFontStyle: style.categoryFontStyle,
-                nameFontStyle: style.nameFontStyle,
-                heightCard: style.heightCard,
-                widthCard: style.widthCard,
-                imageError: style.imageError,
-                imagePlaceholder: style.imagePlaceholder,
-                paddingContentCard: style.paddingContentCard,
-              );
-            },
-          ),
-        ),
-        Gap(StoycoScreenSize.height(context, 20)),
-      ],
+    return SizedBox(
+      height: StoycoScreenSize.height(context, style.heightCard),
+      width: double.infinity,
+      child: ListView.separated(
+        clipBehavior: Clip.none,
+        shrinkWrap: true,
+        padding: StoycoScreenSize.symmetric(context, horizontal: 20),
+        separatorBuilder: (BuildContext context, int index) {
+          return Gap(StoycoScreenSize.width(context, 20));
+        },
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: isLoading ? 5 : products.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (isLoading) {
+            return SkeletonCard(
+              width: StoycoScreenSize.width(context, style.widthCard),
+              height: StoycoScreenSize.height(context, style.heightCard),
+              borderRadius: BorderRadius.circular(style.borderRadiusCard),
+            );
+          }
+          final T product = products[index];
+          return ProductCardExclusiveLocked(
+            key: ValueKey<String>('product_exclusive_locked_$index'),
+            imageUrl: getImageUrl(product),
+            name: getName(product),
+            category: getCategory(product),
+            isLocked: getIsLocked(product),
+            onTapProduct: () => onTapProduct(product),
+            onTapProductExclusive: () => onTapProductExclusive(product),
+            backgroundColorCard: style.backgroundColorCard,
+            borderRadiusCard: style.borderRadiusCard,
+            categoryFontStyle: style.categoryFontStyle,
+            nameFontStyle: style.nameFontStyle,
+            heightCard: style.heightCard,
+            widthCard: style.widthCard,
+            imageError: style.imageError,
+            imagePlaceholder: style.imagePlaceholder,
+            paddingContentCard: style.paddingContentCard,
+          );
+        },
+      ),
     );
   }
 }

@@ -153,7 +153,7 @@ class PartnerProfileDataSource {
     String partnerId,
   ) async {
     final String url =
-        '${environment.web3BaseUrl()}collection/community-owner-id/$partnerId';
+        '${environment.baseUrl()}collection/community-owner-id/$partnerId';
     final Map<String, String> headers = _getHeaders();
     final Response<Map<String, dynamic>> response = await _dio.get(
       url,

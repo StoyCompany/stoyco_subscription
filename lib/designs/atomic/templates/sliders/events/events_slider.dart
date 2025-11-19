@@ -66,24 +66,34 @@ class EventsSlider<T> extends StatelessWidget {
 
   /// Title of the slider. Defaults to 'Experiencias'.
   final String title;
+
   /// Returns whether the event is locked.
   final bool Function(T event) getIsLocked;
+
   /// Returns the name value for an event.
   final String Function(T event) getName;
+
   /// Returns whether the event is finished.
   final bool Function(T event) getIsFinished;
+
   /// Returns the date value for an event.
   final String Function(T event) getDate;
+
   /// Returns the imageUrl value for an event.
   final String Function(T event) getImageUrl;
+
   /// Called when an event is tapped.
   final ValueChanged<T> onTapEvent;
+
   /// Called when an exclusive event is tapped.
   final ValueChanged<T> onTapEventExclusive;
+
   /// List of events to display in the slider.
   final List<T> events;
+
   /// Whether the slider is in a loading state. Defaults to false.
   final bool isLoading;
+
   /// Style model for all design parameters. Defaults to [EventsSliderStyle].
   final EventsSliderStyle style;
 
@@ -93,74 +103,55 @@ class EventsSlider<T> extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: StoycoScreenSize.height(context, 9),
-      children: <Widget>[
-        Padding(
-          padding: StoycoScreenSize.symmetric(context, horizontal: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                title,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontSize: StoycoScreenSize.fontSize(context, 20),
-                  fontWeight: FontWeight.bold,
-                  color: StoycoColors.text,
-                  fontFamily: FontFamilyToken.akkuratPro,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: StoycoScreenSize.height(context, style.heightCard),
-          width: double.infinity,
-          child: ListView.separated(
-            clipBehavior: Clip.none,
-            shrinkWrap: true,
-            padding: StoycoScreenSize.symmetric(context, horizontal: 20),
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(width: StoycoScreenSize.width(context, 20),);
-            },
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: isLoading ? 3 : events.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (isLoading) {
-                return SkeletonCard(
-                  width: StoycoScreenSize.width(context, style.widthCard),
-                  height: StoycoScreenSize.height(context, style.heightCard),
-                  borderRadius: BorderRadius.circular(style.borderRadiusCard),
-                );
-              }
-              final T event = events[index];
-              return EventCardExclusiveLocked(
-                key: ValueKey<String>('event_exclusive_locked_$index'),
-                imageUrl: getImageUrl(event),
-                name: getName(event),
-                isFinished: getIsFinished(event),
-                date: getDate(event),
-                isLocked: getIsLocked(event),
-                onTapEvent: () => onTapEvent(event),
-                onTapEventExclusive: () => onTapEventExclusive(event),
-                backgroundColorCard: style.backgroundColorCard,
-                borderRadiusCard: style.borderRadiusCard,
-                nameFontStyle: style.nameFontStyle,
-                dateFontStyle: style.dateFontStyle,
-                heightCard: style.heightCard,
-                widthCard: style.widthCard,
-                imageError: style.imageError,
-                imagePlaceholder: style.imagePlaceholder,
-                paddingContentCard: style.paddingContentCard, 
-              );
-            },
-          ),
-        ),
-        Gap(StoycoScreenSize.height(context, 20)),
-      ],
+    return SizedBox(
+      height: StoycoScreenSize.height(context, style.heightCard),
+      width: double.infinity,
+      child: ListView.separated(
+        clipBehavior: Clip.none,
+        shrinkWrap: true,
+        padding: StoycoScreenSize.symmetric(context, horizontal: 20),
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(width: StoycoScreenSize.width(context, 20));
+        },
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: isLoading ? 3 : events.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (isLoading) {
+            return SkeletonCard(
+              width: StoycoScreenSize.width(context, style.widthCard),
+              height: StoycoScreenSize.height(context, style.heightCard),
+              borderRadius: BorderRadius.circular(style.borderRadiusCard),
+            );
+          }
+
+          // Safety check to prevent RangeError
+          if (index >= events.length) {
+            return const SizedBox.shrink();
+          }
+
+          final T event = events[index];
+          return EventCardExclusiveLocked(
+            key: ValueKey<String>('event_exclusive_locked_$index'),
+            imageUrl: getImageUrl(event),
+            name: getName(event),
+            isFinished: getIsFinished(event),
+            date: getDate(event),
+            isLocked: getIsLocked(event),
+            onTapEvent: () => onTapEvent(event),
+            onTapEventExclusive: () => onTapEventExclusive(event),
+            backgroundColorCard: style.backgroundColorCard,
+            borderRadiusCard: style.borderRadiusCard,
+            nameFontStyle: style.nameFontStyle,
+            dateFontStyle: style.dateFontStyle,
+            heightCard: style.heightCard,
+            widthCard: style.widthCard,
+            imageError: style.imageError,
+            imagePlaceholder: style.imagePlaceholder,
+            paddingContentCard: style.paddingContentCard,
+          );
+        },
+      ),
     );
   }
 }
