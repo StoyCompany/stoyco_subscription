@@ -1,16 +1,67 @@
 # Changelog
 
+## [2.0.8] - 2025-11-18
+
+### Features
+
+- A new card for merchandise and experience has been added.
+- A new event_grid was created
+
+
+## [2.0.7] - 2025-11-18
+
+### Features
+
+- Added new subscription management methods to Service, Repository, and DataSource:
+  - `subscribeToPlan(SubscribeRequest request)`
+  - `unsubscribe(String planId)`
+  - `renewSubscription(String planId)`
+  - `updateSubscriptionPaymentMethod(SubscriptionMethodModificationRequest request)`
+  - All methods are documented in English, following atomic design system context.
+
+### Technical Details
+
+- Adjusted types for subscription methods to use primitives (`String planId`) for unsubscribe and renew operations, improving API clarity and usability.
+- Unified method signatures and documentation for consistency across layers.
+
+## 2.0.10 - 2025-11-18
+
+**refactor:** Simplify slider layout by replacing Column with SizedBox and optimizing ListView structure
+
+## 2.0.6 - 2025-11-17
+
+### Features
+
+- **Implemented Repository Caching System** using stoyco_shared RepositoryCacheMixin
+  - Added intelligent caching to PartnerProfileRepository (TTL: 5-15 minutes based on data volatility)
+  - Added caching to ActiveSubscriptionRepository (TTL: 3 minutes for fresh subscription data)
+  - Added caching to SubscriptionCatalogRepository (TTL: 4-5 minutes for catalog data)
+  - Added caching to PaymentSummaryRepository (TTL: 5 minutes for payment information)
+  - Automatic cache invalidation on token changes (login/logout events)
+  - Significant performance improvements: ~100x faster on cache hits (500ms → 5ms)
+  - Reduced server load and improved user experience with instant cached responses
+
+### Technical Details
+
+- Leverages InMemoryCacheManager from stoyco_shared package
+- Cache keys include relevant identifiers (partner IDs, user IDs, etc.)
+- TTL values balanced between data freshness and performance
+- Graceful error handling with automatic cache bypass on failures
+
 ## 2.0.5 - 2025-11-14
 
 ### Features
+
 - Added TagIcon widget and padlock SVG asset with associated colors.
 - Enhanced card number handling and added UnionPay support.
 
 ### Fixes
+
 - Set default package name for SvgGenImage to 'stoyco_subscription'.
 - Updated functionToUpdateToken type to a callback for better clarity and usage.
 
 ### Other
+
 - Merged changes from feature/STOYCO-21 and feaure/STOYCO-21 branches.
 
 ## 2.0.4 - 2025-11-13

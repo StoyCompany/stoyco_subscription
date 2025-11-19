@@ -5,10 +5,13 @@ import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/get_subscription_plans_request.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_request.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_method_modification_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/subscription_plans_data_source.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/subscription_plans_repository.dart';
 class SubscriptionPlansService {
+
   /// Service class for managing subscription plans and user authentication.
   ///
   /// This class provides methods to fetch subscription plans, manage user tokens,
@@ -128,6 +131,90 @@ class SubscriptionPlansService {
       return await _subscriptionPlansRepository.getSubscriptionPlans(request);
     } catch (e) {
       return Left<Failure, SubscriptionPlanResponse>(ExceptionFailure.decode(Exception('Error getting subscription plans by user: $e')));
+    }
+  }
+
+  /// Subscribes a user to a plan.
+  ///
+  /// Overview: Initiates a subscription for the user to the specified plan.
+  /// Atomic Level: Organism – handles business logic and integration.
+  /// Parameters:
+  /// - [request]: The model containing user and plan information for subscription.
+  /// Returns: [Either] with [bool] on success or [Failure] on error.
+  /// Example:
+  /// ```dart
+  /// final result = await service.subscribeToPlan(
+  ///   SubscribeRequest(userId: '123', planId: 'abc'),
+  /// );
+  /// ```
+  Future<Either<Failure, bool>> subscribeToPlan(SubscribeRequest request) async {
+    try {
+      return await _subscriptionPlansRepository.subscribeToPlan(request);
+    } catch (e) {
+      return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error subscribing to plan: $e')));
+    }
+  }
+
+  /// Unsubscribes a user from a plan.
+  ///
+  /// Overview: Cancels the user's active subscription for the specified plan.
+  /// Atomic Level: Organism – handles business logic and integration.
+  /// Parameters:
+  /// - [request]: The model containing user and plan information for unsubscription.
+  /// Returns: [Either] with [bool] on success or [Failure] on error.
+  /// Example:
+  /// ```dart
+  /// final result = await service.unsubscribe(
+  ///   String planId,
+  /// );
+  /// ```
+  Future<Either<Failure, bool>> unsubscribe(String planId) async {
+    try {
+      return await _subscriptionPlansRepository.unsubscribe(planId);
+    } catch (e) {
+      return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error unsubscribing plan: $e')));
+    }
+  }
+
+  /// Renews a user's subscription to a plan.
+  ///
+  /// Overview: Renews the user's active subscription for the specified plan.
+  /// Atomic Level: Organism – handles business logic and integration.
+  /// Parameters:
+  /// - [request]: The model containing user and plan information for renewal.
+  /// Returns: [Either] with [bool] on success or [Failure] on error.
+  /// Example:
+  /// ```dart
+  /// final result = await service.renewSubscription(
+  ///   String planId,
+  /// );
+  /// ```
+  Future<Either<Failure, bool>> renewSubscription(String planId) async {
+    try {
+      return await _subscriptionPlansRepository.renewSubscription(planId);
+    } catch (e) {
+      return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error renewing subscription: $e')));
+    }
+  }
+
+  /// Updates the payment method for a user's subscription.
+  ///
+  /// Overview: Changes the payment method for the user's active subscription.
+  /// Atomic Level: Organism – handles business logic and integration.
+  /// Parameters:
+  /// - [request]: The model containing user, plan, and payment method information.
+  /// Returns: [Either] with [bool] on success or [Failure] on error.
+  /// Example:
+  /// ```dart
+  /// final result = await service.updateSubscriptionPaymentMethod(
+  ///   SubscriptionMethodModificationRequest(userId: '123', planId: 'abc', paymentMethodId: 'pm_456'),
+  /// );
+  /// ```
+  Future<Either<Failure, bool>> updateSubscriptionPaymentMethod(SubscriptionMethodModificationRequest request) async {
+    try {
+      return await _subscriptionPlansRepository.updateSubscriptionPaymentMethod(request);
+    } catch (e) {
+      return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error updating payment method: $e')));
     }
   }
 

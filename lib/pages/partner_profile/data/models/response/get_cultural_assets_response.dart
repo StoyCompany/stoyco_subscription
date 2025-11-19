@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
 
 part 'get_cultural_assets_response.g.dart';
 
@@ -19,6 +20,23 @@ class GetCulturalAssetsResponse extends Equatable {
   final String? tecMessageError;
   final int? count;
   final List<CulturalAssetItemModel>? data;
+
+
+  GetCulturalAssetsResponse copyWith({
+    int? error,
+    String? messageError,
+    String? tecMessageError,
+    int? count,
+    List<CulturalAssetItemModel>? data,
+  }) {
+    return GetCulturalAssetsResponse(
+      error: error ?? this.error,
+      messageError: messageError ?? this.messageError,
+      tecMessageError: tecMessageError ?? this.tecMessageError,
+      count: count ?? this.count,
+      data: data ?? this.data,
+    );
+  }
 
   Map<String, dynamic> toJson() => _$GetCulturalAssetsResponseToJson(this);
 
@@ -56,14 +74,15 @@ class CulturalAssetItemModel extends Equatable {
     this.experienceOrProductName,
     this.categories,
     this.isExclusive,
-    this.isSubscriberOnly,
-    this.hasAccess,
     this.createdAt,
     this.updatedAt,
+    this.isSubscriberOnly = false,
+    bool? hasAccessWithSubscription,
     this.accessContent,
-  });
-  factory CulturalAssetItemModel.fromJson(Map<String, dynamic> json) =>
-      _$CulturalAssetItemModelFromJson(json);
+  }) : hasAccessWithSubscription = hasAccessWithSubscription ?? !isSubscriberOnly;
+
+  factory CulturalAssetItemModel.fromJson(Map<String, dynamic> json) => _$CulturalAssetItemModelFromJson(json);
+
   final String? id;
   final String? web3CollectionId;
   final int? collectionId;
@@ -85,11 +104,71 @@ class CulturalAssetItemModel extends Equatable {
   final String? experienceOrProductName;
   final List<CategoryModel>? categories;
   final bool? isExclusive;
-  final bool? isSubscriberOnly;
-  final bool? hasAccess;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final AccessContentModel? accessContent;
+  final bool isSubscriberOnly;
+  /// This value is constructed in the frontend and is not mapped from backend JSON.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool hasAccessWithSubscription;
+  final AccessContent? accessContent;
+
+  CulturalAssetItemModel copyWith({
+    String? id,
+    String? web3CollectionId,
+    int? collectionId,
+    String? name,
+    String? symbol,
+    int? maxSupply,
+    int? stock,
+    int? stoyCoins,
+    int? minted,
+    String? contractAddress,
+    String? txHash,
+    String? metadataUri,
+    String? imageUri,
+    String? avatarBackgroundImageUri,
+    bool? burned,
+    String? artistOrBrandId,
+    String? artistOrBrandName,
+    String? communityId,
+    String? experienceOrProductName,
+    List<CategoryModel>? categories,
+    bool? isExclusive,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? isSubscriberOnly,
+    bool? hasAccessWithSubscription,
+    AccessContent? accessContent,
+  }) {
+    return CulturalAssetItemModel(
+      id: id ?? this.id,
+      web3CollectionId: web3CollectionId ?? this.web3CollectionId,
+      collectionId: collectionId ?? this.collectionId,
+      name: name ?? this.name,
+      symbol: symbol ?? this.symbol,
+      maxSupply: maxSupply ?? this.maxSupply,
+      stock: stock ?? this.stock,
+      stoyCoins: stoyCoins ?? this.stoyCoins,
+      minted: minted ?? this.minted,
+      contractAddress: contractAddress ?? this.contractAddress,
+      txHash: txHash ?? this.txHash,
+      metadataUri: metadataUri ?? this.metadataUri,
+      imageUri: imageUri ?? this.imageUri,
+      avatarBackgroundImageUri: avatarBackgroundImageUri ?? this.avatarBackgroundImageUri,
+      burned: burned ?? this.burned,
+      artistOrBrandId: artistOrBrandId ?? this.artistOrBrandId,
+      artistOrBrandName: artistOrBrandName ?? this.artistOrBrandName,
+      communityId: communityId ?? this.communityId,
+      experienceOrProductName: experienceOrProductName ?? this.experienceOrProductName,
+      categories: categories ?? this.categories,
+      isExclusive: isExclusive ?? this.isExclusive,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isSubscriberOnly: isSubscriberOnly ?? this.isSubscriberOnly,
+      hasAccessWithSubscription: hasAccessWithSubscription ?? this.hasAccessWithSubscription,
+      accessContent: accessContent ?? this.accessContent,
+    );
+  }
 
   Map<String, dynamic> toJson() => _$CulturalAssetItemModelToJson(this);
 
@@ -117,7 +196,7 @@ class CulturalAssetItemModel extends Equatable {
     categories,
     isExclusive,
     isSubscriberOnly,
-    hasAccess,
+    hasAccessWithSubscription,
     createdAt,
     updatedAt,
     accessContent,

@@ -3,6 +3,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_service.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
+// Test model for access validation
+class TestProduct {
+
+  TestProduct({
+    required this.id,
+    required this.accessContent,
+    required this.isSubscriberOnly,
+    this.hasAccess,
+  });
+
+  final String id;
+  final AccessContent accessContent;
+  final bool isSubscriberOnly;
+  final bool? hasAccess;
+
+  TestProduct copyWith({bool? hasAccess}) {
+    return TestProduct(
+      id: id,
+      accessContent: accessContent,
+      isSubscriberOnly: isSubscriberOnly,
+      hasAccess: hasAccess ?? this.hasAccess,
+    );
+  }
+}
 
 void main() {
   group('ActiveSubscriptionService', () {
@@ -137,7 +161,9 @@ void main() {
     );
 
     group('hasAccessToContent()', () {
+      // New model for access validation
       late AccessContent testContent;
+      late TestProduct testProduct;
 
       setUp(() {
         testContent = AccessContent(
@@ -147,43 +173,58 @@ void main() {
           visibleFrom: DateTime(2024, 1, 1),
           visibleUntil: DateTime(2024, 12, 31),
         );
+        testProduct = TestProduct(
+          id: 'product_1',
+          accessContent: testContent,
+          isSubscriberOnly: true,
+        );
       });
 
-      test('should accept content parameter', () {
-        // Verify the method exists and accepts the content parameter
+      test('should accept product parameter', () async {
         expect(
-          () => service.hasAccessToContent(content: testContent),
+          () async => service.hasAccessToMultiplesContent<TestProduct>(
+            contents: <TestProduct>[testProduct],
+            getAccessContent: (TestProduct product) => product.accessContent,
+            hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+            getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
+          ),
           returnsNormally,
         );
       });
 
-      test('should accept optional partnerId parameter', () {
-        // Verify the method accepts the optional partnerId parameter
+      test('should accept optional partnerId parameter', () async {
         expect(
-          () => service.hasAccessToContent(
-            content: testContent,
+          () async => service.hasAccessToMultiplesContent<TestProduct>(
+            contents: <TestProduct>[testProduct],
+            getAccessContent: (TestProduct product) => product.accessContent,
+            hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+            getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
             partnerId: '507f1f77bcf86cd799439012',
           ),
           returnsNormally,
         );
       });
 
-      test('should accept forceRefresh parameter', () {
-        // Verify the method accepts the forceRefresh parameter
+      test('should accept forceRefresh parameter', () async {
         expect(
-          () => service.hasAccessToContent(
-            content: testContent,
+          () async => service.hasAccessToMultiplesContent<TestProduct>(
+            contents: <TestProduct>[testProduct],
+            getAccessContent: (TestProduct product) => product.accessContent,
+            hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+            getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
             forceRefresh: true,
           ),
           returnsNormally,
         );
       });
 
-      test('should accept all parameters together', () {
-        // Verify the method accepts all parameters at once
+      test('should accept all parameters together', () async {
         expect(
-          () => service.hasAccessToContent(
-            content: testContent,
+          () async => service.hasAccessToMultiplesContent<TestProduct>(
+            contents: <TestProduct>[testProduct],
+            getAccessContent: (TestProduct product) => product.accessContent,
+            hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+            getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
             partnerId: '507f1f77bcf86cd799439012',
             forceRefresh: true,
           ),
@@ -191,114 +232,148 @@ void main() {
         );
       });
 
-      test('should return Either<Failure, bool>', () async {
-        final result = await service.hasAccessToContent(content: testContent);
-
-        // Verify it returns an Either
-        expect(result.isLeft || result.isRight, isTrue);
+      test('should return List<TestProduct> with hasAccess field', () async {
+        final List<TestProduct> result = await service.hasAccessToMultiplesContent<TestProduct>(
+          contents: <TestProduct>[testProduct],
+          getAccessContent: (TestProduct product) => product.accessContent,
+          hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+          getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
+        );
+        expect(result, isA<List<TestProduct>>());
+        expect(result.first.hasAccess, isNotNull);
       });
 
-      test('should handle AccessContent with empty planIds', () {
-        final emptyContent = AccessContent(
+      test('should handle product with empty planIds', () async {
+        final AccessContent emptyContent = AccessContent(
           contentId: 'empty_content',
           partnerId: '507f1f77bcf86cd799439012',
           planIds: const <String>[],
           visibleFrom: DateTime(2024, 1, 1),
           visibleUntil: DateTime(2024, 12, 31),
         );
-
-        expect(
-          () => service.hasAccessToContent(content: emptyContent),
-          returnsNormally,
+        final TestProduct emptyProduct = TestProduct(
+          id: 'product_empty',
+          accessContent: emptyContent,
+          isSubscriberOnly: true,
         );
+        final List<TestProduct> result = await service.hasAccessToMultiplesContent<TestProduct>(
+          contents: <TestProduct>[emptyProduct],
+          getAccessContent: (TestProduct product) => product.accessContent,
+          hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+          getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
+        );
+        expect(result.first.hasAccess, isFalse);
       });
 
-      test('should handle AccessContent with multiple planIds', () {
-        final multiPlanContent = AccessContent(
+      test('should handle product with multiple planIds', () async {
+        final AccessContent multiPlanContent = AccessContent(
           contentId: 'multi_plan_content',
           partnerId: '507f1f77bcf86cd799439012',
-          planIds: const <String>[
-            'plan_1',
-            'plan_2',
-            'plan_3',
-            'plan_4',
-            'plan_5',
-          ],
+          planIds: const <String>['plan_1', 'plan_2', 'plan_3', 'plan_4', 'plan_5'],
           visibleFrom: DateTime(2024, 1, 1),
           visibleUntil: DateTime(2024, 12, 31),
         );
-
-        expect(
-          () => service.hasAccessToContent(content: multiPlanContent),
-          returnsNormally,
+        final TestProduct multiPlanProduct = TestProduct(
+          id: 'product_multi',
+          accessContent: multiPlanContent,
+          isSubscriberOnly: true,
         );
+        final List<TestProduct> result = await service.hasAccessToMultiplesContent<TestProduct>(
+          contents: <TestProduct>[multiPlanProduct],
+          getAccessContent: (TestProduct product) => product.accessContent,
+          hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+          getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
+        );
+        expect(result.first.hasAccess, isNotNull);
       });
     });
 
     group('checkMultipleContentAccess()', () {
-      late List<AccessContent> testContents;
+      late List<TestProduct> testProducts;
 
       setUp(() {
-        testContents = <AccessContent>[
-          AccessContent(
-            contentId: 'event_123',
-            partnerId: '507f1f77bcf86cd799439012',
-            planIds: const <String>['plan_1', 'plan_2'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
+        testProducts = <TestProduct>[
+          TestProduct(
+            id: 'product_1',
+            accessContent: AccessContent(
+              contentId: 'event_123',
+              partnerId: '507f1f77bcf86cd799439012',
+              planIds: const <String>['plan_1', 'plan_2'],
+              visibleFrom: DateTime(2024, 1, 1),
+              visibleUntil: DateTime(2024, 12, 31),
+            ),
+            isSubscriberOnly: true,
           ),
-          AccessContent(
-            contentId: 'exclusive_456',
-            partnerId: '507f1f77bcf86cd799439012',
-            planIds: const <String>['plan_3', 'plan_4'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
+          TestProduct(
+            id: 'product_2',
+            accessContent: AccessContent(
+              contentId: 'exclusive_456',
+              partnerId: '507f1f77bcf86cd799439012',
+              planIds: const <String>['plan_3', 'plan_4'],
+              visibleFrom: DateTime(2024, 1, 1),
+              visibleUntil: DateTime(2024, 12, 31),
+            ),
+            isSubscriberOnly: true,
           ),
-          AccessContent(
-            contentId: 'asset_789',
-            partnerId: '507f1f77bcf86cd799439012',
-            planIds: const <String>['plan_5'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
+          TestProduct(
+            id: 'product_3',
+            accessContent: AccessContent(
+              contentId: 'asset_789',
+              partnerId: '507f1f77bcf86cd799439012',
+              planIds: const <String>['plan_5'],
+              visibleFrom: DateTime(2024, 1, 1),
+              visibleUntil: DateTime(2024, 12, 31),
+            ),
+            isSubscriberOnly: true,
           ),
         ];
       });
 
-      test('should accept contents list parameter', () {
-        // Verify the method accepts a list of AccessContent
+      test('should accept products list parameter', () async {
         expect(
-          () => service.checkMultipleContentAccess(contents: testContents),
+          () async => service.hasAccessToMultiplesContent<TestProduct>(
+            contents: testProducts,
+            getAccessContent: (TestProduct product) => product.accessContent,
+            hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+            getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
+          ),
           returnsNormally,
         );
       });
 
-      test('should accept optional partnerId parameter', () {
-        // Verify the method accepts the optional partnerId parameter
+      test('should accept optional partnerId parameter', () async {
         expect(
-          () => service.checkMultipleContentAccess(
-            contents: testContents,
+          () async => service.hasAccessToMultiplesContent<TestProduct>(
+            contents: testProducts,
+            getAccessContent: (TestProduct product) => product.accessContent,
+            hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+            getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
             partnerId: '507f1f77bcf86cd799439012',
           ),
           returnsNormally,
         );
       });
 
-      test('should accept forceRefresh parameter', () {
-        // Verify the method accepts the forceRefresh parameter
+      test('should accept forceRefresh parameter', () async {
         expect(
-          () => service.checkMultipleContentAccess(
-            contents: testContents,
+          () async => service.hasAccessToMultiplesContent<TestProduct>(
+            contents: testProducts,
+            getAccessContent: (TestProduct product) => product.accessContent,
+            hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+            getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
             forceRefresh: true,
           ),
           returnsNormally,
         );
       });
 
-      test('should accept all parameters together', () {
-        // Verify the method accepts all parameters at once
+      test('should accept all parameters together', () async {
         expect(
-          () => service.checkMultipleContentAccess(
-            contents: testContents,
+          () async => service.hasAccessToMultiplesContent<TestProduct>(
+            contents: testProducts,
+            getAccessContent: (TestProduct product) => product.accessContent,
+            hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+            getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
             partnerId: '507f1f77bcf86cd799439012',
             forceRefresh: true,
           ),
@@ -306,129 +381,15 @@ void main() {
         );
       });
 
-      test('should return Either<Failure, Map<AccessContent, bool>>', () async {
-        final result = await service.checkMultipleContentAccess(
-          contents: testContents,
+      test('should return List<TestProduct> with hasAccess field', () async {
+        final List<TestProduct> result = await service.hasAccessToMultiplesContent<TestProduct>(
+          contents: testProducts,
+          getAccessContent: (TestProduct product) => product.accessContent,
+          hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
+          getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
         );
-
-        // Verify it returns an Either
-        expect(result.isLeft || result.isRight, isTrue);
-
-        // If successful, verify it's a Map<AccessContent, bool>
-        result.fold(
-          (failure) {}, // Ignore failure for this test
-          (accessMap) {
-            expect(accessMap, isA<Map<AccessContent, bool>>());
-          },
-        );
-      });
-
-      test('should handle empty contents list', () {
-        expect(
-          () => service.checkMultipleContentAccess(contents: <AccessContent>[]),
-          returnsNormally,
-        );
-      });
-
-      test('should handle single content in list', () {
-        final singleContent = <AccessContent>[
-          AccessContent(
-            contentId: 'single_content',
-            partnerId: '507f1f77bcf86cd799439012',
-            planIds: const <String>['plan_1'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
-          ),
-        ];
-
-        expect(
-          () => service.checkMultipleContentAccess(contents: singleContent),
-          returnsNormally,
-        );
-      });
-
-      test('should handle large number of contents', () {
-        // Create a list with many contents
-        final largeContentList = List<AccessContent>.generate(
-          100,
-          (index) => AccessContent(
-            contentId: 'content_$index',
-            partnerId: '507f1f77bcf86cd799439012',
-            planIds: <String>['plan_${index % 5}'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
-          ),
-        );
-
-        expect(
-          () => service.checkMultipleContentAccess(contents: largeContentList),
-          returnsNormally,
-        );
-      });
-
-      test('should handle contents with different partners', () {
-        final mixedPartnerContents = <AccessContent>[
-          AccessContent(
-            contentId: 'content_partner_1',
-            partnerId: 'partner_1',
-            planIds: const <String>['plan_1'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
-          ),
-          AccessContent(
-            contentId: 'content_partner_2',
-            partnerId: 'partner_2',
-            planIds: const <String>['plan_2'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
-          ),
-          AccessContent(
-            contentId: 'content_partner_3',
-            partnerId: 'partner_3',
-            planIds: const <String>['plan_3'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
-          ),
-        ];
-
-        expect(
-          () => service.checkMultipleContentAccess(
-            contents: mixedPartnerContents,
-          ),
-          returnsNormally,
-        );
-      });
-
-      test('should handle contents with overlapping planIds', () {
-        final overlappingContents = <AccessContent>[
-          AccessContent(
-            contentId: 'content_1',
-            partnerId: '507f1f77bcf86cd799439012',
-            planIds: const <String>['plan_1', 'plan_2', 'plan_3'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
-          ),
-          AccessContent(
-            contentId: 'content_2',
-            partnerId: '507f1f77bcf86cd799439012',
-            planIds: const <String>['plan_2', 'plan_3', 'plan_4'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
-          ),
-          AccessContent(
-            contentId: 'content_3',
-            partnerId: '507f1f77bcf86cd799439012',
-            planIds: const <String>['plan_3', 'plan_4', 'plan_5'],
-            visibleFrom: DateTime(2024, 1, 1),
-            visibleUntil: DateTime(2024, 12, 31),
-          ),
-        ];
-
-        expect(
-          () =>
-              service.checkMultipleContentAccess(contents: overlappingContents),
-          returnsNormally,
-        );
+        expect(result, isA<List<TestProduct>>());
+        expect(result.first.hasAccess, isNotNull);
       });
     });
 
@@ -453,17 +414,17 @@ void main() {
 
       test('should not throw error even if API fails', () async {
         // Simulate API error by using invalid token
-        final mockUserWithoutToken = MockUser(
+        final MockUser mockUserWithoutToken = MockUser(
           uid: 'test_user_id',
           email: 'test@example.com',
           displayName: 'Test User',
         );
-        final mockAuthWithoutToken = MockFirebaseAuth(
+        final MockFirebaseAuth mockAuthWithoutToken = MockFirebaseAuth(
           mockUser: mockUserWithoutToken,
           signedIn: true,
         );
 
-        final serviceWithError = ActiveSubscriptionService(
+        final ActiveSubscriptionService serviceWithError = ActiveSubscriptionService(
           environment: StoycoEnvironment.testing,
           firebaseAuth: mockAuthWithoutToken,
           cacheDuration: const Duration(seconds: 2),
@@ -486,7 +447,7 @@ void main() {
 
       test('should handle concurrent refresh calls', () async {
         // Call refresh concurrently
-        final futures = <Future<void>>[
+        final List<Future<void>> futures = <Future<void>>[
           service.refreshCacheFromPush(),
           service.refreshCacheFromPush(),
           service.refreshCacheFromPush(),

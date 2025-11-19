@@ -15,7 +15,7 @@ class GradientBorder extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // create outer rectangle equals size
     final Rect outerRect = Offset.zero & size;
-    final outerRRect = RRect.fromRectAndRadius(
+    final RRect outerRRect = RRect.fromRectAndRadius(
       outerRect,
       Radius.circular(radius),
     );
@@ -27,7 +27,7 @@ class GradientBorder extends CustomPainter {
       size.width - strokeWidth * 2,
       size.height - strokeWidth * 2,
     );
-    final innerRRect = RRect.fromRectAndRadius(
+    final RRect innerRRect = RRect.fromRectAndRadius(
       innerRect,
       Radius.circular(radius - strokeWidth),
     );
@@ -39,7 +39,7 @@ class GradientBorder extends CustomPainter {
     final Path path1 = Path()..addRRect(outerRRect);
     final Path path2 = Path()..addRRect(innerRRect);
     // var path = Path.combine(PathOperation.difference, path1, path2);
-    final combinedPath = combinePaths(path1, path2);
+    final Path combinedPath = combinePaths(path1, path2);
 
     canvas.drawPath(combinedPath, _paint);
   }

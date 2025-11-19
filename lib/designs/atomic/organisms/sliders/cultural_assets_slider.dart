@@ -78,61 +78,37 @@ class CulturalAssetsSlider extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: StoycoScreenSize.height(context, 9),
-      children: <Widget>[
-        Padding(
-          padding: StoycoScreenSize.symmetric(context, horizontal: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Activos',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: FontFamilyToken.akkuratPro,
-                  fontSize: StoycoScreenSize.fontSize(context, 20),
-                  fontWeight: FontWeight.w700,
-                ),
+    return SizedBox(
+      height: StoycoScreenSize.height(context, 226),
+      width: double.infinity,
+      child: ListView.separated(
+        clipBehavior: Clip.none,
+        shrinkWrap: true,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        separatorBuilder: (BuildContext context, int index) =>
+            Gap(StoycoScreenSize.width(context, 20)),
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: isLoading ? 5 : culturalAssets.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (isLoading) {
+            return SkeletonCard(
+              width: StoycoScreenSize.width(context, 156),
+              height: StoycoScreenSize.height(context, 226),
+              borderRadius: BorderRadius.circular(
+                StoycoScreenSize.radius(context, 20),
               ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: StoycoScreenSize.height(context, 226),
-          width: double.infinity,
-          child: ListView.separated(
-            clipBehavior: Clip.none,
-            shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            separatorBuilder: (BuildContext context, int index) =>
-                Gap(StoycoScreenSize.width(context, 20)),
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: isLoading ? 5 : culturalAssets.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (isLoading) {
-                return SkeletonCard(
-                  width: StoycoScreenSize.width(context, 156),
-                  height: StoycoScreenSize.height(context, 226),
-                  borderRadius: BorderRadius.circular(
-                    StoycoScreenSize.radius(context, 20),
-                  ),
-                );
-              }
+            );
+          }
 
-              final CulturalAssetItemModel asset = culturalAssets[index];
-              return CulturalAssetCard(
-                culturalAssetCard: asset,
-                onTapCulturalAssetExclusive: onTapCulturalAssetExclusive,
-                onTap: onTapSelectedCulturalAsset,
-              );
-            },
-          ),
-        ),
-        Gap(StoycoScreenSize.height(context, 20)),
-      ],
+          final CulturalAssetItemModel asset = culturalAssets[index];
+          return CulturalAssetCard(
+            culturalAssetCard: asset,
+            onTapCulturalAssetExclusive: onTapCulturalAssetExclusive,
+            onTap: onTapSelectedCulturalAsset,
+          );
+        },
+      ),
     );
   }
 }

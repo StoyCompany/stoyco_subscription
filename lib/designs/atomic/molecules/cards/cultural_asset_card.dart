@@ -55,7 +55,7 @@ class CulturalAssetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isLocked = (culturalAssetCard.isSubscriberOnly ?? false) && !(culturalAssetCard.hasAccess ?? false);
+    final bool isLocked = !culturalAssetCard.hasAccessWithSubscription;
 
     return Opacity(
       opacity: isSoldOut ? 0.5 : 1.0,
