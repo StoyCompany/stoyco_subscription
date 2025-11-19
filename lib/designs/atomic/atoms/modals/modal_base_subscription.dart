@@ -56,6 +56,7 @@ class ModalBaseSubscription extends StatelessWidget {
     this.titleStyle,
     this.descriptionStyle,
     this.spacing = 32,
+    this.canPop = true,
   });
 
   /// The main title displayed in the modal.
@@ -76,6 +77,8 @@ class ModalBaseSubscription extends StatelessWidget {
   final ModalBaseSubscriptionType type;
   /// Vertical spacing between modal elements. Defaults to 32.
   final double spacing;
+  /// Determines if the modal can be dismissed by popping the navigation stack.
+  final bool canPop;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +106,7 @@ class ModalBaseSubscription extends StatelessWidget {
     }
 
     return PopScope(
-      canPop: false,
+      canPop: canPop,
       child: Padding(
         padding: StoycoScreenSize.symmetric(
             context,
