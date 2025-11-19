@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.8] - 2025-11-18
+
+### Features
+
+- A new card for merchandise and experience has been added.
+- A new event_grid was created
+
 
 ## [2.0.7] - 2025-11-18
 
