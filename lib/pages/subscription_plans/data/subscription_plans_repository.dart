@@ -66,7 +66,7 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
 
   Future<Either<Failure, bool>> subscribeToPlan(SubscribeRequest request) async {
     try {
-      final Response<Map<String, dynamic>> response = await _dataSource.subscribeToPlan(request);
+      final Response<String> response = await _dataSource.subscribeToPlan(request);
       if (response.statusCode == 200) {
         return const Right<Failure, bool>(true);
       } else {
@@ -83,7 +83,7 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
 
   Future<Either<Failure, bool>> unsubscribe(String planId) async {
       try {
-        final Response<Map<String, dynamic>> response = await _dataSource.unsubscribe(planId);
+        final Response<String> response = await _dataSource.unsubscribe(planId);
         if (response.statusCode == 200) {
           return const Right<Failure, bool>(true);
         } else {
@@ -100,7 +100,7 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
 
     Future<Either<Failure, bool>> renewSubscription(String planId) async {
       try {
-        final Response<Map<String, dynamic>> response = await _dataSource.renewSubscription(planId);
+        final Response<String> response = await _dataSource.renewSubscription(planId);
         if (response.statusCode == 200) {
           return const Right<Failure, bool>(true);
         } else {
@@ -117,7 +117,7 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
 
     Future<Either<Failure, bool>> updateSubscriptionPaymentMethod(SubscriptionMethodModificationRequest request) async {
       try {
-        final Response<Map<String, dynamic>> response = await _dataSource.updateSubscriptionPaymentMethod(request);
+        final Response<String> response = await _dataSource.updateSubscriptionPaymentMethod(request);
         if (response.statusCode == 200) {
           return const Right<Failure, bool>(true);
         } else {

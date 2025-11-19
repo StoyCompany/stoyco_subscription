@@ -41,7 +41,21 @@ class SubscriptionPlansDataSource{
     );
   }
 
-  Future<Response<Map<String, dynamic>>> subscribeToPlan(SubscribeRequest request) async {
+  /// Subscribes a user to a plan.
+  ///
+  /// Overview: Initiates a subscription for the user to the specified plan.
+  /// Atomic Level: Organism – handles network integration.
+  /// Parameters:
+  /// - [request]: The model containing user and plan information for subscription.
+  /// Returns: [Response] with a success message string in the response body, e.g. "La suscripción ha sido creada correctamente."
+  /// Example:
+  /// ```dart
+  /// final response = await dataSource.subscribeToPlan(
+  ///   SubscribeRequest(userId: '123', planId: 'abc'),
+  /// );
+  /// print(response.data); // { message: "La suscripción ha sido creada correctamente." }
+  /// ```
+  Future<Response<String>> subscribeToPlan(SubscribeRequest request) async {
     final String url = '${_environment.baseUrl()}user-plans/subscribe';
     return _dio.post(
       url,
@@ -50,7 +64,7 @@ class SubscriptionPlansDataSource{
     );
   }
 
-  Future<Response<Map<String, dynamic>>> unsubscribe(String planId) async {
+  Future<Response<String>> unsubscribe(String planId) async {
     final String url = '${_environment.baseUrl()}user-plans/unsubscribe';
     return _dio.post(
       url,
@@ -61,7 +75,7 @@ class SubscriptionPlansDataSource{
     );
   }
   
-  Future<Response<Map<String, dynamic>>> renewSubscription(String planId) async {
+  Future<Response<String>> renewSubscription(String planId) async {
     final String url = '${_environment.baseUrl()}user-plans/subscription/$planId/renew';
     return _dio.post(
       url,
@@ -69,7 +83,7 @@ class SubscriptionPlansDataSource{
     );
   }
 
-  Future<Response<Map<String, dynamic>>> updateSubscriptionPaymentMethod(SubscriptionMethodModificationRequest request) async {
+  Future<Response<String>> updateSubscriptionPaymentMethod(SubscriptionMethodModificationRequest request) async {
     final String url = '${_environment.baseUrl()}user-plans/subscription/payment-method';
     return _dio.put(
       url,
