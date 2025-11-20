@@ -4,9 +4,9 @@ import 'package:either_dart/either.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
-import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/get_subscription_plans_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_method_modification_request.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_modification_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/subscription_plans_data_source.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/subscription_plans_repository.dart';
@@ -126,9 +126,9 @@ class SubscriptionPlansService {
   /// - [request]: The request model containing partner and user information.
   ///
   /// Returns [Either] with [SubscriptionPlanResponse] on success or [Failure] on error.
-  Future<Either<Failure, SubscriptionPlanResponse>> getSubscriptionPlansByPartnerAndUser(GetSubscriptionPlansRequest request) async {
+  Future<Either<Failure, SubscriptionPlanResponse>> getSubscriptionPlansByPartnerAndUser(String partnerId) async {
     try {
-      return await _subscriptionPlansRepository.getSubscriptionPlans(request);
+      return await _subscriptionPlansRepository.getSubscriptionPlans(partnerId);
     } catch (e) {
       return Left<Failure, SubscriptionPlanResponse>(ExceptionFailure.decode(Exception('Error getting subscription plans by user: $e')));
     }
@@ -168,9 +168,9 @@ class SubscriptionPlansService {
   ///   String planId,
   /// );
   /// ```
-  Future<Either<Failure, bool>> unsubscribe(String planId) async {
+  Future<Either<Failure, bool>> unsubscribe(SubscriptionModificationRequest request) async {
     try {
-      return await _subscriptionPlansRepository.unsubscribe(planId);
+      return await _subscriptionPlansRepository.unsubscribe(request);
     } catch (e) {
       return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error unsubscribing plan: $e')));
     }
@@ -189,9 +189,9 @@ class SubscriptionPlansService {
   ///   String planId,
   /// );
   /// ```
-  Future<Either<Failure, bool>> renewSubscription(String planId) async {
+  Future<Either<Failure, bool>> renewSubscription(SubscriptionModificationRequest request) async {
     try {
-      return await _subscriptionPlansRepository.renewSubscription(planId);
+      return await _subscriptionPlansRepository.renewSubscription(request);
     } catch (e) {
       return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error renewing subscription: $e')));
     }
