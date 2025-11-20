@@ -35,6 +35,7 @@ class SubscriptionPlan extends Equatable {
     this.subscribed = false,
     this.subscribedIsActive = false,
     this.subscribedIsPendingActivation = false,
+    this.isCurrentPlan = false,
     this.subscribedAt,
     this.expiresAt,
     this.trialStart,
@@ -42,9 +43,13 @@ class SubscriptionPlan extends Equatable {
     this.recommended = false,
     this.priceDiscount = 0.0,
     this.porcentageDiscount = 0.0,
+    this.errorRenewSubscription = false,
     this.messageDiscount = '',
     this.messageSuscriptionStatus = '',
     this.messageTrial = '',
+    this.showBuy = false,
+    this.showCancel = false,
+    this.showRenew = false,
   });
 
   factory SubscriptionPlan.fromJson(Map<String, dynamic> json) => _$SubscriptionPlanFromJson(json);
@@ -109,6 +114,21 @@ class SubscriptionPlan extends Equatable {
   /// The message to display for the trial status.
   final String messageTrial;
 
+  /// Whether this plan is the user's current plan.
+  final bool isCurrentPlan;
+
+  /// Indicates if there was an error when renewing the subscription.
+  final bool errorRenewSubscription;
+
+  /// Whether the buy button should be shown for this plan.
+  final bool showBuy;
+
+  /// Whether the cancel button should be shown for this plan.
+  final bool showCancel;
+  
+  /// Whether the renew button should be shown for this plan.
+  final bool showRenew;
+
   Map<String, dynamic> toJson() => _$SubscriptionPlanToJson(this);
 
   @override
@@ -119,16 +139,24 @@ class SubscriptionPlan extends Equatable {
     description,
     price,
     currencyCode,
+    currencySymbol,
     subscribed,
     subscribedIsActive,
+    subscribedIsPendingActivation,
+    isCurrentPlan,
     subscribedAt,
     expiresAt,
+    trialStart,
+    trialEnd,
     recommended,
     priceDiscount,
     porcentageDiscount,
+    errorRenewSubscription,
     messageDiscount,
     messageSuscriptionStatus,
     messageTrial,
-    currencySymbol,
+    showBuy,
+    showCancel,
+    showRenew,
   ];
 }

@@ -88,11 +88,11 @@ class SubscriptionPlanCard extends StatelessWidget {
       child: CardImageDescriptionTag(
         key: ValueKey<String>('cardImageDescriptionTag_${plan.id}'),
         imageUrl: plan.imageUrl,
-        tag: plan.subscribed && plan.subscribedIsActive
+        tag: plan.isCurrentPlan
           ? TagCorner(
               key: ValueKey<String>('tagCorner_${plan.id}'), 
               title: 'Actual',
-              showExclamationIcon: plan.messageSuscriptionStatus.contains('No pudimos renovar tu suscripción'),
+              showExclamationIcon: plan.errorRenewSubscription,
               height: styleParams.tagCornerHeight,
               width: styleParams.tagCornerWidth,
               cutSize: styleParams.tagCornerCutSize,
@@ -218,9 +218,10 @@ class SubscriptionPlanCard extends StatelessWidget {
                 ),
               ),
             ),
-            if (plan.subscribed) ...<Widget>[
-              if (!plan.subscribedIsPendingActivation)
-                ButtonGradientText(
+            if (plan.subscribed) ...<Widget>[  
+              Visibility(
+                visible: plan.showRenew,
+                child: ButtonGradientText(
                     type: ButtonGradientTextType.primary,
                     paddingButton: styleParams.onTapRenewSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
                       context,
@@ -231,18 +232,22 @@ class SubscriptionPlanCard extends StatelessWidget {
                   text: 'Renovar',
                   onPressed: () => onTapRenewSubscription(plan),
                 ),
-              ButtonGradientText(
-                type: ButtonGradientTextType.secondary,
-                paddingButton: styleParams.onTapCancelSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
-                  context, 
-                  bottom: 5, 
-                  right: 16, 
-                  left: 16,
+              ),
+              Visibility(
+                visible: plan.showCancel,
+                  child: ButtonGradientText(
+                    type: ButtonGradientTextType.secondary,
+                    paddingButton: styleParams.onTapCancelSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
+                      context, 
+                      bottom: 5, 
+                    right: 16, 
+                    left: 16,
+                  ),
+                  text: 'Cancelar suscripción',
+                  onPressed: () => onTapCancelSubscription(plan),
                 ),
-                text: 'Cancelar suscripción',
-                onPressed: () => onTapCancelSubscription(plan),
               )
-            ] else if (plan.messageTrial.isNotEmpty) ...<Widget>[
+            ] else if (plan.messageTrial.isNotEmpty && plan.showBuy) ...<Widget>[
               ButtonGradientText(
                 type: ButtonGradientTextType.primary,
                 paddingButton: styleParams.onTapFreeTrialPadding ?? StoycoScreenSize.fromLTRB(
@@ -271,17 +276,20 @@ class SubscriptionPlanCard extends StatelessWidget {
                 ),
               ),
             ] else ...<Widget> [
-              ButtonGradientText(
-                type: ButtonGradientTextType.primary,
-                paddingButton: styleParams.onTapContinuePadding ?? StoycoScreenSize.fromLTRB(
-                  context, 
-                  top: 20, 
-                  bottom: 16, 
-                  right: 16, 
-                  left: 16,
+              Visibility(
+                visible: plan.showBuy,
+                child: ButtonGradientText(
+                  type: ButtonGradientTextType.primary,
+                  paddingButton: styleParams.onTapContinuePadding ?? StoycoScreenSize.fromLTRB(
+                    context, 
+                    top: 20, 
+                    bottom: 16, 
+                    right: 16, 
+                    left: 16,
+                  ),
+                  text: 'Continuar',
+                  onPressed: () => onTapNewSubscription(plan)
                 ),
-                text: 'Continuar',
-                onPressed: () => onTapNewSubscription(plan)
               ),
             ]
           ],

@@ -20,6 +20,7 @@ SubscriptionPlan _$SubscriptionPlanFromJson(
   subscribedIsActive: json['subscribedIsActive'] as bool? ?? false,
   subscribedIsPendingActivation:
       json['subscribedIsPendingActivation'] as bool? ?? false,
+  isCurrentPlan: json['isCurrentPlan'] as bool? ?? false,
   subscribedAt: json['subscribedAt'] == null
       ? null
       : DateTime.parse(json['subscribedAt'] as String),
@@ -35,9 +36,13 @@ SubscriptionPlan _$SubscriptionPlanFromJson(
   recommended: json['recommended'] as bool? ?? false,
   priceDiscount: (json['priceDiscount'] as num?)?.toDouble() ?? 0.0,
   porcentageDiscount: (json['porcentageDiscount'] as num?)?.toDouble() ?? 0.0,
+  errorRenewSubscription: json['errorRenewSubscription'] as bool? ?? false,
   messageDiscount: json['messageDiscount'] as String? ?? '',
   messageSuscriptionStatus: json['messageSuscriptionStatus'] as String? ?? '',
   messageTrial: json['messageTrial'] as String? ?? '',
+  showBuy: json['showBuy'] as bool? ?? false,
+  showCancel: json['showCancel'] as bool? ?? false,
+  showRenew: json['showRenew'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$SubscriptionPlanToJson(SubscriptionPlan instance) =>
@@ -62,4 +67,9 @@ Map<String, dynamic> _$SubscriptionPlanToJson(SubscriptionPlan instance) =>
       'messageDiscount': instance.messageDiscount,
       'messageSuscriptionStatus': instance.messageSuscriptionStatus,
       'messageTrial': instance.messageTrial,
+      'isCurrentPlan': instance.isCurrentPlan,
+      'errorRenewSubscription': instance.errorRenewSubscription,
+      'showBuy': instance.showBuy,
+      'showCancel': instance.showCancel,
+      'showRenew': instance.showRenew,
     };
