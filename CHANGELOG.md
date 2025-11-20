@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.9] - 2025-11-20
+
+### Features
+
+- Added hover effects for ProductCardExclusiveLocked
+- Adjust AccessContent to receive nullable and empty params
+
+
 ## [2.0.8] - 2025-11-18
 
 ### Features
