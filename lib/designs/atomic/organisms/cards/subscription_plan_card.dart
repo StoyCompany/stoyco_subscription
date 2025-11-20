@@ -218,37 +218,9 @@ class SubscriptionPlanCard extends StatelessWidget {
                 ),
               ),
             ),
-            if (plan.subscribed) ...<Widget>[  
-              Visibility(
-                visible: plan.showRenew,
-                child: ButtonGradientText(
-                    type: ButtonGradientTextType.primary,
-                    paddingButton: styleParams.onTapRenewSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
-                      context,
-                      bottom: 16,
-                      right: 16, 
-                      left: 16,
-                  ),
-                  text: 'Renovar',
-                  onPressed: () => onTapRenewSubscription(plan),
-                ),
-              ),
-              Visibility(
-                visible: plan.showCancel,
-                  child: ButtonGradientText(
-                    type: ButtonGradientTextType.secondary,
-                    paddingButton: styleParams.onTapCancelSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
-                      context, 
-                      bottom: 5, 
-                    right: 16, 
-                    left: 16,
-                  ),
-                  text: 'Cancelar suscripción',
-                  onPressed: () => onTapCancelSubscription(plan),
-                ),
-              )
-            ] else if (plan.messageTrial.isNotEmpty && plan.showBuy) ...<Widget>[
-              ButtonGradientText(
+            Visibility(
+              visible: plan.showBuy,
+              child: ButtonGradientText(
                 type: ButtonGradientTextType.primary,
                 paddingButton: styleParams.onTapFreeTrialPadding ?? StoycoScreenSize.fromLTRB(
                   context, 
@@ -257,12 +229,19 @@ class SubscriptionPlanCard extends StatelessWidget {
                   right: 16, 
                   left: 16,
                 ),
-                text: plan.messageTrial,
+                text: plan.messageTrial.isEmpty ? 'Continuar' : plan.messageTrial,
                 onPressed: () => onTapNewSubscription(plan)
               ),
-              Gap(StoycoScreenSize.height(context, 16)),
-              Padding(
-                padding: StoycoScreenSize.symmetric(context, horizontal: 16),
+            ),
+            Visibility(
+              visible: plan.showBuy && plan.messageDiscount.isNotEmpty,
+              child: Padding(
+                padding: StoycoScreenSize.fromLTRB(
+                  context, 
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                ),
                 child: Text(
                   plan.messageDiscount,
                   textAlign: TextAlign.center,
@@ -275,23 +254,35 @@ class SubscriptionPlanCard extends StatelessWidget {
                   ),
                 ),
               ),
-            ] else ...<Widget> [
-              Visibility(
-                visible: plan.showBuy,
-                child: ButtonGradientText(
+            ),
+            Visibility(
+              visible: plan.showRenew,
+              child: ButtonGradientText(
                   type: ButtonGradientTextType.primary,
-                  paddingButton: styleParams.onTapContinuePadding ?? StoycoScreenSize.fromLTRB(
-                    context, 
-                    top: 20, 
-                    bottom: 16, 
+                  paddingButton: styleParams.onTapRenewSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
+                    context,
+                    bottom: 16,
                     right: 16, 
                     left: 16,
-                  ),
-                  text: 'Continuar',
-                  onPressed: () => onTapNewSubscription(plan)
                 ),
+                text: 'Renovar',
+                onPressed: () => onTapRenewSubscription(plan),
               ),
-            ]
+            ),
+            Visibility(
+              visible: plan.showCancel,
+                child: ButtonGradientText(
+                  type: ButtonGradientTextType.secondary,
+                  paddingButton: styleParams.onTapCancelSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
+                    context, 
+                    bottom: 5, 
+                  right: 16, 
+                  left: 16,
+                ),
+                text: 'Cancelar suscripción',
+                onPressed: () => onTapCancelSubscription(plan),
+              ),
+            ),
           ],
         ),
       ),
