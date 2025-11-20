@@ -1,10 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/images/image_network_blur.dart';
-import 'package:stoyco_subscription/designs/atomic/atoms/tags/tag_locked.dart';
-import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
@@ -217,7 +213,7 @@ class _EventCardExclusiveLockedState extends State<EventCardExclusiveLockedV2> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     Text(
                       widget.name,
                       style: TextStyle(
