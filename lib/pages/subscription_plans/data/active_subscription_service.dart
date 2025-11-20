@@ -529,15 +529,21 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
+    // Public content - immediate access
+    if (!isSubscriptionOnly) {
+      return true;
+    }
+
     final Either<Failure, ActiveUserPlanResponse> result =
         await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+
     return result.fold(
       (Failure failure) {
         StoyCoLogger.error(
-          'Multiple content access check failed: ${failure.message}',
-          tag: 'SubscriptionStatusService',
+          'Content access check failed: ${failure.message}',
+          tag: 'ActiveSubscriptionService',
         );
-        return !isSubscriptionOnly;
+        return false;
       },
       (ActiveUserPlanResponse response) {
         final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
@@ -545,21 +551,17 @@ class ActiveSubscriptionService {
                 (ActiveUserPlan plan) => plan.partnerId == partnerId,
               )
             : response.data;
+
         final Set<String> userPlanIds = filteredSubscriptions
             .map((ActiveUserPlan plan) => plan.plan.id)
             .toSet();
-        bool hasAccess;
-        if (!isSubscriptionOnly) {
-          hasAccess = true;
-        } else {
-          if (accessContent == null) {
-            hasAccess = false;
-          } else {
-            hasAccess =
-                accessContent.planIds?.any(userPlanIds.contains) ?? true;
-          }
-        }
-        return hasAccess;
+
+        // Check all conditions in single expression
+        return accessContent != null &&
+            (accessContent.contentId?.isNotEmpty ?? false) &&
+            (accessContent.partnerId?.isNotEmpty ?? false) &&
+            (accessContent.planIds?.isNotEmpty ?? false) &&
+            accessContent.planIds!.any(userPlanIds.contains);
       },
     );
   }
@@ -569,29 +571,62 @@ class ActiveSubscriptionService {
   /// This method efficiently determines access for each item in [contents],
   /// populating the model with its access status based on subscription rules.
   ///
-  /// - If [getIsSubscriptionOnly] returns `false`, the user is granted immediate public access.
-  /// - If [getIsSubscriptionOnly] returns `true`, access is validated against the user's active subscription plan IDs and the item's [AccessContent].
-  /// - The [hasAccessToContent] callback is used to return the model with its access field populated.
+  /// **Access Logic:**
+  /// - If [getIsSubscriptionOnly] returns `false`, user is granted immediate public access
+  /// - If [getIsSubscriptionOnly] returns `true`, access is validated against:
+  ///   - User's active subscription plan IDs
+  ///   - Item's [AccessContent] (must have valid contentId, partnerId, and planIds)
+  /// - The [hasAccessToContent] callback is used to return the model with its access field populated
   ///
-  /// ### Parameters
-  /// - `contents`: List of models to check access for.
-  /// - `getAccessContent`: Returns the [AccessContent] for a given model.
-  /// - `hasAccessToContent`: Returns the model with its access field set.
-  /// - `getIsSubscriptionOnly`: Returns whether the model requires subscription-only access.
-  /// - `partnerId`: Optional partner filter for subscription validation.
-  /// - `forceRefresh`: If true, bypasses cache and fetches fresh data.
+  /// **Access Validation for Subscription-Only Content:**
+  /// - Returns `false` if [AccessContent] is null
+  /// - Returns `false` if contentId is null or empty
+  /// - Returns `false` if partnerId is null or empty
+  /// - Returns `false` if planIds is null or empty
+  /// - Returns `true` if user has any of the required plan IDs
   ///
-  /// ### Returns
-  /// An [Either] containing a list of models of type `T` with their access status populated, or a [Failure] on error.
+  /// **Caching Behavior:**
+  /// - Uses the same caching strategy as [getActiveUserSubscriptions]
+  /// - Pass [forceRefresh] to bypass cache
   ///
-  /// ### Example
+  /// **Parameters:**
+  /// - [contents]: List of models to check access for
+  /// - [getAccessContent]: Function that returns the [AccessContent] for a given model
+  /// - [hasAccessToContent]: Function that returns the model with its access field set
+  /// - [getIsSubscriptionOnly]: Function that returns whether the model requires subscription-only access
+  /// - [partnerId]: Optional partner filter for subscription validation
+  /// - [forceRefresh]: If true, bypasses cache and fetches fresh data
+  ///
+  /// **Returns:**
+  /// A list of models of type `T` with their access status populated.
+  ///
+  /// **Example:**
   /// ```dart
-  /// final result = await service.checkMultipleContentAccessGenerated<MyModel>(
-  ///   contents: myModelList,
-  ///   getAccessContent: (model) => model.accessContent,
-  ///   hasAccessToContent: (model, hasAccess) => model.copyWith(hasAccess: hasAccess),
-  ///   getIsSubscriptionOnly: (model) => model.isSubscriptionOnly,
+  /// // With Event model
+  /// final events = await service.hasAccessToMultiplesContent<Event>(
+  ///   contents: eventList,
+  ///   getAccessContent: (event) => event.accessContent,
+  ///   hasAccessToContent: (event, hasAccess) => event.copyWith(hasAccess: hasAccess),
+  ///   getIsSubscriptionOnly: (event) => event.isSubscriptionOnly,
   /// );
+  ///
+  /// // With CulturalAsset model
+  /// final assets = await service.hasAccessToMultiplesContent<CulturalAsset>(
+  ///   contents: assetList,
+  ///   getAccessContent: (asset) => asset.accessContent,
+  ///   hasAccessToContent: (asset, hasAccess) => asset.copyWith(hasAccess: hasAccess),
+  ///   getIsSubscriptionOnly: (asset) => asset.requiresSubscription,
+  ///   partnerId: '507f1f77bcf86cd799439012',
+  /// );
+  ///
+  /// // Process results
+  /// for (final event in events) {
+  ///   if (event.hasAccess) {
+  ///     print('✅ ${event.title} - Accessible');
+  ///   } else {
+  ///     print('🔒 ${event.title} - Locked');
+  ///   }
+  /// }
   /// ```
   Future<List<T>> hasAccessToMultiplesContent<T>({
     required List<T> contents,
@@ -603,11 +638,12 @@ class ActiveSubscriptionService {
   }) async {
     final Either<Failure, ActiveUserPlanResponse> result =
         await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+
     return result.fold(
       (Failure failure) {
         StoyCoLogger.error(
           'Multiple content access check failed: ${failure.message}',
-          tag: 'SubscriptionStatusService',
+          tag: 'ActiveSubscriptionService',
         );
         return _handleErrorContents<T>(
           contents: contents,
@@ -621,30 +657,48 @@ class ActiveSubscriptionService {
                 (ActiveUserPlan plan) => plan.partnerId == partnerId,
               )
             : response.data;
+
         final Set<String> userPlanIds = filteredSubscriptions
             .map((ActiveUserPlan plan) => plan.plan.id)
             .toSet();
-        final List<T> resultList = contents.map((T item) {
+
+        return contents.map((T item) {
           final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
-          bool hasAccess;
+
+          // Public content - immediate access
           if (!isSubscriptionOnly) {
-            hasAccess = true;
-          } else {
-            final AccessContent? content = getAccessContent(item);
-            if (content == null) {
-              hasAccess = false;
-            } else {
-              hasAccess = content.planIds?.any(userPlanIds.contains) ?? true;
-            }
+            return hasAccessToContent(item, true);
           }
+
+          // Subscription-only content - validate all conditions in single expression
+          final AccessContent? content = getAccessContent(item);
+          final bool hasAccess =
+              content != null &&
+              (content.contentId?.isNotEmpty ?? false) &&
+              (content.partnerId?.isNotEmpty ?? false) &&
+              (content.planIds?.isNotEmpty ?? false) &&
+              content.planIds!.any(userPlanIds.contains);
+
           return hasAccessToContent(item, hasAccess);
         }).toList();
-        return resultList;
       },
     );
   }
 
   /// Returns contents with hasAccess set to false for items where getIsSubscriptionOnly is true.
+  ///
+  /// This helper method is used when there's an error fetching subscription data.
+  /// It ensures that:
+  /// - Public content ([getIsSubscriptionOnly] returns false) remains accessible
+  /// - Subscription-only content is marked as inaccessible for safety
+  ///
+  /// **Parameters:**
+  /// - [contents]: List of content items to process
+  /// - [getIsSubscriptionOnly]: Function to determine if content requires subscription
+  /// - [hasAccessToContent]: Function to update the model with access status
+  ///
+  /// **Returns:**
+  /// A list of models with access status set based on subscription requirement.
   List<T> _handleErrorContents<T>({
     required List<T> contents,
     required bool Function(T) getIsSubscriptionOnly,
