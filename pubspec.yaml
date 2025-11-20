@@ -29,10 +29,10 @@ dependencies:
   shimmer: ^3.0.0
 
   stoyco_shared:
-    #path: ../stoyco-shared
-    git:
-      url: https://github.com/StoyCompany/stoyco-shared.git
-      ref: test
+    path: ../stoyco-shared
+    # git:
+    #   url: https://github.com/StoyCompany/stoyco-shared.git
+    #   ref: test
 
 dev_dependencies:
   build_runner: ^2.4.7

@@ -447,7 +447,8 @@ class ActiveSubscriptionService {
   ///   },
   /// );
   /// ```
-  Future<Either<Failure, List<ActiveUserPlan>>> getActiveSubscriptionsForPartner({
+  Future<Either<Failure, List<ActiveUserPlan>>>
+  getActiveSubscriptionsForPartner({
     required String partnerId,
     bool forceRefresh = false,
   }) async {
@@ -528,7 +529,8 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result =
+        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
     return result.fold(
       (Failure failure) {
         StoyCoLogger.error(
@@ -538,8 +540,14 @@ class ActiveSubscriptionService {
         return !isSubscriptionOnly;
       },
       (ActiveUserPlanResponse response) {
-        final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null ? response.data.where((ActiveUserPlan plan) => plan.partnerId == partnerId) : response.data;
-        final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
+        final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
+            ? response.data.where(
+                (ActiveUserPlan plan) => plan.partnerId == partnerId,
+              )
+            : response.data;
+        final Set<String> userPlanIds = filteredSubscriptions
+            .map((ActiveUserPlan plan) => plan.plan.id)
+            .toSet();
         bool hasAccess;
         if (!isSubscriptionOnly) {
           hasAccess = true;
@@ -547,7 +555,8 @@ class ActiveSubscriptionService {
           if (accessContent == null) {
             hasAccess = false;
           } else {
-            hasAccess = accessContent.planIds.any(userPlanIds.contains);
+            hasAccess =
+                accessContent.planIds?.any(userPlanIds.contains) ?? true;
           }
         }
         return hasAccess;
@@ -592,7 +601,8 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result =
+        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
     return result.fold(
       (Failure failure) {
         StoyCoLogger.error(
@@ -606,8 +616,14 @@ class ActiveSubscriptionService {
         );
       },
       (ActiveUserPlanResponse response) {
-        final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null ? response.data.where((ActiveUserPlan plan) => plan.partnerId == partnerId) : response.data;
-        final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
+        final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
+            ? response.data.where(
+                (ActiveUserPlan plan) => plan.partnerId == partnerId,
+              )
+            : response.data;
+        final Set<String> userPlanIds = filteredSubscriptions
+            .map((ActiveUserPlan plan) => plan.plan.id)
+            .toSet();
         final List<T> resultList = contents.map((T item) {
           final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
           bool hasAccess;
@@ -618,7 +634,7 @@ class ActiveSubscriptionService {
             if (content == null) {
               hasAccess = false;
             } else {
-              hasAccess = content.planIds.any(userPlanIds.contains);
+              hasAccess = content.planIds?.any(userPlanIds.contains) ?? true;
             }
           }
           return hasAccessToContent(item, hasAccess);

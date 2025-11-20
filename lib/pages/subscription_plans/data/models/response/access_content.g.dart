@@ -8,10 +8,10 @@ part of 'access_content.dart';
 
 AccessContent _$AccessContentFromJson(Map<String, dynamic> json) =>
     AccessContent(
-      contentId: json['contentId'] as String,
-      partnerId: json['partnerId'] as String,
-      planIds: (json['planIds'] as List<dynamic>)
-          .map((e) => e as String)
+      contentId: AccessContent._emptyStringToNull(json['contentId'] as String?),
+      partnerId: AccessContent._emptyStringToNull(json['partnerId'] as String?),
+      planIds: (json['planIds'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
       visibleFrom: json['visibleFrom'] == null
           ? null
@@ -23,8 +23,8 @@ AccessContent _$AccessContentFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$AccessContentToJson(AccessContent instance) =>
     <String, dynamic>{
-      'contentId': instance.contentId,
-      'partnerId': instance.partnerId,
+      'contentId': AccessContent._nullToEmptyString(instance.contentId),
+      'partnerId': AccessContent._nullToEmptyString(instance.partnerId),
       'planIds': instance.planIds,
       'visibleFrom': instance.visibleFrom?.toIso8601String(),
       'visibleUntil': instance.visibleUntil?.toIso8601String(),
