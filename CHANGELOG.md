@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.9] - 2025-11-20
+
+### Fixes
+
+- Update subscription plan model and UI to support new state management.
+
 ## [2.0.8] - 2025-11-18
 
 ### Features
