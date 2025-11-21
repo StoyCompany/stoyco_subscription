@@ -63,36 +63,33 @@ class SubscriptionPlanCard extends StatelessWidget {
   /// The subscription plan model to display.
   final SubscriptionPlan plan;
 
-
   /// Style parameters for customizing the appearance of the card.
   final SubscriptionPlanScreenStyleParams styleParams;
-
 
   /// Callback when the renew subscription action is tapped.
   final void Function(SubscriptionPlan) onTapRenewSubscription;
 
-
   /// Callback when the cancel subscription action is tapped.
   final void Function(SubscriptionPlan) onTapCancelSubscription;
-
 
   /// Callback when the new subscription or free trial action is tapped.
   final void Function(SubscriptionPlan) onTapNewSubscription;
 
-  
-
   @override
   Widget build(BuildContext context) {
+
+    final UserStatus statusUserSubscription = plan.userStatus ?? const UserStatus.empty();
+
     return HoverAnimationCard(
       key: ValueKey<String>('hoverAnimationCard_${plan.id}'),
       child: CardImageDescriptionTag(
         key: ValueKey<String>('cardImageDescriptionTag_${plan.id}'),
         imageUrl: plan.imageUrl,
-        tag: plan.isCurrentPlan
+        tag: statusUserSubscription.isCurrent
           ? TagCorner(
               key: ValueKey<String>('tagCorner_${plan.id}'), 
               title: 'Actual',
-              showExclamationIcon: plan.errorRenewSubscription,
+              showExclamationIcon: plan.actions.errorRenewSubscription,
               height: styleParams.tagCornerHeight,
               width: styleParams.tagCornerWidth,
               cutSize: styleParams.tagCornerCutSize,
@@ -116,7 +113,7 @@ class SubscriptionPlanCard extends StatelessWidget {
               ) : null,
         description: Column(
           children: <Widget>[
-            if (plan.imageUrl.isEmpty && plan.subscribed)
+            if (plan.imageUrl.isEmpty && statusUserSubscription.isCurrent)
               Gap(StoycoScreenSize.height(context, 40)),
             Padding(
               padding: StoycoScreenSize.symmetric(context, horizontal: 16),
@@ -181,7 +178,7 @@ class SubscriptionPlanCard extends StatelessWidget {
               htmlContent: plan.description,
             ),
             Visibility(
-              visible: plan.messageSuscriptionStatus.isNotEmpty,
+              visible: statusUserSubscription.messageSubscriptionStatus.isNotEmpty,
               child: Padding(
                 padding: styleParams.messageInformationPadding ?? StoycoScreenSize.fromLTRB(
                   context, 
@@ -202,7 +199,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                     Gap(StoycoScreenSize.width(context, 8)),
                     Expanded(
                       child: Text(
-                        plan.messageSuscriptionStatus,
+                        statusUserSubscription.messageSubscriptionStatus,
                         style: styleParams.messageInformationTextStyle ?? GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             fontSize: StoycoScreenSize.fontSize(context, 16),
@@ -219,7 +216,7 @@ class SubscriptionPlanCard extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: plan.showBuy,
+              visible: plan.actions.showBuy,
               child: ButtonGradientText(
                 type: ButtonGradientTextType.primary,
                 paddingButton: styleParams.onTapFreeTrialPadding ?? StoycoScreenSize.fromLTRB(
@@ -229,12 +226,12 @@ class SubscriptionPlanCard extends StatelessWidget {
                   right: 16, 
                   left: 16,
                 ),
-                text: plan.messageTrial.isEmpty ? 'Continuar' : plan.messageTrial,
+                text: plan.actions.messageTrial.isEmpty ? 'Continuar' : plan.actions.messageTrial,
                 onPressed: () => onTapNewSubscription(plan)
               ),
             ),
             Visibility(
-              visible: plan.showBuy && plan.messageDiscount.isNotEmpty,
+              visible: plan.actions.showBuy && plan.actions.messageDiscount.isNotEmpty,
               child: Padding(
                 padding: StoycoScreenSize.fromLTRB(
                   context, 
@@ -243,7 +240,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                   top: 16,
                 ),
                 child: Text(
-                  plan.messageDiscount,
+                  plan.actions.messageDiscount,
                   textAlign: TextAlign.center,
                   style: styleParams.planMessageDiscountTextStyle ?? GoogleFonts.montserrat(
                     textStyle: TextStyle(
@@ -256,7 +253,7 @@ class SubscriptionPlanCard extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: plan.showRenew,
+              visible: plan.actions.showRenew,
               child: ButtonGradientText(
                   type: ButtonGradientTextType.primary,
                   paddingButton: styleParams.onTapRenewSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
@@ -270,7 +267,7 @@ class SubscriptionPlanCard extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: plan.showCancel,
+              visible: plan.actions.showCancel,
                 child: ButtonGradientText(
                   type: ButtonGradientTextType.secondary,
                   paddingButton: styleParams.onTapCancelSubscriptionPadding ?? StoycoScreenSize.fromLTRB(

@@ -1,29 +1,16 @@
+
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'subscription_plan.g.dart';
 
+
 /// Model representing a subscription plan option (child).
 @JsonSerializable()
 class SubscriptionPlan extends Equatable {
   /// Creates a [SubscriptionPlan] model.
-  ///
-  /// [name] - The name/title of the plan.
-  /// [imageUrl] - The image URL for the plan.
-  /// [description] - The HTML description of the plan's benefits.
-  /// [price] - The price of the plan.
-  /// [currencyCode] - The currency code or text (e.g., 'MXN').
-  /// [currencySymbol] - The currency symbol (e.g., '$').
-  /// [subscribed] - Whether the user is currently subscribed to this plan.
-  /// [subscribedIsActive] - Whether the plan is currently active.
-  /// [subscribedAt] - The date/time when the user subscribed.
-  /// [expiresAt] - The date/time when the subscription expires.
-  /// [recommended] - Whether this plan is recommended.
-  /// [priceDiscount] - The discounted price, if any.
-  /// [porcentageDiscount] - The discount percentage, if any.
-  /// [messageDiscount] - The message to display for the discount.
-  /// [messageSuscriptionStatus] - The message to display for the subscription status.
-  /// [messageTrial] - The message to display for the trial status.
+  /// [userStatus] - The user status for this plan (can be null).
+  /// [actions] - The actions available for this plan (can be null).
   const SubscriptionPlan({
     required this.id,
     required this.name,
@@ -32,24 +19,9 @@ class SubscriptionPlan extends Equatable {
     required this.price,
     required this.currencyCode,
     required this.currencySymbol,
-    this.subscribed = false,
-    this.subscribedIsActive = false,
-    this.subscribedIsPendingActivation = false,
-    this.isCurrentPlan = false,
-    this.subscribedAt,
-    this.expiresAt,
-    this.trialStart,
-    this.trialEnd,
+    required this.actions,
     this.recommended = false,
-    this.priceDiscount = 0.0,
-    this.porcentageDiscount = 0.0,
-    this.errorRenewSubscription = false,
-    this.messageDiscount = '',
-    this.messageSuscriptionStatus = '',
-    this.messageTrial = '',
-    this.showBuy = false,
-    this.showCancel = false,
-    this.showRenew = false,
+    this.userStatus,
   });
 
   factory SubscriptionPlan.fromJson(Map<String, dynamic> json) => _$SubscriptionPlanFromJson(json);
@@ -75,59 +47,14 @@ class SubscriptionPlan extends Equatable {
   /// The currency symbol (e.g., '$').
   final String currencySymbol;
 
-  /// Whether the user is currently subscribed to this plan.
-  final bool subscribed;
-
-  /// Whether the plan is currently active.
-  final bool subscribedIsActive;
-
-  /// Whether the subscription is pending activation.
-  final bool subscribedIsPendingActivation;
-
-  /// The date/time when the user subscribed.
-  final DateTime? subscribedAt;
-
-  /// The date/time when the subscription expires.
-  final DateTime? expiresAt;
-
-  /// The date/time when the trial starts.
-  final DateTime? trialStart;
-
-  /// The date/time when the trial ends.
-  final DateTime? trialEnd;
-
   /// Whether this plan is recommended.
   final bool recommended;
 
-  /// The discounted price, if any.
-  final double priceDiscount;
+  /// The user status for this plan (can be null).
+  final UserStatus? userStatus;
 
-  /// The discount percentage, if any.
-  final double porcentageDiscount;
-
-  /// The message to display for the discount.
-  final String messageDiscount;
-
-  /// The message to display for the subscription status.
-  final String messageSuscriptionStatus;
-
-  /// The message to display for the trial status.
-  final String messageTrial;
-
-  /// Whether this plan is the user's current plan.
-  final bool isCurrentPlan;
-
-  /// Indicates if there was an error when renewing the subscription.
-  final bool errorRenewSubscription;
-
-  /// Whether the buy button should be shown for this plan.
-  final bool showBuy;
-
-  /// Whether the cancel button should be shown for this plan.
-  final bool showCancel;
-  
-  /// Whether the renew button should be shown for this plan.
-  final bool showRenew;
+  /// The actions available for this plan (can be null).
+  final PlanActions actions;
 
   Map<String, dynamic> toJson() => _$SubscriptionPlanToJson(this);
 
@@ -140,23 +67,106 @@ class SubscriptionPlan extends Equatable {
     price,
     currencyCode,
     currencySymbol,
-    subscribed,
-    subscribedIsActive,
-    subscribedIsPendingActivation,
-    isCurrentPlan,
+    recommended,
+    userStatus,
+    actions,
+  ];
+}
+
+/// Model representing the user status for a subscription plan.
+@JsonSerializable()
+class UserStatus extends Equatable {
+  const UserStatus({
+    this.isSubscribed = false,
+    this.isActive = false,
+    this.isPendingActivation = false,
+    this.isCurrent = false,
+    this.messageSubscriptionStatus = '',
+    this.subscribedAt,
+    this.expiresAt,
+    this.trialStart,
+    this.trialEnd,
+  });
+
+  const UserStatus.empty() : 
+    isSubscribed = false,
+    isActive = false,
+    isPendingActivation = false,
+    isCurrent = false,
+    messageSubscriptionStatus = '',
+    subscribedAt = null,
+    expiresAt = null,
+    trialStart = null,
+    trialEnd = null;
+
+  factory UserStatus.fromJson(Map<String, dynamic> json) => _$UserStatusFromJson(json);
+
+  final bool isSubscribed;
+  final bool isActive;
+  final bool isPendingActivation;
+  final bool isCurrent;
+  final String messageSubscriptionStatus;
+  @JsonKey(includeIfNull: true)
+  final DateTime? subscribedAt;
+  @JsonKey(includeIfNull: true)
+  final DateTime? expiresAt;
+  @JsonKey(includeIfNull: true)
+  final DateTime? trialStart;
+  @JsonKey(includeIfNull: true)
+  final DateTime? trialEnd;
+
+  Map<String, dynamic> toJson() => _$UserStatusToJson(this);
+
+  @override
+  List<Object?> get props => <Object?>[
+    isSubscribed,
+    isActive,
+    isPendingActivation,
+    isCurrent,
+    messageSubscriptionStatus,
     subscribedAt,
     expiresAt,
     trialStart,
     trialEnd,
-    recommended,
+  ];
+}
+
+/// Model representing the actions available for a subscription plan.
+@JsonSerializable()
+class PlanActions extends Equatable {
+  const PlanActions({
+    this.showBuy = false,
+    this.showRenew = false,
+    this.showCancel = false,
+    this.errorRenewSubscription = false,
+    this.priceDiscount = 0.0,
+    this.porcentageDiscount = 0.0,
+    this.messageDiscount = '',
+    this.messageTrial = '',
+  });
+
+  factory PlanActions.fromJson(Map<String, dynamic> json) => _$PlanActionsFromJson(json);
+
+  final bool showBuy;
+  final bool showRenew;
+  final bool showCancel;
+  final bool errorRenewSubscription;
+  final double priceDiscount;
+  final double porcentageDiscount;
+  final String messageDiscount;
+  final String messageTrial;
+
+  Map<String, dynamic> toJson() => _$PlanActionsToJson(this);
+
+  @override
+  List<Object?> get props => <Object?>[
+    showBuy,
+    showRenew,
+    showCancel,
+    errorRenewSubscription,
     priceDiscount,
     porcentageDiscount,
-    errorRenewSubscription,
     messageDiscount,
-    messageSuscriptionStatus,
     messageTrial,
-    showBuy,
-    showCancel,
-    showRenew,
   ];
 }
