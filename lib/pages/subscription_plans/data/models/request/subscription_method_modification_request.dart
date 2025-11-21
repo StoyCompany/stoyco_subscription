@@ -9,17 +9,20 @@ class SubscriptionMethodModificationRequest extends Equatable {
 
   const SubscriptionMethodModificationRequest({
     required this.planId,
+    required this.planRecurrence,
     required this.paymentMethodId,
   });
 
   factory SubscriptionMethodModificationRequest.fromJson(Map<String, dynamic> json) => _$SubscriptionMethodModificationRequestFromJson(json);
 
   final String planId;
+  final String planRecurrence;
   final String paymentMethodId;
   
   @override
   List<Object?> get props => <Object?>[
     planId,
+    planRecurrence,
     paymentMethodId,
   ];
 

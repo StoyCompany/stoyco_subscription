@@ -30,7 +30,7 @@ class SubscriptionLockedContent extends StatelessWidget {
     }
 
     return Stack(
-      children: [
+      children: <Widget>[
         Opacity(opacity: 1, child: IgnorePointer(child: child)),
         Positioned.fill(
           child: GestureDetector(
@@ -45,7 +45,7 @@ class SubscriptionLockedContent extends StatelessWidget {
               linearGradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
+                colors: <Color>[
                   Colors.white.withOpacity(0.02),
                   Colors.white.withOpacity(0.01),
                 ],
@@ -53,13 +53,13 @@ class SubscriptionLockedContent extends StatelessWidget {
               borderGradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
+                colors: <Color>[
                   Colors.white.withOpacity(0.05),
                   Colors.white.withOpacity(0.02),
                 ],
               ),
               child: Stack(
-                children: [
+                children: <Widget>[
                   Positioned(
                     left: indicatorPosition.left != null
                         ? StoycoScreenSize.width(
@@ -103,7 +103,7 @@ class SubscriptionLockedContent extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           spacing: StoycoScreenSize.width(context, 8),
                           mainAxisSize: MainAxisSize.min,
-                          children: [
+                          children: <Widget>[
                             StoycoAssets
                                 .lib
                                 .assets

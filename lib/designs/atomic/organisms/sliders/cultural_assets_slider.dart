@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/cultural_asset_card.dart';
-import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
 

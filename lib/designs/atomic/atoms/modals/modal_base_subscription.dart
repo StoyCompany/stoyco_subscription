@@ -102,48 +102,42 @@ class ModalBaseSubscription extends StatelessWidget {
         buttonText = nameOnTapNavigate ?? 'Continuar';
     }
 
-    return PopScope(
-      canPop: false,
-      child: Padding(
-        padding: StoycoScreenSize.symmetric(
-            context,
-            horizontal: 24,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          spacing: StoycoScreenSize.height(context, spacing),
-          children: <Widget>[
-            icon,
+    return Padding(
+      padding: StoycoScreenSize.symmetric( context, horizontal: 24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: StoycoScreenSize.height(context, spacing),
+        children: <Widget>[
+          icon,
+          Text(
+            title,
+            style: titleStyle ?? GoogleFonts.montserrat(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: StoycoScreenSize.fontSize(context, 26),
+                color: StoycoColors.softWhite,
+              ),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          if (description != null)
             Text(
-              title,
-              style: titleStyle ?? GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: StoycoScreenSize.fontSize(context, 26),
+              description!,
+              style: descriptionStyle ?? GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.w400,
+                  fontSize: StoycoScreenSize.fontSize(context, 16),
                   color: StoycoColors.softWhite,
                 ),
               ),
               textAlign: TextAlign.center,
             ),
-            if (description != null)
-              Text(
-                description!,
-                style: descriptionStyle ?? GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.w400,
-                    fontSize: StoycoScreenSize.fontSize(context, 16),
-                    color: StoycoColors.softWhite,
-                  ),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ButtonGradientText(
-              type: ButtonGradientTextType.primary,
-              text: buttonText,
-              onPressed: onTapNavigate,
-            ),
-          ],
-        ),
+          ButtonGradientText(
+            type: ButtonGradientTextType.primary,
+            text: buttonText,
+            onPressed: onTapNavigate,
+          ),
+        ],
       ),
     );
   }

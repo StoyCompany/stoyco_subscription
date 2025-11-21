@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/cards/event_card_exclusive_locked.dart';
 import 'package:stoyco_subscription/designs/atomic/templates/sliders/events/events_slider_style.dart';
-import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
-import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template events_slider}

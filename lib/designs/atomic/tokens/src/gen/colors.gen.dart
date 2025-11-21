@@ -92,6 +92,9 @@ class StoycoColors {
   /// Color: #DE2424
   static const Color errorText = Color(0xFFDE2424);
 
+  /// Color: #202532
+  static const Color gray = Color(0xFF202532);
+
   /// Color: #D9D9D9
   static const Color grayText = Color(0xFFD9D9D9);
 
@@ -172,7 +175,4 @@ class StoycoColors {
 
   /// Color: #F7F6FA
   static const Color white3 = Color(0xFFF7F6FA);
-
-   /// Color: #202532
-  static const Color gray = Color(0xFF202532);
 }

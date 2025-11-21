@@ -63,36 +63,33 @@ class SubscriptionPlanCard extends StatelessWidget {
   /// The subscription plan model to display.
   final SubscriptionPlan plan;
 
-
   /// Style parameters for customizing the appearance of the card.
   final SubscriptionPlanScreenStyleParams styleParams;
-
 
   /// Callback when the renew subscription action is tapped.
   final void Function(SubscriptionPlan) onTapRenewSubscription;
 
-
   /// Callback when the cancel subscription action is tapped.
   final void Function(SubscriptionPlan) onTapCancelSubscription;
-
 
   /// Callback when the new subscription or free trial action is tapped.
   final void Function(SubscriptionPlan) onTapNewSubscription;
 
-  
-
   @override
   Widget build(BuildContext context) {
+
+    final UserStatus statusUserSubscription = plan.userStatus ?? const UserStatus.empty();
+
     return HoverAnimationCard(
       key: ValueKey<String>('hoverAnimationCard_${plan.id}'),
       child: CardImageDescriptionTag(
         key: ValueKey<String>('cardImageDescriptionTag_${plan.id}'),
         imageUrl: plan.imageUrl,
-        tag: plan.subscribed && plan.subscribedIsActive
+        tag: statusUserSubscription.isCurrent
           ? TagCorner(
               key: ValueKey<String>('tagCorner_${plan.id}'), 
               title: 'Actual',
-              showExclamationIcon: plan.messageSuscriptionStatus.contains('No pudimos renovar tu suscripción'),
+              showExclamationIcon: plan.actions.errorRenewSubscription,
               height: styleParams.tagCornerHeight,
               width: styleParams.tagCornerWidth,
               cutSize: styleParams.tagCornerCutSize,
@@ -116,7 +113,7 @@ class SubscriptionPlanCard extends StatelessWidget {
               ) : null,
         description: Column(
           children: <Widget>[
-            if (plan.imageUrl.isEmpty && plan.subscribed)
+            if (plan.imageUrl.isEmpty && statusUserSubscription.isCurrent)
               Gap(StoycoScreenSize.height(context, 40)),
             Padding(
               padding: StoycoScreenSize.symmetric(context, horizontal: 16),
@@ -181,7 +178,7 @@ class SubscriptionPlanCard extends StatelessWidget {
               htmlContent: plan.description,
             ),
             Visibility(
-              visible: plan.messageSuscriptionStatus.isNotEmpty,
+              visible: statusUserSubscription.messageSubscriptionStatus.isNotEmpty,
               child: Padding(
                 padding: styleParams.messageInformationPadding ?? StoycoScreenSize.fromLTRB(
                   context, 
@@ -202,7 +199,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                     Gap(StoycoScreenSize.width(context, 8)),
                     Expanded(
                       child: Text(
-                        plan.messageSuscriptionStatus,
+                        statusUserSubscription.messageSubscriptionStatus,
                         style: styleParams.messageInformationTextStyle ?? GoogleFonts.montserrat(
                           textStyle: TextStyle(
                             fontSize: StoycoScreenSize.fontSize(context, 16),
@@ -218,32 +215,9 @@ class SubscriptionPlanCard extends StatelessWidget {
                 ),
               ),
             ),
-            if (plan.subscribed) ...<Widget>[
-              if (!plan.subscribedIsPendingActivation)
-                ButtonGradientText(
-                    type: ButtonGradientTextType.primary,
-                    paddingButton: styleParams.onTapRenewSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
-                      context,
-                      bottom: 16,
-                      right: 16, 
-                      left: 16,
-                  ),
-                  text: 'Renovar',
-                  onPressed: () => onTapRenewSubscription(plan),
-                ),
-              ButtonGradientText(
-                type: ButtonGradientTextType.secondary,
-                paddingButton: styleParams.onTapCancelSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
-                  context, 
-                  bottom: 5, 
-                  right: 16, 
-                  left: 16,
-                ),
-                text: 'Cancelar suscripción',
-                onPressed: () => onTapCancelSubscription(plan),
-              )
-            ] else if (plan.messageTrial.isNotEmpty) ...<Widget>[
-              ButtonGradientText(
+            Visibility(
+              visible: plan.actions.showBuy,
+              child: ButtonGradientText(
                 type: ButtonGradientTextType.primary,
                 paddingButton: styleParams.onTapFreeTrialPadding ?? StoycoScreenSize.fromLTRB(
                   context, 
@@ -252,14 +226,21 @@ class SubscriptionPlanCard extends StatelessWidget {
                   right: 16, 
                   left: 16,
                 ),
-                text: plan.messageTrial,
+                text: plan.actions.messageTrial.isEmpty ? 'Continuar' : plan.actions.messageTrial,
                 onPressed: () => onTapNewSubscription(plan)
               ),
-              Gap(StoycoScreenSize.height(context, 16)),
-              Padding(
-                padding: StoycoScreenSize.symmetric(context, horizontal: 16),
+            ),
+            Visibility(
+              visible: plan.actions.showBuy && plan.actions.messageDiscount.isNotEmpty,
+              child: Padding(
+                padding: StoycoScreenSize.fromLTRB(
+                  context, 
+                  left: 16,
+                  right: 16,
+                  top: 16,
+                ),
                 child: Text(
-                  plan.messageDiscount,
+                  plan.actions.messageDiscount,
                   textAlign: TextAlign.center,
                   style: styleParams.planMessageDiscountTextStyle ?? GoogleFonts.montserrat(
                     textStyle: TextStyle(
@@ -270,20 +251,35 @@ class SubscriptionPlanCard extends StatelessWidget {
                   ),
                 ),
               ),
-            ] else ...<Widget> [
-              ButtonGradientText(
-                type: ButtonGradientTextType.primary,
-                paddingButton: styleParams.onTapContinuePadding ?? StoycoScreenSize.fromLTRB(
-                  context, 
-                  top: 20, 
-                  bottom: 16, 
+            ),
+            Visibility(
+              visible: plan.actions.showRenew,
+              child: ButtonGradientText(
+                  type: ButtonGradientTextType.primary,
+                  paddingButton: styleParams.onTapRenewSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
+                    context,
+                    bottom: 16,
+                    right: 16, 
+                    left: 16,
+                ),
+                text: 'Renovar',
+                onPressed: () => onTapRenewSubscription(plan),
+              ),
+            ),
+            Visibility(
+              visible: plan.actions.showCancel,
+                child: ButtonGradientText(
+                  type: ButtonGradientTextType.secondary,
+                  paddingButton: styleParams.onTapCancelSubscriptionPadding ?? StoycoScreenSize.fromLTRB(
+                    context, 
+                    bottom: 5, 
                   right: 16, 
                   left: 16,
                 ),
-                text: 'Continuar',
-                onPressed: () => onTapNewSubscription(plan)
+                text: 'Cancelar suscripción',
+                onPressed: () => onTapCancelSubscription(plan),
               ),
-            ]
+            ),
           ],
         ),
       ),

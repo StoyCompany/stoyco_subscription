@@ -272,12 +272,9 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                                             child: SubscriptionPlanCard(
                                               key: ValueKey<String>(plan.id),
                                               plan: plan,
-                                              onTapCancelSubscription: widget
-                                                  .onTapCancelSubscription,
-                                              onTapNewSubscription:
-                                                  widget.onTapNewSubscription,
-                                              onTapRenewSubscription:
-                                                  widget.onTapRenewSubscription,
+                                              onTapCancelSubscription: widget.onTapCancelSubscription,
+                                              onTapNewSubscription: widget.onTapNewSubscription,
+                                              onTapRenewSubscription: widget.onTapRenewSubscription,
                                               styleParams: widget.styleParams,
                                             ),
                                           );
