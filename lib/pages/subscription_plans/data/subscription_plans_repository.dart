@@ -7,9 +7,9 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/excepti
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart' as local_failure;
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
-import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/get_subscription_plans_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_method_modification_request.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_modification_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/subscription_plans_data_source.dart';
 
@@ -34,9 +34,9 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
   ///
   /// Returns an [Either] with [Failure] on error or [SubscriptionPlanResponse] on success.
   /// Results are cached for 5 minutes.
-  Future<Either<local_failure.Failure, SubscriptionPlanResponse>> getSubscriptionPlans(GetSubscriptionPlansRequest request) async {
+  Future<Either<local_failure.Failure, SubscriptionPlanResponse>> getSubscriptionPlans(String partnerId) async {
     try {
-      final Response<Map<String, dynamic>> response = await _dataSource.getSubscriptionPlans(request);
+      final Response<Map<String, dynamic>> response = await _dataSource.getSubscriptionPlans(partnerId);
 
       if (response.statusCode == 200 && response.data != null) {
         return Right<local_failure.Failure, SubscriptionPlanResponse>(
@@ -81,9 +81,9 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
     }
   }
 
-  Future<Either<Failure, bool>> unsubscribe(String planId) async {
+  Future<Either<Failure, bool>> unsubscribe(SubscriptionModificationRequest request) async {
       try {
-        final Response<String> response = await _dataSource.unsubscribe(planId);
+        final Response<String> response = await _dataSource.unsubscribe(request);
         if (response.statusCode == 200) {
           return const Right<Failure, bool>(true);
         } else {
@@ -98,9 +98,9 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
       }
     }
 
-    Future<Either<Failure, bool>> renewSubscription(String planId) async {
+    Future<Either<Failure, bool>> renewSubscription(SubscriptionModificationRequest request) async {
       try {
-        final Response<String> response = await _dataSource.renewSubscription(planId);
+        final Response<String> response = await _dataSource.renewSubscription(request);
         if (response.statusCode == 200) {
           return const Right<Failure, bool>(true);
         } else {
