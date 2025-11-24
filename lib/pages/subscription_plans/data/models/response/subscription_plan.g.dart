@@ -15,13 +15,11 @@ SubscriptionPlan _$SubscriptionPlanFromJson(Map<String, dynamic> json) =>
       price: (json['price'] as num).toDouble(),
       currencyCode: json['currencyCode'] as String,
       currencySymbol: json['currencySymbol'] as String,
+      actions: PlanActions.fromJson(json['actions'] as Map<String, dynamic>),
       recommended: json['recommended'] as bool? ?? false,
       userStatus: json['userStatus'] == null
           ? null
           : UserStatus.fromJson(json['userStatus'] as Map<String, dynamic>),
-      actions: json['actions'] == null
-          ? null
-          : PlanActions.fromJson(json['actions'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SubscriptionPlanToJson(SubscriptionPlan instance) =>

@@ -1,5 +1,12 @@
 # Changelog
 
+##[2.0.10] - 2025-11-24
+
+### Features
+
+- Added hover effects for ProductCardExclusiveLocked
+- Adjust AccessContent to receive nullable and empty params
+
 ## [2.0.9] - 2025-11-20
 
 ### Fixes
@@ -12,7 +19,6 @@
 
 - A new card for merchandise and experience has been added.
 - A new event_grid was created
-
 
 ## [2.0.7] - 2025-11-18
 

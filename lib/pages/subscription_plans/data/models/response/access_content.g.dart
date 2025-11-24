@@ -8,11 +8,15 @@ part of 'access_content.dart';
 
 AccessContent _$AccessContentFromJson(Map<String, dynamic> json) =>
     AccessContent(
-      contentId: json['contentId'] as String,
-      partnerId: json['partnerId'] as String,
-      planIds: (json['planIds'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
+      contentId: json['contentId'] == null
+          ? ''
+          : AccessContent._nullToEmptyString(json['contentId'] as String?),
+      partnerId: json['partnerId'] == null
+          ? ''
+          : AccessContent._nullToEmptyString(json['partnerId'] as String?),
+      planIds: json['planIds'] == null
+          ? const []
+          : AccessContent._nullToEmptyList(json['planIds'] as List?),
       visibleFrom: json['visibleFrom'] == null
           ? null
           : DateTime.parse(json['visibleFrom'] as String),
