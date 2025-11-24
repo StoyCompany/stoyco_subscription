@@ -8,11 +8,15 @@ part of 'access_content.dart';
 
 AccessContent _$AccessContentFromJson(Map<String, dynamic> json) =>
     AccessContent(
-      contentId: AccessContent._emptyStringToNull(json['contentId'] as String?),
-      partnerId: AccessContent._emptyStringToNull(json['partnerId'] as String?),
-      planIds: (json['planIds'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      contentId: json['contentId'] == null
+          ? ''
+          : AccessContent._nullToEmptyString(json['contentId'] as String?),
+      partnerId: json['partnerId'] == null
+          ? ''
+          : AccessContent._nullToEmptyString(json['partnerId'] as String?),
+      planIds: json['planIds'] == null
+          ? const []
+          : AccessContent._nullToEmptyList(json['planIds'] as List?),
       visibleFrom: json['visibleFrom'] == null
           ? null
           : DateTime.parse(json['visibleFrom'] as String),
@@ -23,8 +27,8 @@ AccessContent _$AccessContentFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$AccessContentToJson(AccessContent instance) =>
     <String, dynamic>{
-      'contentId': AccessContent._nullToEmptyString(instance.contentId),
-      'partnerId': AccessContent._nullToEmptyString(instance.partnerId),
+      'contentId': instance.contentId,
+      'partnerId': instance.partnerId,
       'planIds': instance.planIds,
       'visibleFrom': instance.visibleFrom?.toIso8601String(),
       'visibleUntil': instance.visibleUntil?.toIso8601String(),

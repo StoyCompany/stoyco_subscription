@@ -37,10 +37,11 @@ part 'access_content.g.dart';
 @JsonSerializable()
 class AccessContent extends Equatable {
   /// {@macro access_content}
+  /// {@macro access_content}
   const AccessContent({
-    this.contentId,
-    this.partnerId,
-    this.planIds,
+    this.contentId = '',
+    this.partnerId = '',
+    this.planIds = const [],
     this.visibleFrom,
     this.visibleUntil,
   });
@@ -73,11 +74,8 @@ class AccessContent extends Equatable {
   /// Can be null or empty string if content ID is not available.
   ///
   /// **Example:** `'6914f916eb0355ca86422025'`
-  @JsonKey(
-    fromJson: _emptyStringToNull,
-    toJson: _nullToEmptyString,
-  )
-  final String? contentId;
+  @JsonKey(fromJson: _nullToEmptyString)
+  final String contentId;
 
   /// Unique identifier for the partner who owns this content.
   ///
@@ -86,11 +84,8 @@ class AccessContent extends Equatable {
   /// Can be null or empty string if partner information is not available.
   ///
   /// **Example:** `'66f5bd918d77fca522545f01'`
-  @JsonKey(
-    fromJson: _emptyStringToNull,
-    toJson: _nullToEmptyString,
-  )
-  final String? partnerId;
+  @JsonKey(fromJson: _nullToEmptyString)
+  final String partnerId;
 
   /// List of subscription plan IDs that grant access to this content.
   ///
@@ -106,7 +101,8 @@ class AccessContent extends Equatable {
   /// planIds: ['basic_plan', 'premium_plan', 'vip_plan']
   /// // Users with any of these three plans can access the content
   /// ```
-  final List<String>? planIds;
+  @JsonKey(fromJson: _nullToEmptyList)
+  final List<String> planIds;
 
   /// The date and time from which the content becomes visible.
   ///
@@ -136,17 +132,13 @@ class AccessContent extends Equatable {
   /// ```
   final DateTime? visibleUntil;
 
-  /// Converts empty string to null during deserialization.
-  static String? _emptyStringToNull(String? value) {
-    if (value == null || value.isEmpty) {
-      return null;
-    }
-    return value;
+  /// Converts null to empty string during serialization.
+  static String _nullToEmptyString(String? value) {
+    return value ?? '';
   }
 
-  /// Converts null to empty string during serialization.
-  static String? _nullToEmptyString(String? value) {
-    return value ?? '';
+  static List<String> _nullToEmptyList(List<dynamic>? value) {
+    return value?.map((e) => e as String).toList() ?? [];
   }
 
   /// Converts this [AccessContent] to a JSON object.
@@ -171,10 +163,10 @@ class AccessContent extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        contentId,
-        partnerId,
-        planIds,
-        visibleFrom,
-        visibleUntil,
-      ];
+    contentId,
+    partnerId,
+    planIds,
+    visibleFrom,
+    visibleUntil,
+  ];
 }

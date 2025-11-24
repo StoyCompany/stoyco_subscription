@@ -558,10 +558,10 @@ class ActiveSubscriptionService {
 
         // Check all conditions in single expression
         return accessContent != null &&
-            (accessContent.contentId?.isNotEmpty ?? false) &&
-            (accessContent.partnerId?.isNotEmpty ?? false) &&
-            (accessContent.planIds?.isNotEmpty ?? false) &&
-            accessContent.planIds!.any(userPlanIds.contains);
+            accessContent.contentId.isNotEmpty &&
+            accessContent.partnerId.isNotEmpty &&
+            accessContent.planIds.isNotEmpty &&
+            accessContent.planIds.any(userPlanIds.contains);
       },
     );
   }
@@ -674,10 +674,10 @@ class ActiveSubscriptionService {
           final AccessContent? content = getAccessContent(item);
           final bool hasAccess =
               content != null &&
-              (content.contentId?.isNotEmpty ?? false) &&
-              (content.partnerId?.isNotEmpty ?? false) &&
-              (content.planIds?.isNotEmpty ?? false) &&
-              content.planIds!.any(userPlanIds.contains);
+              content.contentId.isNotEmpty &&
+              content.partnerId.isNotEmpty &&
+              content.planIds.isNotEmpty &&
+              content.planIds.any(userPlanIds.contains);
 
           return hasAccessToContent(item, hasAccess);
         }).toList();
