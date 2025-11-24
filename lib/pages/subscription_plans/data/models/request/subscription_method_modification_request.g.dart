@@ -10,6 +10,7 @@ SubscriptionMethodModificationRequest
 _$SubscriptionMethodModificationRequestFromJson(Map<String, dynamic> json) =>
     SubscriptionMethodModificationRequest(
       planId: json['planId'] as String,
+      planRecurrence: json['planRecurrence'] as String,
       paymentMethodId: json['paymentMethodId'] as String,
     );
 
@@ -17,5 +18,6 @@ Map<String, dynamic> _$SubscriptionMethodModificationRequestToJson(
   SubscriptionMethodModificationRequest instance,
 ) => <String, dynamic>{
   'planId': instance.planId,
+  'planRecurrence': instance.planRecurrence,
   'paymentMethodId': instance.paymentMethodId,
 };
