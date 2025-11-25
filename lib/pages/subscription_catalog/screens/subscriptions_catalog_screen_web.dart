@@ -22,6 +22,7 @@ class SubscriptionsCatalogScreenWeb extends StatefulWidget {
   const SubscriptionsCatalogScreenWeb({
     this.onTapSubscription,
     this.onTapSubscribe,
+    this.onTapWhenExpired,
     this.userId,
     this.pageSize,
     super.key,
@@ -34,6 +35,8 @@ class SubscriptionsCatalogScreenWeb extends StatefulWidget {
   /// Callback triggered when the subscribe button is tapped.
   /// Receives the [id] of the subscription.
   final void Function(String id)? onTapSubscribe;
+
+  final void Function(String id)? onTapWhenExpired;
 
   final String? userId;
 
@@ -169,9 +172,12 @@ class _SubscriptionsCatalogScreenWebState
                         title: item.title,
                         subscribed: item.subscribed,
                         hasSubscription: item.hasSubscription,
+                        isExpired: item.isExpired,
                         onTap: () => onTapSubscription?.call(item.partnerId),
                         onTapSubscribe: () =>
                             widget.onTapSubscribe?.call(item.partnerId),
+                        onTapWhenExpired: () =>
+                            widget.onTapWhenExpired?.call(item.partnerId),
                         titleFontSize: 19.36,
                       );
                     },

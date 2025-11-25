@@ -40,6 +40,7 @@ class SubscriptionsCatalogScreenMobile extends StatefulWidget {
     this.userId,
     this.pageSize,
     this.onTapLeadingIcon,
+    this.onTapWhenExpired,
   });
 
   /// Callback triggered when a subscription item is tapped.
@@ -49,6 +50,8 @@ class SubscriptionsCatalogScreenMobile extends StatefulWidget {
   /// Callback triggered when subscribe button is tapped.
   /// Receives the [id] of the subscription.
   final void Function(String id)? onTapSubscribe;
+
+  final void Function(String id)? onTapWhenExpired;
 
   final VoidCallback? onTapLeadingIcon;
 
@@ -223,9 +226,12 @@ class _SubscriptionsCatalogScreenMobileState
                     title: item.title,
                     subscribed: item.subscribed,
                     hasSubscription: item.hasSubscription,
+                    isExpired: item.isExpired,
                     onTap: () => onTapSubscription?.call(item.partnerId),
                     onTapSubscribe: () =>
                         widget.onTapSubscribe?.call(item.partnerId),
+                    onTapWhenExpired: () =>
+                        widget.onTapWhenExpired?.call(item.partnerId),
                   );
                 }, childCount: controller.filteredSubscriptions.length),
               ),

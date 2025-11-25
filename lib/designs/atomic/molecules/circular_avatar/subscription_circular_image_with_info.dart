@@ -141,6 +141,9 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                     ? onTapWhenExpired
                     : onTapSubscribe,
                 child: Container(
+                  constraints: BoxConstraints(
+                    maxWidth: StoycoScreenSize.width(context, 148.5),
+                  ),
                   padding: StoycoScreenSize.symmetric(
                     context,
                     horizontal: 16,
@@ -175,6 +178,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             StoycoAssets.lib.assets.icons.common.alertIcon.svg(
+                              package: 'stoyco_subscription',
                               height: StoycoScreenSize.height(context, 16),
                               width: StoycoScreenSize.width(context, 16),
                             ),
