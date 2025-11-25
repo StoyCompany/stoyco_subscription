@@ -23,6 +23,7 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
     this.userId,
     this.pageSize,
     this.onTapLeadingIcon,
+    this.onTapWhenExpired,
   });
 
   /// Callback when a subscription is tapped.
@@ -30,6 +31,8 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
 
   /// Callback when the subscribe button is tapped.
   final void Function(String id)? onTapSubscribe;
+
+  final void Function(String id)? onTapWhenExpired;
 
   final VoidCallback? onTapLeadingIcon;
 
@@ -45,6 +48,7 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
       return SubscriptionsCatalogScreenWeb(
         onTapSubscription: onTapSubscription,
         onTapSubscribe: onTapSubscribe,
+        onTapWhenExpired: onTapWhenExpired,
         userId: userId,
         pageSize: pageSize,
       );
@@ -52,6 +56,7 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
       return SubscriptionsCatalogScreenMobile(
         onTapSubscription: onTapSubscription,
         onTapSubscribe: onTapSubscribe,
+        onTapWhenExpired: onTapWhenExpired,
         onTapLeadingIcon: onTapLeadingIcon,
         userId: userId,
         pageSize: pageSize,

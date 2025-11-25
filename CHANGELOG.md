@@ -6,6 +6,7 @@
 
 - Added hover effects for ProductCardExclusiveLocked
 - Adjust AccessContent to receive nullable and empty params
+- Implement subscription catalog screens for mobile and web, and a circular image with info component.
 
 ## [2.0.9] - 2025-11-20
 
