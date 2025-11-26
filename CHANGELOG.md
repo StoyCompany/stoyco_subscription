@@ -1,5 +1,9 @@
 # Changelog
 
+##[2.0.13] - 2025-11-26
+
+fix: update URL for fetching cultural assets in partner profile data source
+
 ##[2.0.12] - 2025-11-26
 
 fix: update partner profile data source URL and revert stoyco_shared dependency to local path
