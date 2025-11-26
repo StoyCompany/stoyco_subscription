@@ -155,6 +155,7 @@ class EventsGrid<T> extends StatelessWidget {
             left: 0,
             top: 25,
           ),
+          onLockedTap: () => onTapEventExclusive(event),
           child: EventCardExclusiveLockedV2(
             key: ValueKey<String>('event_exclusive_locked_$index'),
             imageUrl: getImageUrl(event),
