@@ -1,5 +1,11 @@
 # Changelog
 
+##[2.0.11] - 2025-11-24
+
+## Features
+
+- Fix exclusive event tap for event
+
 ##[2.0.10] - 2025-11-24
 
 ### Features
