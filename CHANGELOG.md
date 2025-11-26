@@ -1,5 +1,9 @@
 # Changelog
 
+##[2.0.12] - 2025-11-26
+
+fix: update partner profile data source URL and revert stoyco_shared dependency to local path
+
 ##[2.0.11] - 2025-11-24
 
 ## Features
