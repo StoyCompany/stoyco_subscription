@@ -1,5 +1,12 @@
 # Changelog
 
+##[2.0.14] - 2025-11-27
+
+### Features
+
+- Enhanced `SubscriptionPaymentPreviewCard` to collapse empty text fields with `SizedBox.shrink()` for cleaner UI when data is unavailable
+- Added new CulturalAssetsGrid in order to show assets in a grid structure.
+
 ##[2.0.13] - 2025-11-26
 
 fix: update URL for fetching cultural assets in partner profile data source
