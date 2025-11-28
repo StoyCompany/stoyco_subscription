@@ -1,5 +1,11 @@
 # Changelog
 
+##[2.0.15] - 2025-11-28
+
+### Features
+
+-Enhance SubscriptionLockedContent with platform-specific blur and overlay configurations
+
 ##[2.0.14] - 2025-11-27
 
 ### Features
