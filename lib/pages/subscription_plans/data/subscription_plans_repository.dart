@@ -7,6 +7,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/excepti
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart' as local_failure;
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart' as local_logger;
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_method_modification_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_modification_request.dart';
@@ -131,4 +132,23 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
         return Left<Failure, bool>(ExceptionFailure.decode(error));
       }
     }
-}
+
+    Future<Either<Failure, String>> createSetupIntent() async {
+      try {
+        final Response<Map<String, dynamic>> response = await _dataSource.createSetupIntent();
+        if (response.statusCode == 200 && response.data != null) {
+          final String clientSecret = response.data!['clientSecret'] as String;
+          return Right<Failure, String>(clientSecret);
+        } else {
+          local_logger.StoyCoLogger.error('Error creating SetupIntent: ${response.data}');
+          return Left<Failure, String>(ExceptionFailure.decode(Exception('Error al crear SetupIntent')));
+        }
+      } on DioException catch (error) {
+        return Left<Failure, String>(DioFailure.decode(error));
+      } on Error catch (error) {
+        return Left<Failure, String>(ErrorFailure.decode(error));
+      } on Exception catch (error) {
+        return Left<Failure, String>(ExceptionFailure.decode(error));
+      }
+    }
+  }

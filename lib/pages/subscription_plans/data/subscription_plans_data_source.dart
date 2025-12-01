@@ -84,4 +84,12 @@ class SubscriptionPlansDataSource{
       options: Options(headers: _getHeaders()),
     );
   }
+
+  Future<Response<Map<String, dynamic>>> createSetupIntent() async {
+    final String url = '${_environment.baseUrl()}user-plans/setup-intent';
+    return _dio.post(
+      url,
+      options: Options(headers: _getHeaders()),
+    );
+  }
 }

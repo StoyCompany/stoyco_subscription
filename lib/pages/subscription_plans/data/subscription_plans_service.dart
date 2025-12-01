@@ -218,4 +218,19 @@ class SubscriptionPlansService {
     }
   }
 
+  /// Creates a SetupIntent for managing payment methods.
+  /// Atomic Level: Organism – handles business logic and integration.
+  /// Returns: [Either] with [String] containing the client secret on success or [Failure] on error.
+  /// Example:
+  /// ```dart
+  /// final result = await service.createSetupIntent();
+  /// ```
+  Future<Either<Failure, String>> createSetupIntent() async {
+    try {
+      return await _subscriptionPlansRepository.createSetupIntent();
+    } catch (e) {
+      return Left<Failure, String>(ExceptionFailure.decode(Exception('Error getting server time: $e')));
+    }
+  }
+
 }
