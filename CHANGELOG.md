@@ -1,5 +1,9 @@
 # Changelog
 
+##[2.0.18] - 2025-12-01
+
+feat: enhance StoyCoLogger to include optional tags for log messages and update dependencies
+
 ##[2.0.17] - 2025-12-01
 
 ### Features
