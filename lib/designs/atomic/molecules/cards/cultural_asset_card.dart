@@ -63,11 +63,15 @@ class CulturalAssetCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           StoycoScreenSize.radius(context, 20),
         ),
-        onTap: isSoldOut ? null : isLocked ? onTapCulturalAssetExclusive : () {
-          if (onTap != null) {
-            onTap!(culturalAssetCard);
-          }
-        },
+        onTap: isSoldOut
+            ? null
+            : isLocked
+            ? onTapCulturalAssetExclusive
+            : () {
+                if (onTap != null) {
+                  onTap!(culturalAssetCard);
+                }
+              },
         child: SizedBox(
           width: StoycoScreenSize.width(context, 156),
           height: StoycoScreenSize.height(context, 226),
@@ -83,12 +87,6 @@ class CulturalAssetCard extends StatelessWidget {
                           color: StoycoColors.cardBorderDark,
                           width: 1.5,
                         ),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: Colors.white.withOpacity(0.1),
-                            blurRadius: StoycoScreenSize.radius(context, 35),
-                          ),
-                        ],
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
@@ -112,12 +110,6 @@ class CulturalAssetCard extends StatelessWidget {
                                   imageUrl: culturalAssetCard.imageUri ?? '',
                                   isBlur: isLocked,
                                   fit: BoxFit.cover,
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.topCenter,
-                                child: TagLocked(
-                                  isLocked: isLocked,
                                 ),
                               ),
                             ],
@@ -205,17 +197,23 @@ class CulturalAssetCard extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        StoycoAssets.lib.assets.icons.culturalAssets.culturalAssetCoin.svg(
-                                          package: 'stoyco_subscription',
-                                          width: StoycoScreenSize.width(
-                                            context,
-                                            15,
-                                          ),
-                                          height: StoycoScreenSize.height(
-                                            context,
-                                            15,
-                                          ),
-                                        ),
+                                        StoycoAssets
+                                            .lib
+                                            .assets
+                                            .icons
+                                            .culturalAssets
+                                            .culturalAssetCoin
+                                            .svg(
+                                              package: 'stoyco_subscription',
+                                              width: StoycoScreenSize.width(
+                                                context,
+                                                15,
+                                              ),
+                                              height: StoycoScreenSize.height(
+                                                context,
+                                                15,
+                                              ),
+                                            ),
                                         SizedBox(
                                           width: StoycoScreenSize.width(
                                             context,
@@ -223,7 +221,8 @@ class CulturalAssetCard extends StatelessWidget {
                                           ),
                                         ),
                                         Text(
-                                          culturalAssetCard.stoyCoins.toString(),
+                                          culturalAssetCard.stoyCoins
+                                              .toString(),
                                           style: TextStyle(
                                             fontSize: StoycoScreenSize.fontSize(
                                               context,
