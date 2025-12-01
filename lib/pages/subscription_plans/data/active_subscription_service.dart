@@ -10,6 +10,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/excepti
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/access_content.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/server_time.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/responses/active_user_plan_response.dart';
 
 /// {@template active_subscription_service}
@@ -305,6 +306,62 @@ class ActiveSubscriptionService {
     }
   }
 
+  /// Fetches the server time from the API for validation purposes.
+  ///
+  /// Returns an [Either] with [ServerTime] on success or falls back to device time on error.
+  ///
+  /// **Fallback Behavior:**
+  /// - If the API request fails for any reason (network error, server error, etc.),
+  ///   the method will return the current device time instead of returning a [Failure].
+  /// - This ensures that time-based validations can still proceed even when offline.
+  ///
+  /// **Warning:**
+  /// - Device time can be manipulated by users, so use this fallback with caution
+  ///   for critical validation scenarios.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await service.getServerTime();
+  ///
+  /// result.fold(
+  ///   (failure) => print('Error: ${failure.message}'), // This should never happen due to fallback
+  ///   (serverTime) {
+  ///     print('UTC DateTime: ${serverTime.utcDateTime}');
+  ///     print('Unix Timestamp: ${serverTime.unixTimestamp}');
+  ///     print('ISO 8601: ${serverTime.iso8601}');
+  ///   },
+  /// );
+  /// ```
+  Future<ServerTime> getServerTime() async {
+    try {
+      final Response<Map<String, dynamic>> response =
+          await _dataSource.getServerTime();
+
+      if (response.data == null) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          message: 'Response data is null',
+        );
+      }
+      final ServerTime serverTime = ServerTime.fromJson(response.data!);
+      return serverTime;
+    } catch (e) {
+      // Fallback to device time if server request fails
+      StoyCoLogger.warning(
+        'Failed to fetch server time, using device time as fallback: $e',
+      );
+      
+      final DateTime deviceTime = DateTime.now().toUtc();
+      final ServerTime fallbackTime = ServerTime(
+        utcDateTime: deviceTime,
+        unixTimestamp: deviceTime.millisecondsSinceEpoch ~/ 1000,
+        iso8601: deviceTime.toIso8601String(),
+      );
+      
+      return fallbackTime;
+    }
+  }
+
   /// Checks if the authenticated user has at least one active subscription.
   ///
   /// Returns an [Either] with a [bool] on success or [Failure] on error.
@@ -447,13 +504,11 @@ class ActiveSubscriptionService {
   ///   },
   /// );
   /// ```
-  Future<Either<Failure, List<ActiveUserPlan>>>
-  getActiveSubscriptionsForPartner({
+  Future<Either<Failure, List<ActiveUserPlan>>> getActiveSubscriptionsForPartner({
     required String partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
 
     return result.fold(
       (Failure failure) => Left<Failure, List<ActiveUserPlan>>(failure),
@@ -534,8 +589,8 @@ class ActiveSubscriptionService {
       return true;
     }
 
-    final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final ServerTime getServerTimeResult = await getServerTime();
 
     return result.fold(
       (Failure failure) {
@@ -552,16 +607,22 @@ class ActiveSubscriptionService {
               )
             : response.data;
 
-        final Set<String> userPlanIds = filteredSubscriptions
-            .map((ActiveUserPlan plan) => plan.plan.id)
-            .toSet();
+        final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
+        final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
+          currentDate: getServerTimeResult.utcDateTime,
+        ) ?? true;
+
+        if (!isVisibleForSubscribers) {
+          return true;
+        } 
 
         // Check all conditions in single expression
         return accessContent != null &&
-            accessContent.contentId.isNotEmpty &&
-            accessContent.partnerId.isNotEmpty &&
-            accessContent.planIds.isNotEmpty &&
-            accessContent.planIds.any(userPlanIds.contains);
+          accessContent.contentId.isNotEmpty &&
+          accessContent.partnerId.isNotEmpty &&
+          accessContent.planIds.isNotEmpty &&
+          accessContent.planIds.any(userPlanIds.contains);
+        
       },
     );
   }
@@ -636,8 +697,8 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final ServerTime getServerTimeResult = await getServerTime();
 
     return result.fold(
       (Failure failure) {
@@ -669,16 +730,23 @@ class ActiveSubscriptionService {
           if (!isSubscriptionOnly) {
             return hasAccessToContent(item, true);
           }
-
           // Subscription-only content - validate all conditions in single expression
-          final AccessContent? content = getAccessContent(item);
-          final bool hasAccess =
-              content != null &&
-              content.contentId.isNotEmpty &&
-              content.partnerId.isNotEmpty &&
-              content.planIds.isNotEmpty &&
-              content.planIds.any(userPlanIds.contains);
+          final AccessContent? accessContent = getAccessContent(item);
 
+          final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
+            currentDate: getServerTimeResult.utcDateTime,
+          ) ?? true;
+
+          if (!isVisibleForSubscribers) {
+            return hasAccessToContent(item, true);
+          }
+
+          final bool hasAccess =
+              accessContent != null &&
+              accessContent.contentId.isNotEmpty &&
+              accessContent.partnerId.isNotEmpty &&
+              accessContent.planIds.isNotEmpty &&
+              accessContent.planIds.any(userPlanIds.contains);
           return hasAccessToContent(item, hasAccess);
         }).toList();
       },

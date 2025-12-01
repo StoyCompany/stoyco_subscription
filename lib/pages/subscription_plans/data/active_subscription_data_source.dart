@@ -43,4 +43,18 @@ class ActiveSubscriptionDataSource {
         '${environment.baseUrl()}subscriptions/plans/user/active';
     return _dio.get(url, options: Options(headers: _getHeaders()));
   }
+
+  /// Fetches the server time from the API for validation purposes.
+  ///
+  /// Returns a [Response] with the server time in multiple formats:
+  /// - UTC DateTime
+  /// - Unix timestamp
+  /// - ISO 8601 format
+  ///
+  /// The endpoint used is: `/subscriptions/server-time`
+  /// This endpoint does not require authentication.
+  Future<Response<Map<String, dynamic>>> getServerTime() async {
+    final String url = '${environment.baseUrl()}subscriptions/server-time';
+    return _dio.get(url, options: Options(headers: <String, dynamic>{'accept': '*/*'}));
+  }
 }

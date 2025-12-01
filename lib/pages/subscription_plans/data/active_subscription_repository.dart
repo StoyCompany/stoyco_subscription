@@ -3,6 +3,7 @@ import 'package:either_dart/either.dart';
 import 'package:stoyco_shared/errors/errors.dart';
 import 'package:stoyco_shared/stoyco_shared.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/active_subscription_data_source.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/server_time.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/responses/active_user_plan_response.dart';
 
 /// {@template active_subscription_repository}
@@ -58,5 +59,33 @@ class ActiveSubscriptionRepository with RepositoryCacheMixin {
       },
     );
     return result.fold((Failure l) => throw Exception(l.message), (ActiveUserPlanResponse r) => r);
+  }
+
+  /// Fetches the server time for validation purposes.
+  ///
+  /// Returns a [ServerTime] object containing the server time in multiple formats:
+  /// - UTC DateTime
+  /// - Unix timestamp
+  /// - ISO 8601 format
+  ///
+  /// This endpoint does not require authentication.
+  ///
+  /// Throws [DioException] if the API request fails.
+  Future<ServerTime> getServerTime() async {
+    try {
+      final Response<Map<String, dynamic>> response = await _dataSource.getServerTime();
+
+      if (response.data == null) {
+        throw DioException(
+          requestOptions: response.requestOptions,
+          message: 'Response data is null',
+        );
+      }
+      return ServerTime.fromJson(response.data!);
+    } catch (e) {
+      throw ExceptionFailure.decode(
+        e is Exception ? e : Exception(e.toString()),
+      );
+    }
   }
 }

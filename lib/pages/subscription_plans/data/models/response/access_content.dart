@@ -41,7 +41,7 @@ class AccessContent extends Equatable {
   const AccessContent({
     this.contentId = '',
     this.partnerId = '',
-    this.planIds = const [],
+    this.planIds = const <String>[],
     this.visibleFrom,
     this.visibleUntil,
   });
@@ -138,7 +138,7 @@ class AccessContent extends Equatable {
   }
 
   static List<String> _nullToEmptyList(List<dynamic>? value) {
-    return value?.map((e) => e as String).toList() ?? [];
+    return value?.map((e) => e as String).toList() ?? <String>[];
   }
 
   /// Converts this [AccessContent] to a JSON object.
@@ -160,6 +160,60 @@ class AccessContent extends Equatable {
   /// // Output: {contentId: event_123, partnerId: 507f1f77bcf86cd799439012, ...}
   /// ```
   Map<String, dynamic> toJson() => _$AccessContentToJson(this);
+
+    /// Validates if subscriber-only content is available based on visibility date range.
+  ///
+  /// This method checks whether content should be visible to subscribers based on
+  /// the [visibleFrom] and [visibleUntil] date boundaries.
+  ///
+  /// **Parameters:**
+  /// - [isSubscriberOnly]: Indicates if the content is restricted to subscribers only
+  /// - [currentDate]: Server date to use for validation (required to prevent client-side manipulation)
+  ///
+  /// **Returns:**
+  /// - `true`: If dates are null (no time restriction)
+  /// - `true`: If current date is within range (visibleFrom ≤ current ≤ visibleUntil)
+  /// - `false`: If current date is before or after the valid range
+  /// - `true`: If content is NOT subscribers-only (no date validation needed)
+  ///
+  /// **Example:**
+  /// ```dart
+  /// // Get server time first
+  /// final serverTime = await api.getServerTime();
+  ///
+  /// // Check if content is visible
+  /// final isVisible = accessContent.isVisibleForSubscribers(
+  ///   isSubscriberOnly: true,
+  ///   currentDate: serverTime,
+  /// );
+  ///
+  /// if (isVisible) {
+  ///   // Show content
+  /// } else {
+  ///   // Content not available yet or expired
+  /// }
+  /// ```
+  bool isVisibleForSubscribers({
+    required DateTime currentDate,
+  }) {
+    // If both dates are null, content is available without time restriction
+    if (visibleFrom == null && visibleUntil == null) {
+      return true;
+    }
+
+    // If current date is before the visibility start date
+    if (visibleFrom != null && currentDate.isBefore(visibleFrom!)) {
+      return false;
+    }
+
+    // If current date is after the visibility end date
+    if (visibleUntil != null && currentDate.isAfter(visibleUntil!)) {
+      return false;
+    }
+
+    // Current date is within valid range
+    return true;
+  }
 
   @override
   List<Object?> get props => <Object?>[
