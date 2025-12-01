@@ -138,7 +138,7 @@ class AccessContent extends Equatable {
   }
 
   static List<String> _nullToEmptyList(List<dynamic>? value) {
-    return value?.map((e) => e as String).toList() ?? <String>[];
+    return value?.map((dynamic e) => e as String).toList() ?? <String>[];
   }
 
   /// Converts this [AccessContent] to a JSON object.

@@ -1,5 +1,11 @@
 # Changelog
 
+##[2.0.16] - 2025-12-01
+
+### Features
+
+-feat: add server time fetching functionality and related model
+
 ##[2.0.15] - 2025-11-28
 
 ### Features
