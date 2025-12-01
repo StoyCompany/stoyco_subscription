@@ -11,7 +11,8 @@ SubscribeRequest _$SubscribeRequestFromJson(Map<String, dynamic> json) =>
       planId: json['planId'] as String,
       planRecurrence: json['planRecurrence'] as String,
       isAutomatic: json['isAutomatic'] as bool,
-      paymentMethodId: json['paymentMethodId'] as String,
+      paymentMethodId: json['paymentMethodId'] as String?,
+      setupIntentId: json['setupIntentId'] as String?,
     );
 
 Map<String, dynamic> _$SubscribeRequestToJson(SubscribeRequest instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$SubscribeRequestToJson(SubscribeRequest instance) =>
       'planRecurrence': instance.planRecurrence,
       'isAutomatic': instance.isAutomatic,
       'paymentMethodId': instance.paymentMethodId,
+      'setupIntentId': instance.setupIntentId,
     };

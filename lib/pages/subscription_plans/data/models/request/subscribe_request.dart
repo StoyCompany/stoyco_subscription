@@ -10,7 +10,8 @@ class SubscribeRequest extends Equatable {
     required this.planId,
     required this.planRecurrence,
     required this.isAutomatic,
-    required this.paymentMethodId,
+    this.paymentMethodId,
+    this.setupIntentId,
   });
 
   factory SubscribeRequest.fromJson(Map<String, dynamic> json) => _$SubscribeRequestFromJson(json);
@@ -21,7 +22,9 @@ class SubscribeRequest extends Equatable {
 
   final bool isAutomatic;
 
-  final String paymentMethodId;
+  final String? paymentMethodId;
+
+  final String? setupIntentId;
   
   Map<String, dynamic> toJson() => _$SubscribeRequestToJson(this);
 
@@ -31,5 +34,6 @@ class SubscribeRequest extends Equatable {
     planRecurrence,
     isAutomatic,
     paymentMethodId,
+    setupIntentId,
   ];
 }

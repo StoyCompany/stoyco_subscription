@@ -15,7 +15,7 @@ AccessContent _$AccessContentFromJson(Map<String, dynamic> json) =>
           ? ''
           : AccessContent._nullToEmptyString(json['partnerId'] as String?),
       planIds: json['planIds'] == null
-          ? const []
+          ? const <String>[]
           : AccessContent._nullToEmptyList(json['planIds'] as List?),
       visibleFrom: json['visibleFrom'] == null
           ? null
