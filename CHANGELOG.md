@@ -1,5 +1,11 @@
 # Changelog
 
+##[2.0.17] - 2025-12-01
+
+### Features
+
+-feat: implement createSetupIntent for payment method management
+
 ##[2.0.16] - 2025-12-01
 
 ### Features
