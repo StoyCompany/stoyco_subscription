@@ -37,6 +37,12 @@ class SubscriptionHistoryCard extends StatelessWidget {
 
   final void Function(String partnerId)? onTapSubscriptionHistoryCard;
 
+  bool _isActiveSubscription(UserSubscriptionPlan subscription) {
+    return subscription.planStatus == SubscriptionStatus.active ||
+        subscription.planStatus == SubscriptionStatus.trialPeriod ||
+        subscription.planStatus == SubscriptionStatus.pendingCancellation;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -133,8 +139,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
                             ),
                           ),
                           backgroundColor:
-                              subscriptionHistoryItem.planStatus ==
-                                  SubscriptionStatus.active
+                              _isActiveSubscription(subscriptionHistoryItem)
                               ? StoycoColors.activeChip
                               : StoycoColors.inactiveChip,
                           padding: StoycoScreenSize.symmetric(
@@ -148,8 +153,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
                             ),
                           ),
                           label: Text(
-                            subscriptionHistoryItem.planStatus ==
-                                    SubscriptionStatus.active
+                            _isActiveSubscription(subscriptionHistoryItem)
                                 ? 'Activo'
                                 : 'Inactivo',
                           ),
@@ -158,8 +162,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
                         (subscriptionHistoryItem.planIsDeleted)
                             ? const SizedBox.shrink()
                             : Text(
-                                (subscriptionHistoryItem.planStatus ==
-                                        SubscriptionStatus.active)
+                                _isActiveSubscription(subscriptionHistoryItem)
                                     ? 'Ver suscripción'
                                     : 'Ver planes',
                                 style: GoogleFonts.montserrat(

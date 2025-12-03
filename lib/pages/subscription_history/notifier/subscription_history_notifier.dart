@@ -75,10 +75,36 @@ class SubscriptionHistoryNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Determines if a subscription should be considered active based on its status.
+  ///
+  /// A subscription is considered active if its status is one of:
+  /// - [SubscriptionStatus.active]: Subscription is currently active
+  /// - [SubscriptionStatus.trialPeriod]: User is in trial period
+  /// - [SubscriptionStatus.pendingCancellation]: Subscription is pending cancellation but still active
+  ///
+  /// Returns `true` if the subscription is active, `false` otherwise.
+  bool _isActiveSubscription(UserSubscriptionPlan subscription) {
+    return subscription.planStatus == SubscriptionStatus.active ||
+        subscription.planStatus == SubscriptionStatus.trialPeriod ||
+        subscription.planStatus == SubscriptionStatus.pendingCancellation;
+  }
+
   /// Loads the subscription history data from the service and notifies listeners.
   ///
   /// Populates [allSubscriptions], [activeSubscriptions], and [inactiveSubscriptions]
-  /// based on the [subscribedIsActive] field of each [UserSubscriptionPlan].
+  /// based on the [planStatus] field of each [UserSubscriptionPlan].
+  ///
+  /// Active subscriptions include:
+  /// - Active
+  /// - TrialPeriod
+  /// - PendingCancellation
+  ///
+  /// Inactive subscriptions include all other statuses:
+  /// - PendingPayment
+  /// - PaymentFailed
+  /// - ScheduledToStart
+  /// - Cancelled
+  /// - RenewalAvailable
   Future<void> getSubscriptionHistory() async {
     final Either<Failure, UserSubscriptionPlanResponse> result =
         await SubscriptionCatalogService.instance.getUserSubscriptionPlans(
@@ -94,16 +120,10 @@ class SubscriptionHistoryNotifier extends ChangeNotifier {
       (UserSubscriptionPlanResponse response) {
         allSubscriptions = response.data;
         activeSubscriptions = allSubscriptions
-            .where(
-              (UserSubscriptionPlan e) =>
-                  e.planStatus == SubscriptionStatus.active,
-            )
+            .where(_isActiveSubscription)
             .toList();
         inactiveSubscriptions = allSubscriptions
-            .where(
-              (UserSubscriptionPlan e) =>
-                  e.planStatus != SubscriptionStatus.active,
-            )
+            .where((UserSubscriptionPlan e) => !_isActiveSubscription(e))
             .toList();
       },
     );
