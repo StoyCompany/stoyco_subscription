@@ -166,15 +166,17 @@ class AccessContent extends Equatable {
   /// This method checks whether content should be visible to subscribers based on
   /// the [visibleFrom] and [visibleUntil] date boundaries.
   ///
+  /// **Important:** This method compares only dates, ignoring time components.
+  /// - If [visibleFrom] is set to 2024-01-15, content is visible from 2024-01-15 00:00:00
+  /// - If [visibleUntil] is set to 2024-12-31, content is visible until 2024-12-31 23:59:59
+  ///
   /// **Parameters:**
-  /// - [isSubscriberOnly]: Indicates if the content is restricted to subscribers only
   /// - [currentDate]: Server date to use for validation (required to prevent client-side manipulation)
   ///
   /// **Returns:**
   /// - `true`: If dates are null (no time restriction)
   /// - `true`: If current date is within range (visibleFrom ≤ current ≤ visibleUntil)
   /// - `false`: If current date is before or after the valid range
-  /// - `true`: If content is NOT subscribers-only (no date validation needed)
   ///
   /// **Example:**
   /// ```dart
@@ -183,7 +185,6 @@ class AccessContent extends Equatable {
   ///
   /// // Check if content is visible
   /// final isVisible = accessContent.isVisibleForSubscribers(
-  ///   isSubscriberOnly: true,
   ///   currentDate: serverTime,
   /// );
   ///
@@ -201,14 +202,23 @@ class AccessContent extends Equatable {
       return true;
     }
 
+    // Normalize dates to compare only date parts (ignore time)
+    final DateTime currentDateOnly = DateTime(currentDate.year, currentDate.month, currentDate.day);
+
     // If current date is before the visibility start date
-    if (visibleFrom != null && currentDate.isBefore(visibleFrom!)) {
-      return false;
+    if (visibleFrom != null) {
+      final DateTime visibleFromDateOnly = DateTime(visibleFrom!.year, visibleFrom!.month, visibleFrom!.day);
+      if (currentDateOnly.isBefore(visibleFromDateOnly)) {
+        return false;
+      }
     }
 
     // If current date is after the visibility end date
-    if (visibleUntil != null && currentDate.isAfter(visibleUntil!)) {
-      return false;
+    if (visibleUntil != null) {
+      final DateTime visibleUntilDateOnly = DateTime(visibleUntil!.year, visibleUntil!.month, visibleUntil!.day);
+      if (currentDateOnly.isAfter(visibleUntilDateOnly)) {
+        return false;
+      }
     }
 
     // Current date is within valid range

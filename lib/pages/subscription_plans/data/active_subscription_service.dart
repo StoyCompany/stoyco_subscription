@@ -806,8 +806,7 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
 
     return result.fold(
       (Failure failure) => Left<Failure, Set<String>>(failure),
