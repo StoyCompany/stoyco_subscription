@@ -41,7 +41,9 @@ UserSubscriptionPlan _$UserSubscriptionPlanFromJson(
   price: json['price'] as num,
   currencyCode: json['currencyCode'] as String,
   currencySymbol: json['currencySymbol'] as String,
-  subscribedIsActive: json['subscribedIsActive'] as bool,
+  planStatus: UserSubscriptionPlan._subscriptionStatusFromJson(
+    json['planStatus'] as String,
+  ),
   subscriptionStartDate: json['subscriptionStartDate'] as String,
   subscriptionEndDate: json['subscriptionEndDate'] as String,
   hasActivePlan: json['hasActivePlan'] as bool,
@@ -61,7 +63,9 @@ Map<String, dynamic> _$UserSubscriptionPlanToJson(
   'price': instance.price,
   'currencyCode': instance.currencyCode,
   'currencySymbol': instance.currencySymbol,
-  'subscribedIsActive': instance.subscribedIsActive,
+  'planStatus': UserSubscriptionPlan._subscriptionStatusToJson(
+    instance.planStatus,
+  ),
   'subscriptionStartDate': instance.subscriptionStartDate,
   'subscriptionEndDate': instance.subscriptionEndDate,
   'hasActivePlan': instance.hasActivePlan,

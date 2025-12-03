@@ -19,10 +19,13 @@ SubscriptionIsActiveResponse _$SubscriptionIsActiveResponseFromJson(
   price: json['price'] as num,
   currencyCode: json['currencyCode'] as String,
   currencySymbol: json['currencySymbol'] as String,
-  subscribedIsActive: json['subscribedIsActive'] as bool,
+  planStatus: SubscriptionIsActiveResponse._subscriptionStatusFromJson(
+    json['planStatus'] as String,
+  ),
   subscriptionStartDate: json['subscriptionStartDate'] as String,
   subscriptionEndDate: json['subscriptionEndDate'] as String,
   hasActivePlan: json['hasActivePlan'] as bool,
+  planIsDeleted: json['planIsDeleted'] as bool,
 );
 
 Map<String, dynamic> _$SubscriptionIsActiveResponseToJson(
@@ -38,8 +41,11 @@ Map<String, dynamic> _$SubscriptionIsActiveResponseToJson(
   'price': instance.price,
   'currencyCode': instance.currencyCode,
   'currencySymbol': instance.currencySymbol,
-  'subscribedIsActive': instance.subscribedIsActive,
+  'planStatus': SubscriptionIsActiveResponse._subscriptionStatusToJson(
+    instance.planStatus,
+  ),
   'subscriptionStartDate': instance.subscriptionStartDate,
   'subscriptionEndDate': instance.subscriptionEndDate,
   'hasActivePlan': instance.hasActivePlan,
+  'planIsDeleted': instance.planIsDeleted,
 };
