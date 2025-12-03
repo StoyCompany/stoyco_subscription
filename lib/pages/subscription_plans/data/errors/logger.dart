@@ -5,22 +5,22 @@ class StoyCoLogger {
 
   static void debug(String message, {String? tag}) {
     final String messageToPrint = tag != null
-        ? '[ STOYCO LOG DEBUG : ($tag)] $message'
-        : '[ STOYCO LOG DEBUG ] $message';
+        ? '[ STOYCO SUBSCRIPTION LOG DEBUG : ($tag)] $message'
+        : '[ STOYCO SUBSCRIPTION LOG DEBUG ] $message';
     _logger.d(messageToPrint);
   }
 
   static void info(String message, {String? tag}) {
     final String messageToPrint = tag != null
-        ? '[ STOYCO LOG INFO : ($tag)] $message'
-        : '[ STOYCO LOG INFO ] $message';
+        ? '[ STOYCO SUBSCRIPTION LOG INFO : ($tag)] $message'
+        : '[ STOYCO SUBSCRIPTION LOG INFO ] $message';
     _logger.i(messageToPrint);
   }
 
   static void warning(String message, {String? tag}) {
     final String messageToPrint = tag != null
-        ? '[ STOYCO LOG WARNING : ($tag)] $message'
-        : '[ STOYCO LOG WARNING ] $message';
+        ? '[ STOYCO SUBSCRIPTION LOG WARNING : ($tag)] $message'
+        : '[ STOYCO SUBSCRIPTION LOG WARNING ] $message';
     _logger.w(messageToPrint);
   }
 
@@ -35,8 +35,8 @@ class StoyCoLogger {
     String? tag,
   }) {
     final String messageToPrint = tag != null
-        ? '[ STOYCO LOG ERROR : ($tag)] $message'
-        : '[ STOYCO LOG ERROR ] $message';
+        ? '[ STOYCO SUBSCRIPTION LOG ERROR : ($tag)] $message'
+        : '[ STOYCO SUBSCRIPTION LOG ERROR ] $message';
     _logger.e(messageToPrint, error: error, stackTrace: stackTrace);
   }
 }
