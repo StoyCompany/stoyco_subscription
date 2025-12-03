@@ -1,5 +1,9 @@
 # Changelog
 
+##[2.0.19] - 2025-12-03
+
+feat: enhance access validation logging in ActiveSubscriptionService and AccessContent model
+
 ##[2.0.18] - 2025-12-01
 
 feat: enhance StoyCoLogger to include optional tags for log messages and update dependencies
