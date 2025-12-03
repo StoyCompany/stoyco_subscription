@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/enums/subscription_status.enum.dart';
 
 part 'user_subscription_plan_response.g.dart';
 
@@ -50,12 +51,12 @@ class UserSubscriptionPlanResponse extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        error,
-        messageError,
-        tecMessageError,
-        count,
-        data,
-      ];
+    error,
+    messageError,
+    tecMessageError,
+    count,
+    data,
+  ];
 }
 
 /// {@template user_subscription_plan}
@@ -68,6 +69,7 @@ class UserSubscriptionPlanResponse extends Equatable {
 /// ```dart
 /// final plan = UserSubscriptionPlan.fromJson(jsonMap);
 /// print(plan.planName);
+/// print(plan.planStatus); // SubscriptionStatus.active
 /// ```
 /// {@endtemplate}
 @JsonSerializable()
@@ -84,11 +86,11 @@ class UserSubscriptionPlan extends Equatable {
     required this.price,
     required this.currencyCode,
     required this.currencySymbol,
-    required this.subscribedIsActive,
+    required this.planStatus,
     required this.subscriptionStartDate,
     required this.subscriptionEndDate,
     required this.hasActivePlan,
-    required this.planIsDeleted
+    required this.planIsDeleted,
   });
 
   /// Creates a [UserSubscriptionPlan] from a JSON map.
@@ -113,20 +115,34 @@ class UserSubscriptionPlan extends Equatable {
   /// The unique identifier of the partner.
   final String partnerId;
 
-  /// The recurrence type of the subscription (e.g., "Monthly", "Yearly").
+  /// The recurrence type of the subscription (e.g., "Monthly", "Annual").
   final String recurrenceType;
 
   /// The price of the subscription plan.
   final num price;
 
-  /// The currency code (e.g., "MXN").
+  /// The currency code (e.g., "USD", "MXN").
   final String currencyCode;
 
   /// The currency symbol (e.g., "$").
   final String currencySymbol;
 
-  /// Whether the subscription is currently active.
-  final bool subscribedIsActive;
+  /// The current status of the subscription plan.
+  ///
+  /// Possible values:
+  /// - [SubscriptionStatus.pendingPayment]: Payment is pending, blocks all flows
+  /// - [SubscriptionStatus.trialPeriod]: Trial period active, allows cancellation
+  /// - [SubscriptionStatus.paymentFailed]: Payment failed, allows renewal flow
+  /// - [SubscriptionStatus.active]: Active subscription, allows cancellation
+  /// - [SubscriptionStatus.scheduledToStart]: Subscription scheduled to start
+  /// - [SubscriptionStatus.cancelled]: Subscription cancelled, allows purchase
+  /// - [SubscriptionStatus.pendingCancellation]: Pending cancellation, blocks all flows
+  /// - [SubscriptionStatus.renewalAvailable]: Renewal available, allows renewal flow
+  @JsonKey(
+    fromJson: _subscriptionStatusFromJson,
+    toJson: _subscriptionStatusToJson,
+  )
+  final SubscriptionStatus planStatus;
 
   /// The start date of the subscription (ISO 8601 string).
   final String subscriptionStartDate;
@@ -143,22 +159,30 @@ class UserSubscriptionPlan extends Equatable {
   /// Converts this object to a JSON map.
   Map<String, dynamic> toJson() => _$UserSubscriptionPlanToJson(this);
 
+  /// Converts a JSON string value to [SubscriptionStatus] enum.
+  static SubscriptionStatus _subscriptionStatusFromJson(String value) =>
+      SubscriptionStatus.fromValue(value);
+
+  /// Converts [SubscriptionStatus] enum to a JSON string value.
+  static String _subscriptionStatusToJson(SubscriptionStatus status) =>
+      status.toValue();
+
   @override
   List<Object?> get props => <Object?>[
-        planId,
-        planName,
-        planImageUrl,
-        partnerProfile,
-        partnerName,
-        partnerId,
-        recurrenceType,
-        price,
-        currencyCode,
-        currencySymbol,
-        subscribedIsActive,
-        subscriptionStartDate,
-        subscriptionEndDate,
-        hasActivePlan,
-        planIsDeleted,
-      ];
+    planId,
+    planName,
+    planImageUrl,
+    partnerProfile,
+    partnerName,
+    partnerId,
+    recurrenceType,
+    price,
+    currencyCode,
+    currencySymbol,
+    planStatus,
+    subscriptionStartDate,
+    subscriptionEndDate,
+    hasActivePlan,
+    planIsDeleted,
+  ];
 }

@@ -1,5 +1,9 @@
 # Changelog
 
+##[2.0.20] - 2025-12-03
+
+fix: update UserSubscriptionPlanResponse model to receive plan status and manage statuses with that
+
 ##[2.0.19] - 2025-12-03
 
 feat: enhance access validation logging in ActiveSubscriptionService and AccessContent model

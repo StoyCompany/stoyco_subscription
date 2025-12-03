@@ -4,6 +4,7 @@ import 'package:stoyco_subscription/designs/atomic/molecules/taps/stoyco_subscri
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/requests/get_user_subscription_plans_request.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_service.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/enums/subscription_status.enum.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 
 /// A [ChangeNotifier] that manages the state for the subscription history view.
@@ -93,10 +94,16 @@ class SubscriptionHistoryNotifier extends ChangeNotifier {
       (UserSubscriptionPlanResponse response) {
         allSubscriptions = response.data;
         activeSubscriptions = allSubscriptions
-            .where((UserSubscriptionPlan e) => e.subscribedIsActive)
+            .where(
+              (UserSubscriptionPlan e) =>
+                  e.planStatus == SubscriptionStatus.active,
+            )
             .toList();
         inactiveSubscriptions = allSubscriptions
-            .where((UserSubscriptionPlan e) => !e.subscribedIsActive)
+            .where(
+              (UserSubscriptionPlan e) =>
+                  e.planStatus != SubscriptionStatus.active,
+            )
             .toList();
       },
     );

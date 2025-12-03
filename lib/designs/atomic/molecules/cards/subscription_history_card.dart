@@ -6,6 +6,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/designs/utils/formatter_dates.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/models/enums/subscription_status.enum.dart';
 
 /// {@template subscription_history_card}
 /// A card widget that displays information about a user's subscription history item.
@@ -132,7 +133,8 @@ class SubscriptionHistoryCard extends StatelessWidget {
                             ),
                           ),
                           backgroundColor:
-                              subscriptionHistoryItem.subscribedIsActive
+                              subscriptionHistoryItem.planStatus ==
+                                  SubscriptionStatus.active
                               ? StoycoColors.activeChip
                               : StoycoColors.inactiveChip,
                           padding: StoycoScreenSize.symmetric(
@@ -146,7 +148,8 @@ class SubscriptionHistoryCard extends StatelessWidget {
                             ),
                           ),
                           label: Text(
-                            subscriptionHistoryItem.subscribedIsActive
+                            subscriptionHistoryItem.planStatus ==
+                                    SubscriptionStatus.active
                                 ? 'Activo'
                                 : 'Inactivo',
                           ),
@@ -155,7 +158,8 @@ class SubscriptionHistoryCard extends StatelessWidget {
                         (subscriptionHistoryItem.planIsDeleted)
                             ? const SizedBox.shrink()
                             : Text(
-                                (subscriptionHistoryItem.subscribedIsActive)
+                                (subscriptionHistoryItem.planStatus ==
+                                        SubscriptionStatus.active)
                                     ? 'Ver suscripción'
                                     : 'Ver planes',
                                 style: GoogleFonts.montserrat(
