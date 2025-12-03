@@ -611,7 +611,46 @@ class ActiveSubscriptionService {
       tag: 'ACCESS_CHECK',
     );
 
-    // Check if user is authenticated before proceeding
+    // Validate access_content dates BEFORE checking authentication
+    // This allows content with invalid dates to become public even without login
+    final ServerTime getServerTimeResult = await getServerTime();
+    
+    StoyCoLogger.info(
+      '[TIME] [hasAccessToContent] Server time: ${getServerTimeResult.utcDateTime} (ISO: ${getServerTimeResult.iso8601})',
+      tag: 'ACCESS_CHECK',
+    );
+
+    final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
+      currentDate: getServerTimeResult.utcDateTime,
+    ) ?? true;
+
+    StoyCoLogger.info(
+      '[DATE] [hasAccessToContent] Date validation (isVisibleForSubscribers): $isVisibleForSubscribers',
+      tag: 'ACCESS_CHECK',
+    );
+    
+    if (accessContent != null) {
+      StoyCoLogger.info(
+        '[DATE] [hasAccessToContent] Visibility window: from=${accessContent.visibleFrom}, until=${accessContent.visibleUntil}',
+        tag: 'ACCESS_CHECK',
+      );
+    }
+
+    // If content is NOT in valid date range (future or expired), grant public access
+    if (!isVisibleForSubscribers) {
+      StoyCoLogger.info(
+        '[OK] [hasAccessToContent] Content NOT in valid date range (future or expired) - granting public access (no auth required)',
+        tag: 'ACCESS_CHECK',
+      );
+      return true;
+    }
+
+    StoyCoLogger.info(
+      '[LOCK] [hasAccessToContent] Content IS in valid date range - checking authentication',
+      tag: 'ACCESS_CHECK',
+    );
+
+    // Check if user is authenticated before proceeding with subscription validation
     final User? currentUser = firebaseAuth.currentUser;
     if (currentUser == null) {
       StoyCoLogger.warning(
@@ -633,13 +672,6 @@ class ActiveSubscriptionService {
         return false;
       },
       (ActiveUserPlanResponse response) async {
-        // Only fetch server time if we successfully got subscriptions
-        final ServerTime getServerTimeResult = await getServerTime();
-
-        StoyCoLogger.info(
-          '[TIME] [hasAccessToContent] Server time: ${getServerTimeResult.utcDateTime} (ISO: ${getServerTimeResult.iso8601})',
-          tag: 'ACCESS_CHECK',
-        );
         StoyCoLogger.info(
           '[STATS] [hasAccessToContent] User has ${response.count} active subscription(s)',
           tag: 'ACCESS_CHECK',
@@ -660,35 +692,6 @@ class ActiveSubscriptionService {
         
         StoyCoLogger.info(
           '[PLANS] [hasAccessToContent] User plan IDs: ${userPlanIds.toList()}',
-          tag: 'ACCESS_CHECK',
-        );
-
-        final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
-          currentDate: getServerTimeResult.utcDateTime,
-        ) ?? true;
-
-        StoyCoLogger.info(
-          '[DATE] [hasAccessToContent] Date validation (isVisibleForSubscribers): $isVisibleForSubscribers',
-          tag: 'ACCESS_CHECK',
-        );
-        
-        if (accessContent != null) {
-          StoyCoLogger.info(
-            '[DATE] [hasAccessToContent] Visibility window: from=${accessContent.visibleFrom}, until=${accessContent.visibleUntil}',
-            tag: 'ACCESS_CHECK',
-          );
-        }
-
-        if (!isVisibleForSubscribers) {
-          StoyCoLogger.info(
-            '[OK] [hasAccessToContent] Content NOT in valid date range (future or expired) - granting public access',
-            tag: 'ACCESS_CHECK',
-          );
-          return true;
-        }
-
-        StoyCoLogger.info(
-          '[LOCK] [hasAccessToContent] Content IS in valid date range - checking subscription plan access',
           tag: 'ACCESS_CHECK',
         );
 
@@ -813,6 +816,14 @@ class ActiveSubscriptionService {
       tag: 'BULK_ACCESS_CHECK',
     );
 
+    // Get server time FIRST to validate dates before checking authentication
+    final ServerTime getServerTimeResult = await getServerTime();
+
+    StoyCoLogger.info(
+      '[TIME] [hasAccessToMultiplesContent] Server time: ${getServerTimeResult.utcDateTime} (ISO: ${getServerTimeResult.iso8601})',
+      tag: 'BULK_ACCESS_CHECK',
+    );
+
     // Check if user is authenticated
     final User? currentUser = firebaseAuth.currentUser;
     final bool isAuthenticated = currentUser != null;
@@ -822,26 +833,22 @@ class ActiveSubscriptionService {
       tag: 'BULK_ACCESS_CHECK',
     );
 
-    // If user is not authenticated, only grant access to public content
+    // If user is not authenticated, validate dates and grant access based on visibility
     if (!isAuthenticated) {
       StoyCoLogger.warning(
-        '[AUTH] [hasAccessToMultiplesContent] User not authenticated - only public content will be accessible',
+        '[AUTH] [hasAccessToMultiplesContent] User not authenticated - validating content dates',
         tag: 'BULK_ACCESS_CHECK',
       );
       return _handleUnauthenticatedContents<T>(
         contents: contents,
+        getAccessContent: getAccessContent,
         getIsSubscriptionOnly: getIsSubscriptionOnly,
         hasAccessToContent: hasAccessToContent,
+        serverTime: getServerTimeResult,
       );
     }
 
     final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
-    final ServerTime getServerTimeResult = await getServerTime();
-
-    StoyCoLogger.info(
-      '[TIME] [hasAccessToMultiplesContent] Server time: ${getServerTimeResult.utcDateTime} (ISO: ${getServerTimeResult.iso8601})',
-      tag: 'BULK_ACCESS_CHECK',
-    );
 
     return result.fold(
       (Failure failure) {
@@ -851,8 +858,10 @@ class ActiveSubscriptionService {
         );
         return _handleErrorContents<T>(
           contents: contents,
+          getAccessContent: getAccessContent,
           getIsSubscriptionOnly: getIsSubscriptionOnly,
           hasAccessToContent: hasAccessToContent,
+          serverTime: getServerTimeResult,
         );
       },
       (ActiveUserPlanResponse response) {
@@ -995,37 +1004,61 @@ class ActiveSubscriptionService {
   /// This helper method is used when the user is not authenticated.
   /// It ensures that:
   /// - Public content ([getIsSubscriptionOnly] returns false) remains accessible
-  /// - Subscription-only content is marked as inaccessible
+  /// - Subscription-only content with invalid dates (future or expired) becomes accessible
+  /// - Subscription-only content with valid dates is marked as inaccessible
   ///
   /// **Parameters:**
   /// - [contents]: List of content items to process
+  /// - [getAccessContent]: Function to get AccessContent from the model
   /// - [getIsSubscriptionOnly]: Function to determine if content requires subscription
   /// - [hasAccessToContent]: Function to update the model with access status
+  /// - [serverTime]: Server time for date validation
   ///
   /// **Returns:**
-  /// A list of models with access status set based on subscription requirement.
+  /// A list of models with access status set based on subscription requirement and date validation.
   List<T> _handleUnauthenticatedContents<T>({
     required List<T> contents,
+    required AccessContent? Function(T) getAccessContent,
     required bool Function(T) getIsSubscriptionOnly,
     required T Function(T, bool) hasAccessToContent,
+    required ServerTime serverTime,
   }) {
     int publicCount = 0;
+    int dateBasedPublicCount = 0;
     int lockedCount = 0;
 
     final List<T> result = contents.map((T item) {
       final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
       
-      if (isSubscriptionOnly) {
-        lockedCount++;
-        return hasAccessToContent(item, false);
-      } else {
+      // Public content - always accessible
+      if (!isSubscriptionOnly) {
         publicCount++;
         return hasAccessToContent(item, true);
       }
+
+      // Subscription-only content - check dates
+      final AccessContent? accessContent = getAccessContent(item);
+      final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
+        currentDate: serverTime.utcDateTime,
+      ) ?? true;
+
+      // If content is NOT in valid date range (future or expired), grant public access
+      if (!isVisibleForSubscribers) {
+        dateBasedPublicCount++;
+        StoyCoLogger.info(
+          '[OK] [handleUnauthenticatedContents] Content with invalid dates - granting public access',
+          tag: 'BULK_ACCESS_CHECK',
+        );
+        return hasAccessToContent(item, true);
+      }
+
+      // Content is subscription-only and in valid date range - deny access
+      lockedCount++;
+      return hasAccessToContent(item, false);
     }).toList();
 
     StoyCoLogger.info(
-      '[SUMMARY] [handleUnauthenticatedContents] Result: Total=${contents.length}, Public=$publicCount, Locked=$lockedCount',
+      '[SUMMARY] [handleUnauthenticatedContents] Result: Total=${contents.length}, Public=$publicCount, DateBasedPublic=$dateBasedPublicCount, Locked=$lockedCount',
       tag: 'BULK_ACCESS_CHECK',
     );
 
@@ -1037,24 +1070,45 @@ class ActiveSubscriptionService {
   /// This helper method is used when there's an error fetching subscription data.
   /// It ensures that:
   /// - Public content ([getIsSubscriptionOnly] returns false) remains accessible
-  /// - Subscription-only content is marked as inaccessible for safety
+  /// - Subscription-only content with invalid dates (future or expired) becomes accessible
+  /// - Subscription-only content with valid dates is marked as inaccessible for safety
   ///
   /// **Parameters:**
   /// - [contents]: List of content items to process
+  /// - [getAccessContent]: Function to get AccessContent from the model
   /// - [getIsSubscriptionOnly]: Function to determine if content requires subscription
   /// - [hasAccessToContent]: Function to update the model with access status
+  /// - [serverTime]: Server time for date validation
   ///
   /// **Returns:**
-  /// A list of models with access status set based on subscription requirement.
+  /// A list of models with access status set based on subscription requirement and date validation.
   List<T> _handleErrorContents<T>({
     required List<T> contents,
+    required AccessContent? Function(T) getAccessContent,
     required bool Function(T) getIsSubscriptionOnly,
     required T Function(T, bool) hasAccessToContent,
+    required ServerTime serverTime,
   }) => contents.map((T item) {
-    if (getIsSubscriptionOnly(item)) {
-      return hasAccessToContent(item, false);
+    final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
+    
+    // Public content - always accessible
+    if (!isSubscriptionOnly) {
+      return hasAccessToContent(item, true);
     }
-    return item;
+
+    // Subscription-only content - check dates
+    final AccessContent? accessContent = getAccessContent(item);
+    final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
+      currentDate: serverTime.utcDateTime,
+    ) ?? true;
+
+    // If content is NOT in valid date range (future or expired), grant public access
+    if (!isVisibleForSubscribers) {
+      return hasAccessToContent(item, true);
+    }
+
+    // Content is subscription-only and in valid date range - deny access for safety
+    return hasAccessToContent(item, false);
   }).toList();
 
   /// Gets all available content accesses for the user.
