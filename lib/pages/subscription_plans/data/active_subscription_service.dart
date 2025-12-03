@@ -584,45 +584,155 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    // Public content - immediate access
+    StoyCoLogger.info(
+      '[>>] [hasAccessToContent] Starting access validation',
+      tag: 'ACCESS_CHECK',
+    );
+    StoyCoLogger.info(
+      '[INFO] [hasAccessToContent] Parameters: isSubscriptionOnly=$isSubscriptionOnly, partnerId=$partnerId, forceRefresh=$forceRefresh',
+      tag: 'ACCESS_CHECK',
+    );
+    StoyCoLogger.info(
+      '[DATA] [hasAccessToContent] AccessContent: ${accessContent?.toJson()}',
+      tag: 'ACCESS_CHECK',
+    );
+
+    // Public content - immediate access (no authentication required)
     if (!isSubscriptionOnly) {
+      StoyCoLogger.info(
+        '[OK] [hasAccessToContent] Content is PUBLIC - granting immediate access (no auth required)',
+        tag: 'ACCESS_CHECK',
+      );
       return true;
     }
 
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
-    final ServerTime getServerTimeResult = await getServerTime();
+    StoyCoLogger.info(
+      '[LOCK] [hasAccessToContent] Content is SUBSCRIPTION-ONLY - validating access',
+      tag: 'ACCESS_CHECK',
+    );
 
-    return result.fold(
-      (Failure failure) {
+    // Validate access_content dates BEFORE checking authentication
+    // This allows content with invalid dates to become public even without login
+    final ServerTime getServerTimeResult = await getServerTime();
+    
+    StoyCoLogger.info(
+      '[TIME] [hasAccessToContent] Server time: ${getServerTimeResult.utcDateTime} (ISO: ${getServerTimeResult.iso8601})',
+      tag: 'ACCESS_CHECK',
+    );
+
+    final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
+      currentDate: getServerTimeResult.utcDateTime,
+    ) ?? true;
+
+    StoyCoLogger.info(
+      '[DATE] [hasAccessToContent] Date validation (isVisibleForSubscribers): $isVisibleForSubscribers',
+      tag: 'ACCESS_CHECK',
+    );
+    
+    if (accessContent != null) {
+      StoyCoLogger.info(
+        '[DATE] [hasAccessToContent] Visibility window: from=${accessContent.visibleFrom}, until=${accessContent.visibleUntil}',
+        tag: 'ACCESS_CHECK',
+      );
+    }
+
+    // If content is NOT in valid date range (future or expired), grant public access
+    if (!isVisibleForSubscribers) {
+      StoyCoLogger.info(
+        '[OK] [hasAccessToContent] Content NOT in valid date range (future or expired) - granting public access (no auth required)',
+        tag: 'ACCESS_CHECK',
+      );
+      return true;
+    }
+
+    StoyCoLogger.info(
+      '[LOCK] [hasAccessToContent] Content IS in valid date range - checking authentication',
+      tag: 'ACCESS_CHECK',
+    );
+
+    // Check if user is authenticated before proceeding with subscription validation
+    final User? currentUser = firebaseAuth.currentUser;
+    if (currentUser == null) {
+      StoyCoLogger.warning(
+        '[DENIED] [hasAccessToContent] User not authenticated - denying access to subscription-only content',
+        tag: 'ACCESS_CHECK',
+      );
+      return false;
+    }
+
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+
+    return await result.fold(
+      (Failure failure) async {
         StoyCoLogger.error(
-          'Content access check failed: ${failure.message}',
-          tag: 'ActiveSubscriptionService',
+          '[ERROR] [hasAccessToContent] Failed to fetch user subscriptions: ${failure.message}',
+          tag: 'ACCESS_CHECK',
         );
+        // On error, deny access to subscription-only content for safety
         return false;
       },
-      (ActiveUserPlanResponse response) {
+      (ActiveUserPlanResponse response) async {
+        StoyCoLogger.info(
+          '[STATS] [hasAccessToContent] User has ${response.count} active subscription(s)',
+          tag: 'ACCESS_CHECK',
+        );
+
         final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
             ? response.data.where(
                 (ActiveUserPlan plan) => plan.partnerId == partnerId,
               )
             : response.data;
 
+        StoyCoLogger.info(
+          '[FILTER] [hasAccessToContent] After partner filter: ${filteredSubscriptions.length} subscription(s)',
+          tag: 'ACCESS_CHECK',
+        );
+
         final Set<String> userPlanIds = filteredSubscriptions.map((ActiveUserPlan plan) => plan.plan.id).toSet();
-        final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
-          currentDate: getServerTimeResult.utcDateTime,
-        ) ?? true;
+        
+        StoyCoLogger.info(
+          '[PLANS] [hasAccessToContent] User plan IDs: ${userPlanIds.toList()}',
+          tag: 'ACCESS_CHECK',
+        );
 
-        if (!isVisibleForSubscribers) {
-          return true;
-        } 
+        // Validate AccessContent fields
+        final bool hasValidAccessContent = accessContent != null;
+        final bool hasContentId = accessContent?.contentId.isNotEmpty ?? false;
+        final bool hasPartnerId = accessContent?.partnerId.isNotEmpty ?? false;
+        final bool hasPlanIds = accessContent?.planIds.isNotEmpty ?? false;
 
-        // Check all conditions in single expression
-        return accessContent != null &&
+        StoyCoLogger.info(
+          '[CHECK] [hasAccessToContent] AccessContent validation: hasValidAccessContent=$hasValidAccessContent, hasContentId=$hasContentId, hasPartnerId=$hasPartnerId, hasPlanIds=$hasPlanIds',
+          tag: 'ACCESS_CHECK',
+        );
+
+        if (accessContent != null && accessContent.planIds.isNotEmpty) {
+          StoyCoLogger.info(
+            '[PLANS] [hasAccessToContent] Required plan IDs: ${accessContent.planIds}',
+            tag: 'ACCESS_CHECK',
+          );
+        }
+
+        // Check all conditions
+        final bool hasAccess = accessContent != null &&
           accessContent.contentId.isNotEmpty &&
           accessContent.partnerId.isNotEmpty &&
           accessContent.planIds.isNotEmpty &&
           accessContent.planIds.any(userPlanIds.contains);
-        
+
+        if (hasAccess) {
+          StoyCoLogger.info(
+            '[OK] [hasAccessToContent] ACCESS GRANTED - User has valid subscription plan',
+            tag: 'ACCESS_CHECK',
+          );
+        } else {
+          StoyCoLogger.warning(
+            '[DENIED] [hasAccessToContent] ACCESS DENIED - User does not have required subscription plan',
+            tag: 'ACCESS_CHECK',
+          );
+        }
+
+        return hasAccess;
       },
     );
   }
@@ -697,48 +807,162 @@ class ActiveSubscriptionService {
     String? partnerId,
     bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    StoyCoLogger.info(
+      '[>>] [hasAccessToMultiplesContent] Starting bulk access validation for ${contents.length} item(s)',
+      tag: 'BULK_ACCESS_CHECK',
+    );
+    StoyCoLogger.info(
+      '[INFO] [hasAccessToMultiplesContent] Parameters: partnerId=$partnerId, forceRefresh=$forceRefresh',
+      tag: 'BULK_ACCESS_CHECK',
+    );
+
+    // Get server time FIRST to validate dates before checking authentication
     final ServerTime getServerTimeResult = await getServerTime();
+
+    StoyCoLogger.info(
+      '[TIME] [hasAccessToMultiplesContent] Server time: ${getServerTimeResult.utcDateTime} (ISO: ${getServerTimeResult.iso8601})',
+      tag: 'BULK_ACCESS_CHECK',
+    );
+
+    // Check if user is authenticated
+    final User? currentUser = firebaseAuth.currentUser;
+    final bool isAuthenticated = currentUser != null;
+    
+    StoyCoLogger.info(
+      '[AUTH] [hasAccessToMultiplesContent] User authentication status: ${isAuthenticated ? "authenticated" : "not authenticated"}',
+      tag: 'BULK_ACCESS_CHECK',
+    );
+
+    // If user is not authenticated, validate dates and grant access based on visibility
+    if (!isAuthenticated) {
+      StoyCoLogger.warning(
+        '[AUTH] [hasAccessToMultiplesContent] User not authenticated - validating content dates',
+        tag: 'BULK_ACCESS_CHECK',
+      );
+      return _handleUnauthenticatedContents<T>(
+        contents: contents,
+        getAccessContent: getAccessContent,
+        getIsSubscriptionOnly: getIsSubscriptionOnly,
+        hasAccessToContent: hasAccessToContent,
+        serverTime: getServerTimeResult,
+      );
+    }
+
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
 
     return result.fold(
       (Failure failure) {
         StoyCoLogger.error(
-          'Multiple content access check failed: ${failure.message}',
-          tag: 'ActiveSubscriptionService',
+          '[ERROR] [hasAccessToMultiplesContent] Failed to fetch user subscriptions: ${failure.message}',
+          tag: 'BULK_ACCESS_CHECK',
         );
         return _handleErrorContents<T>(
           contents: contents,
+          getAccessContent: getAccessContent,
           getIsSubscriptionOnly: getIsSubscriptionOnly,
           hasAccessToContent: hasAccessToContent,
+          serverTime: getServerTimeResult,
         );
       },
       (ActiveUserPlanResponse response) {
+        StoyCoLogger.info(
+          '[STATS] [hasAccessToMultiplesContent] User has ${response.count} active subscription(s)',
+          tag: 'BULK_ACCESS_CHECK',
+        );
+
         final Iterable<ActiveUserPlan> filteredSubscriptions = partnerId != null
             ? response.data.where(
                 (ActiveUserPlan plan) => plan.partnerId == partnerId,
               )
             : response.data;
 
+        StoyCoLogger.info(
+          '[FILTER] [hasAccessToMultiplesContent] After partner filter: ${filteredSubscriptions.length} subscription(s)',
+          tag: 'BULK_ACCESS_CHECK',
+        );
+
         final Set<String> userPlanIds = filteredSubscriptions
             .map((ActiveUserPlan plan) => plan.plan.id)
             .toSet();
 
-        return contents.map((T item) {
+        StoyCoLogger.info(
+          '[PLANS] [hasAccessToMultiplesContent] User plan IDs: ${userPlanIds.toList()}',
+          tag: 'BULK_ACCESS_CHECK',
+        );
+
+        int itemIndex = 0;
+        int publicCount = 0;
+        int grantedCount = 0;
+        int deniedCount = 0;
+
+        final List<T> result = contents.map((T item) {
+          itemIndex++;
           final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
+
+          StoyCoLogger.info(
+            '[ITEM] [hasAccessToMultiplesContent] Item #$itemIndex: isSubscriptionOnly=$isSubscriptionOnly',
+            tag: 'BULK_ACCESS_CHECK',
+          );
 
           // Public content - immediate access
           if (!isSubscriptionOnly) {
+            publicCount++;
+            StoyCoLogger.info(
+              '[OK] [hasAccessToMultiplesContent] Item #$itemIndex: PUBLIC - granting access',
+              tag: 'BULK_ACCESS_CHECK',
+            );
             return hasAccessToContent(item, true);
           }
-          // Subscription-only content - validate all conditions in single expression
+
+          // Subscription-only content - validate all conditions
           final AccessContent? accessContent = getAccessContent(item);
+
+          StoyCoLogger.info(
+            '[DATA] [hasAccessToMultiplesContent] Item #$itemIndex AccessContent: ${accessContent?.toJson()}',
+            tag: 'BULK_ACCESS_CHECK',
+          );
 
           final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
             currentDate: getServerTimeResult.utcDateTime,
           ) ?? true;
 
+          StoyCoLogger.info(
+            '[DATE] [hasAccessToMultiplesContent] Item #$itemIndex: Date validation (isVisibleForSubscribers)=$isVisibleForSubscribers',
+            tag: 'BULK_ACCESS_CHECK',
+          );
+
+          if (accessContent != null) {
+            StoyCoLogger.info(
+              '[DATE] [hasAccessToMultiplesContent] Item #$itemIndex: Visibility window: from=${accessContent.visibleFrom}, until=${accessContent.visibleUntil}',
+              tag: 'BULK_ACCESS_CHECK',
+            );
+          }
+
           if (!isVisibleForSubscribers) {
+            publicCount++;
+            StoyCoLogger.info(
+              '[OK] [hasAccessToMultiplesContent] Item #$itemIndex: NOT in valid date range (future or expired) - granting public access',
+              tag: 'BULK_ACCESS_CHECK',
+            );
             return hasAccessToContent(item, true);
+          }
+
+          // Validate AccessContent fields
+          final bool hasValidAccessContent = accessContent != null;
+          final bool hasContentId = accessContent?.contentId.isNotEmpty ?? false;
+          final bool hasPartnerId = accessContent?.partnerId.isNotEmpty ?? false;
+          final bool hasPlanIds = accessContent?.planIds.isNotEmpty ?? false;
+
+          StoyCoLogger.info(
+            '[CHECK] [hasAccessToMultiplesContent] Item #$itemIndex: Validation - hasValidAccessContent=$hasValidAccessContent, hasContentId=$hasContentId, hasPartnerId=$hasPartnerId, hasPlanIds=$hasPlanIds',
+            tag: 'BULK_ACCESS_CHECK',
+          );
+
+          if (accessContent != null && accessContent.planIds.isNotEmpty) {
+            StoyCoLogger.info(
+              '[PLANS] [hasAccessToMultiplesContent] Item #$itemIndex: Required plan IDs: ${accessContent.planIds}',
+              tag: 'BULK_ACCESS_CHECK',
+            );
           }
 
           final bool hasAccess =
@@ -747,10 +971,98 @@ class ActiveSubscriptionService {
               accessContent.partnerId.isNotEmpty &&
               accessContent.planIds.isNotEmpty &&
               accessContent.planIds.any(userPlanIds.contains);
+
+          if (hasAccess) {
+            grantedCount++;
+            StoyCoLogger.info(
+              '[OK] [hasAccessToMultiplesContent] Item #$itemIndex: ACCESS GRANTED',
+              tag: 'BULK_ACCESS_CHECK',
+            );
+          } else {
+            deniedCount++;
+            StoyCoLogger.warning(
+              '[DENIED] [hasAccessToMultiplesContent] Item #$itemIndex: ACCESS DENIED',
+              tag: 'BULK_ACCESS_CHECK',
+            );
+          }
+
           return hasAccessToContent(item, hasAccess);
         }).toList();
+
+        StoyCoLogger.info(
+          '[SUMMARY] [hasAccessToMultiplesContent] Summary: Total=$itemIndex, Public=$publicCount, Granted=$grantedCount, Denied=$deniedCount',
+          tag: 'BULK_ACCESS_CHECK',
+        );
+
+        return result;
       },
     );
+  }
+
+  /// Returns contents with hasAccess set based on authentication status.
+  ///
+  /// This helper method is used when the user is not authenticated.
+  /// It ensures that:
+  /// - Public content ([getIsSubscriptionOnly] returns false) remains accessible
+  /// - Subscription-only content with invalid dates (future or expired) becomes accessible
+  /// - Subscription-only content with valid dates is marked as inaccessible
+  ///
+  /// **Parameters:**
+  /// - [contents]: List of content items to process
+  /// - [getAccessContent]: Function to get AccessContent from the model
+  /// - [getIsSubscriptionOnly]: Function to determine if content requires subscription
+  /// - [hasAccessToContent]: Function to update the model with access status
+  /// - [serverTime]: Server time for date validation
+  ///
+  /// **Returns:**
+  /// A list of models with access status set based on subscription requirement and date validation.
+  List<T> _handleUnauthenticatedContents<T>({
+    required List<T> contents,
+    required AccessContent? Function(T) getAccessContent,
+    required bool Function(T) getIsSubscriptionOnly,
+    required T Function(T, bool) hasAccessToContent,
+    required ServerTime serverTime,
+  }) {
+    int publicCount = 0;
+    int dateBasedPublicCount = 0;
+    int lockedCount = 0;
+
+    final List<T> result = contents.map((T item) {
+      final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
+      
+      // Public content - always accessible
+      if (!isSubscriptionOnly) {
+        publicCount++;
+        return hasAccessToContent(item, true);
+      }
+
+      // Subscription-only content - check dates
+      final AccessContent? accessContent = getAccessContent(item);
+      final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
+        currentDate: serverTime.utcDateTime,
+      ) ?? true;
+
+      // If content is NOT in valid date range (future or expired), grant public access
+      if (!isVisibleForSubscribers) {
+        dateBasedPublicCount++;
+        StoyCoLogger.info(
+          '[OK] [handleUnauthenticatedContents] Content with invalid dates - granting public access',
+          tag: 'BULK_ACCESS_CHECK',
+        );
+        return hasAccessToContent(item, true);
+      }
+
+      // Content is subscription-only and in valid date range - deny access
+      lockedCount++;
+      return hasAccessToContent(item, false);
+    }).toList();
+
+    StoyCoLogger.info(
+      '[SUMMARY] [handleUnauthenticatedContents] Result: Total=${contents.length}, Public=$publicCount, DateBasedPublic=$dateBasedPublicCount, Locked=$lockedCount',
+      tag: 'BULK_ACCESS_CHECK',
+    );
+
+    return result;
   }
 
   /// Returns contents with hasAccess set to false for items where getIsSubscriptionOnly is true.
@@ -758,24 +1070,45 @@ class ActiveSubscriptionService {
   /// This helper method is used when there's an error fetching subscription data.
   /// It ensures that:
   /// - Public content ([getIsSubscriptionOnly] returns false) remains accessible
-  /// - Subscription-only content is marked as inaccessible for safety
+  /// - Subscription-only content with invalid dates (future or expired) becomes accessible
+  /// - Subscription-only content with valid dates is marked as inaccessible for safety
   ///
   /// **Parameters:**
   /// - [contents]: List of content items to process
+  /// - [getAccessContent]: Function to get AccessContent from the model
   /// - [getIsSubscriptionOnly]: Function to determine if content requires subscription
   /// - [hasAccessToContent]: Function to update the model with access status
+  /// - [serverTime]: Server time for date validation
   ///
   /// **Returns:**
-  /// A list of models with access status set based on subscription requirement.
+  /// A list of models with access status set based on subscription requirement and date validation.
   List<T> _handleErrorContents<T>({
     required List<T> contents,
+    required AccessContent? Function(T) getAccessContent,
     required bool Function(T) getIsSubscriptionOnly,
     required T Function(T, bool) hasAccessToContent,
+    required ServerTime serverTime,
   }) => contents.map((T item) {
-    if (getIsSubscriptionOnly(item)) {
-      return hasAccessToContent(item, false);
+    final bool isSubscriptionOnly = getIsSubscriptionOnly(item);
+    
+    // Public content - always accessible
+    if (!isSubscriptionOnly) {
+      return hasAccessToContent(item, true);
     }
-    return item;
+
+    // Subscription-only content - check dates
+    final AccessContent? accessContent = getAccessContent(item);
+    final bool isVisibleForSubscribers = accessContent?.isVisibleForSubscribers(
+      currentDate: serverTime.utcDateTime,
+    ) ?? true;
+
+    // If content is NOT in valid date range (future or expired), grant public access
+    if (!isVisibleForSubscribers) {
+      return hasAccessToContent(item, true);
+    }
+
+    // Content is subscription-only and in valid date range - deny access for safety
+    return hasAccessToContent(item, false);
   }).toList();
 
   /// Gets all available content accesses for the user.

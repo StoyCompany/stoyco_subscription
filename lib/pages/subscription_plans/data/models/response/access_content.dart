@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart';
 
 part 'access_content.g.dart';
 
@@ -170,13 +171,18 @@ class AccessContent extends Equatable {
   /// - If [visibleFrom] is set to 2024-01-15, content is visible from 2024-01-15 00:00:00
   /// - If [visibleUntil] is set to 2024-12-31, content is visible until 2024-12-31 23:59:59
   ///
+  /// **Date Configuration Scenarios:**
+  /// 1. **Both null**: Content is always in valid range (permanent exclusive content)
+  /// 2. **Only visibleFrom**: Content is valid from that date onwards (no expiration)
+  /// 3. **Only visibleUntil**: Content is valid until that date (valid from the beginning)
+  /// 4. **Both dates**: Content is valid only within the specified range
+  ///
   /// **Parameters:**
   /// - [currentDate]: Server date to use for validation (required to prevent client-side manipulation)
   ///
   /// **Returns:**
-  /// - `true`: If dates are null (no time restriction)
-  /// - `true`: If current date is within range (visibleFrom ≤ current ≤ visibleUntil)
-  /// - `false`: If current date is before or after the valid range
+  /// - `true`: If dates are null (no time restriction) OR current date is within range
+  /// - `false`: If current date is before [visibleFrom] OR after [visibleUntil]
   ///
   /// **Example:**
   /// ```dart
@@ -197,31 +203,111 @@ class AccessContent extends Equatable {
   bool isVisibleForSubscribers({
     required DateTime currentDate,
   }) {
+    StoyCoLogger.info(
+      '[>>] [isVisibleForSubscribers] === Starting date validation ===',
+      tag: 'DATE_VALIDATION',
+    );
+    StoyCoLogger.info(
+      '[INFO] [isVisibleForSubscribers] visibleFrom: $visibleFrom, visibleUntil: $visibleUntil, currentDate: $currentDate',
+      tag: 'DATE_VALIDATION',
+    );
+
     // If both dates are null, content is available without time restriction
     if (visibleFrom == null && visibleUntil == null) {
+      StoyCoLogger.info(
+        '[OK] [isVisibleForSubscribers] CASE 1: Both dates NULL - content is ALWAYS valid (permanent exclusive)',
+        tag: 'DATE_VALIDATION',
+      );
       return true;
     }
 
     // Normalize dates to compare only date parts (ignore time)
     final DateTime currentDateOnly = DateTime(currentDate.year, currentDate.month, currentDate.day);
+    StoyCoLogger.info(
+      '[CHECK] [isVisibleForSubscribers] Normalized current date: ${currentDateOnly.toIso8601String()}',
+      tag: 'DATE_VALIDATION',
+    );
 
-    // If current date is before the visibility start date
-    if (visibleFrom != null) {
+    // Case 2: Only visibleFrom is set (valid from that date onwards, no expiration)
+    if (visibleFrom != null && visibleUntil == null) {
       final DateTime visibleFromDateOnly = DateTime(visibleFrom!.year, visibleFrom!.month, visibleFrom!.day);
+      StoyCoLogger.info(
+        '[CHECK] [isVisibleForSubscribers] CASE 2: Only START date set (${visibleFromDateOnly.toIso8601String()})',
+        tag: 'DATE_VALIDATION',
+      );
+      
       if (currentDateOnly.isBefore(visibleFromDateOnly)) {
+        StoyCoLogger.warning(
+          '[DENIED] [isVisibleForSubscribers] Current date is BEFORE start date - content NOT YET valid',
+          tag: 'DATE_VALIDATION',
+        );
         return false;
       }
+      
+      StoyCoLogger.info(
+        '[OK] [isVisibleForSubscribers] Current date is ON or AFTER start date - content IS valid (no end date)',
+        tag: 'DATE_VALIDATION',
+      );
+      return true;
     }
 
-    // If current date is after the visibility end date
-    if (visibleUntil != null) {
+    // Case 3: Only visibleUntil is set (valid until that date, from the beginning)
+    if (visibleFrom == null && visibleUntil != null) {
       final DateTime visibleUntilDateOnly = DateTime(visibleUntil!.year, visibleUntil!.month, visibleUntil!.day);
+      StoyCoLogger.info(
+        '[CHECK] [isVisibleForSubscribers] CASE 3: Only END date set (${visibleUntilDateOnly.toIso8601String()})',
+        tag: 'DATE_VALIDATION',
+      );
+      
       if (currentDateOnly.isAfter(visibleUntilDateOnly)) {
+        StoyCoLogger.warning(
+          '[DENIED] [isVisibleForSubscribers] Current date is AFTER end date - content EXPIRED',
+          tag: 'DATE_VALIDATION',
+        );
         return false;
       }
+      
+      StoyCoLogger.info(
+        '[OK] [isVisibleForSubscribers] Current date is ON or BEFORE end date - content IS valid (no start date)',
+        tag: 'DATE_VALIDATION',
+      );
+      return true;
     }
 
-    // Current date is within valid range
+    // Case 4: Both dates are set (valid only within the range)
+    StoyCoLogger.info(
+      '[CHECK] [isVisibleForSubscribers] CASE 4: Both dates set - validating range',
+      tag: 'DATE_VALIDATION',
+    );
+    
+    final DateTime visibleFromDateOnly = DateTime(visibleFrom!.year, visibleFrom!.month, visibleFrom!.day);
+    final DateTime visibleUntilDateOnly = DateTime(visibleUntil!.year, visibleUntil!.month, visibleUntil!.day);
+    
+    StoyCoLogger.info(
+      '[CLOCK] [isVisibleForSubscribers] Range: ${visibleFromDateOnly.toIso8601String()} to ${visibleUntilDateOnly.toIso8601String()}',
+      tag: 'DATE_VALIDATION',
+    );
+    
+    if (currentDateOnly.isBefore(visibleFromDateOnly)) {
+      StoyCoLogger.warning(
+        '[DENIED] [isVisibleForSubscribers] Current date is BEFORE start date - content NOT YET valid',
+        tag: 'DATE_VALIDATION',
+      );
+      return false;
+    }
+    
+    if (currentDateOnly.isAfter(visibleUntilDateOnly)) {
+      StoyCoLogger.warning(
+        '[DENIED] [isVisibleForSubscribers] Current date is AFTER end date - content EXPIRED',
+        tag: 'DATE_VALIDATION',
+      );
+      return false;
+    }
+
+    StoyCoLogger.info(
+      '[OK] [isVisibleForSubscribers] Current date is WITHIN range - content IS valid',
+      tag: 'DATE_VALIDATION',
+    );
     return true;
   }
 
