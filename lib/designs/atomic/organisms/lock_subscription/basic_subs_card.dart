@@ -64,6 +64,7 @@ class SubscriptionLockedContent extends StatelessWidget {
     required this.isLocked,
     this.scale = 1.0,
     this.indicatorPosition = SubscriptionIndicatorPosition.defaultPosition,
+    this.borderRadiusCard = 16.0,
     this.onLockedTap,
     this.blurIntensity = 3,
     this.overlayOpacityStart = 0.02,
@@ -101,6 +102,9 @@ class SubscriptionLockedContent extends StatelessWidget {
   /// )
   /// ```
   final SubscriptionIndicatorPosition indicatorPosition;
+
+  /// Border radius for the glassmorphic overlay and blur effect.
+  final double borderRadiusCard;
 
   /// Callback invoked when the locked overlay is tapped.
   ///
@@ -207,7 +211,7 @@ class SubscriptionLockedContent extends StatelessWidget {
             child: GlassmorphicContainer(
               width: double.infinity,
               height: double.infinity,
-              borderRadius: StoycoScreenSize.radius(context, 16),
+              borderRadius: StoycoScreenSize.radius(context, borderRadiusCard),
               blur: blurIntensity,
               alignment: Alignment.center,
               border: 0,
