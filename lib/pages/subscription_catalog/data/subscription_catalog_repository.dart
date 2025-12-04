@@ -53,13 +53,11 @@ class SubscriptionCatalogRepository {
   ///
   /// Returns a [GetSubscriptionCatalogResponse] with the catalog data.
   Future<Either<Failure, GetSubscriptionCatalogResponse>> getSubscriptionCatalog({
-    String? userId,
     int? page,
     int? pageSize,
   }) async {
     try {
       final Response<Map<String, dynamic>> response = await _dataSource.getSubscriptionCatalog(
-        userId: userId,
         page: page,
         pageSize: pageSize,
       );

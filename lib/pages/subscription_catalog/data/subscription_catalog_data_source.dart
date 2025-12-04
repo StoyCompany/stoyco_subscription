@@ -29,6 +29,7 @@ class SubscriptionCatalogDataSource {
   /// Returns the headers for API requests, including the authorization token.
   Map<String, String> _getHeaders() => <String, String>{
     'Authorization': 'Bearer $_userToken',
+    'accept': '*/*',
   };
 
   /// Fetches the subscription plans for a specific user from the API.
@@ -38,21 +39,16 @@ class SubscriptionCatalogDataSource {
   Future<Response<Map<String, dynamic>>> getUserSubscriptionPlans(
     GetUserSubscriptionPlansRequest request,
   ) async {
-    final String url =
-        '${environment.baseUrl()}subscriptions/plans/user/${request.userId}';
+    final String url = '${environment.baseUrl()}subscriptions/plans/user/${request.userId}';
     return _dio.get(url, options: Options(headers: _getHeaders()));
   }
 
   Future<Response<Map<String, dynamic>>> getSubscriptionCatalog({
-    String? userId,
     int? page,
     int? pageSize,
   }) async {
     final String url = '${environment.baseUrl()}subscriptions/catalog';
     final Map<String, dynamic> queryParams = <String, dynamic>{};
-    if (userId != null && userId.isNotEmpty) {
-      queryParams['userId'] = userId;
-    }
     if (page != null) {
       queryParams['page'] = page;
     }

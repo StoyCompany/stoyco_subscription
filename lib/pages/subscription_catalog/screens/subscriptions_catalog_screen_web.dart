@@ -5,6 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/molecules/circular_avatar/sub
 import 'package:stoyco_subscription/designs/atomic/molecules/tab_bar/tab_bar_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_service.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item_map.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/notifier/subscription_catalog_notifier.dart';
 
@@ -23,8 +24,8 @@ class SubscriptionsCatalogScreenWeb extends StatefulWidget {
     this.onTapSubscription,
     this.onTapSubscribe,
     this.onTapWhenExpired,
-    this.userId,
     this.pageSize,
+    required this.service,
     super.key,
   });
 
@@ -38,7 +39,7 @@ class SubscriptionsCatalogScreenWeb extends StatefulWidget {
 
   final void Function(String id)? onTapWhenExpired;
 
-  final String? userId;
+  final SubscriptionCatalogService service;
 
   final int? pageSize;
 
@@ -63,7 +64,7 @@ class _SubscriptionsCatalogScreenWebState
     onTapSubscription = widget.onTapSubscription;
     notifier = SubscriptionCatalogNotifier(
       this,
-      userId: widget.userId,
+      service: widget.service,
       pageSize: widget.pageSize,
     );
     notifier.addListener(_onNotifierChanged);

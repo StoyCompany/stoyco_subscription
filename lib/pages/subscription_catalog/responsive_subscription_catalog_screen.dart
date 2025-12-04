@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_service.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/screens/subscription_catalog_screen_mobile.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/screens/subscriptions_catalog_screen_web.dart';
 
@@ -20,10 +21,10 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
     super.key,
     this.onTapSubscription,
     this.onTapSubscribe,
-    this.userId,
     this.pageSize,
     this.onTapLeadingIcon,
     this.onTapWhenExpired,
+    required this.service,
   });
 
   /// Callback when a subscription is tapped.
@@ -36,7 +37,7 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
 
   final VoidCallback? onTapLeadingIcon;
 
-  final String? userId;
+  final SubscriptionCatalogService service;
 
   final int? pageSize;
 
@@ -49,7 +50,7 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
         onTapSubscription: onTapSubscription,
         onTapSubscribe: onTapSubscribe,
         onTapWhenExpired: onTapWhenExpired,
-        userId: userId,
+        service: service,
         pageSize: pageSize,
       );
     } else {
@@ -58,7 +59,7 @@ class ResponsiveSubscriptionCatalogScreen extends StatelessWidget {
         onTapSubscribe: onTapSubscribe,
         onTapWhenExpired: onTapWhenExpired,
         onTapLeadingIcon: onTapLeadingIcon,
-        userId: userId,
+        service: service,
         pageSize: pageSize,
       );
     }

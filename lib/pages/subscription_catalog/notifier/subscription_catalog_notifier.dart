@@ -11,7 +11,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.
 class SubscriptionCatalogNotifier extends ChangeNotifier {
   SubscriptionCatalogNotifier(
     TickerProvider vsync, {
-    this.userId,
+    required this.service,
     int? pageSize,
   }) : pageSize = pageSize ?? 50 {
     tabController = TabController(vsync: vsync, length: tabs.length);
@@ -28,7 +28,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     const SubscriptionStoycoTab(title: 'Brands'),
   ];
   final ScrollController scrollController = ScrollController();
-  final String? userId;
+  final SubscriptionCatalogService service;
 
   List<SubscriptionCatalogItemMap> musicSubscriptions =
       <SubscriptionCatalogItemMap>[];
@@ -112,8 +112,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     }
     isLoadingMore = true;
     final int nextPage = currentPage + 1;
-    final Either<Failure, GetSubscriptionCatalogResponse> result =
-        await SubscriptionCatalogService.instance.getSubscriptionCatalog(
+    final Either<Failure, GetSubscriptionCatalogResponse> result = await service.getSubscriptionCatalog(
           page: nextPage,
           pageSize: pageSize,
         );
@@ -174,9 +173,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     brandSubscriptions.clear();
 
     while (hasNextPage) {
-      final Either<Failure, GetSubscriptionCatalogResponse> result =
-          await SubscriptionCatalogService.instance.getSubscriptionCatalog(
-            userId: userId,
+      final Either<Failure, GetSubscriptionCatalogResponse> result = await service.getSubscriptionCatalog(
             page: currentPage,
             pageSize: pageSize,
           );

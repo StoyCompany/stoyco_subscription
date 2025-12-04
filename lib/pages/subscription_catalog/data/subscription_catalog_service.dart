@@ -132,10 +132,9 @@ class SubscriptionCatalogService {
   ///
   /// Returns an [Either] with [GetSubscriptionCatalogResponse] on success or [Failure] on error.
   Future<Either<Failure, GetSubscriptionCatalogResponse>>
-  getSubscriptionCatalog({String? userId, int? page, int? pageSize}) async {
+  getSubscriptionCatalog({ int? page, int? pageSize}) async {
     try {
       final Either<Failure, GetSubscriptionCatalogResponse> response = await _repository.getSubscriptionCatalog(
-        userId: userId,
         page: page,
         pageSize: pageSize,
       );

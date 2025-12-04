@@ -7,6 +7,7 @@ import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dar
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
+import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_service.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/models/subscription_catalog_item_map.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/notifier/subscription_catalog_notifier.dart';
 
@@ -37,10 +38,10 @@ class SubscriptionsCatalogScreenMobile extends StatefulWidget {
     super.key,
     this.onTapSubscription,
     this.onTapSubscribe,
-    this.userId,
     this.pageSize,
     this.onTapLeadingIcon,
     this.onTapWhenExpired,
+    required this.service,
   });
 
   /// Callback triggered when a subscription item is tapped.
@@ -55,21 +56,18 @@ class SubscriptionsCatalogScreenMobile extends StatefulWidget {
 
   final VoidCallback? onTapLeadingIcon;
 
-  final String? userId;
+  final SubscriptionCatalogService service;
 
   final int? pageSize;
 
   @override
-  State<SubscriptionsCatalogScreenMobile> createState() =>
-      _SubscriptionsCatalogScreenMobileState();
+  State<SubscriptionsCatalogScreenMobile> createState() => _SubscriptionsCatalogScreenMobileState();
 }
 
 /// State for [SubscriptionsCatalogScreenMobile].
 ///
 /// Handles the notifier, tab controller, and grid layout logic.
-class _SubscriptionsCatalogScreenMobileState
-    extends State<SubscriptionsCatalogScreenMobile>
-    with SingleTickerProviderStateMixin {
+class _SubscriptionsCatalogScreenMobileState extends State<SubscriptionsCatalogScreenMobile> with SingleTickerProviderStateMixin {
   late SubscriptionCatalogNotifier notifier;
   late void Function(String id)? onTapSubscription;
 
@@ -79,8 +77,8 @@ class _SubscriptionsCatalogScreenMobileState
     onTapSubscription = widget.onTapSubscription;
     notifier = SubscriptionCatalogNotifier(
       this,
-      userId: widget.userId,
       pageSize: widget.pageSize,
+      service: widget.service,
     );
     notifier.addListener(_onNotifierChanged);
   }
