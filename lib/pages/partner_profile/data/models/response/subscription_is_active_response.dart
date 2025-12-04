@@ -103,6 +103,9 @@ class SubscriptionIsActiveResponse extends Equatable {
   /// Whether the plan has been deleted.
   final bool planIsDeleted;
 
+  // TODO: JOSE LAMILLA REVISAR ESTO PORFA
+  final subscribedIsActive = false;
+
   /// Converts this object to a JSON map.
   Map<String, dynamic> toJson() => _$SubscriptionIsActiveResponseToJson(this);
 
@@ -116,20 +119,20 @@ class SubscriptionIsActiveResponse extends Equatable {
 
   @override
   List<Object?> get props => <Object?>[
-        planId,
-        planName,
-        planImageUrl,
-        partnerProfile,
-        partnerName,
-        partnerId,
-        recurrenceType,
-        price,
-        currencyCode,
-        currencySymbol,
-        planStatus,
-        subscriptionStartDate,
-        subscriptionEndDate,
-        hasActivePlan,
-        planIsDeleted,
-      ];
+    planId,
+    planName,
+    planImageUrl,
+    partnerProfile,
+    partnerName,
+    partnerId,
+    recurrenceType,
+    price,
+    currencyCode,
+    currencySymbol,
+    planStatus,
+    subscriptionStartDate,
+    subscriptionEndDate,
+    hasActivePlan,
+    planIsDeleted,
+  ];
 }
