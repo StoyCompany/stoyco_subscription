@@ -107,13 +107,11 @@ class SubscriptionCatalogService {
   ///
   /// Takes a [GetUserSubscriptionPlansRequest] containing the user ID.
   /// Returns an [Either] with [UserSubscriptionPlanResponse] on success or [Failure] on error.
-  Future<Either<Failure, UserSubscriptionPlanResponse>>
-  getUserSubscriptionPlans(GetUserSubscriptionPlansRequest request) async {
+  Future<Either<Failure, UserSubscriptionPlanResponse>> getUserSubscriptionPlans(GetUserSubscriptionPlansRequest request) async {
     try {
       await verifyToken();
-      final UserSubscriptionPlanResponse response = await _repository
-          .getUserSubscriptionPlans(request);
-      return Right<Failure, UserSubscriptionPlanResponse>(response);
+      final Either<Failure, UserSubscriptionPlanResponse> response = await _repository.getUserSubscriptionPlans(request);
+      return response;
     } on DioException catch (error) {
       return Left<Failure, UserSubscriptionPlanResponse>(
         DioFailure.decode(error),
@@ -136,13 +134,12 @@ class SubscriptionCatalogService {
   Future<Either<Failure, GetSubscriptionCatalogResponse>>
   getSubscriptionCatalog({String? userId, int? page, int? pageSize}) async {
     try {
-      final GetSubscriptionCatalogResponse response = await _repository
-          .getSubscriptionCatalog(
-            userId: userId,
-            page: page,
-            pageSize: pageSize,
-          );
-      return Right<Failure, GetSubscriptionCatalogResponse>(response);
+      final Either<Failure, GetSubscriptionCatalogResponse> response = await _repository.getSubscriptionCatalog(
+        userId: userId,
+        page: page,
+        pageSize: pageSize,
+      );
+      return response;
     } on DioException catch (error) {
       return Left<Failure, GetSubscriptionCatalogResponse>(
         DioFailure.decode(error),

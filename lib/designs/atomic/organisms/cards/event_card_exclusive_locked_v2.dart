@@ -164,6 +164,7 @@ class EventCardExclusiveLockedV2 extends StatefulWidget {
 }
 
 class _EventCardExclusiveLockedState extends State<EventCardExclusiveLockedV2> {
+  // ignore: unused_field
   bool _isInfoHovered = false;
 
   @override

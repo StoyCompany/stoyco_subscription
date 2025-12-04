@@ -14,34 +14,21 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/models/respons
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/responses/active_user_plan_response.dart';
 
 /// {@template active_subscription_service}
-/// Service class for managing active subscription verification operations with caching.
+/// Service class for managing active subscription verification operations.
 ///
 /// This singleton service provides methods to check if a user has active
 /// subscriptions by interacting with the repository and data source layers.
 /// It manages the user authentication automatically using Firebase Auth.
-///
-/// **Caching Strategy:**
-/// - Stores subscription data in memory after first fetch
-/// - Automatically refreshes cache after configured duration (default: 5 minutes)
-/// - Can force refresh on demand
-/// - Clears cache automatically on user logout
 ///
 /// **Usage:**
 /// ```dart
 /// final service = ActiveSubscriptionService(
 ///   environment: StoycoEnvironment.testing,
 ///   firebaseAuth: FirebaseAuth.instance,
-///   cacheDuration: Duration(minutes: 10), // Optional, defaults to 5 minutes
 /// );
 ///
-/// // First call fetches from API and caches
+/// // Fetch user subscriptions from API
 /// final result = await service.getActiveUserSubscriptions();
-///
-/// // Subsequent calls use cache if still valid
-/// final cachedResult = await service.getActiveUserSubscriptions();
-///
-/// // Force refresh from API
-/// final freshResult = await service.getActiveUserSubscriptions(forceRefresh: true);
 ///
 /// result.fold(
 ///   (failure) => print('Error: ${failure.message}'),
@@ -59,29 +46,25 @@ class ActiveSubscriptionService {
   /// Factory constructor for initializing the service.
   ///
   /// Automatically handles token retrieval and refresh from Firebase Auth.
-  /// Sets up cache management and logout listener.
+  /// Sets up auth state listener for cleanup on logout.
   ///
   /// - [firebaseAuth]: Required Firebase Auth instance for authentication
   /// - [environment]: API environment (defaults to development)
-  /// - [cacheDuration]: How long to keep cache valid (defaults to 5 minutes)
   ///
   /// Example:
   /// ```dart
   /// final service = ActiveSubscriptionService(
   ///   environment: StoycoEnvironment.production,
   ///   firebaseAuth: FirebaseAuth.instance,
-  ///   cacheDuration: Duration(minutes: 10),
   /// );
   /// ```
   factory ActiveSubscriptionService({
     required FirebaseAuth firebaseAuth,
     StoycoEnvironment environment = StoycoEnvironment.development,
-    Duration cacheDuration = const Duration(minutes: 5),
   }) {
     instance = ActiveSubscriptionService._(
       firebaseAuth: firebaseAuth,
       environment: environment,
-      cacheDuration: cacheDuration,
     );
     return instance;
   }
@@ -90,7 +73,6 @@ class ActiveSubscriptionService {
   ActiveSubscriptionService._({
     required this.firebaseAuth,
     this.environment = StoycoEnvironment.development,
-    this.cacheDuration = const Duration(minutes: 5),
   }) {
     _dataSource = ActiveSubscriptionDataSource(environment: environment);
     _repository = ActiveSubscriptionRepository(_dataSource);
@@ -106,57 +88,19 @@ class ActiveSubscriptionService {
   /// Firebase Auth instance for automatic token management.
   final FirebaseAuth firebaseAuth;
 
-  /// Duration for which cached data remains valid.
-  final Duration cacheDuration;
-
   late final ActiveSubscriptionDataSource _dataSource;
   late final ActiveSubscriptionRepository _repository;
-
-  /// Cached subscription response.
-  ActiveUserPlanResponse? _cachedResponse;
-
-  /// Timestamp of when the cache was last updated.
-  DateTime? _lastCacheUpdate;
 
   /// Subscription to Firebase Auth state changes.
   StreamSubscription<User?>? _authStateSubscription;
 
-  /// Sets up listener for Firebase Auth state changes to clear cache on logout.
+  /// Sets up listener for Firebase Auth state changes.
   void _setupAuthStateListener() {
     _authStateSubscription = firebaseAuth.authStateChanges().listen((
       User? user,
     ) {
-      if (user == null) {
-        // User logged out, clear cache
-        clearCache();
-      }
+      // Listener for potential future cleanup on logout
     });
-  }
-
-  /// Clears the cached subscription data.
-  ///
-  /// This is useful when you want to force a fresh fetch from the API
-  /// or when the user logs out.
-  ///
-  /// Example:
-  /// ```dart
-  /// service.clearCache();
-  /// final freshData = await service.getActiveUserSubscriptions();
-  /// ```
-  void clearCache() {
-    _cachedResponse = null;
-    _lastCacheUpdate = null;
-  }
-
-  /// Checks if the current cache is still valid based on [cacheDuration].
-  bool get _isCacheValid {
-    if (_cachedResponse == null || _lastCacheUpdate == null) {
-      return false;
-    }
-    final Duration timeSinceUpdate = DateTime.now().difference(
-      _lastCacheUpdate!,
-    );
-    return timeSinceUpdate < cacheDuration;
   }
 
   /// Disposes resources, particularly the auth state subscription.
@@ -164,7 +108,7 @@ class ActiveSubscriptionService {
     _authStateSubscription?.cancel();
   }
 
-  /// Handles silent push notification to refresh cache.
+  /// Handles silent push notification to refresh subscription data.
   ///
   /// Call this method when your app receives a silent push notification
   /// indicating that subscription data has changed on the server.
@@ -179,8 +123,8 @@ class ActiveSubscriptionService {
   /// ```dart
   /// FirebaseMessaging.onMessage.listen((RemoteMessage message) {
   ///   if (message.data['type'] == 'subscription_update') {
-  ///     // Force refresh cache from server
-  ///     await service.refreshCacheFromPush();
+  ///     // Fetch fresh data from server
+  ///     await service.refreshFromPush();
   ///   }
   /// });
   /// ```
@@ -190,38 +134,34 @@ class ActiveSubscriptionService {
   /// FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
   ///   if (message.data['type'] == 'subscription_update') {
   ///     final service = ActiveSubscriptionService.instance;
-  ///     await service.refreshCacheFromPush();
+  ///     await service.refreshFromPush();
   ///   }
   /// });
   /// ```
-  Future<void> refreshCacheFromPush() async {
+  Future<void> refreshFromPush() async {
     try {
-      // Clear old cache
-      clearCache();
-
       // Fetch fresh data from API
       final Either<Failure, ActiveUserPlanResponse> result =
-          await getActiveUserSubscriptions(forceRefresh: true);
+          await getActiveUserSubscriptions();
 
       result.fold(
         (Failure failure) {
           // Log error but don't throw
           // Silent push should not crash the app
           StoyCoLogger.info(
-            'Failed to refresh subscription cache from push: ${failure.message}',
+            'Failed to refresh subscriptions from push: ${failure.message}',
           );
         },
         (ActiveUserPlanResponse response) {
-          // Cache is already updated in getActiveUserSubscriptions
           StoyCoLogger.info(
-            'Cache refreshed successfully from push notification',
+            'Subscriptions refreshed successfully from push notification',
           );
         },
       );
     } catch (e, stackTrace) {
       // Catch any unexpected errors
       StoyCoLogger.error(
-        'Error refreshing cache from push: $e',
+        'Error refreshing subscriptions from push: $e',
         stackTrace: stackTrace,
       );
     }
@@ -251,50 +191,24 @@ class ActiveSubscriptionService {
   ///
   /// Returns an [Either] with [ActiveUserPlanResponse] on success or [Failure] on error.
   ///
-  /// **Caching Behavior:**
-  /// - Returns cached data if available and still valid (within [cacheDuration])
-  /// - Fetches from API if cache is invalid or [forceRefresh] is true
-  /// - Automatically updates cache after successful API fetch
-  ///
-  /// Parameters:
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
-  ///
   /// The response contains:
   /// - `count`: Number of active subscriptions
   /// - `data`: List of [ActiveUserPlan] objects with subscription details
   ///
   /// Example:
   /// ```dart
-  /// // Use cache if available
+  /// // Fetch subscriptions from API
   /// final result = await service.getActiveUserSubscriptions();
-  ///
-  /// // Force fresh data from API
-  /// final freshResult = await service.getActiveUserSubscriptions(forceRefresh: true);
   ///
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
   ///   (response) => print('Active subscriptions: ${response.count}'),
   /// );
   /// ```
-  Future<Either<Failure, ActiveUserPlanResponse>> getActiveUserSubscriptions({
-    bool forceRefresh = false,
-  }) async {
-    // Return cached data if valid and not forcing refresh
-    if (!forceRefresh && _isCacheValid) {
-      return Right<Failure, ActiveUserPlanResponse>(_cachedResponse!);
-    }
-
-    // Fetch fresh data from API
+  Future<Either<Failure, ActiveUserPlanResponse>> getActiveUserSubscriptions() async {
     try {
       await _updateTokenInLayers();
-      final ActiveUserPlanResponse response = await _repository
-          .getActiveUserSubscriptions();
-
-      // Update cache
-      _cachedResponse = response;
-      _lastCacheUpdate = DateTime.now();
-
-      return Right<Failure, ActiveUserPlanResponse>(response);
+      return await _repository.getActiveUserSubscriptions();
     } on DioException catch (error) {
       return Left<Failure, ActiveUserPlanResponse>(DioFailure.decode(error));
     } on Error catch (error) {
@@ -371,20 +285,9 @@ class ActiveSubscriptionService {
   /// This is a convenience method that wraps [getActiveUserSubscriptions]
   /// and returns a simple boolean result.
   ///
-  /// **Caching Behavior:**
-  /// - Uses the same caching strategy as [getActiveUserSubscriptions]
-  /// - Pass [forceRefresh] to bypass cache
-  ///
-  /// Parameters:
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
-  ///
   /// Example:
   /// ```dart
-  /// // Use cache if available
   /// final result = await service.hasActiveSubscription();
-  ///
-  /// // Force fresh check from API
-  /// final freshResult = await service.hasActiveSubscription(forceRefresh: true);
   ///
   /// result.fold(
   ///   (failure) => print('Error: ${failure.message}'),
@@ -397,11 +300,9 @@ class ActiveSubscriptionService {
   ///   },
   /// );
   /// ```
-  Future<Either<Failure, bool>> hasActiveSubscription({
-    bool forceRefresh = false,
-  }) async {
+  Future<Either<Failure, bool>> hasActiveSubscription() async {
     final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+        await getActiveUserSubscriptions();
 
     return result.fold(
       (Failure failure) => Left<Failure, bool>(failure),
@@ -418,25 +319,14 @@ class ActiveSubscriptionService {
   ///
   /// This method filters the user's active subscriptions by partner ID.
   ///
-  /// **Caching Behavior:**
-  /// - Uses the same caching strategy as [getActiveUserSubscriptions]
-  /// - Pass [forceRefresh] to bypass cache
-  ///
   /// Parameters:
   /// - [partnerId]: The MongoDB ObjectId of the partner to check
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
   ///
   /// Example:
   /// ```dart
   /// // Check if user has subscription for a specific partner
   /// final result = await service.hasActiveSubscriptionForPartner(
   ///   partnerId: '507f1f77bcf86cd799439012',
-  /// );
-  ///
-  /// // Force fresh check from API
-  /// final freshResult = await service.hasActiveSubscriptionForPartner(
-  ///   partnerId: '507f1f77bcf86cd799439012',
-  ///   forceRefresh: true,
   /// );
   ///
   /// result.fold(
@@ -452,10 +342,9 @@ class ActiveSubscriptionService {
   /// ```
   Future<Either<Failure, bool>> hasActiveSubscriptionForPartner({
     required String partnerId,
-    bool forceRefresh = false,
   }) async {
     final Either<Failure, ActiveUserPlanResponse> result =
-        await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+        await getActiveUserSubscriptions();
 
     return result.fold((Failure failure) => Left<Failure, bool>(failure), (
       ActiveUserPlanResponse response,
@@ -475,13 +364,8 @@ class ActiveSubscriptionService {
   /// This method filters the user's active subscriptions by partner ID and returns
   /// the complete plan details.
   ///
-  /// **Caching Behavior:**
-  /// - Uses the same caching strategy as [getActiveUserSubscriptions]
-  /// - Pass [forceRefresh] to bypass cache
-  ///
   /// Parameters:
   /// - [partnerId]: The MongoDB ObjectId of the partner to filter by
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
   ///
   /// Example:
   /// ```dart
@@ -506,9 +390,8 @@ class ActiveSubscriptionService {
   /// ```
   Future<Either<Failure, List<ActiveUserPlan>>> getActiveSubscriptionsForPartner({
     required String partnerId,
-    bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions();
 
     return result.fold(
       (Failure failure) => Left<Failure, List<ActiveUserPlan>>(failure),
@@ -535,15 +418,10 @@ class ActiveSubscriptionService {
   /// access to the content by matching the plan IDs from the user's subscriptions
   /// with the plan IDs specified in the [AccessContent] object.
   ///
-  /// **Caching Behavior:**
-  /// - Uses the same caching strategy as [getActiveUserSubscriptions]
-  /// - Pass [forceRefresh] to bypass cache
-  ///
   /// **Parameters:**
   /// - [content]: The [AccessContent] object containing content information and
   ///   authorized plan IDs
   /// - [partnerId]: Optional partner ID to restrict the search to a specific partner
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
   ///
   /// **Example:**
   /// ```dart
@@ -579,17 +457,16 @@ class ActiveSubscriptionService {
   /// );
   /// ```
   Future<bool> hasAccessToContent({
-    required AccessContent? accessContent,
+    AccessContent? accessContent,
     required bool isSubscriptionOnly,
     String? partnerId,
-    bool forceRefresh = false,
   }) async {
     StoyCoLogger.info(
       '[>>] [hasAccessToContent] Starting access validation',
       tag: 'ACCESS_CHECK',
     );
     StoyCoLogger.info(
-      '[INFO] [hasAccessToContent] Parameters: isSubscriptionOnly=$isSubscriptionOnly, partnerId=$partnerId, forceRefresh=$forceRefresh',
+      '[INFO] [hasAccessToContent] Parameters: isSubscriptionOnly=$isSubscriptionOnly, partnerId=$partnerId',
       tag: 'ACCESS_CHECK',
     );
     StoyCoLogger.info(
@@ -660,7 +537,7 @@ class ActiveSubscriptionService {
       return false;
     }
 
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions();
 
     return await result.fold(
       (Failure failure) async {
@@ -756,17 +633,12 @@ class ActiveSubscriptionService {
   /// - Returns `false` if planIds is null or empty
   /// - Returns `true` if user has any of the required plan IDs
   ///
-  /// **Caching Behavior:**
-  /// - Uses the same caching strategy as [getActiveUserSubscriptions]
-  /// - Pass [forceRefresh] to bypass cache
-  ///
   /// **Parameters:**
   /// - [contents]: List of models to check access for
   /// - [getAccessContent]: Function that returns the [AccessContent] for a given model
   /// - [hasAccessToContent]: Function that returns the model with its access field set
   /// - [getIsSubscriptionOnly]: Function that returns whether the model requires subscription-only access
   /// - [partnerId]: Optional partner filter for subscription validation
-  /// - [forceRefresh]: If true, bypasses cache and fetches fresh data
   ///
   /// **Returns:**
   /// A list of models of type `T` with their access status populated.
@@ -805,14 +677,13 @@ class ActiveSubscriptionService {
     required T Function(T, bool) hasAccessToContent,
     required bool Function(T) getIsSubscriptionOnly,
     String? partnerId,
-    bool forceRefresh = false,
   }) async {
     StoyCoLogger.info(
       '[>>] [hasAccessToMultiplesContent] Starting bulk access validation for ${contents.length} item(s)',
       tag: 'BULK_ACCESS_CHECK',
     );
     StoyCoLogger.info(
-      '[INFO] [hasAccessToMultiplesContent] Parameters: partnerId=$partnerId, forceRefresh=$forceRefresh',
+      '[INFO] [hasAccessToMultiplesContent] Parameters: partnerId=$partnerId',
       tag: 'BULK_ACCESS_CHECK',
     );
 
@@ -848,7 +719,7 @@ class ActiveSubscriptionService {
       );
     }
 
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions();
 
     return result.fold(
       (Failure failure) {
@@ -1116,13 +987,8 @@ class ActiveSubscriptionService {
   /// Returns an [Either] with a [Set<String>] on success or [Failure] on error.
   /// The set contains all unique content IDs the user has access to.
   ///
-  /// **Caching Behavior:**
-  /// - Uses the same caching strategy as [getActiveUserSubscriptions]
-  /// - Pass [forceRefresh] to bypass cache
-  ///
   /// Parameters:
   /// - [partnerId]: Optional partner ID to get accesses only from a specific partner
-  /// - [forceRefresh]: Set to true to bypass cache and fetch fresh data from API
   ///
   /// Example:
   /// ```dart
@@ -1137,9 +1003,8 @@ class ActiveSubscriptionService {
   /// ```
   Future<Either<Failure, Set<String>>> getAllUserAccesses({
     String? partnerId,
-    bool forceRefresh = false,
   }) async {
-    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions(forceRefresh: forceRefresh);
+    final Either<Failure, ActiveUserPlanResponse> result = await getActiveUserSubscriptions();
 
     return result.fold(
       (Failure failure) => Left<Failure, Set<String>>(failure),

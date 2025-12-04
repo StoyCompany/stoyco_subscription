@@ -81,7 +81,6 @@ mixin ContentAccessValidatorMixin {
       accessContent: contentAccess,
       isSubscriptionOnly: isSubscriptionOnly,
       partnerId: partnerId,
-      forceRefresh: forceRefresh,
     );
   }
 
@@ -294,7 +293,6 @@ mixin MultiContentAccessValidatorMixin {
       hasAccessToContent: hasAccessToContent,
       getIsSubscriptionOnly: getIsSubscriptionOnly,
       partnerId: partnerId,
-      forceRefresh: forceRefresh,
     );
   }
 }

@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
-import 'package:stoyco_shared/errors/errors.dart';
-import 'package:stoyco_shared/stoyco_shared.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/requests/get_user_subscription_plans_request.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/get_subscription_catalog_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/user_subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription_catalog_data_source.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 
 /// {@template subscription_catalog_repository}
 /// Repository class for managing subscription catalog data operations.
@@ -13,7 +13,7 @@ import 'package:stoyco_subscription/pages/subscription_catalog/data/subscription
 /// This class acts as an intermediary between the data source and the service layer,
 /// providing methods to fetch user subscription plans and handle data mapping.
 /// {@endtemplate}
-class SubscriptionCatalogRepository with RepositoryCacheMixin {
+class SubscriptionCatalogRepository {
   /// Creates a [SubscriptionCatalogRepository] with the given [SubscriptionCatalogDataSource].
   SubscriptionCatalogRepository(this._dataSource);
 
@@ -29,66 +29,47 @@ class SubscriptionCatalogRepository with RepositoryCacheMixin {
   void updateToken(String token) {
     userToken = token;
     _dataSource.updateToken(token);
-    // Clear cache when token changes (user might have logged in/out)
-    clearAllCache();
   }
 
   /// Fetches user subscription plans.
   ///
   /// Returns a [UserSubscriptionPlanResponse] with the plans data.
-  /// Results are cached for 4 minutes.
-  Future<UserSubscriptionPlanResponse> getUserSubscriptionPlans(
+  Future<Either<Failure, UserSubscriptionPlanResponse>> getUserSubscriptionPlans(
     GetUserSubscriptionPlansRequest request,
   ) async {
-    final Either<Failure, UserSubscriptionPlanResponse> result = await cachedCall<UserSubscriptionPlanResponse>(
-      key: 'user_subscription_plans_${request.userId}',
-      ttl: const Duration(minutes: 4),
-      fetcher: () async {
-        try {
-          final Response<Map<String, dynamic>> response = await _dataSource.getUserSubscriptionPlans(request);
-          return Right<Failure, UserSubscriptionPlanResponse>(UserSubscriptionPlanResponse.fromJson(response.data!));
-        } catch (e) {
-          return Left<Failure, UserSubscriptionPlanResponse>(
-            ExceptionFailure.decode(
-              e is Exception ? e : Exception(e.toString()),
-            ),
-          );
-        }
-      },
-    );
-    return result.fold((Failure l) => throw Exception(l.message), (UserSubscriptionPlanResponse r) => r);
+    try {
+      final Response<Map<String, dynamic>> response = await _dataSource.getUserSubscriptionPlans(request);
+      return Right<Failure, UserSubscriptionPlanResponse>(UserSubscriptionPlanResponse.fromJson(response.data!));
+    } catch (e) {
+      return Left<Failure, UserSubscriptionPlanResponse>(
+        ExceptionFailure.decode(
+          e is Exception ? e : Exception(e.toString()),
+        ),
+      );
+    }
   }
 
   /// Fetches the general subscription catalog.
   ///
   /// Returns a [GetSubscriptionCatalogResponse] with the catalog data.
-  /// Results are cached for 5 minutes as catalog data changes infrequently.
-  Future<GetSubscriptionCatalogResponse> getSubscriptionCatalog({
+  Future<Either<Failure, GetSubscriptionCatalogResponse>> getSubscriptionCatalog({
     String? userId,
     int? page,
     int? pageSize,
   }) async {
-    final String cacheKey = 'subscription_catalog_${userId ?? "all"}_${page ?? 1}_${pageSize ?? 10}';
-    final Either<Failure, GetSubscriptionCatalogResponse> result = await cachedCall<GetSubscriptionCatalogResponse>(
-      key: cacheKey,
-      ttl: const Duration(minutes: 5),
-      fetcher: () async {
-        try {
-          final Response<Map<String, dynamic>> response = await _dataSource.getSubscriptionCatalog(
-            userId: userId,
-            page: page,
-            pageSize: pageSize,
-          );
-          return  Right<Failure, GetSubscriptionCatalogResponse>(GetSubscriptionCatalogResponse.fromJson(response.data!));
-        } catch (e) {
-          return Left<Failure, GetSubscriptionCatalogResponse>(
-            ExceptionFailure.decode(
-              e is Exception ? e : Exception(e.toString()),
-            ),
-          );
-        }
-      },
-    );
-    return result.fold((Failure l) => throw Exception(l.message), (GetSubscriptionCatalogResponse r) => r);
+    try {
+      final Response<Map<String, dynamic>> response = await _dataSource.getSubscriptionCatalog(
+        userId: userId,
+        page: page,
+        pageSize: pageSize,
+      );
+      return  Right<Failure, GetSubscriptionCatalogResponse>(GetSubscriptionCatalogResponse.fromJson(response.data!));
+    } catch (e) {
+      return Left<Failure, GetSubscriptionCatalogResponse>(
+        ExceptionFailure.decode(
+          e is Exception ? e : Exception(e.toString()),
+        ),
+      );
+    }
   }
 }

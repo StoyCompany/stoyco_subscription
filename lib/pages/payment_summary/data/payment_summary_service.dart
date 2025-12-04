@@ -191,11 +191,10 @@ class PaymentSummaryService {
   }) async {
     try {
       await verifyToken();
-      final PaymentSummaryInfoResponse result = await _repository.getPaymentSummaryByPlan(
+      return await _repository.getPaymentSummaryByPlan(
         planId: planId,
         recurrenceType: recurrenceType,
       );
-      return Right<Failure, PaymentSummaryInfoResponse>(result);
     } on DioException catch (error) {
       return Left<Failure, PaymentSummaryInfoResponse>(
         DioFailure.decode(error),

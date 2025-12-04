@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
-import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/lock_subscription/subscription_indicator_position.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template subscription_locked_content}
 /// A widget that overlays locked content with a glassmorphic blur effect and a subscription indicator.

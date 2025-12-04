@@ -117,8 +117,7 @@ class PartnerProfileService {
   /// Fetches the lowest price subscription plan for the given [partnerId].
   Future<Either<Failure, LowestPricePlanResponseModel>> getLowestPricePlanByPartner(String partnerId) async {
     try {
-      final LowestPricePlanResponseModel result = await _repository!.getLowestPricePlanByPartner(partnerId: partnerId);
-      return Right<Failure, LowestPricePlanResponseModel>(result);
+      return await _repository!.getLowestPricePlanByPartner(partnerId: partnerId);
     } on DioException catch (error) {
       return Left<Failure, LowestPricePlanResponseModel>(DioFailure.decode(error));
     } on Error catch (error) {
@@ -133,8 +132,7 @@ class PartnerProfileService {
   Future<Either<Failure, SubscriptionIsActiveResponse>> getLastUserPlanByPartner(String partnerId) async {
     try {
       await verifyToken();
-      final SubscriptionIsActiveResponse result = await _repository!.getLastUserPlanByPartner(partnerId: partnerId);
-      return Right<Failure, SubscriptionIsActiveResponse>(result);
+      return await _repository!.getLastUserPlanByPartner(partnerId: partnerId);
     } on DioException catch (error) {
       return Left<Failure, SubscriptionIsActiveResponse>(DioFailure.decode(error));
     } on Error catch (error) {
@@ -147,8 +145,7 @@ class PartnerProfileService {
 
   Future<Either<Failure, GetCulturalAssetsResponse>> getCulturalAssetsByCommunityOwner(String partnerId) async {
     try {
-      final GetCulturalAssetsResponse result = await _repository!.getCulturalAssetsByCommunityOwner(partnerId: partnerId);
-      return Right<Failure, GetCulturalAssetsResponse>(result);
+      return await _repository!.getCulturalAssetsByCommunityOwner(partnerId: partnerId);
     } on DioException catch (error) {
       return Left<Failure, GetCulturalAssetsResponse>(DioFailure.decode(error));
     } on Error catch (error) {

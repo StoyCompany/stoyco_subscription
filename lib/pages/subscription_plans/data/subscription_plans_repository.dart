@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
-import 'package:stoyco_shared/stoyco_shared.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/error.dart' as local_error;
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/error.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart' as local_exception;
@@ -14,7 +13,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/models/request
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan_response.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/subscription_plans_data_source.dart';
 
-class SubscriptionPlansRepository with RepositoryCacheMixin {
+class SubscriptionPlansRepository {
   SubscriptionPlansRepository(this._dataSource, this.userToken);
 
   /// The data source used by the repository.
@@ -27,8 +26,6 @@ class SubscriptionPlansRepository with RepositoryCacheMixin {
   void updateToken(String token) {
     userToken = token;
     _dataSource.updateToken(token);
-    // Clear cache when token changes (user might have logged in/out)
-    clearAllCache();
   }
 
   /// Fetches subscription plans based on the provided request.

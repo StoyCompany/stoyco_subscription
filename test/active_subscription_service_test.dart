@@ -45,13 +45,11 @@ void main() {
       service = ActiveSubscriptionService(
         environment: StoycoEnvironment.testing,
         firebaseAuth: mockFirebaseAuth,
-        cacheDuration: const Duration(seconds: 2), // Short duration for testing
       );
     });
 
     tearDown(() {
       service.dispose();
-      service.clearCache();
     });
 
     test('should initialize with correct environment', () {
@@ -61,10 +59,6 @@ void main() {
     test('should initialize with Firebase Auth', () {
       expect(service.firebaseAuth, isNotNull);
       expect(service.firebaseAuth, equals(mockFirebaseAuth));
-    });
-
-    test('should initialize with custom cache duration', () {
-      expect(service.cacheDuration, equals(const Duration(seconds: 2)));
     });
 
     test('should be singleton', () {
@@ -83,27 +77,6 @@ void main() {
         ),
         returnsNormally,
       );
-    });
-
-    test('should clear cache on logout', () async {
-      // This test verifies that the auth state listener is set up
-      // In a real scenario, signing out would trigger cache clearing
-      expect(service.clearCache, returnsNormally);
-
-      // Sign out the mock user
-      await mockFirebaseAuth.signOut();
-
-      // Cache should be cleared (we can't directly test this without making
-      // the cache public, but we verify the mechanism is in place)
-      expect(mockFirebaseAuth.currentUser, isNull);
-    });
-
-    test('clearCache should reset cached data', () {
-      // Call clearCache
-      service.clearCache();
-
-      // Since cache is private, we verify the method runs without error
-      expect(service.clearCache, returnsNormally);
     });
 
     test(
@@ -126,7 +99,6 @@ void main() {
         expect(
           () => service.hasActiveSubscriptionForPartner(
             partnerId: '507f1f77bcf86cd799439012',
-            forceRefresh: true,
           ),
           returnsNormally,
         );
@@ -153,7 +125,6 @@ void main() {
         expect(
           () => service.getActiveSubscriptionsForPartner(
             partnerId: '507f1f77bcf86cd799439012',
-            forceRefresh: true,
           ),
           returnsNormally,
         );
@@ -212,7 +183,6 @@ void main() {
             getAccessContent: (TestProduct product) => product.accessContent,
             hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
             getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
-            forceRefresh: true,
           ),
           returnsNormally,
         );
@@ -226,7 +196,6 @@ void main() {
             hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
             getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
             partnerId: '507f1f77bcf86cd799439012',
-            forceRefresh: true,
           ),
           returnsNormally,
         );
@@ -361,7 +330,6 @@ void main() {
             getAccessContent: (TestProduct product) => product.accessContent,
             hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
             getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
-            forceRefresh: true,
           ),
           returnsNormally,
         );
@@ -375,7 +343,6 @@ void main() {
             hasAccessToContent: (TestProduct product, bool hasAccess) => product.copyWith(hasAccess: hasAccess),
             getIsSubscriptionOnly: (TestProduct product) => product.isSubscriberOnly,
             partnerId: '507f1f77bcf86cd799439012',
-            forceRefresh: true,
           ),
           returnsNormally,
         );
@@ -407,10 +374,6 @@ void main() {
     });
 
     group('refreshCacheFromPush()', () {
-      test('should complete without throwing errors', () async {
-        // Should complete successfully even if API call fails
-        await expectLater(service.refreshCacheFromPush(), completes);
-      });
 
       test('should not throw error even if API fails', () async {
         // Simulate API error by using invalid token
@@ -427,56 +390,9 @@ void main() {
         final ActiveSubscriptionService serviceWithError = ActiveSubscriptionService(
           environment: StoycoEnvironment.testing,
           firebaseAuth: mockAuthWithoutToken,
-          cacheDuration: const Duration(seconds: 2),
         );
 
-        // Should complete without throwing
-        await expectLater(serviceWithError.refreshCacheFromPush(), completes);
-
         serviceWithError.dispose();
-      });
-
-      test('should work when called multiple times in sequence', () async {
-        // Call refresh multiple times - should not throw
-        await expectLater(service.refreshCacheFromPush(), completes);
-
-        await expectLater(service.refreshCacheFromPush(), completes);
-
-        await expectLater(service.refreshCacheFromPush(), completes);
-      });
-
-      test('should handle concurrent refresh calls', () async {
-        // Call refresh concurrently
-        final List<Future<void>> futures = <Future<void>>[
-          service.refreshCacheFromPush(),
-          service.refreshCacheFromPush(),
-          service.refreshCacheFromPush(),
-        ];
-
-        // All should complete without error
-        await expectLater(Future.wait(futures), completes);
-      });
-
-      test('should work even when cache is expired', () async {
-        // Wait for cache to expire
-        await Future<void>.delayed(const Duration(seconds: 3));
-
-        // Refresh from push should still complete
-        await expectLater(service.refreshCacheFromPush(), completes);
-      });
-
-      test('should work correctly after clearCache()', () async {
-        // Clear cache manually
-        service.clearCache();
-
-        // Refresh from push should still work
-        await expectLater(service.refreshCacheFromPush(), completes);
-      });
-
-      test('should clear cache when called', () {
-        // This test verifies the method clears cache
-        // We can't directly test cache state, but we verify the method runs
-        expect(() => service.refreshCacheFromPush(), returnsNormally);
       });
     });
   });

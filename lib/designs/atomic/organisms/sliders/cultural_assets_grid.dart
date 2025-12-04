@@ -146,10 +146,7 @@ class CulturalAssetsGrid extends StatelessWidget {
             final bool isSoldOut = (asset.stock ?? 1) == 0;
 
             // Only show locked overlay if not sold out (sold out takes priority)
-            final bool isLocked =
-                !isSoldOut &&
-                asset.isSubscriberOnly &&
-                !asset.hasAccessWithSubscription;
+            final bool isLocked = !isSoldOut && !asset.hasAccessWithSubscription;
 
             return SubscriptionLockedContent(
               scale: scale,
