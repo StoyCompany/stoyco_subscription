@@ -1,5 +1,17 @@
 # Changelog
 
+##[3.0.0] - 2025-12-04
+
+Refactor subscription-related services and repositories to streamline error handling and remove caching logic
+
+- Simplified error handling in PartnerProfileService and PaymentSummaryService by directly returning results from repository calls.
+- Updated PaymentSummaryRepository and SubscriptionCatalogRepository to return Either<Failure, ResponseModel> instead of throwing exceptions, enhancing error management.
+- Removed caching logic from ActiveSubscriptionRepository and SubscriptionPlansRepository to simplify data fetching processes.
+- Adjusted ActiveSubscriptionService to eliminate cache management, ensuring fresh data retrieval on each call.
+- Modified tests for ActiveSubscriptionService to reflect changes in caching behavior and error handling, ensuring robustness in various scenarios.
+
+chore: remove stoyco_shared dependency from pubspec.yaml
+
 ##[2.0.20] - 2025-12-03
 
 fix: update UserSubscriptionPlanResponse model to receive plan status and manage statuses with that
