@@ -1,5 +1,9 @@
 # Changelog
 
+##[3.0.1] - 2025-12-04
+
+refactor: remove userId parameter from subscription catalog methods and update service usage
+
 ##[3.0.0] - 2025-12-04
 
 Refactor subscription-related services and repositories to streamline error handling and remove caching logic
