@@ -14,6 +14,11 @@ import 'package:stoyco_subscription/pages/partner_profile/data/models/response/g
 /// While loading, displays skeleton cards as placeholders.
 /// If the [culturalAssets] list is empty and not loading, nothing is shown.
 ///
+/// **Priority Logic:**
+/// - Sold out assets take priority over locked state
+/// - If an asset is sold out, the "Contenido exclusivo" overlay is not shown
+/// - Only non-sold-out assets can display the subscription lock overlay
+///
 /// Example usage:
 /// ```dart
 /// CulturalAssetsGrid(
@@ -138,8 +143,14 @@ class CulturalAssetsGrid extends StatelessWidget {
             }
 
             final CulturalAssetItemModel asset = culturalAssets[index];
+            final bool isSoldOut = (asset.stock ?? 1) == 0;
+
+            // Only show locked overlay if not sold out (sold out takes priority)
             final bool isLocked =
-                asset.isSubscriberOnly && !asset.hasAccessWithSubscription;
+                !isSoldOut &&
+                asset.isSubscriberOnly &&
+                !asset.hasAccessWithSubscription;
+
             return SubscriptionLockedContent(
               scale: scale,
               isLocked: isLocked,

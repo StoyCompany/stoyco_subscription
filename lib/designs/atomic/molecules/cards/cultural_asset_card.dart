@@ -18,6 +18,11 @@ import 'package:stoyco_subscription/pages/partner_profile/data/models/response/g
 /// - The asset's title centered below the image.
 /// - A footer with a "Comprar" label and the asset's price with a coin icon.
 ///
+/// **Priority Logic:**
+/// - If the asset is sold out, it takes priority over locked state
+/// - The sold out badge is displayed and blur effect is not applied
+/// - Only if not sold out, the locked/unlocked state is evaluated
+///
 /// Example usage:
 /// ```dart
 /// CulturalAssetCard(
@@ -35,27 +40,31 @@ class CulturalAssetCard extends StatelessWidget {
   /// [culturalAssetCard] provides the data to display in the card.
   const CulturalAssetCard({
     super.key,
-
     required this.culturalAssetCard,
     this.onTap,
-
     this.onTapCulturalAssetExclusive,
   });
 
   /// The model containing the asset's image, title, and price.
   final CulturalAssetItemModel culturalAssetCard;
 
+  /// Callback when the card is tapped and accessible.
   final void Function(CulturalAssetItemModel)? onTap;
 
   /// Callback when the locked cultural asset card is tapped.
   final VoidCallback? onTapCulturalAssetExclusive;
 
+  /// Whether the asset is sold out (stock is 0).
   bool get isSoldOut => (culturalAssetCard.stock ?? 1) == 0;
+
+  /// Whether the asset is locked (requires subscription and user doesn't have access).
+  ///
+  /// This is only evaluated if the asset is not sold out.
+  bool get isLocked =>
+      !isSoldOut && !culturalAssetCard.hasAccessWithSubscription;
 
   @override
   Widget build(BuildContext context) {
-    final bool isLocked = !culturalAssetCard.hasAccessWithSubscription;
-
     return Opacity(
       opacity: isSoldOut ? 0.5 : 1.0,
       child: InkWell(
@@ -258,6 +267,7 @@ class CulturalAssetCard extends StatelessWidget {
     );
   }
 
+  /// Builds the (Sold Out) badge.
   Widget _buildSoldOut(BuildContext context) => Container(
     width: StoycoScreenSize.width(context, 119),
     height: StoycoScreenSize.height(context, 23),
