@@ -1,5 +1,16 @@
 # Changelog
 
+##[2.0.21] - 2025-12-05
+
+Refactor subscription services to integrate Firebase Auth for automatic token management
+
+- Updated CardImageDescriptionTag to increase image height.
+- Enhanced SubscriptionCircularImageWithInfo to use ButtonGradientText for subscription actions, improving UI consistency.
+- Reduced cache duration for cultural assets and subscription catalog to 2 and 1 minute respectively for better data freshness.
+- Integrated Firebase Auth into PartnerProfileService, PaymentSummaryService, SubscriptionCatalogService, and SubscriptionPlansService for seamless token retrieval and refresh.
+- Removed manual token management, simplifying service usage and improving reliability.
+- Updated subscription catalog screen to use a SliverList for adaptive height based on item count.
+
 ##[2.0.20] - 2025-12-03
 
 fix: update UserSubscriptionPlanResponse model to receive plan status and manage statuses with that
