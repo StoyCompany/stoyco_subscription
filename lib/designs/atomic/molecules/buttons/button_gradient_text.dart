@@ -106,6 +106,7 @@ class ButtonGradientText extends StatelessWidget {
     this.highlightColor,
     this.iconWidget,
     this.iconPosition = ButtonGradientTextIconPosition.none,
+    this.alignmentContent,
   });
   /// Optional icon widget to display in the button (left or right).
   final Widget? iconWidget;
@@ -147,7 +148,7 @@ class ButtonGradientText extends StatelessWidget {
   final double? borderWidth;
 
   /// Border radius for rounded corners.
-  final double? borderRadius;
+  final double borderRadius;
 
   /// List of shadows applied to the button.
   final List<BoxShadow>? boxShadow;
@@ -172,6 +173,9 @@ class ButtonGradientText extends StatelessWidget {
 
   /// Highlight color for interactive states.
   final Color? highlightColor;
+
+  /// Alignment for the content inside the button.
+  final Alignment? alignmentContent;
 
   @override
   Widget build(BuildContext context) {
@@ -268,7 +272,7 @@ class ButtonGradientText extends StatelessWidget {
               StoycoColors.blue,
             ],
           ),
-          width: borderWidth ?? 1,
+          width: borderWidth ?? 1.5,
         );
 
         shadows = boxShadow ?? const <BoxShadow>[
@@ -321,6 +325,7 @@ class ButtonGradientText extends StatelessWidget {
       splashColor: splashColor,
       focusColor: focusColor,
       highlightColor: highlightColor,
+      alignmentContent: alignmentContent,
       onPressed: (type == ButtonGradientTextType.inactive || type == ButtonGradientTextType.loading) ? null : onPressed,
       child: Padding(
         padding: paddingContent ?? StoycoScreenSize.symmetric(context, horizontal: 24, vertical: 16),

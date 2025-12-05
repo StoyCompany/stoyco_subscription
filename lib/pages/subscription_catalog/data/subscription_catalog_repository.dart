@@ -71,7 +71,7 @@ class SubscriptionCatalogRepository with RepositoryCacheMixin {
     final String cacheKey = 'subscription_catalog_${userId ?? "all"}_${page ?? 1}_${pageSize ?? 10}';
     final Either<Failure, GetSubscriptionCatalogResponse> result = await cachedCall<GetSubscriptionCatalogResponse>(
       key: cacheKey,
-      ttl: const Duration(minutes: 5),
+      ttl: const Duration(minutes: 1),
       fetcher: () async {
         try {
           final Response<Map<String, dynamic>> response = await _dataSource.getSubscriptionCatalog(

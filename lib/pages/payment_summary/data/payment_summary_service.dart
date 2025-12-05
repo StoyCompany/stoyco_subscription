@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/payment_summary_data_source.dart';
@@ -40,114 +41,60 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure
 class PaymentSummaryService {
   /// Factory constructor for initializing the service.
   ///
-  /// **Parameters:**
-  /// - [environment]: API environment (defaults to development)
-  /// - [userToken]: Initial authentication token
-  /// - [functionToUpdateToken]: Optional function to refresh the token when needed
+  /// Automatically handles token retrieval and refresh from Firebase Auth.
   ///
-  /// **Example:**
-  /// ```dart
-  /// final service = PaymentSummaryService(
-  ///   environment: StoycoEnvironment.production,
-  ///   userToken: 'initial_token',
-  ///   functionToUpdateToken: () async {
-  ///     return await FirebaseAuth.instance.currentUser?.getIdToken();
-  ///   },
-  /// );
-  /// ```
+  /// - [firebaseAuth]: Required Firebase Auth instance for authentication
+  /// - [environment]: API environment (defaults to development)
   factory PaymentSummaryService({
+    required FirebaseAuth firebaseAuth,
     StoycoEnvironment environment = StoycoEnvironment.development,
-    String userToken = '',
-    Future<String?> Function()? functionToUpdateToken,
   }) {
     instance = PaymentSummaryService._(
+      firebaseAuth: firebaseAuth,
       environment: environment,
-      userToken: userToken,
-      functionToUpdateToken: functionToUpdateToken,
     );
     return instance;
   }
 
   /// Private constructor for singleton pattern.
   PaymentSummaryService._({
+    required this.firebaseAuth,
     this.environment = StoycoEnvironment.development,
-    this.userToken = '',
-    this.functionToUpdateToken,
   }) {
     _dataSource = PaymentSummaryDataSource(environment: environment);
-    _repository = PaymentSummaryRepository(_dataSource, userToken);
-    _repository.updateToken(userToken);
-    _dataSource.updateToken(userToken);
+    _repository = PaymentSummaryRepository(_dataSource, '');
   }
 
   /// Singleton instance of [PaymentSummaryService].
-  static PaymentSummaryService instance = PaymentSummaryService._();
+  static late PaymentSummaryService instance;
 
-  /// Current authentication token.
-  String userToken;
+  /// The current environment (development, production, testing).
+  final StoycoEnvironment environment;
 
-  /// Current API environment.
-  StoycoEnvironment environment;
-
-  /// Optional function to refresh the authentication token.
-  Future<String?> Function()? functionToUpdateToken;
+  /// Firebase Auth instance for automatic token management.
+  final FirebaseAuth firebaseAuth;
 
   late final PaymentSummaryDataSource _dataSource;
   late final PaymentSummaryRepository _repository;
 
-  /// Updates the authentication token across all layers.
-  ///
-  /// Call this method when the user's authentication token changes
-  /// (e.g., after login or token refresh).
-  ///
-  /// **Example:**
-  /// ```dart
-  /// final newToken = await FirebaseAuth.instance.currentUser?.getIdToken();
-  /// service.updateToken(newToken ?? '');
-  /// ```
-  void updateToken(String token) {
-    userToken = token;
+  /// Gets the current user token from Firebase Auth.
+  Future<String> _getToken() async {
+    final User? user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception('No user is currently signed in to Firebase');
+    }
+    final String? token = await user.getIdToken();
+    if (token == null) {
+      throw Exception('Failed to retrieve Firebase ID token');
+    }
+    return token;
+  }
+
+  /// Updates the token in the data source and repository.
+  Future<void> _updateTokenInLayers() async {
+    final String token = await _getToken();
     _repository.updateToken(token);
     _dataSource.updateToken(token);
-  }
-
-  /// Sets the function used to refresh the authentication token.
-  ///
-  /// This function will be called automatically when the token is empty
-  /// or needs to be refreshed.
-  ///
-  /// **Example:**
-  /// ```dart
-  /// service.setFunctionToUpdateToken(() async {
-  ///   return await FirebaseAuth.instance.currentUser?.getIdToken();
-  /// });
-  /// ```
-  void setFunctionToUpdateToken(Future<String?> Function()? function) {
-    functionToUpdateToken = function;
-  }
-
-  /// Verifies and updates the authentication token if necessary.
-  ///
-  /// This method is called automatically before API requests to ensure
-  /// a valid token is available.
-  ///
-  /// **Throws:**
-  /// - [FunctionToUpdateTokenNotSetException] if token is empty and no update function is set
-  /// - [EmptyUserTokenException] if token refresh fails or returns empty
-  Future<void> verifyToken() async {
-    if (userToken.isEmpty) {
-      if (functionToUpdateToken == null) {
-        throw FunctionToUpdateTokenNotSetException();
-      }
-      final String? newToken = await functionToUpdateToken!();
-      if (newToken != null && newToken.isNotEmpty) {
-        userToken = newToken;
-        _repository.updateToken(newToken);
-        _dataSource.updateToken(newToken);
-      } else {
-        throw EmptyUserTokenException('Failed to update token');
-      }
-    }
   }
 
   /// Fetches payment summary information for a specific subscription plan.
@@ -190,7 +137,7 @@ class PaymentSummaryService {
     required String recurrenceType,
   }) async {
     try {
-      await verifyToken();
+      await _updateTokenInLayers();
       final PaymentSummaryInfoResponse result = await _repository.getPaymentSummaryByPlan(
         planId: planId,
         recurrenceType: recurrenceType,

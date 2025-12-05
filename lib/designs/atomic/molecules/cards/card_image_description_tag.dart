@@ -148,7 +148,7 @@ class CardImageDescriptionTag extends StatelessWidget {
                         topRight: Radius.circular(StoycoScreenSize.radius(context, 22)),
                       ),
                       child: SizedBox(
-                        height: imageHeight ?? StoycoScreenSize.height(context, 160),
+                        height: imageHeight ?? StoycoScreenSize.height(context, 180),
                         width: imageWidth ?? double.infinity,
                         child:  CachedNetworkImage(
                               imageUrl: imageUrl,

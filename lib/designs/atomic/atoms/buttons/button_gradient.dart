@@ -57,9 +57,10 @@ class ButtonGradient extends StatelessWidget {
     this.highlightColor,
     this.backgroundGradientColor,
     this.gradientBorder,
-    this.borderRadius,
+    this.borderRadius = 0,
     this.boxShadow,
     this.padding,
+    this.alignmentContent,
   });
 
   /// Callback when the button is pressed.
@@ -96,13 +97,16 @@ class ButtonGradient extends StatelessWidget {
   final GradientBoxBorder? gradientBorder;
 
   /// Border radius for rounded corners.
-  final double? borderRadius;
+  final double borderRadius;
 
   /// Box shadow(s) for elevation.
   final List<BoxShadow>? boxShadow;
 
   /// Padding inside the button.
   final EdgeInsetsGeometry? padding;
+
+  /// Alignment for the content inside the button.
+  final Alignment? alignmentContent;
 
   @override
   Widget build(BuildContext context) {
@@ -118,9 +122,10 @@ class ButtonGradient extends StatelessWidget {
           constraints: BoxConstraints(minHeight: height ?? StoycoScreenSize.height(context, 29)),
           child: Container(
             width: width ?? double.infinity,
+            alignment: alignmentContent,
             decoration: BoxDecoration(
               color: backgroundColor,
-              borderRadius: borderRadius != null ? BorderRadius.circular(borderRadius!) : null,
+              borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, borderRadius)),
               gradient: backgroundGradientColor,
               boxShadow: boxShadow,
               border: gradientBorder,

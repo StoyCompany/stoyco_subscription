@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/get_cultural_assets_response.dart';
 import 'package:stoyco_subscription/pages/partner_profile/data/models/response/lowest_price_plan_response_model.dart';
@@ -28,33 +29,34 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure
 /// {@endtemplate}
 class PartnerProfileService {
 
-  /// Factory constructor for creating or accessing a singleton instance
+  /// Factory constructor for creating or accessing a singleton instance.
+  ///
+  /// Automatically handles token retrieval and refresh from Firebase Auth.
+  ///
+  /// - [firebaseAuth]: Required Firebase Auth instance for authentication
+  /// - [environment]: API environment (required)
+  /// - [activeSubscriptionService]: Required dependency for subscription checks
   factory PartnerProfileService({
+    required FirebaseAuth firebaseAuth,
     required StoycoEnvironment environment,
-    String userToken = '',
-    Future<String?> Function()? functionToUpdateToken,
     required ActiveSubscriptionService activeSubscriptionService,
   }) => _instance ??= PartnerProfileService._(
+    firebaseAuth: firebaseAuth,
     environment: environment,
-    userToken: userToken,
-    functionToUpdateToken: functionToUpdateToken,
     activeSubscriptionService: activeSubscriptionService,
   );
 
   PartnerProfileService._({
+    required this.firebaseAuth,
     required this.environment,
-    this.userToken = '',
-    this.functionToUpdateToken,
     required this.activeSubscriptionService,
   }) {
     _dataSource = PartnerProfileDataSource(environment: environment);
     _repository = PartnerProfileRepository(
       dataSource: _dataSource!,
       activeSubscriptionService: activeSubscriptionService,
-      userToken: userToken,
+      userToken: '',
     );
-    _repository!.updateToken(userToken);
-    _dataSource!.updateToken(userToken);
   }
 
   /// Singleton instance
@@ -63,17 +65,14 @@ class PartnerProfileService {
   /// Getter for singleton instance
   static PartnerProfileService? get instance => _instance;
 
-  /// The current user authentication token.
-  String userToken;
+  /// Firebase Auth instance for automatic token management.
+  final FirebaseAuth firebaseAuth;
 
   /// The environment configuration for API endpoints.
-  StoycoEnvironment environment;
+  final StoycoEnvironment environment;
 
   /// The active subscription service dependency
-  ActiveSubscriptionService activeSubscriptionService;
-
-  /// Callback function to refresh the authentication token.
-  Future<String?> Function()? functionToUpdateToken;
+  final ActiveSubscriptionService activeSubscriptionService;
 
   /// The data source for partner profile operations.
   PartnerProfileDataSource? _dataSource;
@@ -81,40 +80,29 @@ class PartnerProfileService {
   /// The repository for partner profile operations.
   PartnerProfileRepository? _repository;
 
+  /// Gets the current user token from Firebase Auth.
+  Future<String> _getToken() async {
+    final User? user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception('No user is currently signed in to Firebase');
+    }
+    final String? token = await user.getIdToken();
+    if (token == null) {
+      throw Exception('Failed to retrieve Firebase ID token');
+    }
+    return token;
+  }
 
-  /// Updates the stored token and propagates it to the repository and data source.
-  void updateToken(String token) {
-    userToken = token;
+  /// Updates the token in the data source and repository.
+  Future<void> _updateTokenInLayers() async {
+    final String token = await _getToken();
     _repository?.updateToken(token);
     _dataSource?.updateToken(token);
   }
 
-
-  /// Sets the function used to update the token when missing.
-  void setFunctionToUpdateToken(Future<String?> Function()? function) {
-    functionToUpdateToken = function;
-  }
-
-
-  /// Ensures a valid token is available.
-  Future<void> verifyToken() async {
-    if (userToken.isEmpty) {
-      if (functionToUpdateToken == null) {
-        throw FunctionToUpdateTokenNotSetException();
-      }
-      final String? newToken = await functionToUpdateToken!();
-      if (newToken != null && newToken.isNotEmpty) {
-        userToken = newToken;
-        _repository?.updateToken(newToken);
-        _dataSource?.updateToken(newToken);
-      } else {
-        throw EmptyUserTokenException('Failed to update token');
-      }
-    }
-  }
-
-
   /// Fetches the lowest price subscription plan for the given [partnerId].
+  ///
+  /// This is a public endpoint that doesn't require authentication.
   Future<Either<Failure, LowestPricePlanResponseModel>> getLowestPricePlanByPartner(String partnerId) async {
     try {
       final LowestPricePlanResponseModel result = await _repository!.getLowestPricePlanByPartner(partnerId: partnerId);
@@ -130,9 +118,11 @@ class PartnerProfileService {
 
 
   /// Fetches the last active user subscription for the given [partnerId].
+  ///
+  /// Automatically refreshes Firebase Auth token before making the request.
   Future<Either<Failure, SubscriptionIsActiveResponse>> getLastUserPlanByPartner(String partnerId) async {
     try {
-      await verifyToken();
+      await _updateTokenInLayers();
       final SubscriptionIsActiveResponse result = await _repository!.getLastUserPlanByPartner(partnerId: partnerId);
       return Right<Failure, SubscriptionIsActiveResponse>(result);
     } on DioException catch (error) {

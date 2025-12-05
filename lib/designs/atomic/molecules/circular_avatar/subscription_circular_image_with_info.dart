@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/images/image_network_blur.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
@@ -88,7 +90,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
     } else if (StoycoScreenSize.isTablet(context)) {
       dynamicImageSize = 120;
     } else {
-      dynamicImageSize = 100;
+      dynamicImageSize = 148;
     }
 
     final double imageW = imageWidth ?? dynamicImageSize;
@@ -115,100 +117,82 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                 child: const Icon(Icons.error),
               ),
             ),
-            SizedBox(
-              child: Text(
-                maxLines: 1,
-                title,
-                textScaler: TextScaler.noScaling,
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
-                    color: StoycoColors.softWhite,
-                    fontSize: StoycoScreenSize.fontSize(
-                      context,
-                      titleFontSize ?? 18.53,
-                    ),
-                    fontWeight: FontWeight.w400,
+            Text(
+              maxLines: 1,
+              title,
+              textScaler: TextScaler.noScaling,
+              style: GoogleFonts.montserrat(
+                textStyle: TextStyle(
+                  color: StoycoColors.softWhite,
+                  fontSize: StoycoScreenSize.fontSize(
+                    context,
+                    titleFontSize ?? 18.53,
                   ),
+                  fontWeight: FontWeight.w400,
                 ),
-                overflow: TextOverflow.ellipsis,
               ),
+              overflow: TextOverflow.ellipsis,
             ),
 
-            // Botón solo si hasSubscription es false o null
+            // Botón con lógica completa de estados
             if (hasSubscription ?? false)
-              InkWell(
-                onTap: ((isExpired ?? false) && (subscribed ?? false))
+              ButtonGradientText(
+                text: (isExpired ?? false) && (subscribed ?? false)
+                    ? 'Renovar'
+                    : subscribed ?? false
+                    ? 'Ver suscripción'
+                    : 'Suscribirme',
+                type: ButtonGradientTextType.custom,
+                width: StoycoScreenSize.width(context, 148),
+                height: StoycoScreenSize.height(context, 31),
+                alignmentContent: Alignment.center,
+                paddingContent: StoycoScreenSize.symmetric(
+                  context,
+                  horizontal: 16,
+                  vertical: 4,
+                ),
+                borderRadius: 15,
+                borderWidth: 1.5,
+                gradientBorder: const GradientBoxBorder(
+                  gradient: LinearGradient(
+                    colors: <Color>[Color(0xFF373680), Color(0xFF373680)],
+                  ),
+                  width: 1.5,
+                ),
+                backgroundGradientColor: subscribed ?? false
+                    ? const LinearGradient(
+                        colors: <Color>[
+                          Color(0x232336B2),
+                          Color(0x232336B2),
+                          Color(0x2323361A),
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      )
+                    : const LinearGradient(
+                        colors: <Color>[Color(0xFF1C197F), Color(0xFF4639E7)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                textStyle: TextStyle(
+                  fontSize: StoycoScreenSize.fontSize(context, 15),
+                  fontFamily: FontFamilyToken.akkuratPro,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                ),
+                iconWidget: (isExpired ?? false) && (subscribed ?? false)
+                    ? StoycoAssets.lib.assets.icons.common.alertIcon.svg(
+                        package: 'stoyco_subscription',
+                        height: StoycoScreenSize.height(context, 16),
+                        width: StoycoScreenSize.width(context, 16),
+                      )
+                    : null,
+                iconPosition: (isExpired ?? false) && (subscribed ?? false)
+                    ? ButtonGradientTextIconPosition.left
+                    : ButtonGradientTextIconPosition.none,
+                onPressed: ((isExpired ?? false) && (subscribed ?? false))
                     ? onTapWhenExpired
                     : onTapSubscribe,
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxWidth: StoycoScreenSize.width(context, 148.5),
-                  ),
-                  padding: StoycoScreenSize.symmetric(
-                    context,
-                    horizontal: 16,
-                    vertical: 3,
-                  ),
-                  height: StoycoScreenSize.height(context, 30.66),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF373680)),
-                    borderRadius: BorderRadius.circular(15.31),
-                    gradient: subscribed ?? false
-                        ? const LinearGradient(
-                            colors: <Color>[
-                              Color(0x232336B2),
-                              Color(0x232336B2),
-                              Color(0x2323361A),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          )
-                        : const LinearGradient(
-                            colors: <Color>[
-                              Color(0xFF1C197F),
-                              Color(0xFF4639E7),
-                            ],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                  ),
-                  child: (isExpired ?? false) && (subscribed ?? false)
-                      ? Row(
-                          spacing: StoycoScreenSize.width(context, 8),
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            StoycoAssets.lib.assets.icons.common.alertIcon.svg(
-                              package: 'stoyco_subscription',
-                              height: StoycoScreenSize.height(context, 16),
-                              width: StoycoScreenSize.width(context, 16),
-                            ),
-                            Text(
-                              'Renovar',
-                              style: TextStyle(
-                                fontSize: StoycoScreenSize.fontSize(
-                                  context,
-                                  15.31,
-                                ),
-                                fontFamily: FontFamilyToken.akkuratPro,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        )
-                      : Text(
-                          subscribed ?? false
-                              ? 'Ver suscripción'
-                              : 'Suscribirme',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: StoycoScreenSize.fontSize(context, 15.31),
-                            fontFamily: FontFamilyToken.akkuratPro,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                ),
               ),
           ],
         ),

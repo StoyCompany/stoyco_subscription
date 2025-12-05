@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/requests/get_user_subscription_plans_request.dart';
 import 'package:stoyco_subscription/pages/subscription_catalog/data/models/responses/get_subscription_catalog_response.dart';
@@ -12,107 +13,99 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/excepti
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 
 /// {@template subscription_catalog_service}
-/// Service class for managing subscription catalog operations.
+/// Service class for managing subscription catalog operations with automatic Firebase Auth token management.
 ///
 /// This singleton service provides methods to fetch user subscription plans
-/// by interacting with the repository and data source layers. It manages
-/// the user authentication token, environment configuration, and supports
-/// automatic token refresh using a provided callback function.
+/// and catalog information. It automatically handles token retrieval and refresh from Firebase Auth.
 ///
-/// Usage example:
+/// **Token Management:**
+/// - Automatically retrieves token from Firebase Auth before each request
+/// - Refreshes token before making API calls
+/// - No manual token management required
+///
+/// **Usage:**
 /// ```dart
 /// final service = SubscriptionCatalogService(
 ///   environment: StoycoEnvironment.production,
-///   userToken: 'your_token',
-///   functionToUpdateToken: () => getNewToken(),
+///   firebaseAuth: FirebaseAuth.instance,
 /// );
 ///
+/// // Service automatically handles token refresh
 /// final result = await service.getUserSubscriptionPlans(
 ///   GetUserSubscriptionPlansRequest(userId: 'user_id'),
 /// );
 /// ```
 /// {@endtemplate}
 class SubscriptionCatalogService {
-  /// Factory for singleton initialization with custom environment, token and token update function.
+  /// Factory constructor for initializing the service.
+  ///
+  /// Automatically handles token retrieval and refresh from Firebase Auth.
+  ///
+  /// - [firebaseAuth]: Required Firebase Auth instance for authentication
+  /// - [environment]: API environment (defaults to development)
   factory SubscriptionCatalogService({
+    required FirebaseAuth firebaseAuth,
     StoycoEnvironment environment = StoycoEnvironment.development,
-    String userToken = '',
-    Future<String?>? Function()? functionToUpdateToken,
   }) {
     instance = SubscriptionCatalogService._(
+      firebaseAuth: firebaseAuth,
       environment: environment,
-      userToken: userToken,
-      functionToUpdateToken: functionToUpdateToken,
     );
     return instance;
   }
 
   /// Private constructor for singleton pattern.
   SubscriptionCatalogService._({
+    required this.firebaseAuth,
     this.environment = StoycoEnvironment.development,
-    this.userToken = '',
-    this.functionToUpdateToken,
   }) {
     _dataSource = SubscriptionCatalogDataSource(environment: environment);
     _repository = SubscriptionCatalogRepository(_dataSource);
-    _repository.updateToken(userToken);
-    _dataSource.updateToken(userToken);
   }
 
   /// Singleton instance of [SubscriptionCatalogService].
-  static SubscriptionCatalogService instance = SubscriptionCatalogService._();
+  static late SubscriptionCatalogService instance;
 
-  /// The user's authentication token.
-  String userToken;
+  /// The current environment (development, production, testing).
+  final StoycoEnvironment environment;
 
-  /// The current environment (development, production, etc.).
-  StoycoEnvironment environment;
-
-  /// Optional function to update the user token if it becomes invalid.
-  Future<String?>? Function()? functionToUpdateToken;
+  /// Firebase Auth instance for automatic token management.
+  final FirebaseAuth firebaseAuth;
 
   late final SubscriptionCatalogDataSource _dataSource;
   late final SubscriptionCatalogRepository _repository;
 
-  /// Updates the user token and propagates it to the repository and data source.
-  void updateToken(String token) {
-    userToken = token;
+  /// Gets the current user token from Firebase Auth.
+  Future<String> _getToken() async {
+    final User? user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception('No user is currently signed in to Firebase');
+    }
+    final String? token = await user.getIdToken();
+    if (token == null) {
+      throw Exception('Failed to retrieve Firebase ID token');
+    }
+    return token;
+  }
+
+  /// Updates the token in the data source and repository.
+  Future<void> _updateTokenInLayers() async {
+    final String token = await _getToken();
     _repository.updateToken(token);
     _dataSource.updateToken(token);
   }
 
-  /// Sets the function to update the user token.
-  void setFunctionToUpdateToken(Future<String?>? Function()? function) {
-    functionToUpdateToken = function;
-  }
-
-  /// Verifies the user token and updates it if necessary using [functionToUpdateToken].
-  ///
-  /// Throws an [Exception] if the token cannot be updated.
-  Future<void> verifyToken() async {
-    if (userToken.isEmpty) {
-      if (functionToUpdateToken == null) {
-        throw Exception('functionToUpdateToken is not set');
-      }
-      final String? newToken = await functionToUpdateToken!();
-      if (newToken != null && newToken.isNotEmpty) {
-        updateToken(newToken);
-      } else {
-        throw Exception('Failed to update token');
-      }
-    }
-  }
-
   /// Fetches the subscription plans for a specific user.
   ///
-  /// Takes a [GetUserSubscriptionPlansRequest] containing the user ID.
-  /// Returns an [Either] with [UserSubscriptionPlanResponse] on success or [Failure] on error.
-  Future<Either<Failure, UserSubscriptionPlanResponse>>
-  getUserSubscriptionPlans(GetUserSubscriptionPlansRequest request) async {
+  /// Automatically refreshes Firebase Auth token before making the request.
+  ///
+  /// - [request]: Contains the user ID and filter parameters
+  ///
+  /// Returns [Either] with [UserSubscriptionPlanResponse] on success or [Failure] on error.
+  Future<Either<Failure, UserSubscriptionPlanResponse>> getUserSubscriptionPlans(GetUserSubscriptionPlansRequest request) async {
     try {
-      await verifyToken();
-      final UserSubscriptionPlanResponse response = await _repository
-          .getUserSubscriptionPlans(request);
+      await _updateTokenInLayers();
+      final UserSubscriptionPlanResponse response = await _repository.getUserSubscriptionPlans(request);
       return Right<Failure, UserSubscriptionPlanResponse>(response);
     } on DioException catch (error) {
       return Left<Failure, UserSubscriptionPlanResponse>(
@@ -132,12 +125,12 @@ class SubscriptionCatalogService {
   /// Fetches the subscription catalog from the API, optionally filtered by [userId]
   /// and paginated using [page] and [pageSize].
   ///
-  /// Returns an [Either] with [GetSubscriptionCatalogResponse] on success or [Failure] on error.
-  Future<Either<Failure, GetSubscriptionCatalogResponse>>
-  getSubscriptionCatalog({String? userId, int? page, int? pageSize}) async {
+  /// This is a public endpoint that doesn't require authentication.
+  ///
+  /// Returns [Either] with [GetSubscriptionCatalogResponse] on success or [Failure] on error.
+  Future<Either<Failure, GetSubscriptionCatalogResponse>> getSubscriptionCatalog({String? userId, int? page, int? pageSize}) async {
     try {
-      final GetSubscriptionCatalogResponse response = await _repository
-          .getSubscriptionCatalog(
+      final GetSubscriptionCatalogResponse response = await _repository.getSubscriptionCatalog(
             userId: userId,
             page: page,
             pageSize: pageSize,

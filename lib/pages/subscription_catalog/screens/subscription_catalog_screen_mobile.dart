@@ -191,7 +191,6 @@ class _SubscriptionsCatalogScreenMobileState
                         SubscriptionSearchBar(
                           onChanged: controller.onSearchChanged,
                         ),
-
                         StoycoTabBarV2(
                           tabController: controller.tabController,
                           tabs: controller.tabs,
@@ -205,35 +204,63 @@ class _SubscriptionsCatalogScreenMobileState
             SliverToBoxAdapter(
               child: SizedBox(height: StoycoScreenSize.height(context, 16)),
             ),
-            // Grid of subscription items
+            // Grid of subscription items with adaptive height
             SliverPadding(
               padding: StoycoScreenSize.symmetric(context, horizontal: 24),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 0.7,
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    const int itemsPerRow = 2;
+                    final int rowIndex = index;
+                    final int startIndex = rowIndex * itemsPerRow;
+                    final int endIndex = (startIndex + itemsPerRow).clamp(
+                      0,
+                      controller.filteredSubscriptions.length,
+                    );
+
+                    if (startIndex >= controller.filteredSubscriptions.length) {
+                      return null;
+                    }
+
+                    final List<SubscriptionCatalogItemMap> rowItems = controller.filteredSubscriptions.sublist(startIndex, endIndex);
+
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: StoycoScreenSize.height(context, 56),
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            ...List<Widget>.generate(rowItems.length, (int itemIndex) {
+                              final SubscriptionCatalogItemMap item = rowItems[itemIndex];
+                              return Expanded(
+                                child: Padding(
+                                  padding: StoycoScreenSize.fromLTRB(
+                                    context,
+                                    right: itemIndex < rowItems.length - 1 ? 16 : 0,
+                                  ),
+                                  child: SubscriptionCircularImageWithInfo(
+                                    imageUrl: item.imageUrl,
+                                    title: item.title,
+                                    subscribed: item.subscribed,
+                                    hasSubscription: item.hasSubscription,
+                                    isExpired: item.isExpired,
+                                    onTap: () => onTapSubscription?.call(item.partnerId),
+                                    onTapSubscribe: () => widget.onTapSubscribe?.call(item.partnerId),
+                                    onTapWhenExpired: () => widget.onTapWhenExpired?.call(item.partnerId),
+                                  ),
+                                ),
+                              );
+                            }),
+                            if (rowItems.length == 1) const Spacer(),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: (controller.filteredSubscriptions.length / 2).ceil(),
                 ),
-                delegate: SliverChildBuilderDelegate((
-                  BuildContext context,
-                  int index,
-                ) {
-                  final SubscriptionCatalogItemMap item =
-                      controller.filteredSubscriptions[index];
-                  return SubscriptionCircularImageWithInfo(
-                    imageUrl: item.imageUrl,
-                    title: item.title,
-                    subscribed: item.subscribed,
-                    hasSubscription: item.hasSubscription,
-                    isExpired: item.isExpired,
-                    onTap: () => onTapSubscription?.call(item.partnerId),
-                    onTapSubscribe: () =>
-                        widget.onTapSubscribe?.call(item.partnerId),
-                    onTapWhenExpired: () =>
-                        widget.onTapWhenExpired?.call(item.partnerId),
-                  );
-                }, childCount: controller.filteredSubscriptions.length),
               ),
             ),
           ],
