@@ -103,8 +103,9 @@ class SubscriptionIsActiveResponse extends Equatable {
   /// Whether the plan has been deleted.
   final bool planIsDeleted;
 
-  // TODO: JOSE LAMILLA REVISAR ESTO PORFA
-  final subscribedIsActive = false;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  /// Indicates if the subscription is currently active, in trial, or scheduled to start.
+  bool get subscribedIsActive => planStatus == SubscriptionStatus.active || planStatus == SubscriptionStatus.trialPeriod || planStatus == SubscriptionStatus.pendingCancellation;
 
   /// Converts this object to a JSON map.
   Map<String, dynamic> toJson() => _$SubscriptionIsActiveResponseToJson(this);
