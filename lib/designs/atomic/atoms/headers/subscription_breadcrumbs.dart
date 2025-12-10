@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -24,23 +23,21 @@ class Breadcrumbs extends StatelessWidget {
     super.key,
     required this.items,
     Widget Function(BuildContext context)? separator,
-  }) : separator =
-           separator ??
-           ((BuildContext context) => Row(
-             children: <Widget>[
-               SizedBox(width: StoycoScreenSize.width(context, 12)),
-               Text(
-                 '/',
-                 style: GoogleFonts.inter(
-                   textStyle: TextStyle(
-                     fontWeight: FontWeight.w400,
-                     fontSize: StoycoScreenSize.fontSize(context, 16),
-                   ),
-                 ),
-               ),
-               SizedBox(width: StoycoScreenSize.width(context, 12)),
-             ],
-           ));
+  }) : separator = separator ??
+      ((BuildContext context) => Row(
+        children: <Widget>[
+          SizedBox(width: StoycoScreenSize.width(context, 12)),
+          Text(
+            '/',
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: StoycoScreenSize.fontSize(context, 16),
+              fontFamily: FontFamilyToken.akkuratPro,
+            ),
+          ),
+          SizedBox(width: StoycoScreenSize.width(context, 12)),
+        ],
+      ));
 
   /// The list of breadcrumb items.
   final List<BreadcrumbItem> items;
