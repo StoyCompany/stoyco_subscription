@@ -43,6 +43,7 @@ class CulturalAssetCard extends StatelessWidget {
     required this.culturalAssetCard,
     this.onTap,
     this.onTapCulturalAssetExclusive,
+    this.isEnabled = true,
   });
 
   /// The model containing the asset's image, title, and price.
@@ -54,32 +55,38 @@ class CulturalAssetCard extends StatelessWidget {
   /// Callback when the locked cultural asset card is tapped.
   final VoidCallback? onTapCulturalAssetExclusive;
 
+  final bool isEnabled;
+  
   /// Whether the asset is sold out (stock is 0).
   bool get isSoldOut => (culturalAssetCard.stock ?? 1) == 0;
 
   /// Whether the asset is locked (requires subscription and user doesn't have access).
   ///
   /// This is only evaluated if the asset is not sold out.
-  bool get isLocked =>
-      !isSoldOut && !culturalAssetCard.hasAccessWithSubscription;
+  bool get isLocked => !isSoldOut && !culturalAssetCard.hasAccessWithSubscription;
 
   @override
   Widget build(BuildContext context) {
     return Opacity(
-      opacity: isSoldOut ? 0.5 : 1.0,
+      opacity: isSoldOut || !isEnabled ? 0.5 : 1.0,
       child: InkWell(
         borderRadius: BorderRadius.circular(
           StoycoScreenSize.radius(context, 20),
         ),
-        onTap: isSoldOut
-            ? null
-            : isLocked
-            ? onTapCulturalAssetExclusive
-            : () {
-                if (onTap != null) {
-                  onTap!(culturalAssetCard);
-                }
-              },
+        onTap: () {
+          if (!isEnabled || isSoldOut) {
+            return;
+          }
+
+          if (isLocked) {
+            if (onTapCulturalAssetExclusive != null) {
+              if (onTap != null) {
+                onTap!(culturalAssetCard);
+              }
+            }
+            return;
+          }
+        },
         child: SizedBox(
           width: StoycoScreenSize.width(context, 156),
           height: StoycoScreenSize.height(context, 226),
