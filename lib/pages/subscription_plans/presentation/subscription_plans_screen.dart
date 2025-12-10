@@ -1,11 +1,10 @@
-import 'package:flutter/widgets.dart';
-import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/skeletons/skeleton_card.dart';
-import 'package:stoyco_subscription/designs/atomic/molecules/tap_menu_items/tab_menu_item.dart';
+import 'package:stoyco_subscription/designs/atomic/molecules/tab_bar/tab_bar_custom.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/cards/subscription_plan_card.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan_response.dart';
@@ -44,18 +43,18 @@ import 'package:stoyco_subscription/pages/subscription_plans/presentation/helper
 /// ```
 /// {@endtemplate}
 class SubscriptionPlansList extends StatefulWidget {
-    /// {@macro subscription_plans_list}
-    const SubscriptionPlansList({
-      super.key,
-      required this.subscriptionPlanResponse,
-      this.isLoading = false,
-      this.crossAxisCount = 1,
-      required this.onTapCancelSubscription,
-      required this.onTapNewSubscription,
-      required this.onTapRenewSubscription,
-      this.styleParams = const SubscriptionPlanScreenStyleParams(),
-      this.onPlanTypeChanged,
-    });
+  /// {@macro subscription_plans_list}
+  const SubscriptionPlansList({
+    super.key,
+    required this.subscriptionPlanResponse,
+    this.isLoading = false,
+    this.crossAxisCount = 1,
+    required this.onTapCancelSubscription,
+    required this.onTapNewSubscription,
+    required this.onTapRenewSubscription,
+    this.styleParams = const SubscriptionPlanScreenStyleParams(),
+    this.onPlanTypeChanged,
+  });
 
   /// Response containing lists of subscription plans.
   final SubscriptionPlanResponse subscriptionPlanResponse;
@@ -91,6 +90,16 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
   /// Whether monthly plans are currently shown.
   bool isMonthly = true;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.subscriptionPlanResponse.monthlyPlans.isNotEmpty) {
+      isMonthly = true;
+    } else if (widget.subscriptionPlanResponse.annualPlans.isNotEmpty) {
+      isMonthly = false;
+    }
+  }
+
   /// Returns true if there are monthly plans available.
   bool get hasMonthlyPlans =>
       widget.subscriptionPlanResponse.monthlyPlans.isNotEmpty;
@@ -105,244 +114,269 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            if (StoycoScreenSize.isPhone(context)) ...<Widget>[
-              StoycoAssets.lib.assets.icons.plan.tagSubscription.svg(
-                width: widget.styleParams.tagSubscriptionWidth,
-                height: widget.styleParams.tagSubscriptionHeight,
-                package: 'stoyco_subscription',
-              ),
-              Gap(StoycoScreenSize.height(context, 16)),
-              Text(
-                hasNoPlans
-                    ? 'No hay planes disponibles'
-                    : widget.subscriptionPlanResponse.partnerName,
-                textAlign: TextAlign.center,
-                style:
-                    widget.styleParams.titleStyle ??
-                    GoogleFonts.montserrat(
-                      textStyle: TextStyle(
-                        color: StoycoColors.grayText,
-                        fontSize: StoycoScreenSize.fontSize(context, 24),
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-              ),
-              Gap(StoycoScreenSize.height(context, 16)),
-            ] else ...<Widget>[
-              StoycoAssets.lib.assets.icons.plan.tagSubscriptionSlim.svg(
-                width: widget.styleParams.tagSubscriptionWidth,
-                height: widget.styleParams.tagSubscriptionHeight,
-                package: 'stoyco_subscription',
-              ),
-              Gap(StoycoScreenSize.height(context, 12)),
-              Text(
-                'Suscripciones',
-                textAlign: TextAlign.center,
-                style:
-                    widget.styleParams.titleStyle ??
-                    TextStyle(
-                      color: StoycoColors.grayText,
-                      fontSize: StoycoScreenSize.fontSize(context, 20),
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Akkurat_Pro',
-                    ),
-              ),
-              Gap(StoycoScreenSize.height(context, 30)),
-              Text(
-                hasNoPlans
-                    ? 'No hay planes disponibles'
-                    : 'Elige el plan de ${widget.subscriptionPlanResponse.partnerName} que mejor se adapte a ti.',
-                textAlign: TextAlign.center,
-                style:
-                    widget.styleParams.titleStyle ??
-                    TextStyle(
-                      color: StoycoColors.grayText,
-                      fontSize: StoycoScreenSize.fontSize(context, 25),
-                      fontWeight: FontWeight.w700,
-                      fontFamily: 'Akkurat_Pro',
-                    ),
-              ),
-              Gap(StoycoScreenSize.height(context, 30)),
-            ],
-            Expanded(
-              child: widget.isLoading
-                  ? SingleChildScrollView(
-                      child: LayoutBuilder(
-                        builder:
-                            (BuildContext context, BoxConstraints constraints) {
-                              final double totalSpacing =
-                                  (widget.crossAxisCount - 1) * 10;
-                              final double cardWidth =
-                                  (constraints.maxWidth - totalSpacing) /
-                                  widget.crossAxisCount;
-                              return Wrap(
-                                key: const ValueKey<String>(
-                                  'monthly_plans_wrap',
-                                ),
-                                spacing: StoycoScreenSize.width(context, 8),
-                                runSpacing: StoycoScreenSize.height(context, 8),
-                                alignment: WrapAlignment.center,
-                                children: List<Widget>.generate(3, (int index) {
-                                  return SizedBox(
-                                    width: cardWidth,
-                                    child: SkeletonCard(
-                                      height: cardWidth,
-                                      width: cardWidth,
-                                      margin: StoycoScreenSize.symmetric(
-                                        context,
-                                        horizontal: 16,
-                                        horizontalPhone: 40,
-                                        vertical: 12,
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              );
-                            },
-                      ),
-                    )
-                  : Visibility(
-                      visible: hasMonthlyPlans || hasAnnualPlans,
-                      replacement: const SizedBox.shrink(),
-                      child: TabMenuItem(
-                        tabs: hasMonthlyPlans && hasAnnualPlans
-                            ? const <String>['Mensual', 'Anual']
-                            : hasMonthlyPlans
-                            ? const <String>['Mensual']
-                            : hasAnnualPlans
-                            ? const <String>['Anual']
-                            : const <String>[],
-                        textDescription: StoycoScreenSize.isPhone(context)
-                            ? 'Elige el plan que mejor se adapte a ti.'
-                            : null,
-                        isLoading: widget.isLoading,
-                        textDescriptionStyle:
-                            widget.styleParams.textDescriptionStyle,
-                        onTabChanged: (String value) {
-                          setState(() {
-                            isMonthly = value == 'Mensual';
-                          });
+    final bool isPhone = StoycoScreenSize.isPhone(context);
 
-                          widget.onPlanTypeChanged?.call(isMonthly);
-                        },
-                        initialNavIndex: isMonthly ? 0 : 1,
-                        children: <Widget>[
-                          if (hasMonthlyPlans)
-                            SingleChildScrollView(
-                              child: LayoutBuilder(
-                                builder:
-                                    (
-                                      BuildContext context,
-                                      BoxConstraints constraints,
-                                    ) {
-                                      final double totalSpacing =
-                                          (widget.crossAxisCount - 1) * 10;
-                                      final double cardWidth =
-                                          (constraints.maxWidth -
-                                              totalSpacing) /
-                                          widget.crossAxisCount;
-                                      final List<SubscriptionPlan> plans =
-                                          widget
-                                              .subscriptionPlanResponse
-                                              .monthlyPlans;
-                                      return Wrap(
-                                        key: const ValueKey<String>(
-                                          'monthly_plans_wrap',
-                                        ),
-                                        spacing: StoycoScreenSize.width(
-                                          context,
-                                          8,
-                                        ),
-                                        runSpacing: StoycoScreenSize.height(
-                                          context,
-                                          8,
-                                        ),
-                                        alignment: WrapAlignment.center,
-                                        children: plans.map((
-                                          SubscriptionPlan plan,
-                                        ) {
-                                          return SizedBox(
-                                            width: cardWidth,
-                                            child: SubscriptionPlanCard(
-                                              key: ValueKey<String>(plan.id),
-                                              plan: plan,
-                                              onTapCancelSubscription: widget.onTapCancelSubscription,
-                                              onTapNewSubscription: widget.onTapNewSubscription,
-                                              onTapRenewSubscription: widget.onTapRenewSubscription,
-                                              styleParams: widget.styleParams,
-                                            ),
-                                          );
-                                        }).toList(),
-                                      );
-                                    },
-                              ),
-                            ),
-                          if (hasAnnualPlans)
-                            SingleChildScrollView(
-                              child: LayoutBuilder(
-                                builder:
-                                    (
-                                      BuildContext context,
-                                      BoxConstraints constraints,
-                                    ) {
-                                      final double totalSpacing =
-                                          (widget.crossAxisCount - 1) * 10;
-                                      final double cardWidth =
-                                          (constraints.maxWidth -
-                                              totalSpacing) /
-                                          widget.crossAxisCount;
-                                      final List<SubscriptionPlan> plans =
-                                          widget
-                                              .subscriptionPlanResponse
-                                              .annualPlans;
-                                      return Wrap(
-                                        key: const ValueKey<String>(
-                                          'annual_plans_wrap',
-                                        ),
-                                        spacing: StoycoScreenSize.width(
-                                          context,
-                                          8,
-                                        ),
-                                        runSpacing: StoycoScreenSize.height(
-                                          context,
-                                          8,
-                                        ),
-                                        alignment: WrapAlignment.center,
-                                        children: plans.map((
-                                          SubscriptionPlan plan,
-                                        ) {
-                                          return SizedBox(
-                                            width: cardWidth,
-                                            child: SubscriptionPlanCard(
-                                              key: ValueKey<String>(plan.id),
-                                              plan: plan,
-                                              onTapCancelSubscription: widget
-                                                  .onTapCancelSubscription,
-                                              onTapNewSubscription:
-                                                  widget.onTapNewSubscription,
-                                              onTapRenewSubscription:
-                                                  widget.onTapRenewSubscription,
-                                              styleParams: widget.styleParams,
-                                            ),
-                                          );
-                                        }).toList(),
-                                      );
-                                    },
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-            ),
+    return Scaffold(
+      backgroundColor: StoycoColors.midnightInk,
+      body: SafeArea(
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _buildIconHeader(context, isPhone),
+            _buildTitle(context, isPhone),
+            if (!isPhone) _buildDescription(context),
+            _buildTabBar(context, isPhone),
+            _buildPlansContent(context),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildIconHeader(BuildContext context, bool isPhone) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.only(
+          top: StoycoScreenSize.height(context, isPhone ? 0 : 24),
+          bottom: StoycoScreenSize.height(context, isPhone ? 14 : 12),
+        ),
+        child: Center(
+          child: isPhone
+              ? StoycoAssets.lib.assets.icons.plan.tagSubscription.svg(
+                  width: widget.styleParams.tagSubscriptionWidth,
+                  height: widget.styleParams.tagSubscriptionHeight,
+                  package: 'stoyco_subscription',
+                )
+              : StoycoAssets.lib.assets.icons.plan.tagSubscriptionSlim.svg(
+                  width: widget.styleParams.tagSubscriptionWidth,
+                  height: widget.styleParams.tagSubscriptionHeight,
+                  package: 'stoyco_subscription',
+                ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitle(BuildContext context, bool isPhone) {
+    return SliverToBoxAdapter(
+      child: Center(
+        child: Padding(
+          padding: StoycoScreenSize.fromLTRB(
+            context,
+            left: 24,
+            right: 24,
+            bottom: isPhone ? 4 : 16,
+          ),
+          child: Text(
+            isPhone
+                ? (hasNoPlans
+                      ? 'No hay planes disponibles'
+                      : widget.subscriptionPlanResponse.partnerName)
+                : 'Suscripciones',
+            textAlign: TextAlign.center,
+            style:
+                widget.styleParams.titleStyle ??
+                TextStyle(
+                  color: StoycoColors.grayText,
+                  fontSize: StoycoScreenSize.fontSize(
+                    context,
+                    isPhone ? 24 : 20,
+                  ),
+                  fontWeight: FontWeight.w700,
+                  fontFamily: FontFamilyToken.akkuratPro,
+                ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDescription(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: StoycoScreenSize.height(context, 16)),
+        child: Center(
+          child: Padding(
+            padding: StoycoScreenSize.symmetric(context, horizontal: 24),
+            child: Text(
+              hasNoPlans
+                  ? 'No hay planes disponibles'
+                  : 'Elige el plan de ${widget.subscriptionPlanResponse.partnerName} que mejor se adapte a ti.',
+              textAlign: TextAlign.center,
+              style:
+                  widget.styleParams.titleStyle ??
+                  TextStyle(
+                    color: StoycoColors.grayText,
+                    fontSize: StoycoScreenSize.fontSize(context, 25),
+                    fontWeight: FontWeight.w700,
+                    fontFamily: FontFamilyToken.akkuratPro,
+                  ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabBar(BuildContext context, bool isPhone) {
+    if (!hasMonthlyPlans && !hasAnnualPlans) {
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
+
+    final double barHeight = isPhone
+        ? StoycoScreenSize.height(context, 90)
+        : StoycoScreenSize.height(context, 80);
+
+    return SliverAppBar(
+      backgroundColor: StoycoColors.midnightInk,
+      surfaceTintColor: StoycoColors.midnightInk,
+      toolbarHeight: barHeight,
+      pinned: true,
+      automaticallyImplyLeading: false,
+      titleSpacing: 0,
+      title: Padding(
+        padding: StoycoScreenSize.symmetric(context, horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  final bool hasBothPlans = hasMonthlyPlans && hasAnnualPlans;
+                  return CustomTabBar(
+                    width: constraints.maxWidth,
+                    tabs: hasBothPlans
+                        ? const <String>['Mensual', 'Anual']
+                        : hasMonthlyPlans
+                        ? const <String>['Mensual']
+                        : const <String>['Anual'],
+                    initialNavIndex: _getTabInitialIndex(),
+                    isLoading: widget.isLoading,
+                    onTabChanged: (int index) {
+                      setState(() {
+                        isMonthly = hasMonthlyPlans && hasAnnualPlans
+                            ? index == 0
+                            : hasMonthlyPlans;
+                      });
+                      widget.onPlanTypeChanged?.call(isMonthly);
+                    },
+                  );
+                },
+              ),
+            ),
+            if (isPhone && !widget.isLoading) ...<Widget>[
+              SizedBox(height: StoycoScreenSize.height(context, 15)),
+              Padding(
+                padding: StoycoScreenSize.symmetric(context, horizontal: 8),
+                child: Text(
+                  'Elige el plan que mejor se adapte a ti.',
+                  textAlign: TextAlign.left,
+                  style:
+                      widget.styleParams.textDescriptionStyle ??
+                      TextStyle(
+                        fontSize: StoycoScreenSize.fontSize(context, 16),
+                        fontFamily: FontFamilyToken.akkuratPro,
+                        fontWeight: FontWeight.bold,
+                        color: StoycoColors.iconDefault,
+                      ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlansContent(BuildContext context) {
+    if (widget.isLoading) {
+      return _buildLoadingContent(context);
+    }
+
+    if (!hasMonthlyPlans && !hasAnnualPlans) {
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
+
+    final List<SubscriptionPlan> plans;
+    if (hasMonthlyPlans && hasAnnualPlans) {
+      plans = isMonthly
+          ? widget.subscriptionPlanResponse.monthlyPlans
+          : widget.subscriptionPlanResponse.annualPlans;
+    } else if (hasMonthlyPlans) {
+      plans = widget.subscriptionPlanResponse.monthlyPlans;
+    } else {
+      plans = widget.subscriptionPlanResponse.annualPlans;
+    }
+
+    return _buildPlansGrid(context, plans);
+  }
+
+  Widget _buildLoadingContent(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double totalSpacing = (widget.crossAxisCount - 1) * 10;
+          final double cardWidth =
+              (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
+          return Wrap(
+            spacing: StoycoScreenSize.width(context, 8),
+            runSpacing: StoycoScreenSize.height(context, 8),
+            alignment: WrapAlignment.center,
+            children: List<Widget>.generate(3, (int index) {
+              return SizedBox(
+                width: cardWidth,
+                child: SkeletonCard(
+                  height: cardWidth,
+                  width: cardWidth,
+                  margin: StoycoScreenSize.symmetric(
+                    context,
+                    horizontal: 16,
+                    horizontalPhone: 40,
+                    vertical: 12,
+                  ),
+                ),
+              );
+            }),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPlansGrid(BuildContext context, List<SubscriptionPlan> plans) {
+    return SliverToBoxAdapter(
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final double totalSpacing = (widget.crossAxisCount - 1) * 10;
+          final double cardWidth =
+              (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
+          return Wrap(
+            spacing: StoycoScreenSize.width(context, 8),
+            runSpacing: StoycoScreenSize.height(context, 8),
+            alignment: WrapAlignment.center,
+            children: plans.map((SubscriptionPlan plan) {
+              return SizedBox(
+                width: cardWidth,
+                child: SubscriptionPlanCard(
+                  key: ValueKey<String>(plan.id),
+                  plan: plan,
+                  onTapCancelSubscription: widget.onTapCancelSubscription,
+                  onTapNewSubscription: widget.onTapNewSubscription,
+                  onTapRenewSubscription: widget.onTapRenewSubscription,
+                  styleParams: widget.styleParams,
+                ),
+              );
+            }).toList(),
+          );
+        },
+      ),
+    );
+  }
+
+  int _getTabInitialIndex() {
+    if (hasMonthlyPlans && hasAnnualPlans) {
+      return isMonthly ? 0 : 1;
+    }
+    return 0;
   }
 }

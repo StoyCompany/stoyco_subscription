@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template custom_tab_bar}
@@ -36,8 +36,8 @@ class CustomTabBar extends StatefulWidget {
   /// {@macro custom_tab_bar}
   const CustomTabBar({
     super.key,
-    this.width = 324,
-    this.height = 40,
+    this.width = 346,
+    this.height = 33,
     this.padding,
     required this.tabs,
     required this.onTabChanged,
@@ -79,7 +79,9 @@ class _CustomTabBarState extends State<CustomTabBar> {
   void initState() {
     super.initState();
     selectedIndex = widget.initialNavIndex;
-    textKeys.addAll(List<GlobalKey>.generate(widget.tabs.length, (_) => GlobalKey()));
+    textKeys.addAll(
+      List<GlobalKey>.generate(widget.tabs.length, (_) => GlobalKey()),
+    );
   }
 
   @override
@@ -105,74 +107,97 @@ class _CustomTabBarState extends State<CustomTabBar> {
 
   @override
   Widget build(BuildContext context) {
+    final double tabBarWidth = widget.tabs.length > 1 ? widget.width : widget.width / 2;
+    
     return Container(
       height: StoycoScreenSize.height(context, widget.height),
-      width: StoycoScreenSize.width(context, widget.tabs.length > 1 ? widget.width : widget.width / 1.95),
-      padding: widget.padding ?? StoycoScreenSize.symmetric(context, horizontal: 6, horizontalPhone: 4),
+      width: StoycoScreenSize.width( context, tabBarWidth),
+      alignment: Alignment.center,
       decoration: BoxDecoration(
         color: StoycoColors.menuItemBackground,
-        borderRadius: BorderRadius.circular(StoycoScreenSize.radius(context, 105)),
+        borderRadius: BorderRadius.circular(
+          StoycoScreenSize.radius(context, 106),
+        ),
       ),
       child: SingleChildScrollView(
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
         physics: const NeverScrollableScrollPhysics(),
         child: Row(
-          children: List<Widget>.generate(
-            widget.tabs.length,
-            (int index) {
-              final bool isSelected = selectedIndex == index;
-              return SizedBox(
-                width: StoycoScreenSize.width(context, widget.width - StoycoScreenSize.symmetric(context, horizontal: 6, horizontalPhone: 4).horizontal) / 2,
-                child: isSelected 
-                  ? ButtonGradientText(
-                      text: widget.tabs[index], 
-                      onPressed: () => changeTab(index),
-                      paddingContent: StoycoScreenSize.symmetric(
-                        context, 
-                        verticalPhone: 6,
-                        vertical: 2,
-                      ),
-                      borderRadius: StoycoScreenSize.radius(context, 105),
-                      type: ButtonGradientTextType.tertiary,
-                      textStyle: GoogleFonts.montserrat(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List<Widget>.generate(widget.tabs.length, (int index) {
+            final bool isSelected = selectedIndex == index;
+            return SizedBox(
+              height: StoycoScreenSize.height(context, widget.height),
+              width: tabBarWidth / widget.tabs.length,
+              child: isSelected
+                  ? Padding(
+                    padding: widget.padding ?? StoycoScreenSize.symmetric(
+                      context,
+                      verticalPhone: 3,
+                      vertical: 2,
+                      horizontalPhone: 3,
+                      horizontal: 2,
+                    ),
+                    child: ButtonGradientText(
+                        text: widget.tabs[index],
+                        onPressed: () => changeTab(index),
+                        alignmentContent: Alignment.center,
+                        paddingContent: widget.padding ?? StoycoScreenSize.symmetric(
+                          context,
+                          verticalPhone: 3,
+                          vertical: 2,
+                        ),
+                        borderRadius: StoycoScreenSize.radius(context, 106),
+                        type: ButtonGradientTextType.tertiary,
                         textStyle: TextStyle(
-                          color: StoycoColors.deepCharcoal,
+                          fontFamily: FontFamilyToken.akkuratPro,
+                          color: StoycoColors.deepTeal,
                           fontSize: StoycoScreenSize.fontSize(
-                            context, 
+                            context,
                             18,
                             phone: 14,
                           ),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    )
-                  : ButtonGradientText(
-                      text: widget.tabs[index],
-                      textStyle: GoogleFonts.montserrat(
+                  )
+                  : Padding(
+                    padding: widget.padding ?? StoycoScreenSize.symmetric(
+                      context,
+                      verticalPhone: 3,
+                      vertical: 2,
+                      horizontalPhone: 3,
+                      horizontal: 2,
+                    ),
+                    child: ButtonGradientText(
+                        text: widget.tabs[index],
+                        alignmentContent: Alignment.center,
                         textStyle: TextStyle(
+                          fontFamily: FontFamilyToken.akkuratPro,
                           color: StoycoColors.iconDefault,
                           fontSize: StoycoScreenSize.fontSize(
-                            context, 
+                            context,
                             18,
                             phone: 14,
                           ),
                           fontWeight: FontWeight.w400,
                         ),
-                      ),
-                      onPressed: () => changeTab(index),
-                      paddingContent: StoycoScreenSize.symmetric(
-                          context, 
+                        onPressed: () => changeTab(index),
+                        paddingContent: StoycoScreenSize.symmetric(
+                          context,
                           vertical: 2,
-                          verticalPhone: 6,
+                          verticalPhone: 3,
+                          horizontalPhone: 3,
                         ),
-                      borderRadius: StoycoScreenSize.radius(context, 105),
-                      type: ButtonGradientTextType.custom,
-                      backgroundColor: StoycoColors.transparent,
-                    ),
-              );
-            },
-          ),
+                        borderRadius: StoycoScreenSize.radius(context, 106),
+                        type: ButtonGradientTextType.custom,
+                        backgroundColor: StoycoColors.transparent,
+                      ),
+                  ),
+            );
+          }),
         ),
       ),
     );

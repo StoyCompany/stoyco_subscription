@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/images/image_network_blur.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
@@ -63,12 +62,11 @@ class SubscriptionHistoryCard extends StatelessWidget {
             children: <Widget>[
               Text(
                 'Te suscribiste a: ',
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
+                style: TextStyle(
+                    fontFamily: FontFamilyToken.akkuratPro,
                     color: StoycoColors.softWhite,
                     fontWeight: FontWeight.w700,
                     fontSize: StoycoScreenSize.fontSize(context, 12),
-                  ),
                 ),
               ),
               ImageNetworkBlur(
@@ -93,22 +91,20 @@ class SubscriptionHistoryCard extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           subscriptionHistoryItem.partnerName,
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
+                          style: TextStyle(
+                              fontFamily: FontFamilyToken.akkuratPro,
                               color: StoycoColors.softWhite,
                               fontWeight: FontWeight.w700,
                               fontSize: StoycoScreenSize.fontSize(context, 16),
-                            ),
                           ),
                         ),
                         Text(
                           '${subscriptionHistoryItem.planName} (${subscriptionHistoryItem.recurrenceType}) ${subscriptionHistoryItem.price} ${subscriptionHistoryItem.currencyCode}',
-                          style: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
+                          style: TextStyle(
+                              fontFamily: FontFamilyToken.akkuratPro,
                               color: StoycoColors.softWhite,
                               fontWeight: FontWeight.w400,
                               fontSize: StoycoScreenSize.fontSize(context, 12),
-                            ),
                           ),
                         ),
                         Text(
@@ -131,12 +127,11 @@ class SubscriptionHistoryCard extends StatelessWidget {
                       spacing: StoycoScreenSize.height(context, 4),
                       children: <Widget>[
                         Chip(
-                          labelStyle: GoogleFonts.montserrat(
-                            textStyle: TextStyle(
+                          labelStyle: TextStyle(
+                              fontFamily: FontFamilyToken.akkuratPro,
                               color: StoycoColors.deepCharcoal,
                               fontWeight: FontWeight.w400,
                               fontSize: StoycoScreenSize.fontSize(context, 12),
-                            ),
                           ),
                           backgroundColor:
                               _isActiveSubscription(subscriptionHistoryItem)
@@ -165,15 +160,14 @@ class SubscriptionHistoryCard extends StatelessWidget {
                                 _isActiveSubscription(subscriptionHistoryItem)
                                     ? 'Ver suscripción'
                                     : 'Ver planes',
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    color: StoycoColors.softWhite,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: StoycoScreenSize.fontSize(
-                                      context,
-                                      12,
+                                style: TextStyle(
+                                  fontFamily: FontFamilyToken.akkuratPro,
+                                  color: StoycoColors.softWhite,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: StoycoScreenSize.fontSize(
+                                    context,
+                                    12,
                                     ),
-                                  ),
                                 ),
                               ),
                       ],

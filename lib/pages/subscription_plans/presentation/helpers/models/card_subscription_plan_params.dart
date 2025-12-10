@@ -38,7 +38,7 @@ class SubscriptionPlanScreenStyleParams {
     this.tagCornerHeight = 100,
     this.tagCornerWidth = 100,
     this.tagCornerCutSize = 48,
-    this.tagCornerRadius = 20,
+    this.tagCornerRadius = 5,
     this.tagCornerPaddingText,
     this.tagCornerTextStyle,
     this.tagCornerColor = StoycoColors.blue,

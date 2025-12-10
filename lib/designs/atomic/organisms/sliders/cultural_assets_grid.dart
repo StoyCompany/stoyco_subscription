@@ -70,6 +70,7 @@ class CulturalAssetsGrid extends StatelessWidget {
   const CulturalAssetsGrid({
     super.key,
     required this.culturalAssets,
+    required this.balance,
     this.isLoading = false,
     this.onTapSelectedCulturalAsset,
     this.onTapCulturalAssetExclusive,
@@ -82,6 +83,9 @@ class CulturalAssetsGrid extends StatelessWidget {
 
   /// The list of cultural asset models to display in the grid.
   final List<CulturalAssetItemModel> culturalAssets;
+
+  /// The user's current balance.
+  final int balance;
 
   /// Whether the grid is in a loading state and should show skeleton cards. Defaults to false.
   final bool isLoading;
@@ -164,6 +168,7 @@ class CulturalAssetsGrid extends StatelessWidget {
                 culturalAssetCard: asset,
                 onTapCulturalAssetExclusive: onTapCulturalAssetExclusive,
                 onTap: onTapSelectedCulturalAsset,
+                isEnabled: balance >= (asset.stoyCoins ?? 0),
               ),
             );
           },

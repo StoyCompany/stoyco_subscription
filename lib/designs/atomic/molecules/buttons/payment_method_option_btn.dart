@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/buttons/button_gradient.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// A button widget for selecting a payment method option.
@@ -75,12 +75,11 @@ class PaymentMethodOptionBtn extends StatelessWidget {
                 child: Text(
                   textAlign: TextAlign.center,
                   text,
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
-                      color: StoycoColors.text,
-                      fontSize: StoycoScreenSize.fontSize(context, 16),
-                      fontWeight: FontWeight.w700,
-                    ),
+                  style: TextStyle(
+                    fontFamily: FontFamilyToken.akkuratPro,
+                    color: StoycoColors.text,
+                    fontSize: StoycoScreenSize.fontSize(context, 16),
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),

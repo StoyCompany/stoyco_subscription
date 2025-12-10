@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/cards/card_gradient.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/currencies/currency_width_flag.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
 
@@ -49,12 +49,11 @@ class SubscriptionPlanPaymentInfoCard extends StatelessWidget {
           children: <Widget>[
             Text(
               paymentSummaryInfo.title,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
+              style: TextStyle(
+                  fontFamily: FontFamilyToken.akkuratPro,
                   fontWeight: FontWeight.bold,
                   fontSize: StoycoScreenSize.fontSize(context, 28),
                   color: StoycoColors.softWhite,
-                ),
               ),
               textAlign: TextAlign.center,
             ),
@@ -68,12 +67,11 @@ class SubscriptionPlanPaymentInfoCard extends StatelessWidget {
               visible: paymentSummaryInfo.trialSubtitle.isNotEmpty,
               child: Text(
                 paymentSummaryInfo.trialSubtitle,
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
+                style: TextStyle(
+                    fontFamily: FontFamilyToken.akkuratPro,
                     color: StoycoColors.softWhite,
                     fontWeight: FontWeight.w400,
                     fontSize: StoycoScreenSize.fontSize(context, 14),
-                  ),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -82,12 +80,11 @@ class SubscriptionPlanPaymentInfoCard extends StatelessWidget {
                 '${paymentSummaryInfo.paymentStartNote}\n'
                 '• Te enviaremos un correo de recordatorio 7 días antes del cobro.\n'
                 '• Cancela cuando quieras, consulta los términos y condiciones.',
-                style: GoogleFonts.inter(
-                  textStyle: TextStyle(
+                style: TextStyle(
+                    fontFamily: FontFamilyToken.akkuratPro,
                     color: StoycoColors.softWhite,
                     fontWeight: FontWeight.w400,
                     fontSize: StoycoScreenSize.fontSize(context, 12),
-                  ),
                 )
               ),
           ],

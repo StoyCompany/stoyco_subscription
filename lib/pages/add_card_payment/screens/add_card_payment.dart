@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/inputs/subscription_text_form.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/card_gradient_multicheck.dart';
@@ -177,12 +176,11 @@ class _AddCardPaymentState extends State<AddCardPayment> {
         ),
         Text(
           'Todas las transacciones son seguras y encriptadas',
-          style: GoogleFonts.inter(
-            textStyle: TextStyle(
+          style: TextStyle(
               color: StoycoColors.text,
+              fontFamily: FontFamilyToken.akkuratPro,
               fontSize: StoycoScreenSize.fontSize(context, 16),
               fontWeight: FontWeight.w400,
-            ),
           ),
         ),
       ],
@@ -240,8 +238,8 @@ class _AddCardPaymentState extends State<AddCardPayment> {
                   notifier.maskedCardNumber(
                     notifier.cardNumberController.text,
                   ),
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
+                  style: TextStyle(
+                      fontFamily: FontFamilyToken.akkuratPro,
                       color: StoycoColors.text,
                       fontSize: StoycoScreenSize.fontSize(
                         context,
@@ -249,7 +247,6 @@ class _AddCardPaymentState extends State<AddCardPayment> {
                       ),
                       fontWeight: FontWeight.w700,
                       letterSpacing: 2.0,
-                    ),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -268,24 +265,22 @@ class _AddCardPaymentState extends State<AddCardPayment> {
                           children: <Widget>[
                             Text(
                               'Nombre del titular',
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                              style: TextStyle(
+                                  fontFamily: FontFamilyToken.akkuratPro,
                                   color: StoycoColors.softWhite,
                                   fontSize: StoycoScreenSize.fontSize(context, 12),
                                   fontWeight: FontWeight.w400,
-                                ),
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             Text(
                               notifier.cardHolderNameController.text,
-                              style: GoogleFonts.montserrat(
-                                textStyle: TextStyle(
+                              style: TextStyle(
+                                  fontFamily: FontFamilyToken.akkuratPro,
                                   color: StoycoColors.text,
                                   fontSize: StoycoScreenSize.fontSize(context, 14),
                                   fontWeight: FontWeight.w700,
-                                ),
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -310,12 +305,11 @@ class _AddCardPaymentState extends State<AddCardPayment> {
                               alignment: Alignment.centerRight,
                               child: Text(
                                 'Fecha vencimiento',
-                                style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
+                                style: TextStyle(
+                                    fontFamily: FontFamilyToken.akkuratPro,
                                     color: StoycoColors.softWhite,
                                     fontSize: StoycoScreenSize.fontSize(context, 12),
                                     fontWeight: FontWeight.w400,
-                                  ),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -325,12 +319,11 @@ class _AddCardPaymentState extends State<AddCardPayment> {
                               alignment: Alignment.centerRight,
                               child: Text(
                                 notifier.cardExpiryController.text,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
+                                style: TextStyle(
+                                    fontFamily: FontFamilyToken.akkuratPro,
                                     color: StoycoColors.text,
                                     fontSize: StoycoScreenSize.fontSize(context, 14),
                                     fontWeight: FontWeight.w700,
-                                  ),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

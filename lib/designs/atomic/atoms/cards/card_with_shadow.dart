@@ -116,7 +116,7 @@ class CardWithShadow extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius - borderWidth),
-          color: backgroundColor ?? StoycoColors.cardBackgroundBlack50,
+          color: backgroundColor ?? StoycoColors.gray,
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: shadowColor ?? StoycoColors.cardShadowPurple19,
@@ -135,14 +135,7 @@ class CardWithShadow extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius - borderWidth),
-              gradient: gradientChildren ?? const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  StoycoColors.cardBackgroundBlack50,
-                  StoycoColors.cardBackgroundBlack50,
-                ],
-              ),
+              color: backgroundColor ?? StoycoColors.gray,
             ),
             padding: paddingChildren,
             child: child,

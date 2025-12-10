@@ -76,7 +76,7 @@ class ActiveSubscriptionService {
   factory ActiveSubscriptionService({
     required FirebaseAuth firebaseAuth,
     StoycoEnvironment environment = StoycoEnvironment.development,
-    Duration cacheDuration = const Duration(minutes: 5),
+    Duration cacheDuration = const Duration(minutes: 1),
   }) {
     instance = ActiveSubscriptionService._(
       firebaseAuth: firebaseAuth,

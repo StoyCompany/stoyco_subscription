@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/buttons/button_gradient.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/modals/dialog_container_v2.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
@@ -110,12 +109,11 @@ class ExpiredSubscriptionModal extends StatelessWidget {
             Text(
               'No pudimos procesar el pago con tu tarjeta. Actualiza tus datos para seguir disfrutando de beneficios exclusivos.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
-                textStyle: TextStyle(
+              style: TextStyle(
+                  fontFamily: FontFamilyToken.akkuratPro,
                   fontSize: StoycoScreenSize.fontSize(context, 16),
                   color: StoycoColors.text,
                   fontWeight: FontWeight.w400,
-                ),
               ),
             ),
             // Renew button
@@ -137,12 +135,11 @@ class ExpiredSubscriptionModal extends StatelessWidget {
                 child: Text(
                   'Renovar ahora',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.montserrat(
-                    textStyle: TextStyle(
+                  style: TextStyle(
+                      fontFamily: FontFamilyToken.akkuratPro,
                       fontSize: StoycoScreenSize.fontSize(context, 16),
                       color: StoycoColors.text,
                       fontWeight: FontWeight.w700,
-                    ),
                   ),
                 ),
               ),

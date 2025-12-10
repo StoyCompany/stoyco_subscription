@@ -1,6 +1,6 @@
 name: stoyco_subscription
 description: "A Flutter package for managing subscription plans in the Stoyco app."
-version: 2.0.20
+version: 2.0.22
 publish_to: none
 
 environment:
@@ -22,7 +22,6 @@ dependencies:
   flutter_widget_from_html: ^0.17.0
   gap: ^3.0.1
   glassmorphism: ^3.0.0
-  google_fonts: ^6.3.1
   gradient_borders: ^1.0.1
   json_annotation: ^4.9.0
   logger: ^2.2.0

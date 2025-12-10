@@ -99,7 +99,7 @@ class PartnerProfileRepository with RepositoryCacheMixin, MultiContentAccessVali
   }) async {
     final Either<Failure, GetCulturalAssetsResponse> result = await cachedCall<GetCulturalAssetsResponse>(
       key: 'cultural_assets_$partnerId',
-      ttl: const Duration(minutes: 15),
+      ttl: const Duration(minutes: 2),
       fetcher: () async {
         try {
           final GetCulturalAssetsResponse data = await _dataSource.getCulturalAssetsByCommunityOwner(

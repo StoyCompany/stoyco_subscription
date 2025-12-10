@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template custom_app_bar}
@@ -45,11 +45,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Center(
         child: Text(
           title,
-          style: GoogleFonts.montserrat(
-            textStyle: TextStyle(
+          style: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: StoycoScreenSize.fontSize(context, 16),
-            ),
+              fontFamily: FontFamilyToken.akkuratPro,
           ),
         ),
       ),

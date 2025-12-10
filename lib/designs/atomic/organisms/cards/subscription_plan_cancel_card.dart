@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/flags/currency_flag.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/cards/card_image_description_tag.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/dropdowns/html_dropdown.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/designs/utils/formatter_currency.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan.dart';
@@ -70,12 +70,11 @@ class SubscriptionPlanCancelCard extends StatelessWidget {
               padding: StoycoScreenSize.symmetric(context, horizontal: 16),
               child: Text(
                 plan.name,
-                style: styleParams.planNameTextStyle ?? GoogleFonts.montserrat(
-                  textStyle: TextStyle(
+                style: styleParams.planNameTextStyle ?? TextStyle(
+                    fontFamily: FontFamilyToken.akkuratPro,
                     fontWeight: FontWeight.bold,
                     fontSize: StoycoScreenSize.fontSize(context, styleParams.titleFontSize),
                     color: StoycoColors.softWhite,
-                  ),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -86,26 +85,24 @@ class SubscriptionPlanCancelCard extends StatelessWidget {
             children: <Widget>[
               Text(
                 '${plan.currencySymbol}${formatPrice(plan.price)}',
-                style: styleParams.planPriceTextStyle ?? GoogleFonts.montserrat(
-                  textStyle: TextStyle(
+                style: styleParams.planPriceTextStyle ?? TextStyle(
+                    fontFamily: FontFamilyToken.akkuratPro,
                     fontWeight: FontWeight.bold,
                     fontSize: StoycoScreenSize.fontSize(context, styleParams.priceFontSize),
                     color: StoycoColors.softWhite,
-                  ),
                 ),
               ),
               Gap(StoycoScreenSize.width(context, 5)),
               Text(
                 plan.currencyCode,
-                style: styleParams.planCurrencyTextStyle ?? GoogleFonts.montserrat(
-                    textStyle: TextStyle(
+                style: styleParams.planCurrencyTextStyle ?? TextStyle(
+                      fontFamily: FontFamilyToken.akkuratPro,
                       fontWeight: FontWeight.bold,
                       fontSize: StoycoScreenSize.fontSize(
                         context,
                         styleParams.currencyFontSize,
                       ),
                       color: StoycoColors.iconDefault,
-                    ),
                 ),
               ),
               Gap(StoycoScreenSize.width(context, 1)),

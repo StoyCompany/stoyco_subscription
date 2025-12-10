@@ -1,5 +1,47 @@
 # Changelog
 
+## [2.0.22] - 2025-12-10
+
+### Refactoring
+
+- **Font System Migration**: Removed Google Fonts dependency across all components in favor of custom font family tokens for better consistency and performance
+  - Updated `ModalBaseSubscription`, `SubscriptionTextForm`, `Breadcrumbs`, `CustomCheckboxRow`, and payment information sections
+- **Design System Improvements**:
+  - Updated card styles for consistency and improved visual design
+  - Enhanced `tag_subscription.svg` dimensions and structure
+  - Replaced `gradientBorder` with `border` in `ButtonGradient` for better consistency
+  - Added `borderRadius` parameter to `SubscriptionLockedContent` for customizable overlay styling
+- **Subscription Catalog**:
+  - Simplified repository by removing caching logic
+  - Enhanced notifier with loading state management
+  - Improved screen layout and structure for better readability
+  - Refactored subscription plans screen to use CustomScrollView with collapsible header
+  - Added support for single plan type display (monthly or annual only)
+- **Component Enhancements**:
+  - Enhanced `CulturalAssetCard` to manage enabled state and improve tap handling logic
+  - Updated `subscribedIsActive` field to use computed property for active subscription status
+
+### Features
+
+- Added `ElementNotFound` widget for improved user feedback on empty search results
+- Added `light_violet` color to color resources
+
+### Dependencies
+
+- Removed `google_fonts` dependency
+- Reverted `stoyco_shared` to local path
+
+##[2.0.21] - 2025-12-05
+
+Refactor subscription services to integrate Firebase Auth for automatic token management
+
+- Updated CardImageDescriptionTag to increase image height.
+- Enhanced SubscriptionCircularImageWithInfo to use ButtonGradientText for subscription actions, improving UI consistency.
+- Reduced cache duration for cultural assets and subscription catalog to 2 and 1 minute respectively for better data freshness.
+- Integrated Firebase Auth into PartnerProfileService, PaymentSummaryService, SubscriptionCatalogService, and SubscriptionPlansService for seamless token retrieval and refresh.
+- Removed manual token management, simplifying service usage and improving reliability.
+- Updated subscription catalog screen to use a SliverList for adaptive height based on item count.
+
 ##[2.0.20] - 2025-12-03
 
 fix: update UserSubscriptionPlanResponse model to receive plan status and manage statuses with that

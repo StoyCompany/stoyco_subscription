@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/borders/gradient_path_border_painter.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/round_polygons.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/designs/types/tag_corner_position.dart';
@@ -196,13 +196,11 @@ class TagCorner extends StatelessWidget {
                       ),
                       Text(
                         title,
-                        style: textStyle ?? GoogleFonts.montserrat(
-                          textStyle: TextStyle(
+                        style: textStyle ?? TextStyle(
                             color: StoycoColors.softWhite,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Montserrat',
+                            fontFamily: FontFamilyToken.akkuratPro,
                             fontSize: StoycoScreenSize.fontSize(context, 14),
-                          ),
                         ),
                       ),
                     ],

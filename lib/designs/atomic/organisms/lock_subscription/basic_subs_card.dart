@@ -72,6 +72,7 @@ class SubscriptionLockedContent extends StatelessWidget {
     this.borderOpacityEnd = 0.02,
     this.overlayColor = Colors.white,
     this.childOpacity = 1.0,
+    this.borderRadius = 16,
   });
 
   /// The widget to be locked/unlocked behind the subscription overlay.
@@ -189,6 +190,8 @@ class SubscriptionLockedContent extends StatelessWidget {
   /// where blur alone may not be sufficient to hide the content.
   final double childOpacity;
 
+  final double borderRadius;
+
   @override
   Widget build(BuildContext context) {
     if (!isLocked) {
@@ -207,7 +210,7 @@ class SubscriptionLockedContent extends StatelessWidget {
             child: GlassmorphicContainer(
               width: double.infinity,
               height: double.infinity,
-              borderRadius: StoycoScreenSize.radius(context, 16),
+              borderRadius: StoycoScreenSize.radius(context, borderRadius),
               blur: blurIntensity,
               alignment: Alignment.center,
               border: 0,
@@ -285,7 +288,7 @@ class SubscriptionLockedContent extends StatelessWidget {
                                   height: StoycoScreenSize.height(context, 13),
                                 ),
                             Text(
-                              'Contenido exclusivo',
+                              'Exclusivo',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: StoycoScreenSize.fontSize(

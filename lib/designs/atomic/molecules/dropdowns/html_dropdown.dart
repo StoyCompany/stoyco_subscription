@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
   /// {@template html_dropdown}
@@ -94,7 +95,7 @@ class _HtmlDropdownState extends State<HtmlDropdown> {
             style: widget.titleTextStyle ?? TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: StoycoScreenSize.fontSize(context, 16),
-              fontFamily: 'Akkurat_Pro',
+              fontFamily: FontFamilyToken.akkuratPro,
               color: StoycoColors.text,
             ),
           ),
@@ -116,7 +117,7 @@ class _HtmlDropdownState extends State<HtmlDropdown> {
                     padding: widget.contentPadding ?? StoycoScreenSize.fromLTRB(context, left: 16, right: 16),
                     child: SingleChildScrollView(
                       child: HtmlWidget(
-                        widget.htmlContent,
+                        widget.htmlContent.replaceAll('&nbsp;', ' '),
                       ),
                     ),
                   ),

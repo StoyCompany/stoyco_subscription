@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/buttons/button_gradient.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// Enum to control icon position in [ButtonGradientText].
@@ -95,7 +95,7 @@ class ButtonGradientText extends StatelessWidget {
     this.textAlign,
     this.textStyle,
     this.borderWidth = 1,
-    this.borderRadius = 16,
+    this.borderRadius = 100,
     this.boxShadow,
     this.gradientBorder,
     this.backgroundGradientColor, 
@@ -106,6 +106,7 @@ class ButtonGradientText extends StatelessWidget {
     this.highlightColor,
     this.iconWidget,
     this.iconPosition = ButtonGradientTextIconPosition.none,
+    this.alignmentContent,
   });
   /// Optional icon widget to display in the button (left or right).
   final Widget? iconWidget;
@@ -144,10 +145,10 @@ class ButtonGradientText extends StatelessWidget {
   final TextStyle? textStyle;
 
   /// Width of the button border.
-  final double? borderWidth;
+  final double borderWidth;
 
   /// Border radius for rounded corners.
-  final double? borderRadius;
+  final double borderRadius;
 
   /// List of shadows applied to the button.
   final List<BoxShadow>? boxShadow;
@@ -173,9 +174,12 @@ class ButtonGradientText extends StatelessWidget {
   /// Highlight color for interactive states.
   final Color? highlightColor;
 
+  /// Alignment for the content inside the button.
+  final Alignment? alignmentContent;
+
   @override
   Widget build(BuildContext context) {
-    GradientBoxBorder? border;
+    BoxBorder? border;
     Gradient? backgroundG;
     Color? backgroundC;
     TextStyle? style;
@@ -183,122 +187,46 @@ class ButtonGradientText extends StatelessWidget {
 
     switch (type) {
       case ButtonGradientTextType.primary:
-        border = gradientBorder ?? GradientBoxBorder(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: <double>[0.0751, 0.5643, 0.6543],
-            colors: <Color>[
-              StoycoColors.buttonBorderWhite25,
-              StoycoColors.buttonBorderBlack25,
-              StoycoColors.buttonBorderBlack25,
-            ],
-          ),
-          width: borderWidth ?? 1,
-        );
-
-        shadows = boxShadow ?? const <BoxShadow>[
-          BoxShadow(
-            color: StoycoColors.buttonShadowDark,
-            offset: Offset(0, 20),
-            blurRadius: 30,
-            spreadRadius: 0,
-          ),
-          BoxShadow(
-            color: StoycoColors.buttonShadowBlue50,
-            offset: Offset(0, -20),
-            blurRadius: 30,
-            spreadRadius: 0,
-          ),
-        ];
-        backgroundG = backgroundGradientColor ?? const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[
-            StoycoColors.darkBlue,
-            StoycoColors.blue,
-          ],
-        );
-        style = textStyle ?? GoogleFonts.montserrat( 
-          textStyle: TextStyle(
+        backgroundC = StoycoColors.lightViolet;
+        style = textStyle ?? TextStyle(
           color: StoycoColors.text,
           fontSize: StoycoScreenSize.fontSize(context, 16),
           fontWeight: FontWeight.w700,
-        ));
+          fontFamily: FontFamilyToken.akkuratPro,
+        );
       case ButtonGradientTextType.secondary:
-
-        border = gradientBorder ?? GradientBoxBorder(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: <Color>[
-              StoycoColors.darkBlue,
-              StoycoColors.blue,
-            ],
-          ),
-          width: borderWidth ?? 1,
+        border = Border.all(
+          color: StoycoColors.lightViolet,
+          width: borderWidth,
         );
 
         shadows = boxShadow;
-        backgroundG = backgroundGradientColor ?? const RadialGradient(
-          center: Alignment(-0.85, -0.92),
-          radius: 0.964,
-          colors: <Color>[
-            StoycoColors.buttonSecondaryBgStart,
-            StoycoColors.buttonSecondaryBgStart,
-            StoycoColors.buttonSecondaryBgEnd,
-          ],
-          stops: <double>[0.0, 0.0001, 1.0],
-        );
+        backgroundC = backgroundColor ?? StoycoColors.gray;
 
-        style = textStyle ?? GoogleFonts.montserrat(
-          textStyle: TextStyle(
-            color: StoycoColors.text,
-            fontSize: StoycoScreenSize.fontSize(context, 16),
-            fontWeight: FontWeight.bold,
-          ),
+        style = textStyle ?? TextStyle(
+          fontFamily: FontFamilyToken.akkuratPro,
+          color: StoycoColors.text,
+          fontSize: StoycoScreenSize.fontSize(context, 16),
+          fontWeight: FontWeight.bold,
         );
       case ButtonGradientTextType.tertiary:
-        border = gradientBorder ?? GradientBoxBorder(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: <Color>[
-              StoycoColors.darkBlue,
-              StoycoColors.blue,
-            ],
-          ),
-          width: borderWidth ?? 1,
-        );
-
-        shadows = boxShadow ?? const <BoxShadow>[
-          BoxShadow(
-            color: StoycoColors.shadowBlue,
-            offset: Offset.zero,
-            blurRadius: 10,
-            spreadRadius: 0,
-          ),
-        ];
-
         backgroundC = backgroundColor ?? StoycoColors.text;
 
-        style = textStyle ?? GoogleFonts.montserrat(
-          textStyle: TextStyle(
-            color: StoycoColors.deepCharcoal,
-            fontSize: StoycoScreenSize.fontSize(context, 14),
-            fontWeight: FontWeight.bold,
-          ),
+        style = textStyle ?? TextStyle(
+          fontFamily: FontFamilyToken.akkuratPro,
+          color: StoycoColors.deepTeal,
+          fontSize: StoycoScreenSize.fontSize(context, 14),
+          fontWeight: FontWeight.bold,
         );
       case ButtonGradientTextType.inactive || ButtonGradientTextType.loading:
         border = gradientBorder;
         shadows = boxShadow;
         backgroundC = backgroundColor ?? StoycoColors.hint;
-        style = textStyle ?? GoogleFonts.montserrat(
-          textStyle: TextStyle(
-            color: StoycoColors.iconDefault,
-            fontSize: StoycoScreenSize.fontSize(context, 16),
-            fontWeight: FontWeight.bold,
-          ),
+        style = textStyle ?? TextStyle(
+          fontFamily: FontFamilyToken.akkuratPro,
+          color: StoycoColors.iconDefault,
+          fontSize: StoycoScreenSize.fontSize(context, 16),
+          fontWeight: FontWeight.bold,
         );
       case ButtonGradientTextType.custom:
         border = gradientBorder;
@@ -316,11 +244,12 @@ class ButtonGradientText extends StatelessWidget {
       boxShadow: shadows,
       backgroundGradientColor: backgroundG,
       backgroundColor: backgroundC,
-      gradientBorder: border,
+      border: gradientBorder ?? border,
       hoverColor: hoverColor,
       splashColor: splashColor,
       focusColor: focusColor,
       highlightColor: highlightColor,
+      alignmentContent: alignmentContent,
       onPressed: (type == ButtonGradientTextType.inactive || type == ButtonGradientTextType.loading) ? null : onPressed,
       child: Padding(
         padding: paddingContent ?? StoycoScreenSize.symmetric(context, horizontal: 24, vertical: 16),

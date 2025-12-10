@@ -175,4 +175,7 @@ class StoycoColors {
 
   /// Color: #F7F6FA
   static const Color white3 = Color(0xFFF7F6FA);
+
+  /// Color: #6C61FF
+  static const Color lightViolet = Color(0xFF6C61FF);
 }

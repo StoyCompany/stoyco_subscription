@@ -16,35 +16,30 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
   }) : pageSize = pageSize ?? 50 {
     tabController = TabController(vsync: vsync, length: tabs.length);
     tabController.addListener(_onTabChanged);
-    _fetchCatalog();
     scrollController.addListener(_onScroll);
     changeTab(0);
   }
   late TabController tabController;
   int selectedIndex = 0;
   List<SubscriptionStoycoTab> tabs = <SubscriptionStoycoTab>[
-    const SubscriptionStoycoTab(title: 'Music'),
-    const SubscriptionStoycoTab(title: 'Sport'),
-    const SubscriptionStoycoTab(title: 'Brands'),
+    const SubscriptionStoycoTab(title: 'Música'),
+    const SubscriptionStoycoTab(title: 'Deportes'),
+    const SubscriptionStoycoTab(title: 'Marcas'),
   ];
   final ScrollController scrollController = ScrollController();
   final String? userId;
 
-  List<SubscriptionCatalogItemMap> musicSubscriptions =
-      <SubscriptionCatalogItemMap>[];
-  List<SubscriptionCatalogItemMap> sportSubscriptions =
-      <SubscriptionCatalogItemMap>[];
-  List<SubscriptionCatalogItemMap> brandSubscriptions =
-      <SubscriptionCatalogItemMap>[];
+  List<SubscriptionCatalogItemMap> musicSubscriptions = <SubscriptionCatalogItemMap>[];
+  List<SubscriptionCatalogItemMap> sportSubscriptions = <SubscriptionCatalogItemMap>[];
+  List<SubscriptionCatalogItemMap> brandSubscriptions = <SubscriptionCatalogItemMap>[];
 
-  List<SubscriptionCatalogItemMap> subscriptions =
-      <SubscriptionCatalogItemMap>[];
-  List<SubscriptionCatalogItemMap> filteredSubscriptions =
-      <SubscriptionCatalogItemMap>[];
+  List<SubscriptionCatalogItemMap> subscriptions = <SubscriptionCatalogItemMap>[];
+  List<SubscriptionCatalogItemMap> filteredSubscriptions = <SubscriptionCatalogItemMap>[];
   String searchText = '';
 
   int currentPage = 1;
   final int pageSize;
+  bool isLoading = true;
   bool isLoadingMore = false;
   bool hasNextPage = true;
 
@@ -88,12 +83,9 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         subscriptions,
       );
     } else {
-      filteredSubscriptions = subscriptions
-          .where(
-            (SubscriptionCatalogItemMap item) =>
-                item.title.toLowerCase().contains(searchText.toLowerCase()),
-          )
-          .toList();
+      filteredSubscriptions = subscriptions.where(
+            (SubscriptionCatalogItemMap item) => item.title.toLowerCase().contains(searchText.toLowerCase()),
+          ).toList();
     }
   }
 
@@ -165,17 +157,18 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
     isLoadingMore = false;
   }
 
-  Future<void> _fetchCatalog() async {
+  Future<void> fetchCatalog() async {
     currentPage = 1;
     hasNextPage = true;
     isLoadingMore = false;
+    isLoading = true;
+    notifyListeners();
     musicSubscriptions.clear();
     sportSubscriptions.clear();
     brandSubscriptions.clear();
 
     while (hasNextPage) {
-      final Either<Failure, GetSubscriptionCatalogResponse> result =
-          await SubscriptionCatalogService.instance.getSubscriptionCatalog(
+      final Either<Failure, GetSubscriptionCatalogResponse> result = await SubscriptionCatalogService.instance.getSubscriptionCatalog(
             userId: userId,
             page: currentPage,
             pageSize: pageSize,
@@ -228,7 +221,7 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
         },
       );
     }
-
+    isLoading = false;
     changeTab(selectedIndex);
     notifyListeners();
   }
