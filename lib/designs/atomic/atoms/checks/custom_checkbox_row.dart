@@ -27,9 +27,9 @@ import 'package:flutter/material.dart';
 /// ```
 /// {@endtemplate}
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@macro custom_checkbox_row}
@@ -109,12 +109,11 @@ class CustomCheckboxRow extends StatelessWidget {
             onTap: onTapLabel,
             child: labelWidget ?? Text(
               label,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
-                  color: StoycoColors.text,
-                  fontSize: StoycoScreenSize.fontSize(context, 14),
-                  fontWeight: FontWeight.w500,
-                ),
+              style: TextStyle(
+                color: StoycoColors.text,
+                fontSize: StoycoScreenSize.fontSize(context, 14),
+                fontWeight: FontWeight.w500,
+                fontFamily: FontFamilyToken.akkuratPro,
               ),
             ),
           ),
