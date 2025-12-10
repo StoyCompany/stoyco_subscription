@@ -65,9 +65,9 @@ class CardImageDescriptionTag extends StatelessWidget {
     super.key,
     this.cardWidth,
     this.cardHeight,
-    this.cardBorderRadius = 24,
+    this.cardBorderRadius = 5,
     required this.imageUrl,
-    this.imageHeight,
+    this.imageHeight = 200,
     this.imageWidth,
     this.imageBorderRadius,
     this.imagePlaceholder,
@@ -93,7 +93,7 @@ class CardImageDescriptionTag extends StatelessWidget {
   final String imageUrl;
 
   /// The height of the image. Defaults to 160.
-  final double? imageHeight;
+  final double imageHeight;
 
   /// The width of the image. Defaults to full width.
   final double? imageWidth;
@@ -133,48 +133,55 @@ class CardImageDescriptionTag extends StatelessWidget {
       borderRadius: StoycoScreenSize.radius(context, cardBorderRadius),
       padding: paddingCard,
       margin: marginCard,
-      child: ClipRRect(
-        child: Stack(
-          children: <Widget>[
-            Padding(
-              padding: paddingContent ?? StoycoScreenSize.fromLTRB(context, left: 8, top: 8, right: 8, bottom: 32),
-              child: Column(
-                children: <Widget>[
-                  Visibility(
-                    visible: imageUrl.isNotEmpty,
-                    child: ClipRRect(
-                      borderRadius: imageBorderRadius ?? BorderRadius.only(
-                        topLeft: Radius.circular(StoycoScreenSize.radius(context, 22)),
-                        topRight: Radius.circular(StoycoScreenSize.radius(context, 22)),
-                      ),
-                      child: SizedBox(
-                        height: imageHeight ?? StoycoScreenSize.height(context, 180),
-                        width: imageWidth ?? double.infinity,
-                        child:  CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              placeholder: (BuildContext context, String url) => imagePlaceholder ?? const SkeletonCard(),
-                              errorWidget: (BuildContext context, String url, Object error) => imageErrorPlaceholder ?? Container(
-                                alignment: Alignment.center,
-                                color: StoycoColors.deepTeal,
-                                child: const Icon(Icons.error),
-                              ),
-                              fit: BoxFit.cover,
-                            ),
-                      ),
-                    ),
+      backgroundColor: StoycoColors.gray,
+      borderWidth: 0,
+      shadowBlurRadius: 0,
+      shadowColor: Colors.transparent,
+      shadowOffset: Offset.zero,
+      child: Stack(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Visibility(
+                visible: imageUrl.isNotEmpty,
+                child: ClipRRect(
+                  borderRadius: imageBorderRadius ?? BorderRadius.only(
+                    topLeft: Radius.circular(StoycoScreenSize.radius(context, cardBorderRadius)),
+                    topRight: Radius.circular(StoycoScreenSize.radius(context, cardBorderRadius)),
                   ),
-                  Gap(StoycoScreenSize.height(context, 24)),
-                  description,
-                ],
+                  child: SizedBox(
+                    height: StoycoScreenSize.height(context, imageHeight),
+                    width: imageWidth ?? double.infinity,
+                    child:  CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          placeholder: (BuildContext context, String url) => imagePlaceholder ?? const SkeletonCard(),
+                          errorWidget: (BuildContext context, String url, Object error) => imageErrorPlaceholder ?? Container(
+                            alignment: Alignment.center,
+                            color: StoycoColors.deepTeal,
+                            child: const Icon(Icons.error),
+                          ),
+                          fit: BoxFit.cover,
+                          memCacheWidth: 1000,
+                          memCacheHeight: 600,
+                          maxWidthDiskCache: 1000,
+                          maxHeightDiskCache: 600,
+                        ),
+                  ),
+                ),
               ),
+              Gap(StoycoScreenSize.height(context, 24)),
+              Padding(
+                padding: paddingContent ?? StoycoScreenSize.fromLTRB(context, left: 8, right: 8, bottom: 32),
+                child: description,
+              ),
+            ],
+          ),
+          if (tag != null)
+            Align(
+              alignment: tagAlignment,
+              child: tag,
             ),
-            if (tag != null)
-              Align(
-                alignment: tagAlignment,
-                child: tag,
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

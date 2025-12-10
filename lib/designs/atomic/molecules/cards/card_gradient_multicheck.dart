@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/checks/custom_checkbox_row.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template terms_privacy_auto_renew_card}
@@ -75,12 +75,11 @@ class TermsPrivacyAutoRenewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final TextStyle labelTextStyle = GoogleFonts.montserrat(
-      textStyle: TextStyle(
+    final TextStyle labelTextStyle = TextStyle(
+        fontFamily: FontFamilyToken.akkuratPro,
         color: StoycoColors.text,
         fontSize: StoycoScreenSize.fontSize(context, 14),
         fontWeight: FontWeight.w500,
-      ),
     );
 
     return Container(
