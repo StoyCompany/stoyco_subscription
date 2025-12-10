@@ -80,11 +80,12 @@ class CulturalAssetCard extends StatelessWidget {
 
           if (isLocked) {
             if (onTapCulturalAssetExclusive != null) {
-              if (onTap != null) {
-                onTap!(culturalAssetCard);
-              }
+              onTapCulturalAssetExclusive!.call();
             }
             return;
+          }
+          if (onTap != null) {
+            onTap!(culturalAssetCard);
           }
         },
         child: SizedBox(
