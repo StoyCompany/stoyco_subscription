@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -121,12 +120,11 @@ class SubscriptionTextForm extends StatelessWidget {
             ),
           child: Text(
             labelText ?? '',
-            style: labelTextStyle ?? GoogleFonts.montserrat(
-              textStyle: TextStyle(
+            style: labelTextStyle ?? TextStyle(
                 color: (errorText != null && errorText!.isNotEmpty) ? StoycoColors.errorText : StoycoColors.hint, 
                 fontSize: StoycoScreenSize.fontSize(context, 12),
                 fontWeight: FontWeight.w400,
-              ),
+                fontFamily: FontFamilyToken.akkuratPro,
             ),
           ),
         ),
@@ -159,21 +157,19 @@ class SubscriptionTextForm extends StatelessWidget {
           ),
         ),
         hintText: hintText,
-        hintStyle: hintStyle ?? GoogleFonts.montserrat(
-            textStyle: TextStyle(
+        hintStyle: hintStyle ?? TextStyle(
               color: StoycoColors.hint,
               fontSize: StoycoScreenSize.fontSize(context, 14),
               fontWeight: FontWeight.w400,
-          ),
+              fontFamily: FontFamilyToken.akkuratPro,
         ),
       ),
       onChanged: onChanged,
-      style: style ?? GoogleFonts.montserrat(
-          textStyle: TextStyle(
+      style: style ?? TextStyle(
           color: StoycoColors.text,
           fontSize: StoycoScreenSize.fontSize(context, 16),
           fontWeight: FontWeight.w700,
-        ),
+          fontFamily: FontFamilyToken.akkuratPro,
       ),
     );
   }
