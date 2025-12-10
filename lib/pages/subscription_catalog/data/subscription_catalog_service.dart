@@ -76,23 +76,31 @@ class SubscriptionCatalogService {
   late final SubscriptionCatalogRepository _repository;
 
   /// Gets the current user token from Firebase Auth.
-  Future<String> _getToken() async {
-    final User? user = firebaseAuth.currentUser;
-    if (user == null) {
-      throw Exception('No user is currently signed in to Firebase');
+  /// 
+  /// Returns null if the user is not signed in or token retrieval fails,
+  /// allowing the service to work without authentication.
+  Future<String?> _getToken() async {
+    try {
+      final User? user = firebaseAuth.currentUser;
+      if (user == null) {
+        return null;
+      }
+      final String? token = await user.getIdToken();
+      return token;
+    } catch (e) {
+      // Return null if token retrieval fails
+      return null;
     }
-    final String? token = await user.getIdToken();
-    if (token == null) {
-      throw Exception('Failed to retrieve Firebase ID token');
-    }
-    return token;
   }
 
   /// Updates the token in the data source and repository.
+  /// 
+  /// If token is null, updates with empty string to allow unauthenticated requests.
   Future<void> _updateTokenInLayers() async {
-    final String token = await _getToken();
-    _repository.updateToken(token);
-    _dataSource.updateToken(token);
+    final String? token = await _getToken();
+    final String tokenValue = token ?? '';
+    _repository.updateToken(tokenValue);
+    _dataSource.updateToken(tokenValue);
   }
 
   /// Fetches the subscription plans for a specific user.

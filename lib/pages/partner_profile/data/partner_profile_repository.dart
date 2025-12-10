@@ -73,7 +73,7 @@ class PartnerProfileRepository with RepositoryCacheMixin, MultiContentAccessVali
   }) async {
     final Either<Failure, SubscriptionIsActiveResponse> result = await cachedCall<SubscriptionIsActiveResponse>(
       key: 'last_user_plan_$partnerId',
-      ttl: const Duration(minutes: 5),
+      ttl: const Duration(minutes: 2),
       fetcher: () async {
         try {
           final SubscriptionIsActiveResponse data = await _dataSource.getLastUserPlanByPartner(partnerId);
