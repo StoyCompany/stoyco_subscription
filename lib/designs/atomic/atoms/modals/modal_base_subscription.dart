@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template modal_base_subscription}
@@ -111,24 +111,22 @@ class ModalBaseSubscription extends StatelessWidget {
           icon,
           Text(
             title,
-            style: titleStyle ?? GoogleFonts.montserrat(
-              textStyle: TextStyle(
+            style: titleStyle ?? TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: StoycoScreenSize.fontSize(context, 26),
                 color: StoycoColors.softWhite,
-              ),
+                fontFamily: FontFamilyToken.akkuratPro,
             ),
             textAlign: TextAlign.center,
           ),
           if (description != null)
             Text(
               description!,
-              style: descriptionStyle ?? GoogleFonts.montserrat(
-                  textStyle: TextStyle(
+              style: descriptionStyle ?? TextStyle(
                     fontWeight: FontWeight.w400,
                   fontSize: StoycoScreenSize.fontSize(context, 16),
                   color: StoycoColors.softWhite,
-                ),
+                  fontFamily: FontFamilyToken.akkuratPro,
               ),
               textAlign: TextAlign.center,
             ),
