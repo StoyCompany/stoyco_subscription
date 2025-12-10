@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 class PaymentInformationSection extends StatelessWidget {
@@ -22,22 +22,20 @@ class PaymentInformationSection extends StatelessWidget {
             children: <Widget>[
               Text(
                 item['key'] ?? '',
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
+                style: TextStyle(
+                    fontFamily: FontFamilyToken.akkuratPro,
                     color: StoycoColors.softWhite,
                     fontWeight: FontWeight.w700,
                     fontSize: StoycoScreenSize.fontSize(context, 16),
-                  ),
                 ),
               ),
               Text(
                 item['value'] ?? '',
-                style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
+                style: TextStyle(
+                    fontFamily: FontFamilyToken.akkuratPro,
                     color: StoycoColors.softWhite,
                     fontWeight: FontWeight.w700,
                     fontSize: StoycoScreenSize.fontSize(context, 16),
-                  ),
                 ),
               ),
             ],

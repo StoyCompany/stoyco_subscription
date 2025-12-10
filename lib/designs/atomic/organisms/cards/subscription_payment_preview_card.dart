@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:glassmorphism/glassmorphism.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/flags/currency_flag.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/payment_summary/data/models/response/payment_symmary_info_response.dart';
 
@@ -93,12 +93,11 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                 if (title?.isNotEmpty ?? false)
                   Text(
                     title!,
-                    style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
+                    style: TextStyle(
+                        fontFamily: FontFamilyToken.akkuratPro,
                         color: StoycoColors.softWhite,
                         fontWeight: FontWeight.w700,
                         fontSize: StoycoScreenSize.fontSize(context, 20),
-                      ),
                     ),
                   )
                 else
@@ -111,12 +110,11 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         '${paymentSummaryInfo?.breakdown.currencySymbol ?? r'$'}${paymentSummaryInfo?.breakdown.totalAmount}',
-                        style: GoogleFonts.montserrat(
-                          textStyle: TextStyle(
+                        style: TextStyle(
+                            fontFamily: FontFamilyToken.akkuratPro,
                             color: StoycoColors.softWhite,
                             fontWeight: FontWeight.w700,
                             fontSize: StoycoScreenSize.fontSize(context, 24),
-                          ),
                         ),
                       ),
                       Row(
@@ -124,14 +122,13 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             '${paymentSummaryInfo?.breakdown.currencyCode}',
-                            style: GoogleFonts.montserrat(
-                              textStyle: TextStyle(
+                            style: TextStyle(
+                                fontFamily: FontFamilyToken.akkuratPro,
                                 color: StoycoColors.iconDefault,
                                 fontWeight: FontWeight.w700,
                                 fontSize: StoycoScreenSize.fontSize(
                                   context,
                                   16,
-                                ),
                               ),
                             ),
                           ),
@@ -155,12 +152,11 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                     trialSubtitle!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
+                    style: TextStyle(
+                        fontFamily: FontFamilyToken.akkuratPro,
                         color: StoycoColors.softWhite,
                         fontWeight: FontWeight.w700,
                         fontSize: StoycoScreenSize.fontSize(context, 16),
-                      ),
                     ),
                   )
                 else
@@ -170,12 +166,11 @@ class SubscriptionPaymentPreviewCard extends StatelessWidget {
                 if (paymentStartNote?.isNotEmpty ?? false)
                   Text(
                     paymentStartNote!,
-                    style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
+                    style: TextStyle(
+                        fontFamily: FontFamilyToken.akkuratPro,
                         color: StoycoColors.softWhite,
                         fontWeight: FontWeight.w700,
                         fontSize: StoycoScreenSize.fontSize(context, 14),
-                      ),
                     ),
                   )
                 else

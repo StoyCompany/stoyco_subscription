@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/tab_bar/tab_bar_custom.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template tab_menu_item}
@@ -125,7 +126,7 @@ class _TabMenuItemState extends State<TabMenuItem> {
                 textAlign: TextAlign.center,
                 style: widget.textDescriptionStyle ?? TextStyle(
                   fontSize: StoycoScreenSize.fontSize(context, 16),
-                  fontFamily: 'Akkurat_Pro',
+                  fontFamily: FontFamilyToken.akkuratPro,
                   fontWeight: FontWeight.bold,
                   color: StoycoColors.iconDefault,
                 ),

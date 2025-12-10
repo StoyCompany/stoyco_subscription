@@ -16,6 +16,17 @@ class SubscriptionCatalogItemMap extends Equatable {
     required this.isExpired,
   });
 
+  factory SubscriptionCatalogItemMap.empty() => const SubscriptionCatalogItemMap(
+    id: '',
+    imageUrl: '',
+    title: '',
+    subscribed: false,
+    partnerId: '',
+    profile: '',
+    hasSubscription: false,
+    isExpired: false,
+  );
+
   factory SubscriptionCatalogItemMap.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionCatalogItemMapFromJson(json);
 

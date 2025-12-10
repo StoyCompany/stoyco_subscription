@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/images/image_network_blur.dart';
 import 'package:stoyco_subscription/designs/atomic/molecules/buttons/button_gradient_text.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
@@ -121,15 +119,14 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
               maxLines: 1,
               title,
               textScaler: TextScaler.noScaling,
-              style: GoogleFonts.montserrat(
-                textStyle: TextStyle(
+              style: TextStyle(
+                  fontFamily: FontFamilyToken.akkuratPro,
                   color: StoycoColors.softWhite,
                   fontSize: StoycoScreenSize.fontSize(
                     context,
                     titleFontSize ?? 18.53,
                   ),
                   fontWeight: FontWeight.w400,
-                ),
               ),
               overflow: TextOverflow.ellipsis,
             ),
@@ -142,7 +139,12 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                     : subscribed ?? false
                     ? 'Ver suscripción'
                     : 'Suscribirme',
-                type: ButtonGradientTextType.custom,
+                type: (isExpired ?? false) && (subscribed ?? false)
+                    ? ButtonGradientTextType.primary 
+                    : subscribed ?? false
+                    ?  ButtonGradientTextType.primary 
+                    :  ButtonGradientTextType.custom,
+                backgroundColor: StoycoColors.menuItemBackground,
                 width: StoycoScreenSize.width(context, 148),
                 height: StoycoScreenSize.height(context, 31),
                 alignmentContent: Alignment.center,
@@ -153,31 +155,10 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                 ),
                 borderRadius: 15,
                 borderWidth: 1.5,
-                gradientBorder: const GradientBoxBorder(
-                  gradient: LinearGradient(
-                    colors: <Color>[Color(0xFF373680), Color(0xFF373680)],
-                  ),
-                  width: 1.5,
-                ),
-                backgroundGradientColor: subscribed ?? false
-                    ? const LinearGradient(
-                        colors: <Color>[
-                          Color(0x232336B2),
-                          Color(0x232336B2),
-                          Color(0x2323361A),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      )
-                    : const LinearGradient(
-                        colors: <Color>[Color(0xFF1C197F), Color(0xFF4639E7)],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
                 textStyle: TextStyle(
                   fontSize: StoycoScreenSize.fontSize(context, 15),
                   fontFamily: FontFamilyToken.akkuratPro,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w400,
                   color: Colors.white,
                 ),
                 iconWidget: (isExpired ?? false) && (subscribed ?? false)

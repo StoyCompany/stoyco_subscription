@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template tag_locked}
@@ -118,12 +118,11 @@ class TagLocked extends StatelessWidget {
           Gap(StoycoScreenSize.width(context, 4)),
           Text(
             message,
-            style: messageStyle ?? GoogleFonts.montserrat(
-              textStyle: TextStyle(
+            style: messageStyle ?? TextStyle(
                 fontSize: StoycoScreenSize.fontSize(context, 10),
                 fontWeight: FontWeight.w400,
                 color: StoycoColors.deepCharcoal,
-              ),
+                fontFamily: FontFamilyToken.akkuratPro,
             ),
           ), 
         ],

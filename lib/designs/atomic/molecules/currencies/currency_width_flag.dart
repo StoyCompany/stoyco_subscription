@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:stoyco_subscription/designs/atomic/atoms/flags/currency_flag.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
@@ -95,21 +94,16 @@ class CurrencyWidthFlag extends StatelessWidget {
       children: <Widget>[
         Text(
           '$currencySymbol${formatPrice(price)}',
-          style: priceTextStyle ??
-            GoogleFonts.montserrat(
-              textStyle: TextStyle(
+          style: priceTextStyle ?? TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: StoycoScreenSize.fontSize(context, priceFontSize),
                 color: StoycoColors.softWhite,
               ),
-            ),
         ),
         Gap(StoycoScreenSize.width(context, 5)),
         Text(
           currencyCode,
-          style: currencyTextStyle ??
-            GoogleFonts.montserrat(
-              textStyle: TextStyle(
+          style: currencyTextStyle ?? TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: StoycoScreenSize.fontSize(
                   context,
@@ -117,7 +111,6 @@ class CurrencyWidthFlag extends StatelessWidget {
                 ),
                 color: StoycoColors.iconDefault,
               ),
-            ),
         ),
         Gap(StoycoScreenSize.width(context, 1)),
         Padding(
