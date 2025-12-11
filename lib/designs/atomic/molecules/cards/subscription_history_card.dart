@@ -69,13 +69,14 @@ class SubscriptionHistoryCard extends StatelessWidget {
                     fontSize: StoycoScreenSize.fontSize(context, 12),
                 ),
               ),
-              ImageNetworkBlur(
-                imageUrl: subscriptionHistoryItem.planImageUrl,
-                radius: StoycoScreenSize.radius(context, 9),
-                width: double.infinity,
-                height: StoycoScreenSize.height(context, 164),
-                fit: BoxFit.cover,
-              ),
+              if(subscriptionHistoryItem.planImageUrl.isNotEmpty)
+                ImageNetworkBlur(
+                  imageUrl: subscriptionHistoryItem.planImageUrl,
+                  radius: StoycoScreenSize.radius(context, 9),
+                  width: double.infinity,
+                  height: StoycoScreenSize.height(context, 164),
+                  fit: BoxFit.cover,
+                ),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

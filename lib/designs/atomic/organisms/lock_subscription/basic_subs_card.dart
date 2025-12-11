@@ -1,5 +1,5 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:glassmorphism/glassmorphism.dart';
 import 'package:stoyco_shared/design/screen_size.dart';
 import 'package:stoyco_subscription/designs/atomic/organisms/lock_subscription/subscription_indicator_position.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
@@ -198,117 +198,127 @@ class SubscriptionLockedContent extends StatelessWidget {
       return child;
     }
 
-    return Stack(
-      children: <Widget>[
-        Opacity(
-          opacity: childOpacity,
-          child: IgnorePointer(child: child),
-        ),
-        Positioned.fill(
-          child: GestureDetector(
-            onTap: onLockedTap,
-            child: GlassmorphicContainer(
-              width: double.infinity,
-              height: double.infinity,
-              borderRadius: StoycoScreenSize.radius(context, borderRadius),
-              blur: blurIntensity,
-              alignment: Alignment.center,
-              border: 0,
-              linearGradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  overlayColor.withOpacity(overlayOpacityStart),
-                  overlayColor.withOpacity(overlayOpacityEnd),
-                ],
-              ),
-              borderGradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  Colors.white.withOpacity(borderOpacityStart),
-                  Colors.white.withOpacity(borderOpacityEnd),
-                ],
-              ),
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    left: indicatorPosition.left != null
-                        ? StoycoScreenSize.width(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(
+        StoycoScreenSize.radius(context, borderRadius),
+      ),
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: <Widget>[
+          // Blurred child content
+          ImageFiltered(
+            imageFilter: ImageFilter.blur(
+              sigmaX: blurIntensity,
+              sigmaY: blurIntensity,
+              tileMode: TileMode.decal,
+            ),
+            child: Opacity(
+              opacity: childOpacity,
+              child: IgnorePointer(child: child),
+            ),
+          ),
+          // Overlay gradient
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: onLockedTap,
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                      overlayColor.withOpacity(overlayOpacityStart),
+                      overlayColor.withOpacity(overlayOpacityEnd),
+                    ],
+                  ),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(borderOpacityStart),
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    StoycoScreenSize.radius(context, borderRadius),
+                  ),
+                ),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      left: indicatorPosition.left != null
+                          ? StoycoScreenSize.width(
+                              context,
+                              indicatorPosition.left!,
+                            )
+                          : null,
+                      right: indicatorPosition.right != null
+                          ? StoycoScreenSize.width(
+                              context,
+                              indicatorPosition.right!,
+                            )
+                          : null,
+                      top: indicatorPosition.top != null
+                          ? StoycoScreenSize.height(
+                              context,
+                              indicatorPosition.top!,
+                            )
+                          : null,
+                      bottom: indicatorPosition.bottom != null
+                          ? StoycoScreenSize.height(
+                              context,
+                              indicatorPosition.bottom!,
+                            )
+                          : null,
+                      child: Transform.scale(
+                        scale: scale,
+                        child: Container(
+                          padding: StoycoScreenSize.symmetric(
                             context,
-                            indicatorPosition.left!,
-                          )
-                        : null,
-                    right: indicatorPosition.right != null
-                        ? StoycoScreenSize.width(
-                            context,
-                            indicatorPosition.right!,
-                          )
-                        : null,
-                    top: indicatorPosition.top != null
-                        ? StoycoScreenSize.height(
-                            context,
-                            indicatorPosition.top!,
-                          )
-                        : null,
-                    bottom: indicatorPosition.bottom != null
-                        ? StoycoScreenSize.height(
-                            context,
-                            indicatorPosition.bottom!,
-                          )
-                        : null,
-                    child: Transform.scale(
-                      scale: scale,
-                      child: Container(
-                        padding: StoycoScreenSize.symmetric(
-                          context,
-                          horizontal: 15,
-                          vertical: 11,
-                        ),
-                        decoration: BoxDecoration(
-                          color: StoycoColors.midnightInk,
-                          borderRadius: BorderRadius.circular(
-                            StoycoScreenSize.radius(context, 100),
+                            horizontal: 15,
+                            vertical: 11,
                           ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: StoycoScreenSize.width(context, 8),
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            StoycoAssets
-                                .lib
-                                .assets
-                                .icons
-                                .exclusiveContent
-                                .subsciptionButtonIcon
-                                .svg(
-                                  package: 'stoyco_subscription',
-                                  width: StoycoScreenSize.width(context, 13),
-                                  height: StoycoScreenSize.height(context, 13),
-                                ),
-                            Text(
-                              'Exclusivo',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: StoycoScreenSize.fontSize(
-                                  context,
-                                  12,
-                                ),
-                                fontWeight: FontWeight.bold,
-                              ),
+                          decoration: BoxDecoration(
+                            color: StoycoColors.midnightInk,
+                            borderRadius: BorderRadius.circular(
+                              StoycoScreenSize.radius(context, 100),
                             ),
-                          ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: StoycoScreenSize.width(context, 8),
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              StoycoAssets
+                                  .lib
+                                  .assets
+                                  .icons
+                                  .exclusiveContent
+                                  .subsciptionButtonIcon
+                                  .svg(
+                                    package: 'stoyco_subscription',
+                                    width: StoycoScreenSize.width(context, 13),
+                                    height: StoycoScreenSize.height(context, 13),
+                                  ),
+                              Text(
+                                'Exclusivo',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: StoycoScreenSize.fontSize(
+                                    context,
+                                    12,
+                                  ),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

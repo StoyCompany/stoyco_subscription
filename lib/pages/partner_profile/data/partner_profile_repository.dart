@@ -73,7 +73,7 @@ class PartnerProfileRepository with RepositoryCacheMixin, MultiContentAccessVali
   }) async {
     final Either<Failure, SubscriptionIsActiveResponse> result = await cachedCall<SubscriptionIsActiveResponse>(
       key: 'last_user_plan_$partnerId',
-      ttl: const Duration(minutes: 2),
+      ttl: const Duration(minutes: 5),
       fetcher: () async {
         try {
           final SubscriptionIsActiveResponse data = await _dataSource.getLastUserPlanByPartner(partnerId);
@@ -105,16 +105,20 @@ class PartnerProfileRepository with RepositoryCacheMixin, MultiContentAccessVali
           final GetCulturalAssetsResponse data = await _dataSource.getCulturalAssetsByCommunityOwner(
             partnerId,
           );
-          data.copyWith(
-            data: await  validateMultipleAccess<CulturalAssetItemModel>(
-              service: _activeSubscriptionService,
-              contents: data.data ?? <CulturalAssetItemModel>[],
-              getAccessContent: (CulturalAssetItemModel item) => item.accessContent,
-              hasAccessToContent: (CulturalAssetItemModel item, bool hasAccess) => item.copyWith(hasAccessWithSubscription: hasAccess),
-              getIsSubscriptionOnly: (CulturalAssetItemModel item) => item.isSubscriberOnly,
-            ),
+          final List<CulturalAssetItemModel> updatedData = await validateMultipleAccess<CulturalAssetItemModel>(
+            service: _activeSubscriptionService,
+            partnerId: partnerId,
+            forceRefresh: true,
+            contents: data.data ?? <CulturalAssetItemModel>[],
+            getAccessContent: (CulturalAssetItemModel item) => item.accessContent,
+            hasAccessToContent: (CulturalAssetItemModel item, bool hasAccess) => item.copyWith(hasAccessWithSubscription: hasAccess),
+            getIsSubscriptionOnly: (CulturalAssetItemModel item) => item.isSubscriberOnly,
           );
-          return Right<Failure, GetCulturalAssetsResponse>(data);
+          final GetCulturalAssetsResponse updatedResponse = data.copyWith(
+            data: updatedData,
+          );
+          StoyCoLogger.debug('Cultural assets for partner $partnerId fetched and access validated.');
+          return Right<Failure, GetCulturalAssetsResponse>(updatedResponse);
         } catch (e) {
           return Left<Failure, GetCulturalAssetsResponse>(
             ExceptionFailure.decode(
