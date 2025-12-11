@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.23] - 2025-12-11
+
+### Refactoring
+
+- update image handling in SubscriptionHistoryCard and improve caching duration in PartnerProfileRepository
+
 ## [2.0.22] - 2025-12-10
 
 ### Refactoring
