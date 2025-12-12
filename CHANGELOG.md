@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.24] - 2025-12-11 11:30pm
+
+### update tag
+
 ## [2.0.23] - 2025-12-11
 
 ### Refactoring

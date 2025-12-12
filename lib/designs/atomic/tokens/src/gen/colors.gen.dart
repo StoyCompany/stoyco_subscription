@@ -110,6 +110,9 @@ class StoycoColors {
   /// Color: #DEE4ED
   static const Color lightGray = Color(0xFFDEE4ED);
 
+  /// Color: #6C61FF
+  static const Color lightViolet = Color(0xFF6C61FF);
+
   /// Color: #253341
   static const Color menuItemBackground = Color(0xFF253341);
 
@@ -175,7 +178,4 @@ class StoycoColors {
 
   /// Color: #F7F6FA
   static const Color white3 = Color(0xFFF7F6FA);
-
-  /// Color: #6C61FF
-  static const Color lightViolet = Color(0xFF6C61FF);
 }
