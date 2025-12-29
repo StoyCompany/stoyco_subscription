@@ -67,6 +67,11 @@ class _SubscriptionsCatalogScreenWebState
       pageSize: widget.pageSize,
     );
     notifier.addListener(_onNotifierChanged);
+
+    // Fetch the catalog after the first frame is rendered
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifier.fetchCatalog();
+    });
   }
 
   @override
