@@ -66,6 +66,7 @@
     <color name="lightGray">#DEE4ED</color>
     <color name="white3">#F7F6FA</color>
     <color name="gray">#202532</color>
+    <color name="modalGray">#151A3D</color>
 
     <color name="light_violet">#6C61FF</color>
 </resources>

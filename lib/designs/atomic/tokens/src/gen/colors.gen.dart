@@ -122,6 +122,9 @@ class StoycoColors {
   /// Color: #0F151A
   static const Color midnightInk = Color(0xFF0F151A);
 
+  /// Color: #151A3D
+  static const Color modalGray = Color(0xFF151A3D);
+
   /// Color: #4639E7
   static const Color navbarButtonColor = Color(0xFF4639E7);
 
