@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
@@ -39,6 +40,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: StoycoColors.midnightInk,
+      surfaceTintColor: Colors.transparent,
+      scrolledUnderElevation: 0,
+      elevation: 0,
       leading: leadingIcon != null
           ? IconButton(onPressed: onLeadingPressed, icon: leadingIcon!)
           : null,
@@ -46,9 +51,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Text(
           title,
           style: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: StoycoScreenSize.fontSize(context, 16),
-              fontFamily: FontFamilyToken.akkuratPro,
+            fontWeight: FontWeight.w700,
+            fontSize: StoycoScreenSize.fontSize(context, 16),
+            fontFamily: FontFamilyToken.akkuratPro,
           ),
         ),
       ),
