@@ -119,14 +119,19 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
     return Scaffold(
       backgroundColor: StoycoColors.midnightInk,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            _buildIconHeader(context, isPhone),
-            _buildTitle(context, isPhone),
-            if (!isPhone) _buildDescription(context),
-            _buildTabBar(context, isPhone),
-            _buildPlansContent(context),
-          ],
+        child: Padding(
+          padding: isPhone
+              ? EdgeInsets.zero
+              : StoycoScreenSize.fromLTRB(context, left: 24, right: 40),
+          child: CustomScrollView(
+            slivers: <Widget>[
+              _buildIconHeader(context, isPhone),
+              _buildTitle(context, isPhone),
+              if (!isPhone) _buildDescription(context),
+              _buildTabBar(context, isPhone),
+              _buildPlansContent(context),
+            ],
+          ),
         ),
       ),
     );
@@ -243,8 +248,19 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   final bool hasBothPlans = hasMonthlyPlans && hasAnnualPlans;
+
+                  // Calculate responsive width
+                  final double maxTabBarWidth = isPhone
+                      ? constraints.maxWidth
+                      : StoycoScreenSize.width(context, 800);
+
+                  final double tabBarWidth =
+                      constraints.maxWidth < maxTabBarWidth
+                      ? constraints.maxWidth
+                      : maxTabBarWidth;
+
                   return CustomTabBar(
-                    width: constraints.maxWidth,
+                    width: tabBarWidth,
                     tabs: hasBothPlans
                         ? const <String>['Mensual', 'Anual']
                         : hasMonthlyPlans
@@ -312,63 +328,99 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
   }
 
   Widget _buildLoadingContent(BuildContext context) {
+    final bool isPhone = StoycoScreenSize.isPhone(context);
+
     return SliverToBoxAdapter(
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final double totalSpacing = (widget.crossAxisCount - 1) * 10;
-          final double cardWidth =
-              (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
-          return Wrap(
-            spacing: StoycoScreenSize.width(context, 8),
-            runSpacing: StoycoScreenSize.height(context, 8),
-            alignment: WrapAlignment.center,
-            children: List<Widget>.generate(3, (int index) {
-              return SizedBox(
-                width: cardWidth,
-                child: SkeletonCard(
-                  height: cardWidth,
-                  width: cardWidth,
-                  margin: StoycoScreenSize.symmetric(
-                    context,
-                    horizontal: 16,
-                    horizontalPhone: 40,
-                    vertical: 12,
-                  ),
-                ),
-              );
-            }),
-          );
-        },
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: isPhone
+                ? double.infinity
+                : StoycoScreenSize.width(context, 800),
+          ),
+          child: Padding(
+            padding: StoycoScreenSize.symmetric(
+              context,
+              horizontal: isPhone ? 0 : 40,
+            ),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final double totalSpacing = (widget.crossAxisCount - 1) * 10;
+                final double cardWidth =
+                    (constraints.maxWidth - totalSpacing) /
+                    widget.crossAxisCount;
+                return Wrap(
+                  spacing: StoycoScreenSize.width(context, 8),
+                  runSpacing: StoycoScreenSize.height(context, 8),
+                  alignment: WrapAlignment.center,
+                  children: List<Widget>.generate(3, (int index) {
+                    return SizedBox(
+                      width: cardWidth,
+                      child: SkeletonCard(
+                        height: cardWidth,
+                        width: cardWidth,
+                        margin: StoycoScreenSize.symmetric(
+                          context,
+                          horizontal: 16,
+                          horizontalPhone: 40,
+                          vertical: 12,
+                        ),
+                      ),
+                    );
+                  }),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
 
   Widget _buildPlansGrid(BuildContext context, List<SubscriptionPlan> plans) {
+    final bool isPhone = StoycoScreenSize.isPhone(context);
+
     return SliverToBoxAdapter(
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final double totalSpacing = (widget.crossAxisCount - 1) * 10;
-          final double cardWidth =
-              (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
-          return Wrap(
-            spacing: StoycoScreenSize.width(context, 8),
-            runSpacing: StoycoScreenSize.height(context, 8),
-            alignment: WrapAlignment.center,
-            children: plans.map((SubscriptionPlan plan) {
-              return SizedBox(
-                width: cardWidth,
-                child: SubscriptionPlanCard(
-                  key: ValueKey<String>(plan.id),
-                  plan: plan,
-                  onTapCancelSubscription: widget.onTapCancelSubscription,
-                  onTapNewSubscription: widget.onTapNewSubscription,
-                  onTapRenewSubscription: widget.onTapRenewSubscription,
-                  styleParams: widget.styleParams,
-                ),
-              );
-            }).toList(),
-          );
-        },
+      child: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: isPhone
+                ? double.infinity
+                : StoycoScreenSize.width(context, 800),
+          ),
+          child: Padding(
+            padding: StoycoScreenSize.symmetric(
+              context,
+              horizontal: isPhone ? 0 : 40,
+            ),
+            child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final double totalSpacing = (widget.crossAxisCount - 1) * 10;
+                final double cardWidth =
+                    (constraints.maxWidth - totalSpacing) /
+                    widget.crossAxisCount;
+                return Wrap(
+                  spacing: StoycoScreenSize.width(context, 8),
+                  runSpacing: StoycoScreenSize.height(context, 8),
+                  alignment: WrapAlignment.center,
+                  children: plans.map((SubscriptionPlan plan) {
+                    return SizedBox(
+                      width: cardWidth,
+                      child: SubscriptionPlanCard(
+                        key: ValueKey<String>(plan.id),
+                        plan: plan,
+                        onTapCancelSubscription: widget.onTapCancelSubscription,
+                        onTapNewSubscription: widget.onTapNewSubscription,
+                        onTapRenewSubscription: widget.onTapRenewSubscription,
+                        styleParams: widget.styleParams,
+                      ),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
