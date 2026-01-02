@@ -63,13 +63,13 @@ class SubscriptionHistoryCard extends StatelessWidget {
               Text(
                 'Te suscribiste a: ',
                 style: TextStyle(
-                    fontFamily: FontFamilyToken.akkuratPro,
-                    color: StoycoColors.softWhite,
-                    fontWeight: FontWeight.w700,
-                    fontSize: StoycoScreenSize.fontSize(context, 12),
+                  fontFamily: FontFamilyToken.akkuratPro,
+                  color: StoycoColors.softWhite,
+                  fontWeight: FontWeight.w700,
+                  fontSize: StoycoScreenSize.fontSize(context, 12),
                 ),
               ),
-              if(subscriptionHistoryItem.planImageUrl.isNotEmpty)
+              if (subscriptionHistoryItem.planImageUrl.isNotEmpty)
                 ImageNetworkBlur(
                   imageUrl: subscriptionHistoryItem.planImageUrl,
                   radius: StoycoScreenSize.radius(context, 9),
@@ -93,20 +93,21 @@ class SubscriptionHistoryCard extends StatelessWidget {
                         Text(
                           subscriptionHistoryItem.partnerName,
                           style: TextStyle(
-                              fontFamily: FontFamilyToken.akkuratPro,
-                              color: StoycoColors.softWhite,
-                              fontWeight: FontWeight.w700,
-                              fontSize: StoycoScreenSize.fontSize(context, 16),
+                            fontFamily: FontFamilyToken.akkuratPro,
+                            color: StoycoColors.softWhite,
+                            fontWeight: FontWeight.w700,
+                            fontSize: StoycoScreenSize.fontSize(context, 16),
                           ),
                         ),
                         Text(
                           '${subscriptionHistoryItem.planName} (${subscriptionHistoryItem.recurrenceType}) ${subscriptionHistoryItem.price} ${subscriptionHistoryItem.currencyCode}',
                           style: TextStyle(
-                              fontFamily: FontFamilyToken.akkuratPro,
-                              color: StoycoColors.softWhite,
-                              fontWeight: FontWeight.w400,
-                              fontSize: StoycoScreenSize.fontSize(context, 12),
+                            fontFamily: FontFamilyToken.akkuratPro,
+                            color: StoycoColors.softWhite,
+                            fontWeight: FontWeight.w400,
+                            fontSize: StoycoScreenSize.fontSize(context, 12),
                           ),
+                          maxLines: 2,
                         ),
                         Text(
                           '${StoycoDateFormatters.formatIso8601AsDayMonthAbbrYear(subscriptionHistoryItem.subscriptionStartDate)} - ${StoycoDateFormatters.formatIso8601AsDayMonthAbbrYear(subscriptionHistoryItem.subscriptionEndDate)}',
@@ -129,10 +130,10 @@ class SubscriptionHistoryCard extends StatelessWidget {
                       children: <Widget>[
                         Chip(
                           labelStyle: TextStyle(
-                              fontFamily: FontFamilyToken.akkuratPro,
-                              color: StoycoColors.deepCharcoal,
-                              fontWeight: FontWeight.w400,
-                              fontSize: StoycoScreenSize.fontSize(context, 12),
+                            fontFamily: FontFamilyToken.akkuratPro,
+                            color: StoycoColors.deepCharcoal,
+                            fontWeight: FontWeight.w400,
+                            fontSize: StoycoScreenSize.fontSize(context, 12),
                           ),
                           backgroundColor:
                               _isActiveSubscription(subscriptionHistoryItem)
@@ -168,7 +169,7 @@ class SubscriptionHistoryCard extends StatelessWidget {
                                   fontSize: StoycoScreenSize.fontSize(
                                     context,
                                     12,
-                                    ),
+                                  ),
                                 ),
                               ),
                       ],

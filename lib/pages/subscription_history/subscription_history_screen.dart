@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/subscription_history/screens/subscription_history_mobile_screen.dart';
+import 'package:stoyco_subscription/pages/subscription_history/screens/subscription_history_web_screen.dart';
 
 /// {@template responsive_subscription_history_screen}
 /// A responsive screen that displays the subscription history view.
@@ -29,7 +30,10 @@ class ResponsiveSubscriptionHistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!StoycoScreenSize.isPhone(context)) {
-      return const Center(child: Text('En Desarrollo'));
+      return SubscriptionHistoryWebScreen(
+        userId: userId ?? '',
+        onTapSubscriptionHistoryCard: onTapSubscriptionHistoryCard,
+      );
     } else {
       return SubscriptionHistoryMobileScreen(
         userId: userId ?? '',
