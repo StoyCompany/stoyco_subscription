@@ -1,6 +1,6 @@
 name: stoyco_subscription
 description: "A Flutter package for managing subscription plans in the Stoyco app."
-version: 2.0.26
+version: 2.0.27
 publish_to: none
 
 environment:
