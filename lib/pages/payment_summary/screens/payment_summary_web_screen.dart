@@ -84,17 +84,14 @@ class PaymentSummaryWebScreen extends StatelessWidget {
               desktopLarge: 40,
             ),
             children: <Widget>[
-              /// Displays the payment summary preview card.
               SubscriptionPaymentPreviewCard(
                 paymentSummaryInfo: paymentSummaryInfo,
               ),
 
-              /// Displays the payment breakdown section.
               PaymentInformationSection(
                 items: getPaymentInfoItems(paymentSummaryInfo),
               ),
 
-              /// Displays the payment method selection section.
               selectPaymentMethodSection,
             ],
           ),
