@@ -86,6 +86,7 @@ class UserStatus extends Equatable {
     this.expiresAt,
     this.trialStart,
     this.trialEnd,
+    this.platform=''
   });
 
   const UserStatus.empty() : 
@@ -97,6 +98,7 @@ class UserStatus extends Equatable {
     subscribedAt = null,
     expiresAt = null,
     trialStart = null,
+    platform='',
     trialEnd = null;
 
   factory UserStatus.fromJson(Map<String, dynamic> json) => _$UserStatusFromJson(json);
@@ -114,8 +116,13 @@ class UserStatus extends Equatable {
   final DateTime? trialStart;
   @JsonKey(includeIfNull: true)
   final DateTime? trialEnd;
+  @JsonKey(includeIfNull: true)
+  final String platform;
 
   Map<String, dynamic> toJson() => _$UserStatusToJson(this);
+
+
+  String get userPlatform => platform;
 
   @override
   List<Object?> get props => <Object?>[
@@ -128,6 +135,7 @@ class UserStatus extends Equatable {
     expiresAt,
     trialStart,
     trialEnd,
+    platform,
   ];
 }
 

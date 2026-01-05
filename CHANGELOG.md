@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [2.0.29] - 2026-01-05
+
+### Features
+
+- add userplan status handling in subscription models and related logic
+
 ## [2.0.28] - 2026-01-05
 
 ### Features
