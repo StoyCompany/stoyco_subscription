@@ -54,6 +54,7 @@ UserStatus _$UserStatusFromJson(Map<String, dynamic> json) => UserStatus(
   trialEnd: json['trialEnd'] == null
       ? null
       : DateTime.parse(json['trialEnd'] as String),
+  platForm: json['platForm'] as String? ?? '',
 );
 
 Map<String, dynamic> _$UserStatusToJson(UserStatus instance) =>
@@ -67,6 +68,7 @@ Map<String, dynamic> _$UserStatusToJson(UserStatus instance) =>
       'expiresAt': instance.expiresAt?.toIso8601String(),
       'trialStart': instance.trialStart?.toIso8601String(),
       'trialEnd': instance.trialEnd?.toIso8601String(),
+      'platForm': instance.platForm,
     };
 
 PlanActions _$PlanActionsFromJson(Map<String, dynamic> json) => PlanActions(

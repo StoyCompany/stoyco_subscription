@@ -116,6 +116,7 @@ class UserStatus extends Equatable {
   final DateTime? trialStart;
   @JsonKey(includeIfNull: true)
   final DateTime? trialEnd;
+  @JsonKey(includeIfNull: true)
   final String platForm;
 
   Map<String, dynamic> toJson() => _$UserStatusToJson(this);
