@@ -1,6 +1,6 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:stoyco_subscription/utils/platform_access.dart';
 
 part 'subscription_plan.g.dart';
 
@@ -57,6 +57,15 @@ class SubscriptionPlan extends Equatable {
   final PlanActions actions;
 
   Map<String, dynamic> toJson() => _$SubscriptionPlanToJson(this);
+
+  /// returns true if the user has access to the current platform.
+  bool hasPlatformAccess() {
+    final UserStatus? userStatus = this.userStatus;
+    if (userStatus == null) {
+      return false;
+    }
+    return userStatus.userPlatform == getCurrentPlatform();
+  }
 
   @override
   List<Object?> get props => <Object?>[
