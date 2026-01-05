@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:stoyco_subscription/envs/envs.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_for_app_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_method_modification_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_modification_request.dart';
@@ -51,6 +52,15 @@ class SubscriptionPlansDataSource{
 
   Future<Response<String>> subscribeToPlan(SubscribeRequest request) async {
     final String url = '${_environment.baseUrl()}user-plans/subscribe';
+    return _dio.post(
+      url,
+      data: request.toJson(),
+      options: Options(headers: _getHeaders()),
+    );
+  }
+
+  Future<Response<String>> subscribeToPlanApp(SubscribeForAppRequest request) async {
+    final String url = '${_environment.baseUrl()}user-plans/subscribe-app';
     return _dio.post(
       url,
       data: request.toJson(),

@@ -7,6 +7,7 @@ import 'package:stoyco_subscription/envs/envs.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/error.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_for_app_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_method_modification_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_modification_request.dart';
@@ -160,6 +161,34 @@ class SubscriptionPlansService {
     try {
       await _updateTokenInLayers();
       return await _repository.subscribeToPlan(request);
+    } on DioException catch (error) {
+      return Left<Failure, bool>(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left<Failure, bool>(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left<Failure, bool>(ExceptionFailure.decode(error));
+    }
+  }
+
+  /// Subscribes a user to a plan.
+  ///
+  /// Automatically refreshes Firebase Auth token before making the request.
+  ///
+  /// Parameters:
+  /// - [request]: The model containing user and plan information for subscription
+  ///
+  /// Returns: [Either] with [bool] on success or [Failure] on error.
+  ///
+  /// Example:
+  /// ```dart
+  /// final result = await service.subscribeToPlan(
+  ///   SubscribeForAppRequest(userId: '123', planId: 'abc'),
+  /// );
+  /// ```
+  Future<Either<Failure, bool>> subscribeToPlanApp(SubscribeForAppRequest request) async {
+    try {
+      await _updateTokenInLayers();
+      return await _repository.subscribeToPlanApp(request);
     } on DioException catch (error) {
       return Left<Failure, bool>(DioFailure.decode(error));
     } on Error catch (error) {

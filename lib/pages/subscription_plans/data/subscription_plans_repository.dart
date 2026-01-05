@@ -4,6 +4,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/errors/error.d
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/exception.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/failure.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/errors/logger.dart' as local_logger;
+import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_for_app_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscribe_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_method_modification_request.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/request/subscription_modification_request.dart';
@@ -56,6 +57,23 @@ class SubscriptionPlansRepository {
   Future<Either<Failure, bool>> subscribeToPlan(SubscribeRequest request) async {
     try {
       final Response<String> response = await _dataSource.subscribeToPlan(request);
+      if (response.statusCode == 200) {
+        return const Right<Failure, bool>(true);
+      } else {
+        return Left<Failure, bool>(ExceptionFailure.decode(Exception('Error subscribing to plan')));
+      }
+    } on DioException catch (error) {
+      return Left<Failure, bool>(DioFailure.decode(error));
+    } on Error catch (error) {
+      return Left<Failure, bool>(ErrorFailure.decode(error));
+    } on Exception catch (error) {
+      return Left<Failure, bool>(ExceptionFailure.decode(error));
+    }
+  }
+
+  Future<Either<Failure, bool>> subscribeToPlanApp(SubscribeForAppRequest request) async {
+    try {
+      final Response<String> response = await _dataSource.subscribeToPlanApp(request);
       if (response.statusCode == 200) {
         return const Right<Failure, bool>(true);
       } else {

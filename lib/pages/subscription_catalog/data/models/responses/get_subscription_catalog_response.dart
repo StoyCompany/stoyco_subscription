@@ -99,6 +99,7 @@ class SubscriptionCatalogItem extends Equatable {
     required this.hasSubscription,
     required this.isSubscribed,
     required this.isExpired,
+    required this.renewalAvaliable,
   });
 
   factory SubscriptionCatalogItem.fromJson(Map<String, dynamic> json) =>
@@ -112,6 +113,7 @@ class SubscriptionCatalogItem extends Equatable {
   final bool hasSubscription;
   final bool isSubscribed;
   final bool isExpired;
+  final bool renewalAvaliable;
 
   Map<String, dynamic> toJson() => _$SubscriptionCatalogItemToJson(this);
 
@@ -124,6 +126,7 @@ class SubscriptionCatalogItem extends Equatable {
     profile,
     hasSubscription,
     isSubscribed,
-    isExpired
+    isExpired,
+    renewalAvaliable,
   ];
 }

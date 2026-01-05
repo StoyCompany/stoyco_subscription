@@ -1,8 +1,21 @@
 
 # Changelog
 
+## [2.0.28] - 2026-01-05
+
+### Features
+
+- add renewalAvailable property to subscription models and update related logic
+
+## [2.0.27] - 2026-01-04
+
+### Features
+
+- implement SubscribeForAppRequest model and subscription functionality
+
+### Refactoring
+
 ## [2.0.26] - 2025-12-12
-# Changelog
 
 ## [2.0.24] - 2025-12-11 11:30pm
 
