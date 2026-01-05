@@ -124,7 +124,8 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
                 partnerId: item.partnerId,
                 profile: item.profile,
                 hasSubscription: item.hasSubscription,
-                isExpired: item.isExpired
+                isExpired: item.isExpired,
+                renewalAvaliable: item.renewalAvaliable,
               ),
             )
             .toList();
@@ -189,7 +190,8 @@ class SubscriptionCatalogNotifier extends ChangeNotifier {
                   partnerId: item.partnerId,
                   profile: item.profile,
                   hasSubscription: item.hasSubscription,
-                  isExpired: item.isExpired
+                  isExpired: item.isExpired,
+                  renewalAvaliable: item.renewalAvaliable,
                 ),
               )
               .toList();

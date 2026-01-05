@@ -38,14 +38,15 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     this.titleFontSize,
-    this.subscribed,
+    this.subscribed = false,
+    this.isExpired = false,
+    this.renewalAvaliable = false,
     this.margin,
     this.imageWidth,
     this.imageHeight,
     this.onTapSubscribe,
     this.onTapWhenExpired,
-    this.hasSubscription,
-    this.isExpired,
+    this.hasSubscription = false,
   });
 
   /// The title displayed below the image.
@@ -55,11 +56,16 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
   final String imageUrl;
 
   /// Whether the user is subscribed. Affects the button's appearance and text.
-  final bool? subscribed;
-  final bool? hasSubscription;
+  final bool subscribed;
+
+  // Whether the user has any subscription
+  final bool hasSubscription;
+
+  // Whether the renewal option is available
+  final bool renewalAvaliable;
 
   // Whether the user subscription is expired
-  final bool? isExpired;
+  final bool isExpired;
 
   //Image width and height
   final double? imageWidth;
@@ -71,8 +77,10 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
   /// Called when the widget is tapped.
   final VoidCallback? onTap;
 
+  /// Called when the subscribe button is tapped.
   final VoidCallback? onTapSubscribe;
 
+  /// Called when the expired subscription button is tapped.
   final VoidCallback? onTapWhenExpired;
 
   /// Optional margin for the widget.
@@ -93,6 +101,7 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
 
     final double imageW = imageWidth ?? dynamicImageSize;
     final double imageH = imageHeight ?? dynamicImageSize;
+    final bool renewal = (renewalAvaliable || isExpired) && subscribed;
 
     return SizedBox(
       child: GestureDetector(
@@ -132,18 +141,10 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
             ),
 
             // Botón con lógica completa de estados
-            if (hasSubscription ?? false)
+            if (hasSubscription)
               ButtonGradientText(
-                text: (isExpired ?? false) && (subscribed ?? false)
-                    ? 'Renovar'
-                    : subscribed ?? false
-                    ? 'Ver suscripción'
-                    : 'Suscribirme',
-                type: (isExpired ?? false) && (subscribed ?? false)
-                    ? ButtonGradientTextType.primary 
-                    : subscribed ?? false
-                    ?  ButtonGradientTextType.primary 
-                    :  ButtonGradientTextType.custom,
+                text: renewal ? 'Renovar' : subscribed ? 'Ver suscripción' : 'Suscribirme',
+                type: renewal ? ButtonGradientTextType.primary : subscribed ?  ButtonGradientTextType.primary :  ButtonGradientTextType.custom,
                 backgroundColor: StoycoColors.menuItemBackground,
                 width: StoycoScreenSize.width(context, 148),
                 height: StoycoScreenSize.height(context, 31),
@@ -161,19 +162,13 @@ class SubscriptionCircularImageWithInfo extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: Colors.white,
                 ),
-                iconWidget: (isExpired ?? false) && (subscribed ?? false)
-                    ? StoycoAssets.lib.assets.icons.common.alertIcon.svg(
-                        package: 'stoyco_subscription',
-                        height: StoycoScreenSize.height(context, 16),
-                        width: StoycoScreenSize.width(context, 16),
-                      )
-                    : null,
-                iconPosition: (isExpired ?? false) && (subscribed ?? false)
-                    ? ButtonGradientTextIconPosition.left
-                    : ButtonGradientTextIconPosition.none,
-                onPressed: ((isExpired ?? false) && (subscribed ?? false))
-                    ? onTapWhenExpired
-                    : onTapSubscribe,
+                iconWidget: renewal ? StoycoAssets.lib.assets.icons.common.alertIcon.svg(
+                    package: 'stoyco_subscription',
+                    height: StoycoScreenSize.height(context, 16),
+                    width: StoycoScreenSize.width(context, 16),
+                  ) : null,
+                iconPosition: renewal ? ButtonGradientTextIconPosition.left : ButtonGradientTextIconPosition.none,
+                onPressed: renewal ? onTapWhenExpired : onTapSubscribe,
               ),
           ],
         ),

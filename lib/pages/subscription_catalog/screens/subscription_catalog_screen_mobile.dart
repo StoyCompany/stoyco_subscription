@@ -354,6 +354,7 @@ class _SubscriptionsCatalogScreenMobileState
           subscribed: item.subscribed,
           hasSubscription: item.hasSubscription,
           isExpired: item.isExpired,
+          renewalAvaliable: item.renewalAvaliable,
           onTap: () => onTapSubscription?.call(item.partnerId),
           onTapSubscribe: () => widget.onTapSubscribe?.call(item.partnerId),
           onTapWhenExpired: () => widget.onTapWhenExpired?.call(item.partnerId),
