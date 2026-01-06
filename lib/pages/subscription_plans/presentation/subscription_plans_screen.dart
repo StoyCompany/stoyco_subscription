@@ -39,6 +39,7 @@ import 'package:stoyco_subscription/pages/subscription_plans/presentation/helper
 ///   onTapCancelSubscription: (plan) {},
 ///   onTapNewSubscription: (plan) {},
 ///   onTapRenewSubscription: (plan) {},
+///   onValidatePlatformAccess: (plan) {},
 /// )
 /// ```
 /// {@endtemplate}
@@ -52,6 +53,7 @@ class SubscriptionPlansList extends StatefulWidget {
     required this.onTapCancelSubscription,
     required this.onTapNewSubscription,
     required this.onTapRenewSubscription,
+    required this.onValidatePlatformAccess,
     this.styleParams = const SubscriptionPlanScreenStyleParams(),
     this.onPlanTypeChanged,
   });
@@ -73,6 +75,9 @@ class SubscriptionPlansList extends StatefulWidget {
 
   /// Callback when renew subscription is tapped.
   final void Function(SubscriptionPlan plan) onTapRenewSubscription;
+
+  /// Callback when validating platform access.
+  final void Function(SubscriptionPlan plan) onValidatePlatformAccess;
 
   /// Optional style parameters for customizing the appearance and design tokens.
   ///
@@ -412,6 +417,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                         onTapCancelSubscription: widget.onTapCancelSubscription,
                         onTapNewSubscription: widget.onTapNewSubscription,
                         onTapRenewSubscription: widget.onTapRenewSubscription,
+                        onValidatePlatformAccess: widget.onValidatePlatformAccess,
                         styleParams: widget.styleParams,
                       ),
                     );

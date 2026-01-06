@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [2.0.30] - 2026-01-05
+
+### Features
+
+- add platform access validation to subscription plan actions
+
 ## [2.0.29] - 2026-01-05
 
 ### Features
