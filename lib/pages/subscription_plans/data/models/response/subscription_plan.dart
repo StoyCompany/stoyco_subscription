@@ -61,7 +61,7 @@ class SubscriptionPlan extends Equatable {
   /// returns true if the user has access to the current platform.
   bool hasPlatformAccess() {
     final UserStatus? userStatus = this.userStatus;
-    if (userStatus == null) {
+    if (userStatus == null || userStatus.userPlatform.isEmpty ) {
       return true;
     }
     return userStatus.userPlatform == getCurrentPlatform();
