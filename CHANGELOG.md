@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [2.0.31] - 2026-01-06
+
+### FIX
+
+- enhance platform access check in SubscriptionPlan to handle empty userPlatform
+
 ## [2.0.30] - 2026-01-05
 
 ### Features
