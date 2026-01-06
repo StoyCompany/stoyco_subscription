@@ -4,8 +4,12 @@ import 'package:stoyco_subscription/pages/subscription_plans/data/models/respons
 
 
 String getCurrentPlatform() {
-  if (Platform.isIOS) return 'iOS';
-  if (Platform.isAndroid) return 'Android';
+  if (Platform.isIOS) {
+    return 'iOS';
+  }
+  if (Platform.isAndroid) {
+    return 'Android';
+  }
   return 'Unknown';
 }
 
