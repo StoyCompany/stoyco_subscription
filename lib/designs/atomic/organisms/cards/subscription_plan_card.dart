@@ -56,6 +56,7 @@ class SubscriptionPlanCard extends StatelessWidget {
     required this.onTapRenewSubscription,
     required this.onTapCancelSubscription,
     required this.onTapNewSubscription,
+    required this.onValidatePlatformAccess,
     required this.styleParams,
   });
 
@@ -75,10 +76,14 @@ class SubscriptionPlanCard extends StatelessWidget {
   /// Callback when the new subscription or free trial action is tapped.
   final void Function(SubscriptionPlan) onTapNewSubscription;
 
+  /// Callback to validate platform access for the subscription plan.
+  final void Function(SubscriptionPlan) onValidatePlatformAccess;
+
   @override
   Widget build(BuildContext context) {
 
     final UserStatus statusUserSubscription = plan.userStatus ?? const UserStatus.empty();
+    final bool accessPlatform = plan.hasPlatformAccess();
 
     return HoverAnimationCard(
       key: ValueKey<String>('hoverAnimationCard_${plan.id}'),
@@ -221,8 +226,8 @@ class SubscriptionPlanCard extends StatelessWidget {
                   right: 16, 
                   left: 16,
                 ),
-                text: plan.actions.messageTrial.isEmpty ? 'Continuar' : plan.actions.messageTrial,
-                onPressed: () => onTapNewSubscription(plan)
+                text: plan.actions.messageTrial.isEmpty ? plan.actions.buttonText : plan.actions.messageTrial,
+                onPressed: accessPlatform ? () => onTapNewSubscription(plan) : () => onValidatePlatformAccess(plan),
               ),
             ),
             Visibility(
@@ -236,7 +241,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                     left: 16,
                 ),
                 text: 'Renovar',
-                onPressed: () => onTapRenewSubscription(plan),
+                onPressed: accessPlatform ? () => onTapRenewSubscription(plan) : () => onValidatePlatformAccess(plan),
               ),
             ),
             Visibility(
@@ -250,7 +255,7 @@ class SubscriptionPlanCard extends StatelessWidget {
                   left: 16,
                 ),
                 text: 'Cancelar suscripción',
-                onPressed: () => onTapCancelSubscription(plan),
+                onPressed: accessPlatform ? () => onTapCancelSubscription(plan) : () => onValidatePlatformAccess(plan),
               ),
             ),
             Visibility(

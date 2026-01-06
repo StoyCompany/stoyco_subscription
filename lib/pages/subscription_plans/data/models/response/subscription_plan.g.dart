@@ -80,6 +80,7 @@ PlanActions _$PlanActionsFromJson(Map<String, dynamic> json) => PlanActions(
   porcentageDiscount: (json['porcentageDiscount'] as num?)?.toDouble() ?? 0.0,
   messageDiscount: json['messageDiscount'] as String? ?? '',
   messageTrial: json['messageTrial'] as String? ?? '',
+  buttonText: json['buttonText'] as String? ?? 'Continuar',
 );
 
 Map<String, dynamic> _$PlanActionsToJson(PlanActions instance) =>
@@ -92,4 +93,5 @@ Map<String, dynamic> _$PlanActionsToJson(PlanActions instance) =>
       'porcentageDiscount': instance.porcentageDiscount,
       'messageDiscount': instance.messageDiscount,
       'messageTrial': instance.messageTrial,
+      'buttonText': instance.buttonText,
     };

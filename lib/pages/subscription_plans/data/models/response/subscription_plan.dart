@@ -160,6 +160,7 @@ class PlanActions extends Equatable {
     this.porcentageDiscount = 0.0,
     this.messageDiscount = '',
     this.messageTrial = '',
+    this.buttonText = 'Continuar',
   });
 
   factory PlanActions.fromJson(Map<String, dynamic> json) => _$PlanActionsFromJson(json);
@@ -172,6 +173,7 @@ class PlanActions extends Equatable {
   final double porcentageDiscount;
   final String messageDiscount;
   final String messageTrial;
+  final String buttonText;
 
   Map<String, dynamic> toJson() => _$PlanActionsToJson(this);
 
@@ -185,5 +187,6 @@ class PlanActions extends Equatable {
     porcentageDiscount,
     messageDiscount,
     messageTrial,
+    buttonText,
   ];
 }
