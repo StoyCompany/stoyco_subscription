@@ -5,6 +5,7 @@ import 'package:stoyco_subscription/designs/atomic/organisms/cards/subscription_
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/assets.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/colors.gen.dart';
 import 'package:stoyco_subscription/designs/atomic/tokens/src/gen/fonts.gen.dart';
+import 'package:stoyco_subscription/designs/responsive/device.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan.dart';
 import 'package:stoyco_subscription/pages/subscription_plans/data/models/response/subscription_plan_response.dart';
@@ -116,6 +117,72 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
   /// Returns true if there are no plans and not loading.
   bool get hasNoPlans =>
       !hasMonthlyPlans && !hasAnnualPlans && !widget.isLoading;
+
+  /// Calculate responsive column count based on device type and crossAxisCount parameter.
+  int _getResponsiveColumnCount(BuildContext context) {
+    final DeviceType deviceType = getDeviceType(context);
+    
+    // If crossAxisCount is 1, respect it for single column layout
+    if (widget.crossAxisCount == 1) {
+      return 1;
+    }
+    
+    // For multi-column layouts, adapt to device type
+    switch (deviceType) {
+      case DeviceType.mobile:
+        return 1; // Always 1 column on mobile
+      case DeviceType.tablet:
+        // On tablet, use 2 columns or the crossAxisCount if it's less
+        return widget.crossAxisCount >= 2 ? 2 : widget.crossAxisCount;
+      case DeviceType.desktop:
+      case DeviceType.desktopLarge:
+        // On desktop, use the full crossAxisCount
+        return widget.crossAxisCount;
+    }
+  }
+
+  /// Calculate max width based on column count and device type
+  double _getMaxWidth(BuildContext context, int columnCount) {
+    final DeviceType deviceType = getDeviceType(context);
+    
+    // Increased base card width for better display on larger screens
+    final double baseCardWidth = StoycoScreenSize.width(
+      context,
+      400,
+      tablet: 380,
+      desktop: 400,
+      desktopLarge: 420,
+    );
+    
+    final double spacing = StoycoScreenSize.width(context, 16);
+    
+    // Reduced horizontal padding for tablet and desktop
+    final double horizontalPadding = deviceType == DeviceType.mobile
+        ? StoycoScreenSize.width(context, 0)
+        : StoycoScreenSize.width(context, 48);
+    
+    // Calculate total width needed
+    final double totalWidth = (baseCardWidth * columnCount) + 
+                              (spacing * (columnCount - 1)) + 
+                              horizontalPadding;
+    
+    return totalWidth;
+  }
+
+  /// Get horizontal padding based on device type
+  double _getHorizontalPadding(BuildContext context) {
+    final DeviceType deviceType = getDeviceType(context);
+    
+    switch (deviceType) {
+      case DeviceType.mobile:
+        return 0;
+      case DeviceType.tablet:
+        return StoycoScreenSize.width(context, 24);
+      case DeviceType.desktop:
+      case DeviceType.desktopLarge:
+        return StoycoScreenSize.width(context, 24);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -334,29 +401,28 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
 
   Widget _buildLoadingContent(BuildContext context) {
     final bool isPhone = StoycoScreenSize.isPhone(context);
+    final int columnCount = _getResponsiveColumnCount(context);
+    final double maxWidth = _getMaxWidth(context, columnCount);
+    final double horizontalPadding = _getHorizontalPadding(context);
 
     return SliverToBoxAdapter(
       child: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: isPhone
-                ? double.infinity
-                : StoycoScreenSize.width(context, 800),
+            maxWidth: isPhone ? double.infinity : maxWidth,
           ),
           child: Padding(
-            padding: StoycoScreenSize.symmetric(
-              context,
-              horizontal: isPhone ? 0 : 40,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-                final double totalSpacing = (widget.crossAxisCount - 1) * 10;
+                final double spacing = StoycoScreenSize.width(context, 16);
+                final double totalSpacing = (columnCount - 1) * spacing;
                 final double cardWidth =
-                    (constraints.maxWidth - totalSpacing) /
-                    widget.crossAxisCount;
+                    (constraints.maxWidth - totalSpacing) / columnCount;
+                
                 return Wrap(
-                  spacing: StoycoScreenSize.width(context, 8),
-                  runSpacing: StoycoScreenSize.height(context, 8),
+                  spacing: spacing,
+                  runSpacing: StoycoScreenSize.height(context, 16),
                   alignment: WrapAlignment.center,
                   children: List<Widget>.generate(3, (int index) {
                     return SizedBox(
@@ -364,12 +430,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                       child: SkeletonCard(
                         height: cardWidth,
                         width: cardWidth,
-                        margin: StoycoScreenSize.symmetric(
-                          context,
-                          horizontal: 16,
-                          horizontalPhone: 40,
-                          vertical: 12,
-                        ),
+                        margin: EdgeInsets.zero,
                       ),
                     );
                   }),
@@ -384,29 +445,28 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
 
   Widget _buildPlansGrid(BuildContext context, List<SubscriptionPlan> plans) {
     final bool isPhone = StoycoScreenSize.isPhone(context);
+    final int columnCount = _getResponsiveColumnCount(context);
+    final double maxWidth = _getMaxWidth(context, columnCount);
+    final double horizontalPadding = _getHorizontalPadding(context);
 
     return SliverToBoxAdapter(
       child: Center(
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            maxWidth: isPhone
-                ? double.infinity
-                : StoycoScreenSize.width(context, 800),
+            maxWidth: isPhone ? double.infinity : maxWidth,
           ),
           child: Padding(
-            padding: StoycoScreenSize.symmetric(
-              context,
-              horizontal: isPhone ? 0 : 40,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-                final double totalSpacing = (widget.crossAxisCount - 1) * 10;
+                final double spacing = StoycoScreenSize.width(context, 16);
+                final double totalSpacing = (columnCount - 1) * spacing;
                 final double cardWidth =
-                    (constraints.maxWidth - totalSpacing) /
-                    widget.crossAxisCount;
+                    (constraints.maxWidth - totalSpacing) / columnCount;
+                
                 return Wrap(
-                  spacing: StoycoScreenSize.width(context, 8),
-                  runSpacing: StoycoScreenSize.height(context, 8),
+                  spacing: spacing,
+                  runSpacing: StoycoScreenSize.height(context, 16),
                   alignment: WrapAlignment.center,
                   children: plans.map((SubscriptionPlan plan) {
                     return SizedBox(
@@ -417,7 +477,8 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                         onTapCancelSubscription: widget.onTapCancelSubscription,
                         onTapNewSubscription: widget.onTapNewSubscription,
                         onTapRenewSubscription: widget.onTapRenewSubscription,
-                        onValidatePlatformAccess: widget.onValidatePlatformAccess,
+                        onValidatePlatformAccess:
+                            widget.onValidatePlatformAccess,
                         styleParams: widget.styleParams,
                       ),
                     );

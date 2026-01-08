@@ -44,27 +44,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: Colors.transparent,
       scrolledUnderElevation: 0,
       elevation: 0,
+      leadingWidth: 56,
       leading: leadingIcon != null
           ? IconButton(onPressed: onLeadingPressed, icon: leadingIcon!)
-          : null,
-      title: Center(
-        child: Text(
-          title,
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: StoycoScreenSize.fontSize(context, 16),
-            fontFamily: FontFamilyToken.akkuratPro,
-          ),
+          : const SizedBox.shrink(),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontSize: StoycoScreenSize.fontSize(context, 16),
+          fontFamily: FontFamilyToken.akkuratPro,
         ),
       ),
+      centerTitle: true,
       actions: <Widget>[
         if (suffixIcon != null)
           IconButton(onPressed: onSuffixPressed, icon: suffixIcon!)
         else
-          SizedBox(
-            width: StoycoScreenSize.width(context, 24),
-            height: StoycoScreenSize.height(context, 24),
-          ),
+          const SizedBox(width: 56),
       ],
       automaticallyImplyLeading: false,
     );
