@@ -1,6 +1,19 @@
 
 # Changelog
 
+## [2.0.33] - 2026-01-06
+
+### Features
+
+- Adjusted components to adapt to the web's and tablet's responsive design
+- Added web views for multiple screens
+
+## [2.0.32] - 2026-01-06
+
+### FIX
+
+- refactor locked content display and platform detection logic
+
 ## [2.0.31] - 2026-01-06
 
 ### FIX

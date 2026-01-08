@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:stoyco_subscription/designs/atomic/atoms/tags/tag_locked.dart';
+import 'package:stoyco_subscription/designs/atomic/organisms/lock_subscription/basic_subs_card.dart';
 import 'package:stoyco_subscription/designs/responsive/screen_size.dart';
 
 /// {@template locked_blur}
@@ -193,7 +193,13 @@ class _LockedBlurState extends State<LockedBlur> {
                 // Lock badge
                 Align(
                   alignment: widget.alignment,
-                  child: const TagLocked(isLocked: true),
+                  child: SubscriptionLockedContent(
+                    isLocked: widget.isLocked, 
+                    child: SizedBox(
+                      width: widget.width,
+                      height: widget.height,
+                    ),
+                  ),
                 ),
               ],
             ],
