@@ -338,10 +338,8 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
     return SliverToBoxAdapter(
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: isPhone
-                ? double.infinity
-                : StoycoScreenSize.width(context, 800),
+          constraints: const BoxConstraints(
+            maxWidth: double.infinity,
           ),
           child: Padding(
             padding: StoycoScreenSize.symmetric(
@@ -351,9 +349,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 final double totalSpacing = (widget.crossAxisCount - 1) * 10;
-                final double cardWidth =
-                    (constraints.maxWidth - totalSpacing) /
-                    widget.crossAxisCount;
+                final double cardWidth = (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
                 return Wrap(
                   spacing: StoycoScreenSize.width(context, 8),
                   runSpacing: StoycoScreenSize.height(context, 8),
@@ -388,10 +384,8 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
     return SliverToBoxAdapter(
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: isPhone
-                ? double.infinity
-                : StoycoScreenSize.width(context, 800),
+          constraints: const BoxConstraints(
+            maxWidth: double.infinity,
           ),
           child: Padding(
             padding: StoycoScreenSize.symmetric(
@@ -401,9 +395,7 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
             child: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 final double totalSpacing = (widget.crossAxisCount - 1) * 10;
-                final double cardWidth =
-                    (constraints.maxWidth - totalSpacing) /
-                    widget.crossAxisCount;
+                final double cardWidth = (constraints.maxWidth - totalSpacing) / widget.crossAxisCount;
                 return Wrap(
                   spacing: StoycoScreenSize.width(context, 8),
                   runSpacing: StoycoScreenSize.height(context, 8),
