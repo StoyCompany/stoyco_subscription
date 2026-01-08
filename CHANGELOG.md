@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [2.0.32] - 2026-01-06
+
+### FIX
+
+- refactor locked content display and platform detection logic
+
 ## [2.0.31] - 2026-01-06
 
 ### FIX
