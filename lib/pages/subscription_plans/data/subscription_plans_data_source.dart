@@ -77,7 +77,7 @@ class SubscriptionPlansDataSource{
     );
   }
   
-  Future<Response<String>> renewSubscription(SubscriptionModificationRequest request) async {
+  Future<Response<String>> renewSubscription(SubscribeRequest request) async {
     final String url = '${_environment.baseUrl()}user-plans/subscription/renew';
     return _dio.post(
       url,

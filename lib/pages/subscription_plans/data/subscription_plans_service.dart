@@ -238,10 +238,10 @@ class SubscriptionPlansService {
   /// Example:
   /// ```dart
   /// final result = await service.renewSubscription(
-  ///   SubscriptionModificationRequest(planId: 'abc'),
+  ///   SubscribeRequest(planId: 'abc'),
   /// );
   /// ```
-  Future<Either<Failure, bool>> renewSubscription(SubscriptionModificationRequest request) async {
+  Future<Either<Failure, bool>> renewSubscription(SubscribeRequest request) async {
     try {
       await _updateTokenInLayers();
       return await _repository.renewSubscription(request);

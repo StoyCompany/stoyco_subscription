@@ -105,7 +105,7 @@ class SubscriptionPlansRepository {
       }
     }
 
-    Future<Either<Failure, bool>> renewSubscription(SubscriptionModificationRequest request) async {
+    Future<Either<Failure, bool>> renewSubscription(SubscribeRequest request) async {
       try {
         final Response<String> response = await _dataSource.renewSubscription(request);
         if (response.statusCode == 200) {
