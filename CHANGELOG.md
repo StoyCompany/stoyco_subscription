@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [2.0.33] - 2026-01-08
+
+### FIX
+
+- Fix the subscription renewal parameters are adjusted.
+
 ## [2.0.32] - 2026-01-06
 
 ### FIX
