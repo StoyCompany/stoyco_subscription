@@ -58,6 +58,7 @@ class SubscriptionPlanCard extends StatelessWidget {
     required this.onTapNewSubscription,
     required this.onValidatePlatformAccess,
     required this.styleParams,
+    required this.typePlatform,
   });
 
 
@@ -66,6 +67,9 @@ class SubscriptionPlanCard extends StatelessWidget {
 
   /// Style parameters for customizing the appearance of the card.
   final SubscriptionPlanScreenStyleParams styleParams;
+
+  /// The type of platform to validate access.
+  final String typePlatform;
 
   /// Callback when the renew subscription action is tapped.
   final void Function(SubscriptionPlan) onTapRenewSubscription;
@@ -83,7 +87,7 @@ class SubscriptionPlanCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final UserStatus statusUserSubscription = plan.userStatus ?? const UserStatus.empty();
-    final bool accessPlatform = plan.hasPlatformAccess();
+    final bool accessPlatform = plan.hasPlatformAccess(typePlatform);
 
     return HoverAnimationCard(
       key: ValueKey<String>('hoverAnimationCard_${plan.id}'),

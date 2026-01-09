@@ -51,6 +51,7 @@ class SubscriptionPlansList extends StatefulWidget {
     required this.subscriptionPlanResponse,
     this.isLoading = false,
     this.crossAxisCount = 1,
+    required this.typePlatform,
     required this.onTapCancelSubscription,
     required this.onTapNewSubscription,
     required this.onTapRenewSubscription,
@@ -67,6 +68,9 @@ class SubscriptionPlansList extends StatefulWidget {
 
   /// Number of columns in the grid. Defaults to 1.
   final int crossAxisCount;
+
+  /// The type of platform to validate access.
+  final String typePlatform;
 
   /// Callback when cancel subscription is tapped.
   final void Function(SubscriptionPlan plan) onTapCancelSubscription;
@@ -477,8 +481,8 @@ class _SubscriptionPlansListState extends State<SubscriptionPlansList> {
                         onTapCancelSubscription: widget.onTapCancelSubscription,
                         onTapNewSubscription: widget.onTapNewSubscription,
                         onTapRenewSubscription: widget.onTapRenewSubscription,
-                        onValidatePlatformAccess:
-                            widget.onValidatePlatformAccess,
+                        onValidatePlatformAccess: widget.onValidatePlatformAccess,
+                        typePlatform: widget.typePlatform,
                         styleParams: widget.styleParams,
                       ),
                     );

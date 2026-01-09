@@ -1,6 +1,12 @@
 
 # Changelog
 
+## [2.0.35] - 2026-01-08
+
+### FIX
+
+- Fix Adjust platform type validation.
+
 ## [2.0.34] - 2026-01-08
 
 ### FIX
